@@ -126,3 +126,4 @@ MaterialDialog(dialogShowing).draw {
 1. Merge/refactor date picker dialog into this repository
 2. Add missing dialogs such as colour picker and file chooser
 3. Improve documentation to be more informative and add images
+4. Add comments to all `MaterialDialog` functions
