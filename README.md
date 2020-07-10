@@ -6,8 +6,6 @@
 
 This library's design is heavily inspired by https://github.com/afollestad/material-dialogs
 
-## Download
-
 ## Core
 
 ### Usage
