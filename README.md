@@ -1,10 +1,26 @@
 # Compose Material Dialogs
 
+**Current Compose Version: dev14**
+
 ## Credits
 
 This library's design is heavily inspired by https://github.com/afollestad/material-dialogs
 
+## Download
+
 ## Core
+
+### Usage
+
+[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:core/images/download.svg?version=0.1.0) ](https://bintray.com/vanpra/maven/compose-material-dialogs:core/0.1.0/link)
+
+```gradle
+dependencies {
+  ...
+  implementation 'com.vanpra.compose-material-dialogs:core:0.1.0'
+  ...
+}
+```
 
 ### Basic Dialogs
 
