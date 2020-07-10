@@ -13,7 +13,10 @@ import androidx.ui.material.*
 import androidx.ui.unit.dp
 import androidx.ui.util.fastForEachIndexed
 
-class MaterialDialog(private val showing: MutableState<Boolean>) {
+class MaterialDialog(
+    private val showing: MutableState<Boolean>,
+    private val autoDismiss: Boolean = true
+) {
     private val title = mutableListOf<@Composable() () -> Unit>()
     private val body = mutableListOf<@Composable() () -> Unit>()
     private val buttons = mutableListOf<@Composable() () -> Unit>()
@@ -92,11 +95,16 @@ class MaterialDialog(private val showing: MutableState<Boolean>) {
     fun MaterialDialog.positiveButton(
         text: String? = null,
         @StringRes res: Int? = null,
-        onClick: () -> Unit
+        onClick: () -> Unit = {}
     ) {
         val buttonText = ContextAmbient.current.getString(res, text)
         buttons.add {
-            TextButton(onClick = onClick) {
+            TextButton(onClick = {
+                if (autoDismiss) {
+                    showing.value = false
+                }
+                onClick()
+            }) {
                 Text(text = buttonText, style = MaterialTheme.typography.button)
             }
         }
@@ -106,11 +114,16 @@ class MaterialDialog(private val showing: MutableState<Boolean>) {
     fun MaterialDialog.negativeButton(
         text: String? = null,
         @StringRes res: Int? = null,
-        onClick: () -> Unit
+        onClick: () -> Unit = {}
     ) {
         val buttonText = ContextAmbient.current.getString(res, text)
         buttons.add(0) {
-            TextButton(onClick = onClick) {
+            TextButton(onClick = {
+                if (autoDismiss) {
+                    showing.value = false
+                }
+                onClick()
+            }) {
                 Text(text = buttonText, style = MaterialTheme.typography.button)
             }
         }
@@ -280,6 +293,15 @@ class MaterialDialog(private val showing: MutableState<Boolean>) {
                     },
                     style = MaterialTheme.typography.body1
                 )
+            }
+        }
+    }
+
+    @Composable
+    fun MaterialDialog.customView(children: @Composable() () -> Unit) {
+        body.add {
+            Box(modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 28.dp)) {
+                children()
             }
         }
     }
