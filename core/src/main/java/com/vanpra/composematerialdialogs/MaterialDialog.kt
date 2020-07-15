@@ -32,6 +32,11 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
             if (dialog.isAutoDismiss() && !disableDismiss) {
                 dialog.hide()
             }
+
+            dialog.getCallbacks().forEach {
+                it()
+            }
+
             onClick()
         }, modifier = Modifier.tag("button_${buttonsTagOrder.size}")) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
@@ -63,6 +68,15 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
 class MaterialDialog(private val autoDismiss: Boolean = true) {
     private val showing: MutableState<Boolean> = mutableStateOf(false)
     private val buttons = MaterialDialogButtons(this)
+    private val callbacks = mutableListOf<() -> Unit>()
+
+    fun addCallback(callback: () -> Unit) {
+        callbacks.add(callback)
+    }
+
+    fun getCallbacks(): List<() -> Unit> {
+        return callbacks
+    }
 
     fun show() {
         showing.value = true
@@ -235,6 +249,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         list: List<String>,
         disabledIndices: List<Int> = listOf(),
         initialSelection: List<Int> = listOf(),
+        waitForPositiveButton: Boolean = false,
         onCheckedChange: (indices: List<Int>) -> Unit = {}
     ) {
         var selectedItems by mutableStateOf(initialSelection.toMutableList(), StructurallyEqual)
@@ -247,9 +262,19 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
                     newSelectedItems.add(index)
                 }
                 selectedItems = newSelectedItems
-                onCheckedChange(selectedItems)
+                if (!waitForPositiveButton) {
+                    onCheckedChange(selectedItems)
+                }
             }
         }
+        remember {
+            if (waitForPositiveButton) {
+                addCallback {
+                    onCheckedChange(selectedItems)
+                }
+            }
+        }
+
         val isEnabled = { index: Int -> index !in disabledIndices }
 
         listItems(list = list, onClick = { index, _ ->
@@ -288,15 +313,27 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         list: List<String>,
         disabledIndices: List<Int> = listOf(),
         initialSelection: Int = 0,
+        waitForPositiveButton: Boolean = false,
         onChoiceChange: (selected: Int) -> Unit = {}
     ) {
         var selected by state { initialSelection }
         val onSelect = { index: Int ->
             if (index !in disabledIndices) {
                 selected = index
-                onChoiceChange(selected)
+                if (!waitForPositiveButton) {
+                    onChoiceChange(selected)
+                }
             }
         }
+
+        remember {
+            if (waitForPositiveButton) {
+                addCallback {
+                    onChoiceChange(selected)
+                }
+            }
+        }
+
         val isEnabled = { index: Int -> index !in disabledIndices }
 
         listItems(list = list, onClick = { index, _ ->
