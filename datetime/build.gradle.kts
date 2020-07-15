@@ -86,7 +86,7 @@ publishing {
             version = artifactVersion
 
             artifact(sourcesJar)
-            artifact("$buildDir/outputs/aar/core-release.aar")
+            artifact("$buildDir/outputs/aar/$artifactName-release.aar")
 
             pom.withXml {
                 val dependenciesNode = asNode().appendNode("dependencies")

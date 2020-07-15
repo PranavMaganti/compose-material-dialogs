@@ -26,7 +26,7 @@ dependencies {
 
 ![](https://raw.githubusercontent.com/vanpra/ComposeDateTimePicker/master/imgs/datetime.jpg)
 
-[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:core/images/download.svg?version=0.1.0) ](https://bintray.com/vanpra/maven/compose-material-dialogs:core/0.1.0/link)
+[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:datetime/images/download.svg?version=0.1.0) ](https://bintray.com/vanpra/maven/compose-material-dialogs:datetime/0.1.0/link)
 
 ```gradle
 dependencies {
