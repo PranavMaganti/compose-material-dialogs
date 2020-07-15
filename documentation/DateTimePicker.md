@@ -32,7 +32,7 @@ To show the dialog just call`dialog.show()`
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/time.jpg)
 
-```
+```kotlin
 dialog.build {
     timepicker { time ->
         // Do stuff with java.time.LocalTime object which is passed in
@@ -61,7 +61,7 @@ dialog.build {
 
 1. Limit date selection range (ie. min/max date)
 
-2.  Implement Date range selection 
+2. Implement Date range selection 
 
 3. Implement year selection
 

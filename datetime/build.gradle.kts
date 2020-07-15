@@ -51,7 +51,7 @@ android {
 dependencies {
     val composeVersion = "0.1.0-dev14"
 
-    implementation(project(":core"))
+    api(project(":core"))
 
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation("androidx.core:core-ktx:1.3.0")

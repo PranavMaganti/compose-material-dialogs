@@ -5,6 +5,7 @@ import androidx.animation.AnimatedFloat
 import androidx.animation.AnimationEndReason
 import androidx.animation.PhysicsBuilder
 import androidx.compose.Composable
+import androidx.compose.onPreCommit
 import androidx.compose.state
 import androidx.ui.animation.animatedFloat
 import androidx.ui.core.DensityAmbient
@@ -109,14 +110,16 @@ fun ViewPager(
                 enabled = enabled
             )
 
-            if (useAlpha) {
-                if (offset.value < width) {
-                    alphas.value[0] = 1 - offset.value / width
-                } else if (offset.value > width) {
-                    alphas.value[2] = ((offset.value - width) / width)
-                }
+            onPreCommit(index.value) {
+                if (useAlpha) {
+                    if (offset.value < width) {
+                        alphas.value[0] = 1 - offset.value / width
+                    } else if (offset.value > width) {
+                        alphas.value[2] = ((offset.value - width) / width)
+                    }
 
-                alphas.value[1] = 1 - abs(offset.value - width) / width
+                    alphas.value[1] = 1 - abs(offset.value - width) / width
+                }
             }
 
             HorizontalScroller(isScrollable = false) {

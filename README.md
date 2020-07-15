@@ -39,5 +39,5 @@ dependencies {
 ## To do
 
 1. Add missing dialogs such as colour picker and file chooser
-3. Improve documentation to be more informative and add images
-4. Add comments to all `MaterialDialog` functions
+2. Improve documentation to be more informative and add images
+3. Add comments to all `MaterialDialog` functions

@@ -8,7 +8,7 @@ import androidx.ui.foundation.Dialog
 import androidx.ui.material.MaterialTheme
 
 @Composable
-fun Context.getString(@StringRes res: Int? = null, default: String? = null): String {
+internal fun Context.getString(@StringRes res: Int? = null, default: String? = null): String {
     return if (res != null) {
         ContextAmbient.current.getString(res)
     } else default
