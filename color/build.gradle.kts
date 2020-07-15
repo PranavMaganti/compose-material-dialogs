@@ -52,11 +52,13 @@ dependencies {
     val composeVersion = "0.1.0-dev14"
 
     api(project(":core"))
+//    implementation("com.vanpra.compose-viewpager:viewpager:0.1.0")
 
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation("androidx.core:core-ktx:1.3.0")
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("com.google.android.material:material:1.1.0")
+
     implementation("androidx.ui:ui-layout:$composeVersion")
     implementation("androidx.ui:ui-material:$composeVersion")
     implementation("androidx.ui:ui-tooling:$composeVersion")

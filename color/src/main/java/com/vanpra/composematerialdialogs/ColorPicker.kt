@@ -4,14 +4,9 @@ import androidx.compose.*
 import androidx.ui.core.*
 import androidx.ui.foundation.*
 import androidx.ui.foundation.shape.corner.CircleShape
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.ColorFilter
-import androidx.ui.graphics.SolidColor
-import androidx.ui.graphics.luminance
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.padding
-import androidx.ui.layout.preferredHeightIn
-import androidx.ui.layout.size
+import androidx.ui.graphics.*
+import androidx.ui.layout.*
+import androidx.ui.material.FilledTextField
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
@@ -19,6 +14,7 @@ import androidx.ui.material.icons.filled.Done
 import androidx.ui.unit.dp
 import androidx.ui.util.fastForEachIndexed
 import androidx.ui.util.fastMap
+//import com.vanpra.viewpager.ViewPager
 
 val itemSizeDp = 55.dp
 val tickSize = 35.dp
@@ -27,61 +23,98 @@ val tickSize = 35.dp
 fun MaterialDialog.colorChooser(
     colors: List<Color>,
     subColors: List<List<Color>> = listOf(),
+    allowCustomArgb: Boolean = false,
     waitForPositiveButton: Boolean = false,
     onColorSelected: (Color) -> Unit = {}
 ) {
-    customView {
-        var mainSelectedIndex by state { 0 }
-        var selectedColor by state { colors[0] }
-        var showSubColors by state { false }
+    val selectedColor = state { colors[0] }
 
-        val itemSize = with(DensityAmbient.current) { itemSizeDp.toIntPx() }
-
-        remember {
-            if (waitForPositiveButton) {
-                addCallback {
-                    onColorSelected(selectedColor)
-                }
+    remember {
+        if (waitForPositiveButton) {
+            addCallback {
+                onColorSelected(selectedColor.value)
             }
         }
+    }
 
-        GridView(itemsInRow = 4, itemSize = itemSize) {
-            if (!showSubColors) {
-                colors.fastForEachIndexed { index, item ->
-                    ColorView(color = item, selected = index == mainSelectedIndex) {
-                        if (mainSelectedIndex != index) {
-                            mainSelectedIndex = index
-                            if (!waitForPositiveButton && subColors.isNotEmpty()) {
-                                selectedColor = item
-                                onColorSelected(item)
-                            }
-                        }
-                        showSubColors = true
-                    }
-                }
-            } else {
-                Box(
-                    Modifier.size(itemSizeDp).clickable(onClick = {
-                        showSubColors = false
-                    }, indication = null),
-                    shape = CircleShape,
-                    gravity = ContentGravity.Center
-                ) {
-                    Image(
-                        Icons.Default.ArrowBack,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(tickSize)
-                    )
-                }
+    customView {
+//        ViewPager(range = IntRange(0, 1)) {
+//            if (index == 0) {
+                ColorGridLayout(
+                    colors = colors,
+                    selectedColor = selectedColor,
+                    subColors = subColors,
+                    waitForPositiveButton = waitForPositiveButton,
+                    onColorSelected = onColorSelected
+                )
+//            } else {
+//                CustomARGB(selectedColor)
+//            }
+//        }
+    }
+}
 
-                subColors[mainSelectedIndex].fastForEachIndexed { _, item ->
-                    ColorView(color = item, selected = selectedColor == item) {
-                        selectedColor = item
-                        if (!waitForPositiveButton) {
-                            selectedColor = item
+@Composable
+fun CustomARGB(selectedColor: MutableState<Color>) {
+    Column {
+        Box(
+            Modifier.padding(8.dp).fillMaxWidth().height(30.dp),
+            backgroundColor = selectedColor.value,
+            gravity = ContentGravity.Center
+        ) {
+            Text(selectedColor.value.toArgb().toString(), color = selectedColor.value.foreground())
+        }
+    }
+}
+
+@Composable
+fun ColorGridLayout(
+    colors: List<Color>,
+    selectedColor: MutableState<Color>,
+    subColors: List<List<Color>> = listOf(),
+    waitForPositiveButton: Boolean = false,
+    onColorSelected: (Color) -> Unit = {}
+) {
+    var mainSelectedIndex by state { 0 }
+    var showSubColors by state { false }
+
+    val itemSize = with(DensityAmbient.current) { itemSizeDp.toIntPx() }
+
+    GridView(itemsInRow = 4, itemSize = itemSize) {
+        if (!showSubColors) {
+            colors.fastForEachIndexed { index, item ->
+                ColorView(color = item, selected = index == mainSelectedIndex) {
+                    if (mainSelectedIndex != index) {
+                        mainSelectedIndex = index
+                        if (!waitForPositiveButton && subColors.isNotEmpty()) {
+                            selectedColor.value = item
                             onColorSelected(item)
                         }
+                    }
+                    showSubColors = true
+                }
+            }
+        } else {
+            Box(
+                Modifier.size(itemSizeDp).clickable(onClick = {
+                    showSubColors = false
+                }, indication = null),
+                shape = CircleShape,
+                gravity = ContentGravity.Center
+            ) {
+                Image(
+                    Icons.Default.ArrowBack,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(tickSize)
+                )
+            }
+
+            subColors[mainSelectedIndex].fastForEachIndexed { _, item ->
+                ColorView(color = item, selected = selectedColor.value == item) {
+                    selectedColor.value = item
+                    if (!waitForPositiveButton) {
+                        onColorSelected(item)
                     }
                 }
             }
@@ -91,12 +124,6 @@ fun MaterialDialog.colorChooser(
 
 @Composable
 fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
-    val tickColor = if (color.luminance() > 0.6f) {
-        Color.Black
-    } else {
-        Color.White
-    }
-
     Box(
         Modifier.size(itemSizeDp).clip(CircleShape).clickable(onClick = onClick, indication = null),
         shape = CircleShape,
@@ -107,7 +134,7 @@ fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
         if (selected) {
             Image(
                 Icons.Default.Done,
-                colorFilter = ColorFilter.tint(tickColor),
+                colorFilter = ColorFilter.tint(color.foreground()),
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.size(tickSize)
             )
@@ -161,3 +188,6 @@ fun GridView(
         }
     }
 }
+
+fun Color.foreground(): Color = if (this.luminance() > 0.5f) Color.Black else Color.White
+
