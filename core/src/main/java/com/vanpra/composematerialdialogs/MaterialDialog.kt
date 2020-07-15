@@ -23,7 +23,7 @@ import androidx.ui.util.fastForEachIndexed
 import androidx.ui.util.fastMap
 
 /**
- * The MaterialDialog class is used to build and display a dialog using both pre-made and
+ * @brief The MaterialDialog class is used to build and display a dialog using both pre-made and
  * custom views
  *
  * @param autoDismiss when true the dialog will be automatically dismissed when a positive or
@@ -36,23 +36,27 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
     val positiveEnabled = mutableStateOf(mutableListOf<Boolean>())
 
     /**
-     * Shows the dialog
+     * @brief Shows the dialog
      */
     fun show() {
         showing.value = true
     }
 
     /**
-     * Hides the dialog
+     * @brief Hides the dialog
      */
     fun hide() {
         showing.value = false
     }
 
+    /**
+     * @brief Checks if autoDismiss is set
+     * @return true if autoDismiss is set to true and false otherwise
+     */
     fun isAutoDismiss() = autoDismiss
 
     /**
-     * Builds a dialog with the given content
+     * @brief Builds a dialog with the given content
      * @param content the body of the dialog
      */
     @Composable
