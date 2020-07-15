@@ -5,13 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.state
 import androidx.ui.core.setContent
 import androidx.ui.foundation.Text
+import androidx.ui.graphics.Color
 import androidx.ui.material.TextButton
-import com.vanpra.composematerialdialogs.datetime.datepicker
-import com.vanpra.composematerialdialogs.datetime.datetimepicker
-import com.vanpra.composematerialdialogs.datetime.timepicker
 import com.vanpra.composematerialdialogs.ui.ComposeMaterialDialogsTheme
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +17,7 @@ class MainActivity : AppCompatActivity() {
             ComposeMaterialDialogsTheme {
                 val exampleText = """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit risus eu sem aliquam rhoncus. Aliquam ullamcorper tincidunt elit,in aliquam sapien."""
                 val selectedDateTime = state { LocalDate.now() }
+                val colors = listOf(Color.Red, Color.Green, Color.Blue)
 
                 val dialog = MaterialDialog()
                 dialog.build {
@@ -29,11 +27,16 @@ class MainActivity : AppCompatActivity() {
 //                        negativeButton(text = "Disagree")
 //                        positiveButton(text = "Agree")
 //                    }
-
-
-                    datepicker(selectedDateTime.value) { date ->
-                        selectedDateTime.value = date
+//                    datepicker(selectedDateTime.value) { date ->
+//                        selectedDateTime.value = date
+//                    }
+                    title("Select a primary color")
+                    colorpicker(colors)
+                    buttons {
+                        negativeButton(text = "Cancel")
+                        positiveButton(text = "Ok")
                     }
+
                 }
 
                 TextButton(onClick = { dialog.show() }) {

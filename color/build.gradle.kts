@@ -20,6 +20,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    defaultConfig {
+        multiDexEnabled = true
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -28,6 +32,7 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -46,6 +51,8 @@ android {
 dependencies {
     val composeVersion = "0.1.0-dev14"
 
+    api(project(":core"))
+
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation("androidx.core:core-ktx:1.3.0")
     implementation("androidx.appcompat:appcompat:1.1.0")
@@ -53,12 +60,16 @@ dependencies {
     implementation("androidx.ui:ui-layout:$composeVersion")
     implementation("androidx.ui:ui-material:$composeVersion")
     implementation("androidx.ui:ui-tooling:$composeVersion")
+    implementation("androidx.ui:ui-material-icons-extended:$composeVersion")
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.9")
+
     testImplementation("junit:junit:4.13")
     androidTestImplementation("androidx.test.ext:junit:1.1.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
 }
 
-val artifactName = "core"
+val artifactName = "color"
 val artifactGroup = "com.vanpra.compose-material-dialogs"
 val artifactVersion = "0.1.0"
 
