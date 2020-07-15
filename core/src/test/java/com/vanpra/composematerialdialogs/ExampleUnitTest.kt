@@ -1,4 +1,4 @@
-package com.vanpra.composematerialdialogs
+package com.vanpra.datetime
 
 import org.junit.Test
 

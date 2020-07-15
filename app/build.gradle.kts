@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.vanpra.composematerialdialogs"
-        minSdkVersion(23)
+        minSdkVersion(21)
         targetSdkVersion(30)
         versionCode = 1
         versionName = "1.0"
@@ -46,6 +46,7 @@ dependencies {
     val composeVersion = "0.1.0-dev14"
 
     implementation(project(":core"))
+    implementation(project(":datetime"))
 
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation("androidx.core:core-ktx:1.3.0")

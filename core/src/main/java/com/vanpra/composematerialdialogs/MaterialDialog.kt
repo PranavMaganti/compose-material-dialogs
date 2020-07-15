@@ -6,59 +6,80 @@ import androidx.compose.*
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
+import androidx.ui.core.tag
 import androidx.ui.foundation.*
+import androidx.ui.graphics.Color
 import androidx.ui.graphics.imageFromResource
 import androidx.ui.layout.*
 import androidx.ui.material.*
 import androidx.ui.unit.dp
 import androidx.ui.util.fastForEachIndexed
+import androidx.ui.util.fastMap
 
-class MaterialDialog(
-    private val showing: MutableState<Boolean>,
-    private val autoDismiss: Boolean = true
-) {
-    private val title = mutableListOf<@Composable() () -> Unit>()
-    private val body = mutableListOf<@Composable() () -> Unit>()
-    private val buttons = mutableListOf<@Composable() () -> Unit>()
-
-    val stackButtons = false
+class MaterialDialogButtons(private val dialog: MaterialDialog) {
+    val buttonsTagOrder = mutableListOf<Int>()
 
     @Composable
-    fun draw(content: @Composable() MaterialDialog.() -> Unit) {
+    fun MaterialDialogButtons.positiveButton(
+        text: String? = null,
+        @StringRes res: Int? = null,
+        disableDismiss: Boolean = false,
+        onClick: () -> Unit = {}
+    ) {
+        val buttonText = ContextAmbient.current.getString(res, text)
+
+        TextButton(onClick = {
+            if (dialog.isAutoDismiss() && !disableDismiss) {
+                dialog.hide()
+            }
+            onClick()
+        }, modifier = Modifier.tag("button_${buttonsTagOrder.size}")) {
+            Text(text = buttonText, style = MaterialTheme.typography.button)
+        }
+
+        buttonsTagOrder.add(0, buttonsTagOrder.size)
+    }
+
+    @Composable
+    fun MaterialDialogButtons.negativeButton(
+        text: String? = null,
+        @StringRes res: Int? = null,
+        onClick: () -> Unit = {}
+    ) {
+        val buttonText = ContextAmbient.current.getString(res, text)
+        TextButton(onClick = {
+            if (dialog.isAutoDismiss()) {
+                dialog.hide()
+            }
+            onClick()
+        }, modifier = Modifier.tag("button_${buttonsTagOrder.size}")) {
+            Text(text = buttonText, style = MaterialTheme.typography.button)
+        }
+
+        buttonsTagOrder.add(buttonsTagOrder.size)
+    }
+}
+
+class MaterialDialog(private val autoDismiss: Boolean = true) {
+    private val showing: MutableState<Boolean> = mutableStateOf(false)
+    private val buttons = MaterialDialogButtons(this)
+
+    fun show() {
+        showing.value = true
+    }
+
+    fun hide() {
+        showing.value = false
+    }
+
+    fun isAutoDismiss() = autoDismiss
+
+    @Composable
+    fun build(content: @Composable() MaterialDialog.() -> Unit) {
         if (showing.value) {
-            ThemedDialog(onCloseRequest = { showing.value = false }) {
-                content()
-                if (title.isNotEmpty()) {
-                    Row(
-                        Modifier.fillMaxWidth().preferredHeight(64.dp).padding(start = 24.dp),
-                        verticalGravity = Alignment.CenterVertically
-                    ) {
-                        for (item in title) {
-                            item()
-                            Spacer(Modifier.fillMaxHeight().width(14.dp))
-                        }
-                    }
-                }
-
-                if (body.isNotEmpty()) {
-                    Column {
-                        for (item in body) {
-                            item()
-                        }
-                    }
-                }
-
-                if (buttons.isNotEmpty()) {
-                    Row(
-                        Modifier.fillMaxWidth().height(52.dp).padding(end = 8.dp),
-                        verticalGravity = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        for (item in buttons) {
-                            item()
-                            Spacer(Modifier.fillMaxHeight().width(8.dp))
-                        }
-                    }
+            ThemedDialog(onCloseRequest = { hide() }) {
+                Column(Modifier.fillMaxWidth().drawBackground(MaterialTheme.colors.background)) {
+                    this@MaterialDialog.content()
                 }
             }
         }
@@ -70,10 +91,44 @@ class MaterialDialog(
      * @param res title text from a resource
      */
     @Composable
-    fun MaterialDialog.title(text: String? = null, @StringRes res: Int? = null) {
+    fun MaterialDialog.title(
+        text: String? = null,
+        @StringRes res: Int? = null,
+        center: Boolean = false
+    ) {
         val titleText = ContextAmbient.current.getString(res, text)
+        var modifier = Modifier.fillMaxWidth()
+            .padding(start = 24.dp, end = 24.dp)
+            .preferredHeight(64.dp)
+            .wrapContentHeight(Alignment.CenterVertically)
 
-        title.add {
+        if (center) {
+            modifier = modifier.plus(Modifier.wrapContentWidth(Alignment.CenterHorizontally))
+        }
+
+        Text(
+            text = titleText,
+            color = MaterialTheme.colors.onSurface,
+            style = MaterialTheme.typography.h6,
+            modifier = modifier
+        )
+    }
+
+    @Composable
+    fun MaterialDialog.iconTitle(
+        text: String? = null,
+        @StringRes textRes: Int? = null,
+        @DrawableRes iconRes: Int
+    ) {
+        val titleText = ContextAmbient.current.getString(textRes, text)
+        val icon = imageFromResource(ContextAmbient.current.resources, iconRes)
+
+        Row(
+            modifier = Modifier.padding(start = 24.dp, end = 24.dp).preferredHeight(64.dp),
+            verticalGravity = Alignment.CenterVertically
+        ) {
+            Image(asset = icon, modifier = Modifier.size(34.dp))
+            Spacer(Modifier.width(14.dp))
             Text(
                 text = titleText,
                 color = MaterialTheme.colors.onSurface,
@@ -83,63 +138,54 @@ class MaterialDialog(
     }
 
     @Composable
-    fun MaterialDialog.icon(@DrawableRes res: Int) {
-        val icon = imageFromResource(ContextAmbient.current.resources, res)
-
-        title.add(0) {
-            Image(asset = icon, modifier = Modifier.size(34.dp))
-        }
-    }
-
-    @Composable
-    fun MaterialDialog.positiveButton(
-        text: String? = null,
-        @StringRes res: Int? = null,
-        onClick: () -> Unit = {}
-    ) {
-        val buttonText = ContextAmbient.current.getString(res, text)
-        buttons.add {
-            TextButton(onClick = {
-                if (autoDismiss) {
-                    showing.value = false
-                }
-                onClick()
-            }) {
-                Text(text = buttonText, style = MaterialTheme.typography.button)
-            }
-        }
-    }
-
-    @Composable
-    fun MaterialDialog.negativeButton(
-        text: String? = null,
-        @StringRes res: Int? = null,
-        onClick: () -> Unit = {}
-    ) {
-        val buttonText = ContextAmbient.current.getString(res, text)
-        buttons.add(0) {
-            TextButton(onClick = {
-                if (autoDismiss) {
-                    showing.value = false
-                }
-                onClick()
-            }) {
-                Text(text = buttonText, style = MaterialTheme.typography.button)
-            }
-        }
-    }
-
-    @Composable
     fun MaterialDialog.message(text: String? = null, @StringRes res: Int? = null) {
         val messageText = ContextAmbient.current.getString(res, text)
 
-        body.add {
-            Text(
-                text = messageText,
-                color = MaterialTheme.colors.onSurface,
-                style = MaterialTheme.typography.body1,
-                modifier = Modifier.padding(bottom = 28.dp, start = 24.dp, end = 24.dp)
-            )
+        Text(
+            text = messageText,
+            color = MaterialTheme.colors.onSurface,
+            style = MaterialTheme.typography.body1,
+            modifier = Modifier
+                .padding(bottom = 24.dp, start = 24.dp, end = 24.dp)
+        )
+    }
+
+    @Composable
+    fun MaterialDialog.buttons(content: @Composable() MaterialDialogButtons.() -> Unit) {
+        buttons.buttonsTagOrder.clear()
+
+        val constraints = ConstraintSet2 {
+            val buttonBox = createRefFor("buttons")
+
+            constrain(buttonBox) {
+                linkTo(parent.start, parent.end, 24.dp)
+                bottom.linkTo(parent.bottom)
+
+                width = Dimension.fillToConstraints
+                height = Dimension.preferredValue(52.dp).atLeast(52.dp)
+            }
+        }
+
+        val buttonConstraints = ConstraintSet2 {
+            val buttonRefs = buttons.buttonsTagOrder.fastMap { createRefFor("button_$it") }
+
+            buttonRefs.fastForEachIndexed { index, item ->
+                constrain(item) {
+                    centerVerticallyTo(parent)
+                    if (index == 0) {
+                        end.linkTo(parent.end, 8.dp)
+                    } else {
+                        end.linkTo(buttonRefs[index - 1].start, 8.dp)
+                    }
+                }
+            }
+        }
+
+        ConstraintLayout(constraints, Modifier.fillMaxWidth()) {
+            ConstraintLayout(buttonConstraints, modifier = Modifier.tag("buttons")) {
+                content(buttons)
+            }
+
         }
     }
 
@@ -148,21 +194,19 @@ class MaterialDialog(
         list: List<String>,
         onClick: (index: Int, item: String) -> Unit = { _, _ -> }
     ) {
-        body.add {
-            VerticalScroller {
-                list.fastForEachIndexed { index, it ->
-                    Text(
-                        it,
-                        color = MaterialTheme.colors.onSurface,
-                        style = MaterialTheme.typography.body1,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(onClick = { onClick(index, it) })
-                            .padding(top = 12.dp, bottom = 12.dp, start = 24.dp, end = 24.dp)
-                    )
-                }
-
+        VerticalScroller {
+            list.fastForEachIndexed { index, it ->
+                Text(
+                    it,
+                    color = MaterialTheme.colors.onSurface,
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = { onClick(index, it) })
+                        .padding(top = 12.dp, bottom = 12.dp, start = 24.dp, end = 24.dp)
+                )
             }
+
         }
     }
 
@@ -173,16 +217,14 @@ class MaterialDialog(
         isEnabled: (index: Int) -> Boolean = { _ -> true },
         item: @Composable() (index: Int, T) -> Unit
     ) {
-        body.add {
-            VerticalScroller {
-                list.fastForEachIndexed { index, it ->
-                    Box(
-                        Modifier.fillMaxWidth()
-                            .clickable(onClick = { onClick(index, it) }, enabled = isEnabled(index))
-                            .padding(start = 24.dp, end = 24.dp)
-                    ) {
-                        item(index, it)
-                    }
+        VerticalScroller {
+            list.fastForEachIndexed { index, it ->
+                Box(
+                    Modifier.fillMaxWidth()
+                        .clickable(onClick = { onClick(index, it) }, enabled = isEnabled(index))
+                        .padding(start = 24.dp, end = 24.dp)
+                ) {
+                    item(index, it)
                 }
             }
         }
@@ -299,10 +341,9 @@ class MaterialDialog(
 
     @Composable
     fun MaterialDialog.customView(children: @Composable() () -> Unit) {
-        body.add {
-            Box(modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 28.dp)) {
-                children()
-            }
+        Box(modifier = Modifier.padding(bottom = 28.dp)) {
+            children()
         }
     }
 }
+
