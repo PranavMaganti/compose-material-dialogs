@@ -32,8 +32,10 @@ class MainActivity : AppCompatActivity() {
 //                    datepicker(selectedDateTime.value) { date ->
 //                        selectedDateTime.value = date
 //                    }
-                    title("Select a primary color")
-                    colorChooser(colors = ColorPalette.Primary, subColors = ColorPalette.PrimarySub)
+                    title("Input a name")
+//                    colorChooser(colors = ColorPalette.Primary, subColors = ColorPalette.PrimarySub)
+                    input("Username*")
+                    input("Password*")
                     buttons {
                         negativeButton(text = "Cancel")
                         positiveButton(text = "Ok")
@@ -42,13 +44,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 TextButton(onClick = {
-//                    com.afollestad.materialdialogs.MaterialDialog(this).show {
-//                        title(text = "Colors")
-//                        colorChooser(ColorPalette.Primary, subColors = ColorPalette.PrimarySub, allowCustomArgb = true) { dialog, color ->
-//                            // Use color integer
-//                        }
-//                        positiveButton(text = "Select")
-//                    }
                     dialog.show()
                 }) {
                     Text("SHOW")

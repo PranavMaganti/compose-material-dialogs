@@ -8,11 +8,13 @@ import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.tag
 import androidx.ui.foundation.*
-import androidx.ui.graphics.Color
 import androidx.ui.graphics.imageFromResource
+import androidx.ui.input.VisualTransformation
 import androidx.ui.layout.*
 import androidx.ui.material.*
+import androidx.ui.savedinstancestate.savedInstanceState
 import androidx.ui.unit.dp
+import androidx.ui.unit.sp
 import androidx.ui.util.fastForEachIndexed
 import androidx.ui.util.fastMap
 
@@ -28,17 +30,20 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
     ) {
         val buttonText = ContextAmbient.current.getString(res, text)
 
-        TextButton(onClick = {
-            if (dialog.isAutoDismiss() && !disableDismiss) {
-                dialog.hide()
-            }
+        TextButton(
+            onClick = {
+                if (dialog.isAutoDismiss() && !disableDismiss) {
+                    dialog.hide()
+                }
 
-            dialog.getCallbacks().forEach {
-                it()
-            }
+                dialog.getCallbacks().forEach {
+                    it()
+                }
 
-            onClick()
-        }, modifier = Modifier.tag("button_${buttonsTagOrder.size}")) {
+                onClick()
+            }, modifier = Modifier.tag("button_${buttonsTagOrder.size}"),
+            enabled = dialog.positiveEnabled.value.all { it }
+        ) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
         }
 
@@ -69,6 +74,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
     private val showing: MutableState<Boolean> = mutableStateOf(false)
     private val buttons = MaterialDialogButtons(this)
     private val callbacks = mutableListOf<() -> Unit>()
+    val positiveEnabled = mutableStateOf(mutableListOf<Boolean>())
 
     fun addCallback(callback: () -> Unit) {
         callbacks.add(callback)
@@ -372,6 +378,74 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
                     },
                     style = MaterialTheme.typography.body1
                 )
+            }
+        }
+    }
+
+    @Composable
+    fun MaterialDialog.input(
+        label: String,
+        hint: String = "",
+        prefill: String = "",
+        waitForPositiveButton: Boolean = true,
+        allowEmpty: Boolean = false,
+        visualTransformation: VisualTransformation = VisualTransformation.None,
+        errorMessage: (String) -> String = { "" },
+        isValid: (String) -> Boolean = { true },
+        onInput: (String) -> Unit = {}
+    ) {
+        var text by savedInstanceState { prefill }
+        val index by state { positiveEnabled.value.size }
+        var valid by state { allowEmpty }
+
+        remember {
+            positiveEnabled.value.add(index, allowEmpty)
+        }
+
+        if (waitForPositiveButton) {
+            addCallback {
+                onInput(text)
+            }
+        }
+
+        Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)) {
+            FilledTextField(
+                value = text,
+                visualTransformation = visualTransformation,
+                onValueChange = {
+                    text = it
+                    if (!waitForPositiveButton) {
+                        onInput(text)
+                    }
+
+                    // Have to make temp list in order for state to register change
+                    val tempList = positiveEnabled.value.toMutableList()
+                    valid = if (text == "" && allowEmpty) {
+                        true
+                    } else if (text == "") {
+                        false
+                    } else {
+                        isValid(text)
+                    }
+                    tempList[index] = valid
+                    positiveEnabled.value = tempList
+                },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(label) },
+                placeholder = { Text(hint) },
+                isErrorValue = !valid
+            )
+
+            if (!valid) {
+                val message = errorMessage(text)
+                if (message != "") {
+                    Text(
+                        message,
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colors.error,
+                        modifier = Modifier.gravity(Alignment.End)
+                    )
+                }
             }
         }
     }

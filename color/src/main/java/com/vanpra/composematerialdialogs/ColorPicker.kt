@@ -6,6 +6,7 @@ import androidx.ui.foundation.*
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.*
 import androidx.ui.layout.*
+import androidx.ui.material.FilledTextField
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
@@ -13,7 +14,7 @@ import androidx.ui.material.icons.filled.Done
 import androidx.ui.unit.dp
 import androidx.ui.util.fastForEachIndexed
 import androidx.ui.util.fastMap
-import com.vanpra.viewpager.ViewPager
+//import com.vanpra.viewpager.ViewPager
 
 val itemSizeDp = 55.dp
 val tickSize = 35.dp
@@ -37,8 +38,8 @@ fun MaterialDialog.colorChooser(
     }
 
     customView {
-        ViewPager(range = IntRange(0, 1)) {
-            if (index == 0) {
+//        ViewPager(range = IntRange(0, 1)) {
+//            if (index == 0) {
                 ColorGridLayout(
                     colors = colors,
                     selectedColor = selectedColor,
@@ -46,11 +47,10 @@ fun MaterialDialog.colorChooser(
                     waitForPositiveButton = waitForPositiveButton,
                     onColorSelected = onColorSelected
                 )
-            } else {
-                CustomARGB(selectedColor)
-            }
-        }
-
+//            } else {
+//                CustomARGB(selectedColor)
+//            }
+//        }
     }
 }
 
@@ -58,7 +58,7 @@ fun MaterialDialog.colorChooser(
 fun CustomARGB(selectedColor: MutableState<Color>) {
     Column {
         Box(
-            Modifier.padding(8.dp),
+            Modifier.padding(8.dp).fillMaxWidth().height(30.dp),
             backgroundColor = selectedColor.value,
             gravity = ContentGravity.Center
         ) {
