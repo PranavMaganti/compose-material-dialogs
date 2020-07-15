@@ -25,6 +25,9 @@ import androidx.ui.util.fastMap
 /**
  * The MaterialDialog class is used to build and display a dialog using both pre-made and
  * custom views
+ *
+ * @param autoDismiss when true the dialog will be automatically dismissed when a positive or
+ * negative button is pressed
  */
 class MaterialDialog(private val autoDismiss: Boolean = true) {
     private val showing: MutableState<Boolean> = mutableStateOf(false)
