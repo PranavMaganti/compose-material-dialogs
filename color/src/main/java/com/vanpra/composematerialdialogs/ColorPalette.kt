@@ -1,4 +1,7 @@
 /**
+ * This file was taken from https://github.com/afollestad/material-dialogs and modified to use
+ * Jetpack Compose color resource. The original copyright notice is shown below:
+ *
  * Designed and developed by Aidan Follestad (@afollestad)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

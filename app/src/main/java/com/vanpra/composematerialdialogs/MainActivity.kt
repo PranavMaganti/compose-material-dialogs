@@ -18,13 +18,6 @@ class MainActivity : AppCompatActivity() {
             ComposeMaterialDialogsTheme {
                 val exampleText = """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit risus eu sem aliquam rhoncus. Aliquam ullamcorper tincidunt elit,in aliquam sapien."""
                 val selectedDateTime = state { LocalDate.now() }
-                val colors = listOf(Color.Red, Color.Green, Color.Blue)
-                val subColors = listOf(
-                    listOf(Color(0xFFEF5350), Color(0xFFF44336), Color(0xFFE53935)),
-                    listOf(Color(0xFF66BB6A), Color(0xFF4CAF50), Color(0xFF43A047)),
-                    listOf(Color(0xFF42A5F5), Color(0xFF2196F3), Color(0xFF1E88E5))
-                )
-
 
                 val dialog = MaterialDialog()
                 dialog.build {
