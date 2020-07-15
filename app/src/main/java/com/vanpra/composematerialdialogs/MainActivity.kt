@@ -8,6 +8,8 @@ import androidx.ui.core.setContent
 import androidx.ui.foundation.Text
 import androidx.ui.graphics.Color
 import androidx.ui.material.TextButton
+import com.afollestad.materialdialogs.color.colorChooser
+//import com.afollestad.materialdialogs.color.ColorPalette
 import com.vanpra.composematerialdialogs.ui.ComposeMaterialDialogsTheme
 import java.time.LocalDate
 
@@ -40,7 +42,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 TextButton(onClick = {
-
 //                    com.afollestad.materialdialogs.MaterialDialog(this).show {
 //                        title(text = "Colors")
 //                        colorChooser(ColorPalette.Primary, subColors = ColorPalette.PrimarySub, allowCustomArgb = true) { dialog, color ->
