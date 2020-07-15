@@ -2,7 +2,7 @@
 
 ### Date and Time Picker
 
-![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/master/imgs/datetime.jpg)
+![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/datetime.jpg)
 
 ```kotlin
 dialog.build {
@@ -16,7 +16,7 @@ To show the dialog just call `dialog.show()`
 
 ### Date Picker
 
-![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/master/imgs/date.jpg)
+![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/date.jpg)
 
 ```kotlin
 dialog.build {
@@ -30,7 +30,7 @@ To show the dialog just call`dialog.show()`
 
 ### Time Picker
 
-![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/master/imgs/time.jpg)
+![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/time.jpg)
 
 ```
 dialog.build {
