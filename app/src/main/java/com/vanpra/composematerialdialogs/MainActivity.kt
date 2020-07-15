@@ -2,6 +2,7 @@ package com.vanpra.composematerialdialogs
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.state
 import androidx.ui.core.setContent
 import androidx.ui.foundation.Text
 import androidx.ui.material.TextButton
@@ -9,6 +10,8 @@ import com.vanpra.composematerialdialogs.datetime.datepicker
 import com.vanpra.composematerialdialogs.datetime.datetimepicker
 import com.vanpra.composematerialdialogs.datetime.timepicker
 import com.vanpra.composematerialdialogs.ui.ComposeMaterialDialogsTheme
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             ComposeMaterialDialogsTheme {
                 val exampleText = """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit risus eu sem aliquam rhoncus. Aliquam ullamcorper tincidunt elit,in aliquam sapien."""
+                val selectedDateTime = state { LocalDate.now() }
 
                 val dialog = MaterialDialog()
                 dialog.build {
@@ -26,7 +30,10 @@ class MainActivity : AppCompatActivity() {
 //                        positiveButton(text = "Agree")
 //                    }
 
-                    timepicker()
+
+                    datepicker(selectedDateTime.value) { date ->
+                        selectedDateTime.value = date
+                    }
                 }
 
                 TextButton(onClick = { dialog.show() }) {
