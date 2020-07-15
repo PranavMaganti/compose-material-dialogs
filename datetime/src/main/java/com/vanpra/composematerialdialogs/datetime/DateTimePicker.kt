@@ -21,6 +21,7 @@ import java.time.temporal.ChronoUnit
  * @param initialDateTime The date and time to be shown to the user when the dialog is first shown.
  * Defaults to the current date and time if this is not set
  * @param onComplete callback with a LocalDateTime object when the user completes their input
+ * @param onCancel callback when the user cancels the dialog
  */
 @Composable
 fun MaterialDialog.datetimepicker(
@@ -93,19 +94,21 @@ fun MaterialDialog.datetimepicker(
         }
     }
 
-    positiveButton(
-        text = if (currentScreen.value == 0) { "Next" } else { "Ok" },
-        disableDismiss = currentScreen.value == 0
-    ) {
-        if (currentScreen.value == 0) {
-            scrollerPosition.smoothScrollTo(scrollTo.value)
-            currentScreen.value = 1
-        } else {
-            onComplete(LocalDateTime.of(selectedDate.value, selectedTime.value))
+    buttons {
+        positiveButton(
+            text = if (currentScreen.value == 0) { "Next" } else { "Ok" },
+            disableDismiss = currentScreen.value == 0
+        ) {
+            if (currentScreen.value == 0) {
+                scrollerPosition.smoothScrollTo(scrollTo.value)
+                currentScreen.value = 1
+            } else {
+                onComplete(LocalDateTime.of(selectedDate.value, selectedTime.value))
+            }
         }
-    }
 
-    negativeButton("Cancel") {
-        onCancel()
+        negativeButton("Cancel") {
+            onCancel()
+        }
     }
 }

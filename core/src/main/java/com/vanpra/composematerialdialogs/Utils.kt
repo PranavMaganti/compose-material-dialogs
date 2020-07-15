@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.Composable
 import androidx.ui.core.ContextAmbient
-import androidx.ui.foundation.Box
 import androidx.ui.foundation.Dialog
 import androidx.ui.material.MaterialTheme
 
@@ -23,9 +22,7 @@ internal fun ThemedDialog(onCloseRequest: () -> Unit, children: @Composable() ()
 
     Dialog(onCloseRequest = onCloseRequest) {
         MaterialTheme(colors = colors, typography = typography) {
-            Box(backgroundColor = MaterialTheme.colors.surface) {
-                children()
-            }
+            children()
         }
     }
 }

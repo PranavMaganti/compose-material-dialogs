@@ -26,6 +26,7 @@ import androidx.ui.layout.RowScope.gravity
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import androidx.ui.unit.sp
+import com.vanpra.composematerialdialogs.MaterialDialog
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import kotlin.math.*
@@ -38,38 +39,33 @@ data class SelectedOffset(
 /**
  * @brief A time picker dialog
  *
- * @param showing mutable state which controls if the dialog is showing to the user
  * @param initialTime The time to be shown to the user when the dialog is first shown.
  * Defaults to the current time if this is not set
  * @param onComplete callback with a LocalTime object when the user completes their input
+ * @param onCancel callback when the user cancels the dialog
  */
 @Composable
-fun TimePicker(
-    showing: MutableState<Boolean>,
+fun MaterialDialog.timepicker(
     initialTime: LocalTime = LocalTime.now(),
     onCancel: () -> Unit = {},
     onComplete: (LocalTime) -> Unit = {}
 ) {
-    val currentTime = remember { initialTime.truncatedTo(ChronoUnit.MINUTES) }
-    val selectedTime = state { currentTime }
+    val selectedTime = state { remember { initialTime.truncatedTo(ChronoUnit.MINUTES) } }
 
-    if (showing.value) {
-        ThemedDialog(onCloseRequest = { showing.value = false }) {
-            Column(Modifier.drawBackground(MaterialTheme.colors.background)) {
-                DialogTitle("Select a time", Modifier.padding(top = 16.dp))
-                TimePickerLayout(selectedTime = selectedTime)
-                ButtonLayout(
-                    confirmText = "Ok",
-                    onConfirm = {
-                        showing.value = false
-                        onComplete(selectedTime.value)
-                    }, onCancel = {
-                        showing.value = false
-                        onCancel()
-                    })
-            }
+    title("Select a time", center = true)
+    customView {
+        TimePickerLayout(selectedTime = selectedTime)
+    }
+
+    buttons {
+        positiveButton("Ok") {
+            onComplete(selectedTime.value)
+        }
+        negativeButton("Cancel") {
+            onCancel()
         }
     }
+
 }
 
 @Composable
@@ -121,7 +117,10 @@ internal fun TimePickerLayout(
 
 @Composable
 private fun TimeLayout(currentScreen: MutableState<Int>, selectedTime: MutableState<LocalTime>) {
-    Box(Modifier.fillMaxWidth().padding(top = 16.dp).drawBackground(MaterialTheme.colors.primaryVariant)) {
+    Box(
+        Modifier.fillMaxWidth().padding(top = 16.dp)
+            .drawBackground(MaterialTheme.colors.primaryVariant)
+    ) {
         val textSize = 60.sp
         val color = MaterialTheme.colors.onPrimary
         val hourAlpha = 1f - 0.4f * currentScreen.value
@@ -135,7 +134,10 @@ private fun TimeLayout(currentScreen: MutableState<Int>, selectedTime: MutableSt
                 selectedTime.value.hour.toString().padStart(2, '0'),
                 fontSize = textSize,
                 color = color.copy(hourAlpha),
-                modifier = Modifier.clickable(onClick = { currentScreen.value = 0 })
+                modifier = Modifier.clickable(
+                    onClick = { currentScreen.value = 0 },
+                    indication = null
+                )
             )
 
             Text(":", fontSize = textSize, color = color)
@@ -144,7 +146,10 @@ private fun TimeLayout(currentScreen: MutableState<Int>, selectedTime: MutableSt
                 selectedTime.value.minute.toString().padStart(2, '0'),
                 fontSize = textSize,
                 color = color.copy(minAlpha),
-                modifier = Modifier.clickable(onClick = { currentScreen.value = 1 })
+                modifier = Modifier.clickable(
+                    onClick = { currentScreen.value = 1 },
+                    indication = null
+                )
             )
         }
     }

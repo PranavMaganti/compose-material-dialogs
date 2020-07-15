@@ -26,7 +26,6 @@ import androidx.ui.util.fastForEach
 import androidx.ui.util.fastForEachIndexed
 import com.vanpra.composematerialdialogs.MaterialDialog
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.YearMonth
 
 val dateBoxDp = 35.dp
@@ -37,6 +36,7 @@ val dateBoxDp = 35.dp
  * @param initialDate The time to be shown to the user when the dialog is first shown.
  * Defaults to the current date if this is not set
  * @param onComplete callback with a LocalDateTime object when the user completes their input
+ * @param onCancel callback when the user cancels the dialog
  */
 @Composable
 fun MaterialDialog.datepicker(
@@ -53,11 +53,13 @@ fun MaterialDialog.datepicker(
         DatePickerLayout(currentDate = currentDate, selectedDate = selectedDate)
     }
 
-    positiveButton("Ok") {
-        onComplete(selectedDate.value)
-    }
-    negativeButton("Cancel") {
-        onCancel()
+    buttons {
+        positiveButton("Ok") {
+            onComplete(selectedDate.value)
+        }
+        negativeButton("Cancel") {
+            onCancel()
+        }
     }
 }
 
