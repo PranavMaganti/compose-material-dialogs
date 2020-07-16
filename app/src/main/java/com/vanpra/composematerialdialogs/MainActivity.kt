@@ -12,7 +12,9 @@ class MainActivity : AppCompatActivity() {
             ComposeMaterialDialogsTheme {
                 DialogAndShowButton(buttonText = "Basic Dialog With Buttons") {
                     title("Use Location Services?")
-                    message("Let us help apps determine location. This means sending anonymous location data to us, even when no apps are running")
+//                    message("Let us help apps determine location. This means sending anonymous location data to us, even when no apps are running")
+
+                    listItemsSingleChoice(listOf("hello", "there"))
                     buttons {
                         negativeButton("Disagree")
                         positiveButton("Agree")
