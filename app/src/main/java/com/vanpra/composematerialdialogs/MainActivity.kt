@@ -2,7 +2,14 @@ package com.vanpra.composematerialdialogs
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.ui.core.Modifier
 import androidx.ui.core.setContent
+import androidx.ui.foundation.Text
+import androidx.ui.foundation.VerticalScroller
+import androidx.ui.layout.Column
+import androidx.ui.layout.padding
+import androidx.ui.material.MaterialTheme
+import androidx.ui.unit.dp
 import com.vanpra.composematerialdialogs.ui.ComposeMaterialDialogsTheme
 
 class MainActivity : AppCompatActivity() {
@@ -10,12 +17,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeMaterialDialogsTheme {
-                DialogAndShowButton(buttonText = "Basic Dialog With Buttons") {
-                    title("Use Location Services?")
-                    message("Let us help apps determine location. This means sending anonymous location data to us, even when no apps are running")
-                    buttons {
-                        negativeButton("Disagree")
-                        positiveButton("Agree")
+                VerticalScroller {
+                    Column {
+                        DialogSection(title = "Basic Dialogs") {
+                            BasicDialogDemo()
+                        }
+                        DialogSection(title = "List Dialogs") {
+                            ListDialogDemo()
+                        }
                     }
                 }
             }

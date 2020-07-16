@@ -194,40 +194,6 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         }
     }
 
-//        val constraints = ConstraintSet2 {
-//            val buttonBox = createRefFor("buttons")
-//
-//            constrain(buttonBox) {
-//                linkTo(parent.start, parent.end, 24.dp)
-//                bottom.linkTo(parent.bottom)
-//
-//                width = Dimension.fillToConstraints
-//                height = Dimension.preferredValue(52.dp).atLeast(52.dp)
-//            }
-//        }
-//
-//        val buttonConstraints = ConstraintSet2 {
-//            val buttonRefs = buttons.buttonsTagOrder.fastMap { createRefFor("button_$it") }
-//
-//            buttonRefs.fastForEachIndexed { index, item ->
-//                constrain(item) {
-//                    centerVerticallyTo(parent)
-//                    if (index == 0) {
-//                        end.linkTo(parent.end, 8.dp)
-//                    } else {
-//                        end.linkTo(buttonRefs[index - 1].start, 8.dp)
-//                    }
-//                }
-//            }
-//        }
-//
-//        ConstraintLayout(constraints, Modifier.fillMaxWidth()) {
-//            ConstraintLayout(buttonConstraints, modifier = Modifier.tag("buttons")) {
-//                content(buttons)
-//            }
-//
-//        }
-
 
     /**
      * @brief Adds an input field with the given parameters to the dialog
