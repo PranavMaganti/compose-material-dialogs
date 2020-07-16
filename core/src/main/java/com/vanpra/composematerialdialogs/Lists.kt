@@ -24,6 +24,7 @@ import androidx.ui.util.fastForEachIndexed
 @Composable
 fun MaterialDialog.listItems(
     list: List<String>,
+    closeOnClick: Boolean = true,
     onClick: (index: Int, item: String) -> Unit = { _, _ -> }
 ) {
     VerticalScroller {
@@ -34,7 +35,12 @@ fun MaterialDialog.listItems(
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable(onClick = { onClick(index, it) })
+                    .clickable(onClick = {
+                        if(closeOnClick) {
+                            hide()
+                        }
+                        onClick(index, it)
+                    })
                     .padding(top = 12.dp, bottom = 12.dp, start = 24.dp, end = 24.dp)
             )
         }
@@ -53,15 +59,22 @@ fun MaterialDialog.listItems(
 @Composable
 fun <T> MaterialDialog.listItems(
     list: List<T>,
+    closeOnClick: Boolean = true,
     onClick: (index: Int, item: T) -> Unit = { _, _ -> },
     isEnabled: (index: Int) -> Boolean = { _ -> true },
     item: @Composable() (index: Int, T) -> Unit
 ) {
-    VerticalScroller {
+
+    VerticalScroller(modifier = Modifier.padding(bottom = 8.dp)) {
         list.fastForEachIndexed { index, it ->
             Box(
                 Modifier.fillMaxWidth()
-                    .clickable(onClick = { onClick(index, it) }, enabled = isEnabled(index))
+                    .clickable(onClick = {
+                        if (closeOnClick) {
+                            hide()
+                        }
+                        onClick(index, it)
+                    }, enabled = isEnabled(index))
                     .padding(start = 24.dp, end = 24.dp)
             ) {
                 item(index, it)

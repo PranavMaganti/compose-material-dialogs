@@ -1,6 +1,8 @@
-package com.vanpra.composematerialdialogs
+package com.vanpra.composematerialdialogs.demos
 
 import androidx.compose.Composable
+import com.vanpra.composematerialdialogs.DialogAndShowButton
+import com.vanpra.composematerialdialogs.R
 
 @Composable
 fun BasicDialogDemo() {
@@ -39,16 +41,3 @@ fun BasicDialogDemo() {
         }
     }
 }
-
-
-@Composable
-fun ListDialogDemo() {
-    DialogAndShowButton(buttonText = "Single Selection Dialog") {
-        title("Phone Ringtone")
-        buttons {
-            negativeButton("Cancel")
-            positiveButton("Ok")
-        }
-    }
-}
-
