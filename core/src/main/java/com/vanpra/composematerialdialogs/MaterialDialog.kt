@@ -7,93 +7,51 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.tag
-import androidx.ui.foundation.*
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.Image
+import androidx.ui.foundation.Text
+import androidx.ui.foundation.drawBackground
 import androidx.ui.graphics.imageFromResource
 import androidx.ui.input.VisualTransformation
 import androidx.ui.layout.*
-import androidx.ui.material.*
+import androidx.ui.material.FilledTextField
+import androidx.ui.material.MaterialTheme
 import androidx.ui.savedinstancestate.savedInstanceState
 import androidx.ui.unit.dp
 import androidx.ui.unit.sp
 import androidx.ui.util.fastForEachIndexed
 import androidx.ui.util.fastMap
 
-class MaterialDialogButtons(private val dialog: MaterialDialog) {
-    val buttonsTagOrder = mutableListOf<Int>()
-
-    @Composable
-    fun MaterialDialogButtons.positiveButton(
-        text: String? = null,
-        @StringRes res: Int? = null,
-        disableDismiss: Boolean = false,
-        onClick: () -> Unit = {}
-    ) {
-        val buttonText = ContextAmbient.current.getString(res, text)
-
-        TextButton(
-            onClick = {
-                if (dialog.isAutoDismiss() && !disableDismiss) {
-                    dialog.hide()
-                }
-
-                dialog.getCallbacks().forEach {
-                    it()
-                }
-
-                onClick()
-            }, modifier = Modifier.tag("button_${buttonsTagOrder.size}"),
-            enabled = dialog.positiveEnabled.value.all { it }
-        ) {
-            Text(text = buttonText, style = MaterialTheme.typography.button)
-        }
-
-        buttonsTagOrder.add(0, buttonsTagOrder.size)
-    }
-
-    @Composable
-    fun MaterialDialogButtons.negativeButton(
-        text: String? = null,
-        @StringRes res: Int? = null,
-        onClick: () -> Unit = {}
-    ) {
-        val buttonText = ContextAmbient.current.getString(res, text)
-        TextButton(onClick = {
-            if (dialog.isAutoDismiss()) {
-                dialog.hide()
-            }
-            onClick()
-        }, modifier = Modifier.tag("button_${buttonsTagOrder.size}")) {
-            Text(text = buttonText, style = MaterialTheme.typography.button)
-        }
-
-        buttonsTagOrder.add(buttonsTagOrder.size)
-    }
-}
-
+/**
+ * The MaterialDialog class is used to build and display a dialog using both pre-made and
+ * custom views
+ */
 class MaterialDialog(private val autoDismiss: Boolean = true) {
     private val showing: MutableState<Boolean> = mutableStateOf(false)
     private val buttons = MaterialDialogButtons(this)
-    private val callbacks = mutableListOf<() -> Unit>()
+    val callbacks = mutableListOf<() -> Unit>()
     val positiveEnabled = mutableStateOf(mutableListOf<Boolean>())
 
-    fun addCallback(callback: () -> Unit) {
-        callbacks.add(callback)
-    }
-
-    fun getCallbacks(): List<() -> Unit> {
-        return callbacks
-    }
-
+    /**
+     * Shows the dialog
+     */
     fun show() {
         showing.value = true
     }
 
+    /**
+     * Hides the dialog
+     */
     fun hide() {
         showing.value = false
     }
 
     fun isAutoDismiss() = autoDismiss
 
+    /**
+     * Builds a dialog with the given content
+     * @param content the body of the dialog
+     */
     @Composable
     fun build(content: @Composable() MaterialDialog.() -> Unit) {
         if (showing.value) {
@@ -106,9 +64,10 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
     }
 
     /**
-     * @brief Creates a title with the given text
-     * @param text title text from a string
-     * @param res title text from a resource
+     * @brief Adds a title with the given text to the dialog
+     * @param text title text from a string literal
+     * @param res title text from a string resource
+     * @param center text is aligned to center when true
      */
     @Composable
     fun MaterialDialog.title(
@@ -134,6 +93,12 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         )
     }
 
+    /**
+     * @brief Adds a title with the given text and icon to the dialog
+     * @param text title text from a string literal
+     * @param textRes title text from a string resource
+     * @param iconRes icon/image from a drawable resource
+     */
     @Composable
     fun MaterialDialog.iconTitle(
         text: String? = null,
@@ -157,6 +122,11 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         }
     }
 
+    /**
+     * @brief Adds paragraph of text to the dialog
+     * @param text message text from a string literal
+     * @param res message text from a string resource
+     */
     @Composable
     fun MaterialDialog.message(text: String? = null, @StringRes res: Int? = null) {
         val messageText = ContextAmbient.current.getString(res, text)
@@ -170,6 +140,11 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         )
     }
 
+    /**
+     * @brief Adds buttons to the bottom of the dialog
+     * @param content the buttons which should be displayed in the dialog.
+     * See [MaterialDialogButtons] for more information about the content
+     */
     @Composable
     fun MaterialDialog.buttons(content: @Composable() MaterialDialogButtons.() -> Unit) {
         buttons.buttonsTagOrder.clear()
@@ -209,179 +184,20 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         }
     }
 
-    @Composable
-    fun MaterialDialog.listItems(
-        list: List<String>,
-        onClick: (index: Int, item: String) -> Unit = { _, _ -> }
-    ) {
-        VerticalScroller {
-            list.fastForEachIndexed { index, it ->
-                Text(
-                    it,
-                    color = MaterialTheme.colors.onSurface,
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(onClick = { onClick(index, it) })
-                        .padding(top = 12.dp, bottom = 12.dp, start = 24.dp, end = 24.dp)
-                )
-            }
-
-        }
-    }
-
-    @Composable
-    fun <T> MaterialDialog.listItems(
-        list: List<T>,
-        onClick: (index: Int, item: T) -> Unit = { _, _ -> },
-        isEnabled: (index: Int) -> Boolean = { _ -> true },
-        item: @Composable() (index: Int, T) -> Unit
-    ) {
-        VerticalScroller {
-            list.fastForEachIndexed { index, it ->
-                Box(
-                    Modifier.fillMaxWidth()
-                        .clickable(onClick = { onClick(index, it) }, enabled = isEnabled(index))
-                        .padding(start = 24.dp, end = 24.dp)
-                ) {
-                    item(index, it)
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun MaterialDialog.listItemsMultiChoice(
-        list: List<String>,
-        disabledIndices: List<Int> = listOf(),
-        initialSelection: List<Int> = listOf(),
-        waitForPositiveButton: Boolean = false,
-        onCheckedChange: (indices: List<Int>) -> Unit = {}
-    ) {
-        var selectedItems by mutableStateOf(initialSelection.toMutableList(), StructurallyEqual)
-        val onChecked = { index: Int ->
-            if (index !in disabledIndices) {
-                val newSelectedItems = selectedItems.toMutableList()
-                if (index in selectedItems) {
-                    newSelectedItems.remove(index)
-                } else {
-                    newSelectedItems.add(index)
-                }
-                selectedItems = newSelectedItems
-                if (!waitForPositiveButton) {
-                    onCheckedChange(selectedItems)
-                }
-            }
-        }
-        remember {
-            if (waitForPositiveButton) {
-                addCallback {
-                    onCheckedChange(selectedItems)
-                }
-            }
-        }
-
-        val isEnabled = { index: Int -> index !in disabledIndices }
-
-        listItems(list = list, onClick = { index, _ ->
-            onChecked(index)
-        }, isEnabled = isEnabled) { index, item ->
-            val enabled = remember(disabledIndices) { index !in disabledIndices }
-            val selected = index in selectedItems
-
-            Row(
-                Modifier.fillMaxWidth().preferredHeight(48.dp),
-                verticalGravity = Alignment.CenterVertically
-            ) {
-                Checkbox(
-                    checked = selected,
-                    onCheckedChange = { onChecked(index) },
-                    enabled = enabled
-                )
-                Spacer(modifier = Modifier.fillMaxHeight().width(32.dp))
-                Text(
-                    item,
-                    color = if (enabled) {
-                        MaterialTheme.colors.onSurface
-                    } else {
-                        EmphasisAmbient.current.disabled.applyEmphasis(
-                            MaterialTheme.colors.onSurface
-                        )
-                    },
-                    style = MaterialTheme.typography.body1
-                )
-            }
-        }
-    }
-
-    @Composable
-    fun MaterialDialog.listItemsSingleChoice(
-        list: List<String>,
-        disabledIndices: List<Int> = listOf(),
-        initialSelection: Int = 0,
-        waitForPositiveButton: Boolean = false,
-        onChoiceChange: (selected: Int) -> Unit = {}
-    ) {
-        var selected by state { initialSelection }
-        val onSelect = { index: Int ->
-            if (index !in disabledIndices) {
-                selected = index
-                if (!waitForPositiveButton) {
-                    onChoiceChange(selected)
-                }
-            }
-        }
-
-        remember {
-            if (waitForPositiveButton) {
-                addCallback {
-                    onChoiceChange(selected)
-                }
-            }
-        }
-
-        val isEnabled = { index: Int -> index !in disabledIndices }
-
-        listItems(list = list, onClick = { index, _ ->
-            onSelect(index)
-        }, isEnabled = isEnabled) { index, item ->
-            val enabled = remember(disabledIndices) { index !in disabledIndices }
-
-            Row(
-                Modifier.fillMaxWidth().preferredHeight(48.dp),
-                verticalGravity = Alignment.CenterVertically
-            ) {
-                RadioButton(
-                    selected = selected == index,
-                    onSelect = {
-                        if (isEnabled(index)) {
-                            onSelect(index)
-                        }
-                    },
-                    color = if (isEnabled(index)) {
-                        MaterialTheme.colors.secondary
-                    } else {
-                        EmphasisAmbient.current.disabled.applyEmphasis(
-                            MaterialTheme.colors.onSurface
-                        )
-                    }
-                )
-                Spacer(modifier = Modifier.fillMaxHeight().width(32.dp))
-                Text(
-                    item,
-                    color = if (enabled) {
-                        MaterialTheme.colors.onSurface
-                    } else {
-                        EmphasisAmbient.current.disabled.applyEmphasis(
-                            MaterialTheme.colors.onSurface
-                        )
-                    },
-                    style = MaterialTheme.typography.body1
-                )
-            }
-        }
-    }
-
+    /**
+     * @brief Adds an input field with the given parameters to the dialog
+     * @param label string to be shown in the input field before selection eg. Username
+     * @param hint hint to be shown in the input field when it is selected but empty eg. Joe
+     * @param prefill string to be input into the text field by default
+     * @param waitForPositiveButton if true the [onInput] callback will only be called when the
+     * positive button is pressed, otherwise it will be called when the input value is changed
+     * @param allowEmpty if true then an empty string will be a valid input
+     * @param visualTransformation a visual transformation of the content of the text field
+     * @param errorMessage a message to be shown to the user when the input is not valid
+     * @param isTextValid a function which is called to check if the user input is valid
+     * @param onInput a function which is called with the user input. The timing of this call is
+     * dictated by [waitForPositiveButton]
+     */
     @Composable
     fun MaterialDialog.input(
         label: String,
@@ -391,7 +207,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         allowEmpty: Boolean = false,
         visualTransformation: VisualTransformation = VisualTransformation.None,
         errorMessage: (String) -> String = { "" },
-        isValid: (String) -> Boolean = { true },
+        isTextValid: (String) -> Boolean = { true },
         onInput: (String) -> Unit = {}
     ) {
         var text by savedInstanceState { prefill }
@@ -403,7 +219,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         }
 
         if (waitForPositiveButton) {
-            addCallback {
+            callbacks.add {
                 onInput(text)
             }
         }
@@ -425,7 +241,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
                     } else if (text == "") {
                         false
                     } else {
-                        isValid(text)
+                        isTextValid(text)
                     }
                     tempList[index] = valid
                     positiveEnabled.value = tempList
@@ -450,6 +266,10 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         }
     }
 
+    /**
+     * Create an view in the dialog with the given content and appropriate padding
+     * @param children the content of the custom view
+     */
     @Composable
     fun MaterialDialog.customView(children: @Composable() () -> Unit) {
         Box(modifier = Modifier.padding(bottom = 28.dp)) {

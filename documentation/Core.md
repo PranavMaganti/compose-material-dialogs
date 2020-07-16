@@ -43,8 +43,6 @@ dialog.build {
 }
 ```
 
-
-
 If you would like to use a custom list item layout you can use the following code:
 
 ```kotlin
