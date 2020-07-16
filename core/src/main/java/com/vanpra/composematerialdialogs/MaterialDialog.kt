@@ -179,6 +179,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
                 buttons.buttonsTagOrder.forEach { tagNum ->
                     val button =
                         placeables.fastFirstOrNull { it.first == "button_$tagNum" }!!.second
+
                     currX -= button.width
 
                     if (!column) {
@@ -189,7 +190,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
                         currY += button.height + interButtonPadding
                         currX = constraints.maxWidth
                     }
-                }
+            }
             }
         }
     }

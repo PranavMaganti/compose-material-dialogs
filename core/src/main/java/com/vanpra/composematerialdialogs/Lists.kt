@@ -158,16 +158,27 @@ fun MaterialDialog.listItemsMultiChoice(
 fun MaterialDialog.listItemsSingleChoice(
     list: List<String>,
     disabledIndices: List<Int> = listOf(),
-    initialSelection: Int = 0,
+    initialSelection: Int? = null,
     waitForPositiveButton: Boolean = false,
     onChoiceChange: (selected: Int) -> Unit = {}
 ) {
+    val disableIndex by state { positiveEnabled.value.size }
+    remember {
+        positiveEnabled.value.add(disableIndex, initialSelection != null)
+    }
+
     var selected by state { initialSelection }
     val onSelect = { index: Int ->
         if (index !in disabledIndices) {
+            if (!positiveEnabled.value[disableIndex]) {
+                val tempList = positiveEnabled.value.toMutableList()
+                tempList[disableIndex] = true
+                positiveEnabled.value = tempList
+            }
+
             selected = index
             if (!waitForPositiveButton) {
-                onChoiceChange(selected)
+                onChoiceChange(selected!!)
             }
         }
     }
@@ -175,7 +186,7 @@ fun MaterialDialog.listItemsSingleChoice(
     remember {
         if (waitForPositiveButton) {
             callbacks.add {
-                onChoiceChange(selected)
+                onChoiceChange(selected!!)
             }
         }
     }

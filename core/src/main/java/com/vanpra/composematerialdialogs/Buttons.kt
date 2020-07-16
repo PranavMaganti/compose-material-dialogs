@@ -2,6 +2,7 @@ package com.vanpra.composematerialdialogs
 
 import androidx.annotation.StringRes
 import androidx.compose.Composable
+import androidx.compose.remember
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.tag
@@ -51,7 +52,9 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
         }
 
-        buttonsTagOrder.add(0, buttonsTagOrder.size)
+        remember {
+            buttonsTagOrder.add(0, buttonsTagOrder.size)
+        }
     }
 
     /**
@@ -78,6 +81,8 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
         }
 
-        buttonsTagOrder.add(buttonsTagOrder.size)
+        remember {
+            buttonsTagOrder.add(buttonsTagOrder.size)
+        }
     }
 }
