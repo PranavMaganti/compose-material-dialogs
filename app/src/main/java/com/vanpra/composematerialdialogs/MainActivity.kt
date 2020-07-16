@@ -3,6 +3,12 @@ package com.vanpra.composematerialdialogs
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.ui.core.setContent
+import androidx.ui.foundation.VerticalScroller
+import androidx.ui.layout.Column
+import com.vanpra.composematerialdialogs.demos.BasicDialogDemo
+import com.vanpra.composematerialdialogs.demos.BasicListDialogDemo
+import com.vanpra.composematerialdialogs.demos.MultiSelectionDemo
+import com.vanpra.composematerialdialogs.demos.SingleSelectionDemo
 import com.vanpra.composematerialdialogs.ui.ComposeMaterialDialogsTheme
 
 class MainActivity : AppCompatActivity() {
@@ -10,14 +16,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeMaterialDialogsTheme {
-                DialogAndShowButton(buttonText = "Basic Dialog With Buttons") {
-                    title("Use Location Services?")
-//                    message("Let us help apps determine location. This means sending anonymous location data to us, even when no apps are running")
+                VerticalScroller {
+                    Column {
+                        DialogSection(title = "Basic Dialogs") {
+                            BasicDialogDemo()
+                        }
 
-                    listItemsSingleChoice(listOf("hello", "there"))
-                    buttons {
-                        negativeButton("Disagree")
-                        positiveButton("Agree")
+                        DialogSection(title = "Basic List Dialogs") {
+                            BasicListDialogDemo()
+                        }
+
+                        DialogSection(title = "Single Selection List Dialogs") {
+                            SingleSelectionDemo()
+                        }
+
+                        DialogSection(title = "Multi-Selection List Dialogs") {
+                            MultiSelectionDemo()
+                        }
                     }
                 }
             }

@@ -8,11 +8,12 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.layout.wrapContentSize
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TextButton
 import androidx.ui.unit.dp
 
 @Composable
-fun DialogAndShowButton(buttonText: String, content: @Composable()  MaterialDialog.() -> Unit) {
+fun DialogAndShowButton(buttonText: String, content: @Composable() MaterialDialog.() -> Unit) {
     val dialog = MaterialDialog()
     dialog.build {
         content()
@@ -28,4 +29,16 @@ fun DialogAndShowButton(buttonText: String, content: @Composable()  MaterialDial
             modifier = Modifier.fillMaxWidth().wrapContentSize(Alignment.Center)
         )
     }
+}
+
+@Composable
+fun DialogSection(title: String, content: @Composable() () -> Unit) {
+    Text(
+        title,
+        color = MaterialTheme.colors.onSurface,
+        style = MaterialTheme.typography.subtitle1,
+        modifier = Modifier.padding(start = 8.dp, top = 8.dp)
+    )
+
+    content()
 }
