@@ -31,7 +31,7 @@ fun MaterialDialog.colorChooser(
 
     remember {
         if (waitForPositiveButton) {
-            addCallback {
+            callbacks.add {
                 onColorSelected(selectedColor.value)
             }
         }

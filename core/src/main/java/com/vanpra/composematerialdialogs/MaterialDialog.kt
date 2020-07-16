@@ -3,10 +3,7 @@ package com.vanpra.composematerialdialogs
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.*
-import androidx.ui.core.Alignment
-import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Modifier
-import androidx.ui.core.tag
+import androidx.ui.core.*
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Image
 import androidx.ui.foundation.Text
@@ -19,8 +16,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.savedinstancestate.savedInstanceState
 import androidx.ui.unit.dp
 import androidx.ui.unit.sp
-import androidx.ui.util.fastForEachIndexed
-import androidx.ui.util.fastMap
+import androidx.ui.util.fastFirstOrNull
 
 /**
  * @brief The MaterialDialog class is used to build and display a dialog using both pre-made and
@@ -156,40 +152,82 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
     fun MaterialDialog.buttons(content: @Composable() MaterialDialogButtons.() -> Unit) {
         buttons.buttonsTagOrder.clear()
 
-        val constraints = ConstraintSet2 {
-            val buttonBox = createRefFor("buttons")
+        val interButtonPadding = with(DensityAmbient.current) { 12.dp.toIntPx() }
+        val defaultBoxHeight = with(DensityAmbient.current) { 36.dp.toIntPx() }
 
-            constrain(buttonBox) {
-                linkTo(parent.start, parent.end, 24.dp)
-                bottom.linkTo(parent.bottom)
+        Layout({
+            content(buttons)
+        }, Modifier.padding(top = 8.dp, bottom = 8.dp, end = 8.dp)) { measurables, constraints, _ ->
+            val placeables = measurables.map { it.tag to it.measure(constraints) }
+            val totalWidth = placeables.map { it.second.width }.sum()
+            val column = totalWidth > 0.8 * constraints.maxWidth
 
-                width = Dimension.fillToConstraints
-                height = Dimension.preferredValue(52.dp).atLeast(52.dp)
-            }
-        }
+            val height =
+                if (column) {
+                    val buttonHeight = placeables.map { it.second.height }.sum()
+                    val heightPadding = (placeables.size - 1) * interButtonPadding
+                    buttonHeight + heightPadding
+                } else {
+                    defaultBoxHeight
+                }
 
-        val buttonConstraints = ConstraintSet2 {
-            val buttonRefs = buttons.buttonsTagOrder.fastMap { createRefFor("button_$it") }
+            layout(constraints.maxWidth, height) {
 
-            buttonRefs.fastForEachIndexed { index, item ->
-                constrain(item) {
-                    centerVerticallyTo(parent)
-                    if (index == 0) {
-                        end.linkTo(parent.end, 8.dp)
+                var currX = constraints.maxWidth
+                var currY = 0
+
+                buttons.buttonsTagOrder.forEach { tagNum ->
+                    val button =
+                        placeables.fastFirstOrNull { it.first == "button_$tagNum" }!!.second
+                    currX -= button.width
+
+                    if (!column) {
+                        button.place(currX, 0)
                     } else {
-                        end.linkTo(buttonRefs[index - 1].start, 8.dp)
+                        button.place(currX, currY)
+
+                        currY += button.height + interButtonPadding
+                        currX = constraints.maxWidth
                     }
                 }
             }
         }
-
-        ConstraintLayout(constraints, Modifier.fillMaxWidth()) {
-            ConstraintLayout(buttonConstraints, modifier = Modifier.tag("buttons")) {
-                content(buttons)
-            }
-
-        }
     }
+
+//        val constraints = ConstraintSet2 {
+//            val buttonBox = createRefFor("buttons")
+//
+//            constrain(buttonBox) {
+//                linkTo(parent.start, parent.end, 24.dp)
+//                bottom.linkTo(parent.bottom)
+//
+//                width = Dimension.fillToConstraints
+//                height = Dimension.preferredValue(52.dp).atLeast(52.dp)
+//            }
+//        }
+//
+//        val buttonConstraints = ConstraintSet2 {
+//            val buttonRefs = buttons.buttonsTagOrder.fastMap { createRefFor("button_$it") }
+//
+//            buttonRefs.fastForEachIndexed { index, item ->
+//                constrain(item) {
+//                    centerVerticallyTo(parent)
+//                    if (index == 0) {
+//                        end.linkTo(parent.end, 8.dp)
+//                    } else {
+//                        end.linkTo(buttonRefs[index - 1].start, 8.dp)
+//                    }
+//                }
+//            }
+//        }
+//
+//        ConstraintLayout(constraints, Modifier.fillMaxWidth()) {
+//            ConstraintLayout(buttonConstraints, modifier = Modifier.tag("buttons")) {
+//                content(buttons)
+//            }
+//
+//        }
+
 
     /**
      * @brief Adds an input field with the given parameters to the dialog
@@ -283,5 +321,5 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
             children()
         }
     }
-}
 
+}
