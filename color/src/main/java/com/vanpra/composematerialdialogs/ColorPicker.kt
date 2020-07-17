@@ -254,7 +254,9 @@ fun ColorGridLayout(
                             onColorSelected(item)
                         }
                     }
-                    showSubColors = true
+                    if (subColors.isNotEmpty()) {
+                        showSubColors = true
+                    }
                 }
             }
         } else {

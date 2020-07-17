@@ -4,7 +4,6 @@ import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
-import androidx.ui.graphics.Color
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.layout.wrapContentSize
@@ -22,11 +21,12 @@ fun DialogAndShowButton(buttonText: String, content: @Composable() MaterialDialo
     TextButton(
         onClick = { dialog.show() },
         modifier = Modifier.fillMaxWidth().padding(8.dp),
-        backgroundColor = Color.DarkGray
+        backgroundColor = MaterialTheme.colors.primaryVariant
     ) {
         Text(
             buttonText,
-            modifier = Modifier.fillMaxWidth().wrapContentSize(Alignment.Center)
+            modifier = Modifier.fillMaxWidth().wrapContentSize(Alignment.Center),
+            color = MaterialTheme.colors.onPrimary
         )
     }
 }
