@@ -2,15 +2,35 @@ package com.vanpra.composematerialdialogs
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.*
-import androidx.ui.core.*
+import androidx.compose.Composable
+import androidx.compose.MutableState
+import androidx.compose.getValue
+import androidx.compose.mutableStateOf
+import androidx.compose.remember
+import androidx.compose.setValue
+import androidx.compose.state
+import androidx.ui.core.Alignment
+import androidx.ui.core.ContextAmbient
+import androidx.ui.core.DensityAmbient
+import androidx.ui.core.Layout
+import androidx.ui.core.Modifier
+import androidx.ui.core.tag
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Image
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.drawBackground
 import androidx.ui.graphics.imageFromResource
 import androidx.ui.input.VisualTransformation
-import androidx.ui.layout.*
+import androidx.ui.layout.Column
+import androidx.ui.layout.Row
+import androidx.ui.layout.Spacer
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredHeight
+import androidx.ui.layout.size
+import androidx.ui.layout.width
+import androidx.ui.layout.wrapContentHeight
+import androidx.ui.layout.wrapContentWidth
 import androidx.ui.material.FilledTextField
 import androidx.ui.material.MaterialTheme
 import androidx.ui.savedinstancestate.savedInstanceState
@@ -155,9 +175,12 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         val interButtonPadding = with(DensityAmbient.current) { 12.dp.toIntPx() }
         val defaultBoxHeight = with(DensityAmbient.current) { 36.dp.toIntPx() }
 
-        Layout({
-            content(buttons)
-        }, Modifier.padding(top = 8.dp, bottom = 8.dp, end = 8.dp)) { measurables, constraints, _ ->
+        Layout(
+            {
+                content(buttons)
+            },
+            Modifier.padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
+        ) { measurables, constraints, _ ->
             val placeables = measurables.map { it.tag to it.measure(constraints) }
             val totalWidth = placeables.map { it.second.width }.sum()
             val column = totalWidth > 0.8 * constraints.maxWidth
@@ -190,11 +213,10 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
                         currY += button.height + interButtonPadding
                         currX = constraints.maxWidth
                     }
-            }
+                }
             }
         }
     }
-
 
     /**
      * @brief Adds an input field with the given parameters to the dialog
@@ -288,5 +310,4 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
             children()
         }
     }
-
 }

@@ -1,6 +1,5 @@
 package com.vanpra.composematerialdialogs.datetime
 
-
 import androidx.animation.AnimatedFloat
 import androidx.animation.AnimationEndReason
 import androidx.animation.PhysicsBuilder
@@ -49,7 +48,6 @@ private data class ViewPagerImpl(
     }
 }
 
-
 @Composable
 fun ViewPager(
     modifier: Modifier = Modifier,
@@ -70,7 +68,8 @@ fun ViewPager(
             val anchors = listOf(0f, width, 2 * width)
             val index = state { 0 }
 
-            val flingConfig = AnchorsFlingConfig(anchors,
+            val flingConfig = AnchorsFlingConfig(
+                anchors,
                 animationBuilder = PhysicsBuilder(dampingRatio = 0.8f, stiffness = 1000f),
                 onAnimationEnd = { reason, end, _ ->
                     offset.snapTo(width)
@@ -84,7 +83,8 @@ fun ViewPager(
                             onPrevious()
                         }
                     }
-                })
+                }
+            )
 
             val increment = { increment: Int ->
                 offset.animateTo(
@@ -94,7 +94,8 @@ fun ViewPager(
                             index.value += increment
                             offset.snapTo(width)
                         }
-                    })
+                    }
+                )
             }
 
             val interactionState = InteractionState()
@@ -105,7 +106,8 @@ fun ViewPager(
                     val old = offset.value
                     offset.snapTo(offset.value - (it * 0.5f))
                     offset.value - old
-                }, onDragStopped = { offset.fling(flingConfig, -(it * 0.6f)) },
+                },
+                onDragStopped = { offset.fling(flingConfig, -(it * 0.6f)) },
                 interactionState = interactionState,
                 enabled = enabled
             )

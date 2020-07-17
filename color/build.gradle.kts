@@ -1,11 +1,12 @@
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
-import java.util.*
+import java.util.Date
 
 plugins {
     id("com.android.library")
     kotlin("android")
     id("maven-publish")
     id("com.jfrog.bintray") version "1.8.4"
+    id("org.jmailen.kotlinter")
 }
 
 android {
@@ -52,7 +53,6 @@ dependencies {
     val composeVersion = "0.1.0-dev14"
 
     api(project(":core"))
-//    implementation("com.vanpra.compose-viewpager:viewpager:0.1.0")
 
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation("androidx.core:core-ktx:1.3.0")

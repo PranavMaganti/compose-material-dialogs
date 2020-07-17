@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
                             SingleSelectionDemo()
                         }
 
-                        DialogSection(title = "Multi-Selection List Dialogs") {
+                        DialogSection("Multi-Selection List Dialogs") {
                             MultiSelectionDemo()
                         }
                     }

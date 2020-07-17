@@ -1,15 +1,15 @@
 package com.vanpra.composematerialdialogs.demos
 
-import androidx.annotation.DrawableRes
-import androidx.compose.*
+import androidx.compose.Composable
+import androidx.compose.getValue
+import androidx.compose.setValue
+import androidx.compose.state
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContentScale
-import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Image
 import androidx.ui.foundation.Text
 import androidx.ui.graphics.ColorFilter
-import androidx.ui.graphics.imageFromResource
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.layout.Row
 import androidx.ui.layout.fillMaxWidth
@@ -19,7 +19,12 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Person
 import androidx.ui.unit.dp
-import com.vanpra.composematerialdialogs.*
+import com.vanpra.composematerialdialogs.DialogAndShowButton
+import com.vanpra.composematerialdialogs.MaterialDialogButtons
+import com.vanpra.composematerialdialogs.R
+import com.vanpra.composematerialdialogs.listItems
+import com.vanpra.composematerialdialogs.listItemsMultiChoice
+import com.vanpra.composematerialdialogs.listItemsSingleChoice
 
 private val ringtones =
     listOf("None", "Callisto", "Ganymede", "Luna", "Rrrring", "Beats", "Dance Party", "Zen Too")
@@ -133,4 +138,3 @@ fun SingleSelectionDemo() {
         buttons { defaultButtons() }
     }
 }
-

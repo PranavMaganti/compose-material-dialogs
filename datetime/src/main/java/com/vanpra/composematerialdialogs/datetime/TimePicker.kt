@@ -15,21 +15,35 @@ import androidx.ui.core.WithConstraints
 import androidx.ui.core.gesture.DragObserver
 import androidx.ui.core.gesture.dragGestureFilter
 import androidx.ui.core.gesture.pressIndicatorGestureFilter
-import androidx.ui.foundation.*
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.Canvas
+import androidx.ui.foundation.Text
+import androidx.ui.foundation.clickable
+import androidx.ui.foundation.drawBackground
 import androidx.ui.geometry.Offset
 import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.drawscope.drawCanvas
 import androidx.ui.graphics.toArgb
-import androidx.ui.layout.*
+import androidx.ui.layout.Column
+import androidx.ui.layout.Row
 import androidx.ui.layout.RowScope.gravity
+import androidx.ui.layout.fillMaxSize
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredSize
+import androidx.ui.layout.wrapContentWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import androidx.ui.unit.sp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
-import kotlin.math.*
+import kotlin.math.PI
+import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.pow
+import kotlin.math.sin
 
 data class SelectedOffset(
     val lineOffset: Offset = Offset.Zero,
@@ -65,7 +79,6 @@ fun MaterialDialog.timepicker(
             onCancel()
         }
     }
-
 }
 
 @Composable
@@ -79,23 +92,24 @@ internal fun TimePickerLayout(
             TimeLayout(currentScreen, selectedTime)
             Crossfade(currentScreen, TweenBuilder()) {
                 when (it.value) {
-                    0 -> ClockLayout(
-                        isHours = true,
-                        anchorPoints = 12,
-                        label = { index ->
-                            if (index == 0) {
-                                "12"
-                            } else {
-                                index.toString()
-                            }
-                        },
-                        onAnchorChange = { hours ->
-                            selectedTime.value = selectedTime.value.withHour(hours)
-                        },
-                        selectedTime = selectedTime
-                    ) {
-                        currentScreen.value = 1
-                    }
+                    0 ->
+                        ClockLayout(
+                            isHours = true,
+                            anchorPoints = 12,
+                            label = { index ->
+                                if (index == 0) {
+                                    "12"
+                                } else {
+                                    index.toString()
+                                }
+                            },
+                            onAnchorChange = { hours ->
+                                selectedTime.value = selectedTime.value.withHour(hours)
+                            },
+                            selectedTime = selectedTime
+                        ) {
+                            currentScreen.value = 1
+                        }
 
                     1 -> ClockLayout(
                         isHours = false,
@@ -113,7 +127,6 @@ internal fun TimePickerLayout(
         }
     }
 }
-
 
 @Composable
 private fun TimeLayout(currentScreen: MutableState<Int>, selectedTime: MutableState<LocalTime>) {
@@ -264,7 +277,6 @@ private fun ClockLayout(
             }
         }
 
-
     val touchFilter = { pos: Offset ->
         offset.value = pos
         updateAnchor()
@@ -377,4 +389,3 @@ private fun drawText(
         outerText
     )
 }
-

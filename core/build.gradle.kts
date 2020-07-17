@@ -1,11 +1,12 @@
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
-import java.util.*
+import java.util.Date
 
 plugins {
     id("com.android.library")
     kotlin("android")
     id("maven-publish")
     id("com.jfrog.bintray") version "1.8.4"
+    id("org.jmailen.kotlinter")
 }
 
 android {

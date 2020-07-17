@@ -46,7 +46,8 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
                 }
 
                 onClick()
-            }, modifier = Modifier.tag("button_${buttonsTagOrder.size}"),
+            },
+            modifier = Modifier.tag("button_${buttonsTagOrder.size}"),
             enabled = dialog.positiveEnabled.value.all { it }
         ) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
@@ -72,12 +73,15 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         onClick: () -> Unit = {}
     ) {
         val buttonText = ContextAmbient.current.getString(res, text)
-        TextButton(onClick = {
-            if (dialog.isAutoDismiss()) {
-                dialog.hide()
-            }
-            onClick()
-        }, modifier = Modifier.tag("button_${buttonsTagOrder.size}")) {
+        TextButton(
+            onClick = {
+                if (dialog.isAutoDismiss()) {
+                    dialog.hide()
+                }
+                onClick()
+            },
+            modifier = Modifier.tag("button_${buttonsTagOrder.size}")
+        ) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
         }
 
