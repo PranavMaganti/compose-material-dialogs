@@ -30,7 +30,6 @@ import androidx.ui.layout.Row
 import androidx.ui.layout.RowScope.gravity
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.padding
 import androidx.ui.layout.preferredSize
 import androidx.ui.layout.wrapContentWidth
 import androidx.ui.material.MaterialTheme
@@ -66,7 +65,6 @@ fun MaterialDialog.timepicker(
 ) {
     val selectedTime = state { remember { initialTime.truncatedTo(ChronoUnit.MINUTES) } }
 
-    title("Select a time", center = true)
     customView {
         TimePickerLayout(selectedTime = selectedTime)
     }
@@ -130,10 +128,7 @@ internal fun TimePickerLayout(
 
 @Composable
 private fun TimeLayout(currentScreen: MutableState<Int>, selectedTime: MutableState<LocalTime>) {
-    Box(
-        Modifier.fillMaxWidth().padding(top = 16.dp)
-            .drawBackground(MaterialTheme.colors.primaryVariant)
-    ) {
+    Box(Modifier.fillMaxWidth().drawBackground(MaterialTheme.colors.primaryVariant)) {
         val textSize = 60.sp
         val color = MaterialTheme.colors.onPrimary
         val hourAlpha = 1f - 0.4f * currentScreen.value

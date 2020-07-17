@@ -20,7 +20,7 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Person
 import androidx.ui.unit.dp
 import com.vanpra.composematerialdialogs.DialogAndShowButton
-import com.vanpra.composematerialdialogs.MaterialDialogButtons
+import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.R
 import com.vanpra.composematerialdialogs.listItems
 import com.vanpra.composematerialdialogs.listItemsMultiChoice
@@ -44,9 +44,11 @@ private val emailItems = listOf(
 )
 
 @Composable
-private fun MaterialDialogButtons.defaultButtons() {
-    negativeButton("Cancel")
-    positiveButton("Ok")
+private fun MaterialDialog.defaultListButtons() {
+    buttons {
+        negativeButton("Cancel")
+        positiveButton("Ok")
+    }
 }
 
 @Composable
@@ -85,7 +87,7 @@ fun MultiSelectionDemo() {
     DialogAndShowButton(buttonText = "Multi-Selection Dialog") {
         title(res = R.string.labels_dialog_title)
         listItemsMultiChoice(labels)
-        buttons { defaultButtons() }
+        defaultListButtons()
     }
 
     DialogAndShowButton(buttonText = "Multi-Selection Dialog with disabled items") {
@@ -93,7 +95,7 @@ fun MultiSelectionDemo() {
 
         title(res = R.string.labels_dialog_title)
         listItemsMultiChoice(labels, disabledIndices = disabledLabels)
-        buttons { defaultButtons() }
+        defaultListButtons()
     }
 
     DialogAndShowButton(buttonText = "Multi-Selection Dialog with initial selection") {
@@ -105,7 +107,7 @@ fun MultiSelectionDemo() {
         ) {
             initialSelection = it
         }
-        buttons { defaultButtons() }
+        defaultListButtons()
     }
 }
 
@@ -116,7 +118,7 @@ fun SingleSelectionDemo() {
     DialogAndShowButton(buttonText = "Single Selection Dialog") {
         title(res = R.string.ringtone_dialog_title)
         listItemsSingleChoice(ringtones)
-        buttons { defaultButtons() }
+        defaultListButtons()
     }
 
     DialogAndShowButton(buttonText = "Single Selection Dialog with disabled items") {
@@ -124,7 +126,7 @@ fun SingleSelectionDemo() {
 
         title(res = R.string.ringtone_dialog_title)
         listItemsSingleChoice(ringtones, disabledIndices = disabledRingtones)
-        buttons { defaultButtons() }
+        defaultListButtons()
     }
 
     DialogAndShowButton(buttonText = "Single Selection Dialog with initial selection") {
@@ -135,6 +137,6 @@ fun SingleSelectionDemo() {
             onChoiceChange = { initialSingleSelection = it },
             waitForPositiveButton = true
         )
-        buttons { defaultButtons() }
+        defaultListButtons()
     }
 }

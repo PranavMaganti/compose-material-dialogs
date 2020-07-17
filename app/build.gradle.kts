@@ -50,8 +50,6 @@ dependencies {
     implementation(project(":datetime"))
     implementation(project(":color"))
 
-    implementation("com.afollestad.material-dialogs:color:3.2.1")
-
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation("androidx.core:core-ktx:1.3.0")
     implementation("androidx.appcompat:appcompat:1.1.0")

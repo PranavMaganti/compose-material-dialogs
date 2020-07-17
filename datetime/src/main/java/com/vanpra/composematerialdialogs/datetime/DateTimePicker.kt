@@ -22,6 +22,7 @@ import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredWidth
+import androidx.ui.layout.wrapContentHeight
 import androidx.ui.layout.wrapContentWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
@@ -41,6 +42,7 @@ import java.time.temporal.ChronoUnit
  */
 @Composable
 fun MaterialDialog.datetimepicker(
+    title: String,
     initialDateTime: LocalDateTime = LocalDateTime.now(),
     onCancel: () -> Unit = {},
     onComplete: (LocalDateTime) -> Unit = {}
@@ -71,9 +73,10 @@ fun MaterialDialog.datetimepicker(
                             }
                         )
                         .drawOpacity(1f * ratio)
+                        .wrapContentHeight(Alignment.CenterVertically)
                 )
             }
-            DialogTitle("Select Date and Time")
+            DialogTitle(title)
         }
 
         Row(Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally)) {

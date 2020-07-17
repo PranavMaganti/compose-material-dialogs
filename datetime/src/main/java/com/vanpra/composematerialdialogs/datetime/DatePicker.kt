@@ -66,8 +66,6 @@ fun MaterialDialog.datepicker(
     val currentDate = remember { initialDate }
     val selectedDate = state { currentDate }
 
-    title("Select a date", center = true)
-
     customView {
         DatePickerLayout(currentDate = currentDate, selectedDate = selectedDate)
     }
