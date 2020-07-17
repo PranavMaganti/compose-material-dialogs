@@ -4,13 +4,32 @@ import androidx.compose.Composable
 import androidx.compose.MutableState
 import androidx.compose.remember
 import androidx.compose.state
-import androidx.ui.core.*
-import androidx.ui.foundation.*
+import androidx.ui.core.Alignment
+import androidx.ui.core.Constraints
+import androidx.ui.core.DensityAmbient
+import androidx.ui.core.Layout
+import androidx.ui.core.Modifier
+import androidx.ui.core.clip
+import androidx.ui.core.drawOpacity
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.Image
+import androidx.ui.foundation.Text
+import androidx.ui.foundation.clickable
+import androidx.ui.foundation.drawBackground
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.ColorFilter
-import androidx.ui.layout.*
+import androidx.ui.layout.Arrangement
+import androidx.ui.layout.Column
 import androidx.ui.layout.ColumnScope.gravity
+import androidx.ui.layout.Row
+import androidx.ui.layout.fillMaxSize
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredSize
+import androidx.ui.layout.size
+import androidx.ui.layout.wrapContentSize
+import androidx.ui.layout.wrapContentWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ChevronLeft
@@ -94,8 +113,8 @@ private fun DateLayout(
     selected: MutableState<LocalDate>
 ) {
     val check = remember(selected.value, yearMonth) {
-        selected.value.monthValue == yearMonth.monthValue
-                && selected.value.year == yearMonth.year
+        selected.value.monthValue == yearMonth.monthValue &&
+            selected.value.year == yearMonth.year
     }
 
     val textStyle = TextStyle(fontSize = 13.sp, fontWeight = W400)
@@ -124,9 +143,13 @@ private fun DateLayout(
                     Text(
                         it.toString(),
                         modifier = Modifier.size(boxSize)
-                            .clickable(onClick = {
-                                selected.value = LocalDate.of(yearMonth.year, yearMonth.month, it)
-                            }, indication = null)
+                            .clickable(
+                                onClick = {
+                                    selected.value =
+                                        LocalDate.of(yearMonth.year, yearMonth.month, it)
+                                },
+                                indication = null
+                            )
                             .plus(selectedModifier)
                             .wrapContentSize(Alignment.Center),
                         style = textStyle,

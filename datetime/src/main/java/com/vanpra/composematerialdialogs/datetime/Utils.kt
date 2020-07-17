@@ -7,7 +7,11 @@ import androidx.ui.foundation.Dialog
 import androidx.ui.foundation.Text
 import androidx.ui.geometry.Offset
 import androidx.ui.graphics.Color
-import androidx.ui.layout.*
+import androidx.ui.layout.Arrangement
+import androidx.ui.layout.Row
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.wrapContentWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TextButton
 import androidx.ui.material.ripple.ripple
@@ -19,7 +23,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month
 import java.time.YearMonth
-import java.util.*
+import java.util.Locale
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -63,7 +67,6 @@ internal fun ThemedDialog(onCloseRequest: () -> Unit, children: @Composable() ()
         }
     }
 }
-
 
 internal fun Float.getOffset(angle: Double): Offset =
     Offset((this * cos(angle)).toFloat(), (this * sin(angle)).toFloat())

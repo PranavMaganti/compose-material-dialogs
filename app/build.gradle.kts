@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.config.KotlinCompilerVersion
 plugins {
     id("com.android.application")
     kotlin("android")
-
+    id("org.jmailen.kotlinter")
 }
 
 android {
@@ -66,3 +66,4 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.9")
 }
+

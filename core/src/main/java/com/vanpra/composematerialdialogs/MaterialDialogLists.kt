@@ -1,13 +1,25 @@
 package com.vanpra.composematerialdialogs
 
-import androidx.compose.*
+import androidx.compose.Composable
+import androidx.compose.StructurallyEqual
+import androidx.compose.getValue
+import androidx.compose.mutableStateOf
+import androidx.compose.remember
+import androidx.compose.setValue
+import androidx.compose.state
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.foundation.clickable
-import androidx.ui.layout.*
+import androidx.ui.layout.Row
+import androidx.ui.layout.Spacer
+import androidx.ui.layout.fillMaxHeight
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredHeight
+import androidx.ui.layout.width
 import androidx.ui.material.Checkbox
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
@@ -35,16 +47,17 @@ fun MaterialDialog.listItems(
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable(onClick = {
-                        if(closeOnClick) {
-                            hide()
+                    .clickable(
+                        onClick = {
+                            if (closeOnClick) {
+                                hide()
+                            }
+                            onClick(index, it)
                         }
-                        onClick(index, it)
-                    })
+                    )
                     .padding(top = 12.dp, bottom = 12.dp, start = 24.dp, end = 24.dp)
             )
         }
-
     }
 }
 
@@ -69,12 +82,15 @@ fun <T> MaterialDialog.listItems(
         list.fastForEachIndexed { index, it ->
             Box(
                 Modifier.fillMaxWidth()
-                    .clickable(onClick = {
-                        if (closeOnClick) {
-                            hide()
-                        }
-                        onClick(index, it)
-                    }, enabled = isEnabled(index))
+                    .clickable(
+                        onClick = {
+                            if (closeOnClick) {
+                                hide()
+                            }
+                            onClick(index, it)
+                        },
+                        enabled = isEnabled(index)
+                    )
                     .padding(start = 24.dp, end = 24.dp)
             ) {
                 item(index, it)
@@ -126,9 +142,13 @@ fun MaterialDialog.listItemsMultiChoice(
 
     val isEnabled = { index: Int -> index !in disabledIndices }
 
-    listItems(list = list, onClick = { index, _ ->
-        onChecked(index)
-    }, isEnabled = isEnabled) { index, item ->
+    listItems(
+        list = list,
+        onClick = { index, _ ->
+            onChecked(index)
+        },
+        isEnabled = isEnabled
+    ) { index, item ->
         val enabled = remember(disabledIndices) { index !in disabledIndices }
         val selected = index in selectedItems
 
@@ -206,9 +226,13 @@ fun MaterialDialog.listItemsSingleChoice(
 
     val isEnabled = { index: Int -> index !in disabledIndices }
 
-    listItems(list = list, onClick = { index, _ ->
-        onSelect(index)
-    }, isEnabled = isEnabled) { index, item ->
+    listItems(
+        list = list,
+        onClick = { index, _ ->
+            onSelect(index)
+        },
+        isEnabled = isEnabled
+    ) { index, item ->
         val enabled = remember(disabledIndices) { index !in disabledIndices }
 
         Row(

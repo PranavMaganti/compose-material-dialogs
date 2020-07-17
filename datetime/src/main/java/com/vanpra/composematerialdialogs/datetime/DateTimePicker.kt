@@ -1,12 +1,28 @@
 package com.vanpra.composematerialdialogs.datetime
 
-import androidx.compose.*
-import androidx.ui.core.*
-import androidx.ui.foundation.*
+import androidx.compose.Composable
+import androidx.compose.getValue
+import androidx.compose.remember
+import androidx.compose.state
+import androidx.ui.core.Alignment
+import androidx.ui.core.Modifier
+import androidx.ui.core.WithConstraints
+import androidx.ui.core.clip
+import androidx.ui.core.drawOpacity
+import androidx.ui.foundation.Canvas
+import androidx.ui.foundation.HorizontalScroller
+import androidx.ui.foundation.Image
+import androidx.ui.foundation.ScrollerPosition
+import androidx.ui.foundation.clickable
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.geometry.Offset
 import androidx.ui.graphics.ColorFilter
-import androidx.ui.layout.*
+import androidx.ui.layout.Row
+import androidx.ui.layout.Stack
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredWidth
+import androidx.ui.layout.wrapContentWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
@@ -48,10 +64,12 @@ fun MaterialDialog.datetimepicker(
                     colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
                     modifier = Modifier.padding(start = 16.dp)
                         .clip(CircleShape)
-                        .clickable(onClick = {
-                            scrollerPosition.smoothScrollTo(0f)
-                            currentScreen.value = 0
-                        })
+                        .clickable(
+                            onClick = {
+                                scrollerPosition.smoothScrollTo(0f)
+                                currentScreen.value = 0
+                            }
+                        )
                         .drawOpacity(1f * ratio)
                 )
             }
@@ -96,7 +114,11 @@ fun MaterialDialog.datetimepicker(
 
     buttons {
         positiveButton(
-            text = if (currentScreen.value == 0) { "Next" } else { "Ok" },
+            text = if (currentScreen.value == 0) {
+                "Next"
+            } else {
+                "Ok"
+            },
             disableDismiss = currentScreen.value == 0
         ) {
             if (currentScreen.value == 0) {
