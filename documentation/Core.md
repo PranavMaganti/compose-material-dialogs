@@ -2,7 +2,7 @@
 
 ### Basic Dialogs
 
-
+![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/basic_core.png)
 
 Here is an example to make a basic dialog with a title and text:
 
@@ -42,9 +42,9 @@ dialog.build {
 
 If the text of the buttons is too long to fit in one row the buttons will be automatically stacked on top on one another:
 
-
-
 ### List Dialogs
+
+<img src="https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/basic_list.jpg" style="zoom:25%;" />
 
 Below is an example of a plain list dialog:
 
@@ -86,6 +86,8 @@ dialog.build {
 
 ### Single Choice List
 
+![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/single_selection.png)
+
 ```kotlin
 dialog.build {
     listItemsSingleChoice(
@@ -101,6 +103,8 @@ dialog.build {
 As seen in the code snippet above you can pass in a list of indices of items which should be disabled (ie. cannot be selected) and the item index which should selected to start with. By default, if no initial selection is given it will default to the first item.
 
 ### Multiple Choice List
+
+![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/multi_selection.png)
 
 ```kotlin
 dialog.build {

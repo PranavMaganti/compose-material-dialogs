@@ -10,6 +10,8 @@ This library's design is heavily inspired by https://github.com/afollestad/mater
 
 #### [Core Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/documentation/Core.md)
 
+![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/full_core.png)
+
 [ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:core/images/download.svg?version=0.1.1) ](https://bintray.com/vanpra/maven/compose-material-dialogs:core/0.1.1/link)
 
 ```gradle
@@ -38,14 +40,14 @@ dependencies {
 
 ## Color Picker
 
-[Color Picker Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/documentation/ColorPicker.md)
+#### [Color Picker Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/documentation/ColorPicker.md)
 
-[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:datetime/images/download.svg?version=0.1.1) ](https://bintray.com/vanpra/maven/compose-material-dialogs:datetime/0.1.1/link)
+[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:color/images/download.svg?version=0.1.1) ](https://bintray.com/vanpra/maven/compose-material-dialogs:color/0.1.1/link)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:color:0.1.0"
+  implementation "com.vanpra.compose-material-dialogs:color:0.1.1"
   ...
 }
 ```
