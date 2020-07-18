@@ -66,9 +66,7 @@ fun MaterialDialog.datepicker(
     val currentDate = remember { initialDate }
     val selectedDate = state { currentDate }
 
-    customView {
-        DatePickerLayout(currentDate = currentDate, selectedDate = selectedDate)
-    }
+    DatePickerLayout(currentDate = currentDate, selectedDate = selectedDate)
 
     buttons {
         positiveButton("Ok") {
@@ -86,7 +84,7 @@ internal fun DatePickerLayout(
     selectedDate: MutableState<LocalDate>,
     currentDate: LocalDate
 ) {
-    Column(modifier.drawBackground(MaterialTheme.colors.background)) {
+    Column(modifier) {
         DateTitle(selectedDate)
         ViewPager(Modifier.drawBackground(Color.Transparent), useAlpha = true) {
             val newDate = remember(index) {

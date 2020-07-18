@@ -39,7 +39,7 @@ fun MaterialDialog.listItems(
     closeOnClick: Boolean = true,
     onClick: (index: Int, item: String) -> Unit = { _, _ -> }
 ) {
-    VerticalScroller {
+    VerticalScroller(modifier = Modifier.padding(bottom = 8.dp)) {
         list.fastForEachIndexed { index, it ->
             Text(
                 it,

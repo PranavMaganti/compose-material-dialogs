@@ -2,32 +2,45 @@
 
 ### Basic Dialogs
 
-Here is an example to make a basic dialog with a title, text and buttons:
+Here is an example to make a basic dialog with a title and text:
 
 ```kotlin
 val dialog = MaterialDialog()
 
 dialog.build {
-    title("This is a simple dialog")
-    message("""Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-                    hendrerit risus eu sem aliquam rhoncus. Aliquam ullamcorper tincidunt elit,
-                    in aliquam sapien. Nunc a porttitor nulla, at semper orci.""")
-    positiveButton("Ok", onClick = { 
-        //Do Something
-    })
-    negativeButton("Cancel", onClick = { 
-        //Do Something
-    })
+    title(text = "Use Location Services?")
+    message(res = R.string.location_dialog_message)
 }
 
 dialog.show()
 ```
 
-The dialog is shown when the `dialogShowing` state is set to true (eg. when a button press). 
+The dialog is shown when the `dialog.show()` is called. 
 
 The hard coded strings for all the components in the example above can be replaced with a string resource id. 
 
-If the `autoDismiss` parameter of a `MaterialDialog`  is set to false then the dialog will not close when the positive or negative buttons are clicked, allowing flexibility with custom views.
+If the `autoDismiss` parameter of a `MaterialDialog`  is set to false then the dialog will not close when the positive or negative buttons are clicked, allowing for flexibility in custom views.
+
+Buttons can be added to the dialog by adding the following:
+
+```kotlin
+dialog.build {
+    ...
+    
+    buttons {
+        positiveButton("Ok", onClick = { 
+            //Do Something
+        })
+        negativeButton("Cancel", onClick = { 
+            //Do Something
+        })
+    }
+}
+```
+
+If the text of the buttons is too long to fit in one row the buttons will be automatically stacked on top on one another:
+
+
 
 ### List Dialogs
 
@@ -111,3 +124,17 @@ dialog.build {
 }
 ```
 
+The custom view provides a box with the appropriate material design padding's  assigned to it so that your content. If you don't want the padding you can just put your composable anywhere in the `dialog.build` scope and it will be displayed as normal.
+
+### Theming
+
+The background colour of the dialog can be changed by using the `backgroundColor` parameter of the build function:
+
+```kotlin
+dialog.build(backgroundColor = Color.Red) {
+    title(text = "Use Location Services?")
+    message(res = R.string.location_dialog_message)
+}
+```
+
+The shape of the dialog is dictated by the `MaterialTheme.shapes.medium` parameter.

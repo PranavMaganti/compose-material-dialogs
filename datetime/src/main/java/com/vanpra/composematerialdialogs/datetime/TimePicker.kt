@@ -65,9 +65,7 @@ fun MaterialDialog.timepicker(
 ) {
     val selectedTime = state { remember { initialTime.truncatedTo(ChronoUnit.MINUTES) } }
 
-    customView {
-        TimePickerLayout(selectedTime = selectedTime)
-    }
+    TimePickerLayout(selectedTime = selectedTime)
 
     buttons {
         positiveButton("Ok") {
@@ -85,42 +83,40 @@ internal fun TimePickerLayout(
     selectedTime: MutableState<LocalTime>
 ) {
     val currentScreen = state { 0 }
-    Box(modifier.drawBackground(MaterialTheme.colors.background)) {
-        Column {
-            TimeLayout(currentScreen, selectedTime)
-            Crossfade(currentScreen, TweenBuilder()) {
-                when (it.value) {
-                    0 ->
-                        ClockLayout(
-                            isHours = true,
-                            anchorPoints = 12,
-                            label = { index ->
-                                if (index == 0) {
-                                    "12"
-                                } else {
-                                    index.toString()
-                                }
-                            },
-                            onAnchorChange = { hours ->
-                                selectedTime.value = selectedTime.value.withHour(hours)
-                            },
-                            selectedTime = selectedTime
-                        ) {
-                            currentScreen.value = 1
-                        }
-
-                    1 -> ClockLayout(
-                        isHours = false,
-                        anchorPoints = 60,
+    Column(modifier) {
+        TimeLayout(currentScreen, selectedTime)
+        Crossfade(currentScreen, TweenBuilder()) {
+            when (it.value) {
+                0 ->
+                    ClockLayout(
+                        isHours = true,
+                        anchorPoints = 12,
                         label = { index ->
-                            index.toString().padStart(2, '0')
+                            if (index == 0) {
+                                "12"
+                            } else {
+                                index.toString()
+                            }
                         },
-                        onAnchorChange = { mins ->
-                            selectedTime.value = selectedTime.value.withMinute(mins)
+                        onAnchorChange = { hours ->
+                            selectedTime.value = selectedTime.value.withHour(hours)
                         },
                         selectedTime = selectedTime
-                    )
-                }
+                    ) {
+                        currentScreen.value = 1
+                    }
+
+                1 -> ClockLayout(
+                    isHours = false,
+                    anchorPoints = 60,
+                    label = { index ->
+                        index.toString().padStart(2, '0')
+                    },
+                    onAnchorChange = { mins ->
+                        selectedTime.value = selectedTime.value.withMinute(mins)
+                    },
+                    selectedTime = selectedTime
+                )
             }
         }
     }

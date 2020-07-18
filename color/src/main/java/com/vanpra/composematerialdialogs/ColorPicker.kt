@@ -86,7 +86,7 @@ fun MaterialDialog.colorChooser(
             }
         }
 
-        customView {
+        Column {
             if (allowCustomArgb) {
                 Row(
                     Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally)
@@ -108,29 +108,24 @@ fun MaterialDialog.colorChooser(
                         )
                     }
                 }
+            }
 
-                HorizontalScroller(isScrollable = true, scrollerPosition = scrollerPosition) {
-                    Box(Modifier.width(maxWidth)) {
-                        ColorGridLayout(
-                            colors = colors,
-                            selectedColor = selectedColor,
-                            subColors = subColors,
-                            waitForPositiveButton = waitForPositiveButton,
-                            onColorSelected = onColorSelected
-                        )
-                    }
-                    Box(Modifier.width(maxWidth)) {
-                        CustomARGB(selectedColor)
-                    }
+            HorizontalScroller(
+                isScrollable = allowCustomArgb,
+                scrollerPosition = scrollerPosition
+            ) {
+                Box(Modifier.width(maxWidth)) {
+                    ColorGridLayout(
+                        colors = colors,
+                        selectedColor = selectedColor,
+                        subColors = subColors,
+                        waitForPositiveButton = waitForPositiveButton,
+                        onColorSelected = onColorSelected
+                    )
                 }
-            } else {
-                ColorGridLayout(
-                    colors = colors,
-                    selectedColor = selectedColor,
-                    subColors = subColors,
-                    waitForPositiveButton = waitForPositiveButton,
-                    onColorSelected = onColorSelected
-                )
+                Box(Modifier.width(maxWidth)) {
+                    CustomARGB(selectedColor)
+                }
             }
         }
     }

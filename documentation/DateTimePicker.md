@@ -1,5 +1,34 @@
 # Date Time Picker
 
+### Date Picker
+
+![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/date.jpg)
+
+```kotlin
+dialog.build {
+    ...
+    datepicker { date ->
+        // Do stuff with java.time.LocalDate object which is passed in
+    }
+}
+```
+
+### Time Picker
+
+![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/time.jpg)
+
+```kotlin
+dialog.build {
+    ...
+    timepicker { time ->
+        // Do stuff with java.time.LocalTime object which is passed in
+    }
+    ...
+}
+```
+
+
+
 ### Date and Time Picker
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/datetime.jpg)
@@ -12,35 +41,7 @@ dialog.build {
 }
 ```
 
-To show the dialog just call `dialog.show()`
-
-### Date Picker
-
-![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/date.jpg)
-
-```kotlin
-dialog.build {
-    datepicker { date ->
-        // Do stuff with java.time.LocalDate object which is passed in
-    }
-}
-```
-
-To show the dialog just call`dialog.show()`
-
-### Time Picker
-
-![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/time.jpg)
-
-```kotlin
-dialog.build {
-    timepicker { time ->
-        // Do stuff with java.time.LocalTime object which is passed in
-    }
-}
-```
-
-To show the dialog just call `dialog.show()`
+Unlike the other two dialogs the date and time picker has a title build-in and also had a title parameter which can be used set the title. This is needed as the date time picker uses the title space to show the back button.
 
 ### Change initial date
 
@@ -50,7 +51,7 @@ To use the date last inputted by the user as the starting point you can make use
 val selectedDateTime = state { LocalDateTime.now() }
 
 dialog.build {
-    datetimepicker(selectedDateTime.value) { dateTime ->
+    datetimepicker(initalDateTime = selectedDateTime.value) { dateTime ->
         selectedDateTime.value = dateTime
         ...
     }

@@ -18,7 +18,7 @@ import androidx.ui.core.tag
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Image
 import androidx.ui.foundation.Text
-import androidx.ui.foundation.drawBackground
+import androidx.ui.graphics.Color
 import androidx.ui.graphics.imageFromResource
 import androidx.ui.input.VisualTransformation
 import androidx.ui.layout.Column
@@ -76,10 +76,17 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
      * @param content the body of the dialog
      */
     @Composable
-    fun build(content: @Composable() MaterialDialog.() -> Unit) {
+    fun build(
+        backgroundColor: Color = MaterialTheme.colors.background,
+        content: @Composable() MaterialDialog.() -> Unit
+    ) {
         if (showing.value) {
             ThemedDialog(onCloseRequest = { hide() }) {
-                Column(Modifier.fillMaxWidth().drawBackground(MaterialTheme.colors.background)) {
+                Box(
+                    Modifier.fillMaxWidth(),
+                    backgroundColor = backgroundColor,
+                    shape = MaterialTheme.shapes.medium
+                ) {
                     this@MaterialDialog.content()
                 }
             }
@@ -306,7 +313,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
      */
     @Composable
     fun MaterialDialog.customView(children: @Composable() () -> Unit) {
-        Box(modifier = Modifier.padding(bottom = 28.dp)) {
+        Box(modifier = Modifier.padding(bottom = 28.dp, start = 24.dp, end = 24.dp)) {
             children()
         }
     }

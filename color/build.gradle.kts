@@ -17,7 +17,7 @@ dependencies {
 
 val artifactName = "color"
 val artifactGroup = "com.vanpra.compose-material-dialogs"
-val artifactVersion = "0.1.0"
+val artifactVersion = "0.1.1"
 
 val sourcesJar by tasks.creating(Jar::class) {
     from(android.sourceSets.getByName("main").java.srcDirs)

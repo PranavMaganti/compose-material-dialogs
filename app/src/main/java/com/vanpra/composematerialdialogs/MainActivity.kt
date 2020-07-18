@@ -2,6 +2,7 @@ package com.vanpra.composematerialdialogs
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.Composable
 import androidx.ui.core.setContent
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
@@ -18,33 +19,38 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeMaterialDialogsTheme {
-                VerticalScroller {
-                    Column {
-                        DialogSection(title = "Basic Dialogs") {
-                            BasicDialogDemo()
-                        }
+                DialogDemos()
+            }
+        }
+    }
+}
 
-                        DialogSection(title = "Basic List Dialogs") {
-                            BasicListDialogDemo()
-                        }
+@Composable
+fun DialogDemos() {
+    VerticalScroller {
+        Column {
+            DialogSection(title = "Basic Dialogs") {
+                BasicDialogDemo()
+            }
 
-                        DialogSection(title = "Single Selection List Dialogs") {
-                            SingleSelectionDemo()
-                        }
+            DialogSection(title = "Basic List Dialogs") {
+                BasicListDialogDemo()
+            }
 
-                        DialogSection("Multi-Selection List Dialogs") {
-                            MultiSelectionDemo()
-                        }
+            DialogSection(title = "Single Selection List Dialogs") {
+                SingleSelectionDemo()
+            }
 
-                        DialogSection("Date and Time Picker Dialogs") {
-                            DateTimeDialogDemo()
-                        }
+            DialogSection("Multi-Selection List Dialogs") {
+                MultiSelectionDemo()
+            }
 
-                        DialogSection("Color Picker Dialogs") {
-                            ColorDialogDemo()
-                        }
-                    }
-                }
+            DialogSection("Date and Time Picker Dialogs") {
+                DateTimeDialogDemo()
+            }
+
+            DialogSection("Color Picker Dialogs") {
+                ColorDialogDemo()
             }
         }
     }

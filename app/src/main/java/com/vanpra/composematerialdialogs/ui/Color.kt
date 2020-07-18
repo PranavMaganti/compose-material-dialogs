@@ -11,3 +11,5 @@ val blue500 = Color(0xFF2196F3)
 val blue700 = Color(0xFF1976D2)
 
 val teal200 = Color(0xFF03DAC5)
+
+val dialogBackground = Color(0xFF252525)

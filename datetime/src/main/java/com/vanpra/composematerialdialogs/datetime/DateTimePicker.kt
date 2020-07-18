@@ -57,61 +57,59 @@ fun MaterialDialog.datetimepicker(
     val scrollTo = state { 0f }
     val currentScreen = state { 0 }
 
-    customView {
-        Stack(Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 24.dp)) {
-            WithConstraints {
-                val ratio = scrollerPosition.value / constraints.maxWidth
-                Image(
-                    Icons.Default.ArrowBack,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
-                    modifier = Modifier.padding(start = 16.dp)
-                        .clip(CircleShape)
-                        .clickable(
-                            onClick = {
-                                scrollerPosition.smoothScrollTo(0f)
-                                currentScreen.value = 0
-                            }
-                        )
-                        .drawOpacity(1f * ratio)
-                        .wrapContentHeight(Alignment.CenterVertically)
-                )
-            }
-            DialogTitle(title)
-        }
-
-        Row(Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally)) {
-            WithConstraints {
-                val ratio = scrollerPosition.value / constraints.maxWidth
-                val color = MaterialTheme.colors.onBackground
-                Canvas(modifier = Modifier) {
-                    val offset = Offset(30f, 0f)
-                    drawCircle(
-                        color.copy(0.7f + 0.3f * (1 - ratio)),
-                        radius = 8f + 7f * (1 - ratio),
-                        center = center - offset
-                    )
-                    drawCircle(
-                        color.copy(0.7f + 0.3f * ratio),
-                        radius = 8f + 7f * ratio,
-                        center = center + offset
-                    )
-                }
-            }
-        }
-
+    Stack(Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 24.dp)) {
         WithConstraints {
-            scrollTo.value = constraints.maxWidth.toFloat()
-            HorizontalScroller(isScrollable = false, scrollerPosition = scrollerPosition) {
-                DatePickerLayout(
-                    Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
-                    selectedDate,
-                    currentDate
+            val ratio = scrollerPosition.value / constraints.maxWidth
+            Image(
+                Icons.Default.ArrowBack,
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
+                modifier = Modifier.padding(start = 16.dp)
+                    .clip(CircleShape)
+                    .clickable(
+                        onClick = {
+                            scrollerPosition.smoothScrollTo(0f)
+                            currentScreen.value = 0
+                        }
+                    )
+                    .drawOpacity(1f * ratio)
+                    .wrapContentHeight(Alignment.CenterVertically)
+            )
+        }
+        DialogTitle(title)
+    }
+
+    Row(Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally)) {
+        WithConstraints {
+            val ratio = scrollerPosition.value / constraints.maxWidth
+            val color = MaterialTheme.colors.onBackground
+            Canvas(modifier = Modifier) {
+                val offset = Offset(30f, 0f)
+                drawCircle(
+                    color.copy(0.7f + 0.3f * (1 - ratio)),
+                    radius = 8f + 7f * (1 - ratio),
+                    center = center - offset
                 )
-                TimePickerLayout(
-                    Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
-                    selectedTime
+                drawCircle(
+                    color.copy(0.7f + 0.3f * ratio),
+                    radius = 8f + 7f * ratio,
+                    center = center + offset
                 )
             }
+        }
+    }
+
+    WithConstraints {
+        scrollTo.value = constraints.maxWidth.toFloat()
+        HorizontalScroller(isScrollable = false, scrollerPosition = scrollerPosition) {
+            DatePickerLayout(
+                Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
+                selectedDate,
+                currentDate
+            )
+            TimePickerLayout(
+                Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
+                selectedTime
+            )
         }
     }
 
