@@ -42,6 +42,8 @@ dependencies {
 
 #### [Color Picker Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/documentation/ColorPicker.md)
 
+![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/color_picker.png)
+
 [ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:color/images/download.svg?version=0.1.1) ](https://bintray.com/vanpra/maven/compose-material-dialogs:color/0.1.1/link)
 
 ```gradle
