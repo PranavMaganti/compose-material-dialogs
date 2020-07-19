@@ -12,7 +12,9 @@ import androidx.ui.material.TextButton
 import androidx.ui.unit.dp
 import com.vanpra.composematerialdialogs.ui.dialogBackground
 
-/* Builds a dialog and adds button to the layout which shows the dialog on click */
+/**
+ * @brief Builds a dialog and adds button to the layout which shows the dialog on click
+ */
 @Composable
 fun DialogAndShowButton(buttonText: String, content: @Composable() MaterialDialog.() -> Unit) {
     val dialog = MaterialDialog()
@@ -33,7 +35,9 @@ fun DialogAndShowButton(buttonText: String, content: @Composable() MaterialDialo
     }
 }
 
-/* Add title to top of layout */
+/**
+ * @brief Add title to top of layout
+ */
 @Composable
 fun DialogSection(title: String, content: @Composable() () -> Unit) {
     Text(

@@ -14,6 +14,9 @@ import com.vanpra.composematerialdialogs.demos.MultiSelectionDemo
 import com.vanpra.composematerialdialogs.demos.SingleSelectionDemo
 import com.vanpra.composematerialdialogs.ui.ComposeMaterialDialogsTheme
 
+/**
+ * @brief MainActivity with material dialog samples
+ */
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +28,9 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-/* Collection of Material Dialog Demos */
+/**
+ * @brief Collection of Material Dialog Demos
+ */
 @Composable
 fun DialogDemos() {
     VerticalScroller {

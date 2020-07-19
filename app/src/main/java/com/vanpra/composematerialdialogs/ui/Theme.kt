@@ -22,7 +22,7 @@ private val LightColorPalette = lightColorPalette(
 )
 
 @Composable
-fun ComposeMaterialDialogsTheme(
+internal fun ComposeMaterialDialogsTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
