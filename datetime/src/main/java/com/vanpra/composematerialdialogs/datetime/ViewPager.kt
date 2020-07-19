@@ -13,7 +13,6 @@ import androidx.ui.core.WithConstraints
 import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.HorizontalScroller
-import androidx.ui.foundation.InteractionState
 import androidx.ui.foundation.animation.AnchorsFlingConfig
 import androidx.ui.foundation.animation.fling
 import androidx.ui.foundation.gestures.DragDirection
@@ -26,17 +25,22 @@ import androidx.ui.unit.Dp
 import kotlin.math.abs
 import kotlin.math.sign
 
+/**
+ * @brief Interface used to pass data to children of ViewPager
+ */
 interface ViewPagerScope {
+    /* Index of child */
     val index: Int
-    val interactionState: InteractionState
 
+    /* Scroll viewpager to next page */
     fun next()
+
+    /* Scroll viewpager to previous page */
     fun previous()
 }
 
 private data class ViewPagerImpl(
     override val index: Int,
-    override val interactionState: InteractionState,
     val increment: (Int) -> Unit
 ) : ViewPagerScope {
     override fun next() {
@@ -98,8 +102,6 @@ fun ViewPager(
                 )
             }
 
-            val interactionState = InteractionState()
-
             val draggable = modifier.draggable(
                 dragDirection = DragDirection.Horizontal,
                 onDragDeltaConsumptionRequested = {
@@ -108,7 +110,6 @@ fun ViewPager(
                     offset.value - old
                 },
                 onDragStopped = { offset.fling(flingConfig, -(it * 0.6f)) },
-                interactionState = interactionState,
                 enabled = enabled
             )
 
@@ -130,16 +131,13 @@ fun ViewPager(
                         .offset(-offset.toDp())
                 ) {
                     for (x in -1..1) {
-                        Box(
-                            Modifier.preferredWidth(maxWidth).drawOpacity(alphas.value[x + 1])
-                        ) {
-                            if ((offset.value < width && x == -1) || x == 0 || (offset.value > width && x == 1)) {
-                                val viewPagerImpl =
-                                    ViewPagerImpl(
-                                        index.value + x,
-                                        interactionState,
-                                        increment
-                                    )
+                        val previous = offset.value < width && x == -1
+                        val current = x == 0
+                        val next = offset.value > width && x == 1
+
+                        Box(Modifier.preferredWidth(maxWidth).drawOpacity(alphas.value[x + 1])) {
+                            if (previous || current || next) {
+                                val viewPagerImpl = ViewPagerImpl(index.value + x, increment)
                                 screenItem(viewPagerImpl)
                             }
                         }
@@ -151,4 +149,4 @@ fun ViewPager(
 }
 
 @Composable
-fun AnimatedFloat.toDp(): Dp = with(DensityAmbient.current) { this@toDp.value.toDp() }
+private fun AnimatedFloat.toDp(): Dp = with(DensityAmbient.current) { this@toDp.value.toDp() }

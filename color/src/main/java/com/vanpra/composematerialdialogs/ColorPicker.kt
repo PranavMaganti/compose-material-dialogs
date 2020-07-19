@@ -58,6 +58,20 @@ import androidx.ui.util.fastMap
 val itemSizeDp = 55.dp
 val tickSize = 35.dp
 
+/**
+ * @brief Adds a color chooser to the dialog
+ *
+ * @param colors a list of colors for the user to choose. See [ColorPalette] for predefined colors
+ * @param subColors a list of subsets of [colors] for the user to choose from once a main color from
+ * colors has been chosen. See [ColorPalette] for predefined sub-colors colors
+ * @param initialSelection the index of the color which is selected initially
+ * @param allowCustomArgb if true this will allow the user to choose a custom color using
+ * ARGB sliders
+ * @param waitForPositiveButton if true the [onColorSelected] callback will only be called when the
+ * positive button is pressed, otherwise it will be called when the a new color is selected
+ * @param onColorSelected a function which is called with a [Color]. The timing of this call is
+ * dictated by [waitForPositiveButton]
+ */
 @Composable
 fun MaterialDialog.colorChooser(
     colors: List<Color>,
@@ -132,7 +146,7 @@ fun MaterialDialog.colorChooser(
 }
 
 @Composable
-fun CustomARGB(selectedColor: MutableState<Color>) {
+private fun CustomARGB(selectedColor: MutableState<Color>) {
     Column(Modifier.padding(start = 24.dp, end = 24.dp)) {
         Box(
             Modifier.fillMaxWidth().height(70.dp),
@@ -152,7 +166,7 @@ fun CustomARGB(selectedColor: MutableState<Color>) {
 }
 
 @Composable
-fun SliderLayout(selectedColor: MutableState<Color>) {
+private fun SliderLayout(selectedColor: MutableState<Color>) {
     LabelSlider(
         modifier = Modifier.padding(top = 16.dp),
         label = "A",
@@ -191,7 +205,7 @@ fun SliderLayout(selectedColor: MutableState<Color>) {
 }
 
 @Composable
-fun LabelSlider(
+private fun LabelSlider(
     modifier: Modifier = Modifier,
     label: String,
     value: Float,
@@ -226,7 +240,7 @@ fun LabelSlider(
 }
 
 @Composable
-fun ColorGridLayout(
+private fun ColorGridLayout(
     colors: List<Color>,
     selectedColor: MutableState<Color>,
     subColors: List<List<Color>> = listOf(),
@@ -286,7 +300,7 @@ fun ColorGridLayout(
 }
 
 @Composable
-fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
+private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
     Box(
         Modifier.size(itemSizeDp).clip(CircleShape).clickable(onClick = onClick, indication = null),
         shape = CircleShape,
@@ -352,4 +366,4 @@ fun GridView(
     }
 }
 
-fun Color.foreground(): Color = if (this.luminance() > 0.5f) Color.Black else Color.White
+private fun Color.foreground(): Color = if (this.luminance() > 0.5f) Color.Black else Color.White
