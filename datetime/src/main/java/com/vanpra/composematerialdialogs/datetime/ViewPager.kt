@@ -52,6 +52,7 @@ private data class ViewPagerImpl(
     }
 }
 
+/* Basic ViewPage implementation in compose */
 @Composable
 fun ViewPager(
     modifier: Modifier = Modifier,

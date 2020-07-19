@@ -6,6 +6,7 @@ import com.vanpra.composematerialdialogs.DialogAndShowButton
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.colorChooser
 
+/* Color Picker Demos */
 @Composable
 fun ColorDialogDemo() {
     DialogAndShowButton(buttonText = "Color Picker Dialog") {

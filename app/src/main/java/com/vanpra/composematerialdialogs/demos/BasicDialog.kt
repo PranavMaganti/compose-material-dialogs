@@ -4,6 +4,7 @@ import androidx.compose.Composable
 import com.vanpra.composematerialdialogs.DialogAndShowButton
 import com.vanpra.composematerialdialogs.R
 
+/* Basic Dialog Demos */
 @Composable
 fun BasicDialogDemo() {
     DialogAndShowButton(buttonText = "Basic Dialog") {
