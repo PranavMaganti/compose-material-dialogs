@@ -51,6 +51,7 @@ private fun MaterialDialog.defaultListButtons() {
     }
 }
 
+/* Basic List Dialog Demos */
 @Composable
 fun BasicListDialogDemo() {
     DialogAndShowButton(buttonText = "Simple List Dialog") {
@@ -80,6 +81,7 @@ fun BasicListDialogDemo() {
     }
 }
 
+/* Multi Selection List Dialog Demos */
 @Composable
 fun MultiSelectionDemo() {
     var initialSelection by state { listOf(3, 5) }
@@ -111,6 +113,7 @@ fun MultiSelectionDemo() {
     }
 }
 
+/* Single Selection List Dialog Demos */
 @Composable
 fun SingleSelectionDemo() {
     var initialSingleSelection by state { 4 }

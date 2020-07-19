@@ -6,6 +6,7 @@ import com.vanpra.composematerialdialogs.datetime.datepicker
 import com.vanpra.composematerialdialogs.datetime.datetimepicker
 import com.vanpra.composematerialdialogs.datetime.timepicker
 
+/* Date and Time Picker Demos */
 @Composable
 fun DateTimeDialogDemo() {
     DialogAndShowButton(buttonText = "Time Picker Dialog") {
