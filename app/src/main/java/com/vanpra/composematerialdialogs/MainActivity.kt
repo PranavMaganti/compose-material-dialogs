@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+/* Collection of Material Dialog Demos */
 @Composable
 fun DialogDemos() {
     VerticalScroller {

@@ -29,13 +29,19 @@ import kotlin.math.sign
  * @brief Interface used to pass data to children of ViewPager
  */
 interface ViewPagerScope {
-    /* Index of child */
+    /**
+     * @brief Index of child
+     * **/
     val index: Int
 
-    /* Scroll viewpager to next page */
+    /**
+     * @brief Scroll viewpager to next page
+     */
     fun next()
 
-    /* Scroll viewpager to previous page */
+    /**
+     * @brief Scroll viewpager to previous page
+     */
     fun previous()
 }
 
@@ -52,7 +58,9 @@ private data class ViewPagerImpl(
     }
 }
 
-/* Basic ViewPage implementation in compose */
+/**
+ * @brief Basic ViewPage implementation in compose
+ */
 @Composable
 fun ViewPager(
     modifier: Modifier = Modifier,

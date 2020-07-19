@@ -44,7 +44,7 @@ import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
 
-data class SelectedOffset(
+private data class SelectedOffset(
     val lineOffset: Offset = Offset.Zero,
     val selectedOffset: Offset = Offset.Zero
 )

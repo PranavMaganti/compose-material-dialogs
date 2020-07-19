@@ -102,26 +102,7 @@ fun MaterialDialog.colorChooser(
 
         Column {
             if (allowCustomArgb) {
-                Row(
-                    Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally)
-                        .padding(top = 8.dp, bottom = 16.dp)
-                ) {
-                    val ratio = scrollerPosition.value / constraints.maxWidth
-                    val color = MaterialTheme.colors.onBackground
-                    Canvas(modifier = Modifier) {
-                        val offset = Offset(30f, 0f)
-                        drawCircle(
-                            color.copy(0.7f + 0.3f * (1 - ratio)),
-                            radius = 8f + 7f * (1 - ratio),
-                            center = center - offset
-                        )
-                        drawCircle(
-                            color.copy(0.7f + 0.3f * ratio),
-                            radius = 8f + 7f * ratio,
-                            center = center + offset
-                        )
-                    }
-                }
+                PageIndicator(scrollerPosition, constraints)
             }
 
             HorizontalScroller(
@@ -141,6 +122,31 @@ fun MaterialDialog.colorChooser(
                     CustomARGB(selectedColor)
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun PageIndicator(scrollerPosition: ScrollerPosition, constraints: Constraints) {
+    Row(
+        Modifier.fillMaxWidth()
+            .wrapContentWidth(Alignment.CenterHorizontally)
+            .padding(top = 8.dp, bottom = 16.dp)
+    ) {
+        val ratio = scrollerPosition.value / constraints.maxWidth
+        val color = MaterialTheme.colors.onBackground
+        Canvas(modifier = Modifier) {
+            val offset = Offset(30f, 0f)
+            drawCircle(
+                color.copy(0.7f + 0.3f * (1 - ratio)),
+                radius = 8f + 7f * (1 - ratio),
+                center = center - offset
+            )
+            drawCircle(
+                color.copy(0.7f + 0.3f * ratio),
+                radius = 8f + 7f * ratio,
+                center = center + offset
+            )
         }
     }
 }
@@ -320,7 +326,7 @@ private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-fun GridView(
+private fun GridView(
     itemsInRow: Int,
     itemSize: Int,
     content: @Composable() () -> Unit

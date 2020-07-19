@@ -255,14 +255,10 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         val index by state { positiveEnabled.value.size }
         var valid by state { allowEmpty }
 
-        remember {
-            positiveEnabled.value.add(index, allowEmpty)
-        }
+        remember { positiveEnabled.value.add(index, allowEmpty) }
 
         if (waitForPositiveButton) {
-            callbacks.add {
-                onInput(text)
-            }
+            callbacks.add { onInput(text) }
         }
 
         Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)) {

@@ -144,9 +144,7 @@ fun MaterialDialog.listItemsMultiChoice(
 
     listItems(
         list = list,
-        onClick = { index, _ ->
-            onChecked(index)
-        },
+        onClick = { index, _ -> onChecked(index) },
         isEnabled = isEnabled
     ) { index, item ->
         val enabled = remember(disabledIndices) { index !in disabledIndices }
@@ -156,11 +154,7 @@ fun MaterialDialog.listItemsMultiChoice(
             Modifier.fillMaxWidth().preferredHeight(48.dp),
             verticalGravity = Alignment.CenterVertically
         ) {
-            Checkbox(
-                checked = selected,
-                onCheckedChange = { onChecked(index) },
-                enabled = enabled
-            )
+            Checkbox(checked = selected, onCheckedChange = { onChecked(index) }, enabled = enabled)
             Spacer(modifier = Modifier.fillMaxHeight().width(32.dp))
             Text(
                 item,
@@ -218,14 +212,11 @@ fun MaterialDialog.listItemsSingleChoice(
 
     remember {
         if (waitForPositiveButton) {
-            callbacks.add {
-                onChoiceChange(selected!!)
-            }
+            callbacks.add { onChoiceChange(selected!!) }
         }
     }
 
     val isEnabled = { index: Int -> index !in disabledIndices }
-
     listItems(
         list = list,
         onClick = { index, _ ->
@@ -233,39 +224,58 @@ fun MaterialDialog.listItemsSingleChoice(
         },
         isEnabled = isEnabled
     ) { index, item ->
-        val enabled = remember(disabledIndices) { index !in disabledIndices }
+        SingleChoiceItem(
+            item = item,
+            index = index,
+            disabledIndices = disabledIndices,
+            selected = selected,
+            isEnabled = isEnabled,
+            onSelect = onSelect
+        )
+    }
+}
 
-        Row(
-            Modifier.fillMaxWidth().preferredHeight(48.dp),
-            verticalGravity = Alignment.CenterVertically
-        ) {
-            RadioButton(
-                selected = selected == index,
-                onSelect = {
-                    if (isEnabled(index)) {
-                        onSelect(index)
-                    }
-                },
-                color = if (isEnabled(index)) {
-                    MaterialTheme.colors.secondary
-                } else {
-                    EmphasisAmbient.current.disabled.applyEmphasis(
-                        MaterialTheme.colors.onSurface
-                    )
+@Composable
+private fun SingleChoiceItem(
+    item: String,
+    index: Int,
+    disabledIndices: List<Int>,
+    selected: Int?,
+    isEnabled: (index: Int) -> Boolean,
+    onSelect: (index: Int) -> Unit
+) {
+    val enabled = remember(disabledIndices) { index !in disabledIndices }
+
+    Row(
+        Modifier.fillMaxWidth().preferredHeight(48.dp),
+        verticalGravity = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = selected == index,
+            onSelect = {
+                if (isEnabled(index)) {
+                    onSelect(index)
                 }
-            )
-            Spacer(modifier = Modifier.fillMaxHeight().width(32.dp))
-            Text(
-                item,
-                color = if (enabled) {
+            },
+            color = if (isEnabled(index)) {
+                MaterialTheme.colors.secondary
+            } else {
+                EmphasisAmbient.current.disabled.applyEmphasis(
                     MaterialTheme.colors.onSurface
-                } else {
-                    EmphasisAmbient.current.disabled.applyEmphasis(
-                        MaterialTheme.colors.onSurface
-                    )
-                },
-                style = MaterialTheme.typography.body1
-            )
-        }
+                )
+            }
+        )
+        Spacer(modifier = Modifier.fillMaxHeight().width(32.dp))
+        Text(
+            item,
+            color = if (enabled) {
+                MaterialTheme.colors.onSurface
+            } else {
+                EmphasisAmbient.current.disabled.applyEmphasis(
+                    MaterialTheme.colors.onSurface
+                )
+            },
+            style = MaterialTheme.typography.body1
+        )
     }
 }
