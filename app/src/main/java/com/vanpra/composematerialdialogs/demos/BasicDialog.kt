@@ -1,6 +1,8 @@
 package com.vanpra.composematerialdialogs.demos
 
 import androidx.compose.Composable
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.LocationOn
 import com.vanpra.composematerialdialogs.DialogAndShowButton
 import com.vanpra.composematerialdialogs.R
 
@@ -25,7 +27,7 @@ fun BasicDialogDemo() {
 
     DialogAndShowButton(buttonText = "Basic Dialog With Buttons and Icon Title") {
         iconTitle(
-            iconRes = R.drawable.tick,
+            iconAsset = Icons.Default.LocationOn,
             textRes = R.string.location_dialog_title
         )
         message(res = R.string.location_dialog_message)

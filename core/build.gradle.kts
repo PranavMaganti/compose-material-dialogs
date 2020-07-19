@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.config.KotlinCompilerVersion
 import java.util.Date
 
 plugins {
@@ -10,6 +9,10 @@ android {
     buildFeatures {
         compose = true
     }
+}
+
+dependencies {
+    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.6")
 }
 
 val artifactName = "core"

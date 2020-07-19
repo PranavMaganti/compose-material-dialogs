@@ -1,5 +1,6 @@
 package com.vanpra.composematerialdialogs.demos
 
+import androidx.annotation.DrawableRes
 import androidx.compose.Composable
 import androidx.compose.getValue
 import androidx.compose.setValue
@@ -25,6 +26,7 @@ import com.vanpra.composematerialdialogs.R
 import com.vanpra.composematerialdialogs.listItems
 import com.vanpra.composematerialdialogs.listItemsMultiChoice
 import com.vanpra.composematerialdialogs.listItemsSingleChoice
+import dev.chrisbanes.accompanist.coil.CoilImage
 
 private val ringtones =
     listOf("None", "Callisto", "Ganymede", "Luna", "Rrrring", "Beats", "Dance Party", "Zen Too")
@@ -32,15 +34,15 @@ private val labels = listOf("None", "Forums", "Social", "Updates", "Promotions",
 
 private data class EmailIcon(
     val email: String,
-    val icon: VectorAsset
+    @DrawableRes val icon: Int
 )
 
 private val emailItems = listOf(
-    EmailIcon("joe@material-dialog.com", Icons.Default.Person),
-    EmailIcon("jane@material-dialog.com", Icons.Default.Person),
-    EmailIcon("dan@material-dialog.com", Icons.Default.Person),
-    EmailIcon("helen@material-dialog.com", Icons.Default.Person),
-    EmailIcon("karen@material-dialog.com", Icons.Default.Person)
+    EmailIcon("joe@material-dialog.com", R.drawable.tick),
+    EmailIcon("jane@material-dialog.com", R.drawable.tick),
+    EmailIcon("dan@material-dialog.com", R.drawable.tick),
+    EmailIcon("helen@material-dialog.com", R.drawable.tick),
+    EmailIcon("karen@material-dialog.com", R.drawable.tick)
 )
 
 @Composable
@@ -64,17 +66,16 @@ fun BasicListDialogDemo() {
 
     DialogAndShowButton(buttonText = "Custom List Dialog") {
         title(res = R.string.backup_dialog_title)
-        listItems(emailItems) { index, emailIcon ->
+        listItems(emailItems) { _, emailIcon ->
             Row(Modifier.fillMaxWidth()) {
-                Image(
+                CoilImage(
                     emailIcon.icon,
-                    modifier = Modifier.size(45.dp).padding(vertical = 8.dp),
-                    contentScale = ContentScale.Fit,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                    modifier = Modifier.padding(vertical = 8.dp).size(30.dp),
+                    contentScale = ContentScale.FillHeight
                 )
                 Text(
                     emailIcon.email,
-                    modifier = Modifier.padding(start = 8.dp).gravity(Alignment.CenterVertically),
+                    modifier = Modifier.padding(start = 16.dp).gravity(Alignment.CenterVertically),
                     color = MaterialTheme.colors.onBackground,
                     style = MaterialTheme.typography.body1
                 )

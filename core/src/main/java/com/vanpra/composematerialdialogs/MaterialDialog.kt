@@ -19,7 +19,8 @@ import androidx.ui.foundation.Box
 import androidx.ui.foundation.Image
 import androidx.ui.foundation.Text
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.imageFromResource
+import androidx.ui.graphics.ColorFilter
+import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.input.VisualTransformation
 import androidx.ui.layout.Column
 import androidx.ui.layout.Row
@@ -37,6 +38,7 @@ import androidx.ui.savedinstancestate.savedInstanceState
 import androidx.ui.unit.dp
 import androidx.ui.unit.sp
 import androidx.ui.util.fastFirstOrNull
+import dev.chrisbanes.accompanist.coil.CoilImage
 
 /**
  * @brief The MaterialDialog class is used to build and display a dialog using both pre-made and
@@ -128,21 +130,36 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
      * @param text title text from a string literal
      * @param textRes title text from a string resource
      * @param iconRes icon/image from a drawable resource
+     * @param iconAsset an icon/image from a VectorAsset
+     * @param assetTint the tint which should be applied to the asset if it is not null
      */
     @Composable
     fun MaterialDialog.iconTitle(
         text: String? = null,
         @StringRes textRes: Int? = null,
-        @DrawableRes iconRes: Int
+        @DrawableRes iconRes: Int? = null,
+        iconAsset: VectorAsset? = null,
+        assetTint: Color = MaterialTheme.colors.onBackground
     ) {
+        if (iconAsset == null && iconRes == null) {
+            throw IllegalArgumentException("One of iconRes or iconAsset must not be null")
+        }
         val titleText = ContextAmbient.current.getString(textRes, text)
-        val icon = imageFromResource(ContextAmbient.current.resources, iconRes)
-
         Row(
             modifier = Modifier.padding(start = 24.dp, end = 24.dp).preferredHeight(64.dp),
             verticalGravity = Alignment.CenterVertically
         ) {
-            Image(asset = icon, modifier = Modifier.size(34.dp))
+            if (iconAsset != null) {
+                Image(
+                    asset = iconAsset,
+                    colorFilter = ColorFilter.tint(assetTint)
+                )
+            } else {
+                CoilImage(
+                    data = iconRes!!,
+                    modifier = Modifier.size(36.dp)
+                )
+            }
             Spacer(Modifier.width(14.dp))
             Text(
                 text = titleText,

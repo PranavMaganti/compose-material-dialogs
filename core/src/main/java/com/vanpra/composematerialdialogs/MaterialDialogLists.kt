@@ -77,7 +77,6 @@ fun <T> MaterialDialog.listItems(
     isEnabled: (index: Int) -> Boolean = { _ -> true },
     item: @Composable() (index: Int, T) -> Unit
 ) {
-
     VerticalScroller(modifier = Modifier.padding(bottom = 8.dp)) {
         list.fastForEachIndexed { index, it ->
             Box(

@@ -50,6 +50,8 @@ dependencies {
     implementation(project(":datetime"))
     implementation(project(":color"))
 
+    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.6")
+
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation("androidx.core:core-ktx:1.3.0")
     implementation("androidx.appcompat:appcompat:1.1.0")
