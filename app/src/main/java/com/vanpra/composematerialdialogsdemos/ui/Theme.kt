@@ -1,4 +1,4 @@
-package com.vanpra.composematerialdialogs.ui
+package com.vanpra.composematerialdialogsdemos.ui
 
 import androidx.compose.Composable
 import androidx.ui.foundation.isSystemInDarkTheme

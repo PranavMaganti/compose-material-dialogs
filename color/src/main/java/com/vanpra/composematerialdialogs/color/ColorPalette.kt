@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.vanpra.composematerialdialogs
+package com.vanpra.composematerialdialogs.color
 
 import androidx.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.vanpra.composematerialdialogs
+package com.vanpra.composematerialdialogs.color
 
 import androidx.compose.Composable
 import androidx.compose.MutableState
@@ -54,6 +54,7 @@ import androidx.ui.unit.dp
 import androidx.ui.unit.sp
 import androidx.ui.util.fastForEachIndexed
 import androidx.ui.util.fastMap
+import com.vanpra.composematerialdialogs.MaterialDialog
 
 val itemSizeDp = 55.dp
 val tickSize = 35.dp

@@ -1,4 +1,4 @@
-package com.vanpra.composematerialdialogs.ui
+package com.vanpra.composematerialdialogsdemos.ui
 
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.material.Shapes

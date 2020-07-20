@@ -26,8 +26,19 @@ android {
         }
     }
 
+    packagingOptions {
+        exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/LICENSE")
+        exclude("META-INF/LICENSE.txt")
+        exclude("META-INF/license.txt")
+        exclude("META-INF/NOTICE")
+        exclude("META-INF/NOTICE.txt")
+        exclude("META-INF/notice.txt")
+        exclude("META-INF/ASL2.0")
+        exclude("META-INF/*.kotlin_module")
+    }
+
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -46,7 +57,7 @@ android {
 dependencies {
     val composeVersion = "0.1.0-dev14"
 
-    implementation(project(":core"))
+    // implementation(project(":core"))
     implementation(project(":datetime"))
     implementation(project(":color"))
 
@@ -64,6 +75,5 @@ dependencies {
     testImplementation("junit:junit:4.13")
     androidTestImplementation("androidx.test.ext:junit:1.1.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.9")
 }
 

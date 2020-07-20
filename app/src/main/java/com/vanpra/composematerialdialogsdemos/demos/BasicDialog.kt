@@ -1,10 +1,10 @@
-package com.vanpra.composematerialdialogs.demos
+package com.vanpra.composematerialdialogsdemos.demos
 
 import androidx.compose.Composable
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.LocationOn
-import com.vanpra.composematerialdialogs.DialogAndShowButton
-import com.vanpra.composematerialdialogs.R
+import com.vanpra.composematerialdialogsdemos.DialogAndShowButton
+import com.vanpra.composematerialdialogsdemos.R
 
 /**
  * @brief Basic Dialog Demos

@@ -1,10 +1,10 @@
-package com.vanpra.composematerialdialogs.demos
+package com.vanpra.composematerialdialogsdemos.demos
 
 import androidx.compose.Composable
-import com.vanpra.composematerialdialogs.ColorPalette
-import com.vanpra.composematerialdialogs.DialogAndShowButton
+import com.vanpra.composematerialdialogs.color.ColorPalette
+import com.vanpra.composematerialdialogsdemos.DialogAndShowButton
 import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.colorChooser
+import com.vanpra.composematerialdialogs.color.colorChooser
 
 /**
  * @brief Color Picker Demos

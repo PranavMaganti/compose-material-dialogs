@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.vanpra.composematerialdialogs">
+    package="com.vanpra.composematerialdialogsdemos">
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Composematerialdialogs">
         <activity
-            android:name=".MainActivity"
+            android:name="com.vanpra.composematerialdialogsdemos.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Composematerialdialogs.NoActionBar">
             <intent-filter>
