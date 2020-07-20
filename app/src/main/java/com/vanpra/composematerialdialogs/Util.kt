@@ -7,7 +7,6 @@ import androidx.ui.foundation.Text
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.layout.wrapContentSize
-import androidx.ui.material.AlertDialog
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TextButton
 import androidx.ui.unit.dp

@@ -8,17 +8,12 @@ import androidx.compose.state
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContentScale
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Image
 import androidx.ui.foundation.Text
-import androidx.ui.graphics.ColorFilter
-import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.layout.Row
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.layout.size
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Person
 import androidx.ui.unit.dp
 import com.vanpra.composematerialdialogs.DialogAndShowButton
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -29,7 +24,7 @@ import com.vanpra.composematerialdialogs.listItemsSingleChoice
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 private val ringtones =
-    listOf("None", "Callisto", "Ganymede", "Luna", "Rrrring", "Beats", "Dance Party", "Zen Too","None", "Callisto", "Ganymede", "Luna", "Rrrring", "Beats", "Dance Party", "Zen Too")
+    listOf("None", "Callisto", "Ganymede", "Luna", "Rrrring", "Beats", "Dance Party", "Zen Too", "None", "Callisto", "Ganymede", "Luna", "Rrrring", "Beats", "Dance Party", "Zen Too")
 private val labels = listOf("None", "Forums", "Social", "Updates", "Promotions", "Spam", "Bin")
 
 private data class EmailIcon(
