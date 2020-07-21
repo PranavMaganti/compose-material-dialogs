@@ -101,27 +101,31 @@ fun MaterialDialog.colorChooser(
             }
         }
 
-        Column {
+        Column(Modifier.padding(bottom = 8.dp)) {
             if (allowCustomArgb) {
                 PageIndicator(scrollerPosition, constraints)
-            }
-
-            HorizontalScroller(
-                isScrollable = allowCustomArgb,
-                scrollerPosition = scrollerPosition
-            ) {
-                Box(Modifier.width(maxWidth)) {
-                    ColorGridLayout(
-                        colors = colors,
-                        selectedColor = selectedColor,
-                        subColors = subColors,
-                        waitForPositiveButton = waitForPositiveButton,
-                        onColorSelected = onColorSelected
-                    )
+                HorizontalScroller(scrollerPosition = scrollerPosition) {
+                    Box(Modifier.width(maxWidth)) {
+                        ColorGridLayout(
+                            colors = colors,
+                            selectedColor = selectedColor,
+                            subColors = subColors,
+                            waitForPositiveButton = waitForPositiveButton,
+                            onColorSelected = onColorSelected
+                        )
+                    }
+                    Box(Modifier.width(maxWidth)) {
+                        CustomARGB(selectedColor)
+                    }
                 }
-                Box(Modifier.width(maxWidth)) {
-                    CustomARGB(selectedColor)
-                }
+            } else {
+                ColorGridLayout(
+                    colors = colors,
+                    selectedColor = selectedColor,
+                    subColors = subColors,
+                    waitForPositiveButton = waitForPositiveButton,
+                    onColorSelected = onColorSelected
+                )
             }
         }
     }

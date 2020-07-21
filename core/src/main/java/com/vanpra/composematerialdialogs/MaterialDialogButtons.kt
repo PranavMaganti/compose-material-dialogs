@@ -9,6 +9,7 @@ import androidx.ui.core.tag
 import androidx.ui.foundation.Text
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TextButton
+import java.util.Locale
 
 /**
  * A class used to build a buttons layout for a MaterialDialog. This should be used in conjunction
@@ -33,7 +34,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         disableDismiss: Boolean = false,
         onClick: () -> Unit = {}
     ) {
-        val buttonText = ContextAmbient.current.getString(res, text)
+        val buttonText = ContextAmbient.current.getString(res, text).toUpperCase(Locale.ROOT)
 
         TextButton(
             onClick = {
@@ -72,7 +73,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         @StringRes res: Int? = null,
         onClick: () -> Unit = {}
     ) {
-        val buttonText = ContextAmbient.current.getString(res, text)
+        val buttonText = ContextAmbient.current.getString(res, text).toUpperCase(Locale.ROOT)
         TextButton(
             onClick = {
                 if (dialog.isAutoDismiss()) {

@@ -57,9 +57,9 @@ android {
 dependencies {
     val composeVersion = "0.1.0-dev14"
 
-    implementation("com.vanpra.compose-material-dialogs:core:0.1.3")
-    implementation("com.vanpra.compose-material-dialogs:datetime:0.1.3")
-    implementation("com.vanpra.compose-material-dialogs:color:0.1.3")
+    implementation(project(":core"))
+    implementation(project(":datetime"))
+    implementation(project(":color"))
 
     implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.6")
 
