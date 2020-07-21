@@ -15,11 +15,11 @@ import androidx.ui.layout.padding
 import androidx.ui.layout.size
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.vanpra.composematerialdialogsdemos.DialogAndShowButton
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.listItems
 import com.vanpra.composematerialdialogs.listItemsMultiChoice
 import com.vanpra.composematerialdialogs.listItemsSingleChoice
+import com.vanpra.composematerialdialogsdemos.DialogAndShowButton
 import com.vanpra.composematerialdialogsdemos.R
 import dev.chrisbanes.accompanist.coil.CoilImage
 
