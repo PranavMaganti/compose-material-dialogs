@@ -7,11 +7,15 @@
 Here is an example of how to add a color picker to a dialog:
 
 ``` kotlin
+val dialog = MaterialDialog()
+
 dialog.build {
     ...
     colorPicker(colors = ColorPalette.Primary)
     ...
 }
+
+dialog.show()
 ```
 
 `ColorPalette.Primary` is a predefined list of colors and can be replaced with a list of custom colors.

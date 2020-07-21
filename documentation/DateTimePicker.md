@@ -5,12 +5,15 @@
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/date.jpg)
 
 ```kotlin
+val dialog = MaterialDialog()
 dialog.build {
     ...
     datepicker { date ->
         // Do stuff with java.time.LocalDate object which is passed in
     }
 }
+
+dialog.show()
 ```
 
 ### Time Picker
