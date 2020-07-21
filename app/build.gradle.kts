@@ -57,7 +57,7 @@ android {
 dependencies {
     val composeVersion = "0.1.0-dev14"
 
-    // implementation(project(":core"))
+    implementation(project(":core"))
     implementation(project(":datetime"))
     implementation(project(":color"))
 
