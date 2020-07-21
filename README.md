@@ -14,12 +14,12 @@ This library's design is heavily inspired by https://github.com/afollestad/mater
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/full_core.png)
 
-[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:core/images/download.svg?version=0.1.4) ](https://bintray.com/vanpra/maven/compose-material-dialogs:core/0.1.4/link)
+[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:core/images/download.svg?version=0.1.3) ](https://bintray.com/vanpra/maven/compose-material-dialogs:core/0.1.3/link)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:core:0.1.4" 
+  implementation "com.vanpra.compose-material-dialogs:core:0.1.3" 
   ...
 }
 ```
@@ -30,12 +30,12 @@ dependencies {
 
 ![](https://raw.githubusercontent.com/vanpra/ComposeDateTimePicker/master/imgs/datetime.jpg)
 
-[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:datetime/images/download.svg?version=0.1.4) ](https://bintray.com/vanpra/maven/compose-material-dialogs:datetime/0.1.4/link)
+[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:datetime/images/download.svg?version=0.1.3) ](https://bintray.com/vanpra/maven/compose-material-dialogs:datetime/0.1.3/link)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:datetime:0.1.4"
+  implementation "com.vanpra.compose-material-dialogs:datetime:0.1.3"
   ...
 }
 ```
@@ -46,12 +46,12 @@ dependencies {
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/color_picker.png)
 
-[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:color/images/download.svg?version=0.1.4) ](https://bintray.com/vanpra/maven/compose-material-dialogs:color/0.1.4/link)
+[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:color/images/download.svg?version=0.1.3) ](https://bintray.com/vanpra/maven/compose-material-dialogs:color/0.1.3/link)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:color:0.1.4"
+  implementation "com.vanpra.compose-material-dialogs:color:0.1.3"
   ...
 }
 ```
