@@ -2,7 +2,7 @@ package com.vanpra.composematerialdialogs.datetime
 
 import androidx.animation.AnimatedFloat
 import androidx.animation.AnimationEndReason
-import androidx.animation.PhysicsBuilder
+import androidx.animation.SpringSpec
 import androidx.compose.Composable
 import androidx.compose.onPreCommit
 import androidx.compose.state
@@ -11,11 +11,11 @@ import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.WithConstraints
 import androidx.ui.core.drawOpacity
+import androidx.ui.core.gesture.scrollorientationlocking.Orientation
 import androidx.ui.foundation.Box
-import androidx.ui.foundation.HorizontalScroller
-import androidx.ui.foundation.animation.AnchorsFlingConfig
+import androidx.ui.foundation.ScrollableRow
+import androidx.ui.foundation.animation.FlingConfig
 import androidx.ui.foundation.animation.fling
-import androidx.ui.foundation.gestures.DragDirection
 import androidx.ui.foundation.gestures.draggable
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Row
@@ -81,22 +81,9 @@ fun ViewPager(
             val anchors = listOf(0f, width, 2 * width)
             val index = state { 0 }
 
-            val flingConfig = AnchorsFlingConfig(
+            val flingConfig = FlingConfig(
                 anchors,
-                animationBuilder = PhysicsBuilder(dampingRatio = 0.8f, stiffness = 1000f),
-                onAnimationEnd = { reason, end, _ ->
-                    offset.snapTo(width)
-
-                    if (reason != AnimationEndReason.Interrupted) {
-                        if (end == width * 2) {
-                            index.value += 1
-                            onNext()
-                        } else if (end == 0f) {
-                            index.value -= 1
-                            onPrevious()
-                        }
-                    }
-                }
+                animationSpec = SpringSpec(dampingRatio = 0.8f, stiffness = 1000f),
             )
 
             val increment = { increment: Int ->
@@ -112,13 +99,29 @@ fun ViewPager(
             }
 
             val draggable = modifier.draggable(
-                dragDirection = DragDirection.Horizontal,
-                onDragDeltaConsumptionRequested = {
+                orientation = Orientation.Horizontal,
+                onDrag = {
                     val old = offset.value
                     offset.snapTo(offset.value - (it * 0.5f))
                     offset.value - old
                 },
-                onDragStopped = { offset.fling(flingConfig, -(it * 0.6f)) },
+                onDragStopped = {
+                    offset.fling(-(it * 0.6f),
+                        config = flingConfig,
+                        onAnimationEnd = { reason, end, _ ->
+                            offset.snapTo(width)
+
+                            if (reason != AnimationEndReason.Interrupted) {
+                                if (end == width * 2) {
+                                    index.value += 1
+                                    onNext()
+                                } else if (end == 0f) {
+                                    index.value -= 1
+                                    onPrevious()
+                                }
+                            }
+                        })
+                },
                 enabled = enabled
             )
 
@@ -134,7 +137,7 @@ fun ViewPager(
                 }
             }
 
-            HorizontalScroller(isScrollable = false) {
+            ScrollableRow(children = {
                 Row(
                     draggable.preferredWidth(maxWidth * 3)
                         .offset(-offset.toDp())
@@ -152,7 +155,7 @@ fun ViewPager(
                         }
                     }
                 }
-            }
+            })
         }
     }
 }

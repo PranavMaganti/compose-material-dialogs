@@ -24,7 +24,24 @@ import com.vanpra.composematerialdialogsdemos.R
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 private val ringtones =
-    listOf("None", "Callisto", "Ganymede", "Luna", "Rrrring", "Beats", "Dance Party", "Zen Too", "None", "Callisto", "Ganymede", "Luna", "Rrrring", "Beats", "Dance Party", "Zen Too")
+    listOf(
+        "None",
+        "Callisto",
+        "Ganymede",
+        "Luna",
+        "Rrrring",
+        "Beats",
+        "Dance Party",
+        "Zen Too",
+        "None",
+        "Callisto",
+        "Ganymede",
+        "Luna",
+        "Rrrring",
+        "Beats",
+        "Dance Party",
+        "Zen Too"
+    )
 private val labels = listOf("None", "Forums", "Social", "Updates", "Promotions", "Spam", "Bin")
 
 private data class EmailIcon(

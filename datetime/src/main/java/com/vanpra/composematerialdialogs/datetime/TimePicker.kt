@@ -2,7 +2,6 @@ package com.vanpra.composematerialdialogs.datetime
 
 import android.graphics.Paint
 import android.graphics.Rect
-import androidx.animation.TweenBuilder
 import androidx.compose.Composable
 import androidx.compose.MutableState
 import androidx.compose.remember
@@ -63,7 +62,7 @@ fun MaterialDialog.timepicker(
     onCancel: () -> Unit = {},
     onComplete: (LocalTime) -> Unit = {}
 ) {
-    val selectedTime = state { remember { initialTime.truncatedTo(ChronoUnit.MINUTES) } }
+    val selectedTime = state { initialTime.truncatedTo(ChronoUnit.MINUTES) }
 
     TimePickerLayout(selectedTime = selectedTime)
 
@@ -85,7 +84,7 @@ internal fun TimePickerLayout(
     val currentScreen = state { 0 }
     Column(modifier) {
         TimeLayout(currentScreen, selectedTime)
-        Crossfade(currentScreen, TweenBuilder()) {
+        Crossfade(currentScreen) {
             when (it.value) {
                 0 ->
                     ClockLayout(
@@ -224,7 +223,7 @@ private fun ClockLayout(
                 val diff = it.selectedOffset - offset.value + center.value
                 diff.x.pow(2) + diff.y.pow(2)
             }
-        val minAnchor = absDiff.withIndex().minBy { (_, f) -> f }?.index
+        val minAnchor = absDiff.withIndex().minByOrNull { (_, f) -> f }?.index
         if (anchoredOffset.value.selectedOffset != anchors[minAnchor!!].selectedOffset) {
             onAnchorChange(
                 if (isHours && minAnchor % 2 == 1) {

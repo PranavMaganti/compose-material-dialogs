@@ -121,62 +121,61 @@ private fun DateLayout(
     val maxRows = 6
     val layoutHeight = maxRows * boxSizePx + (verticalSpacing * (maxRows - 1))
 
-    Layout(
-        children = {
-            month.fastForEach {
-                if (it != -1) {
-                    var selectedModifier: Modifier = Modifier
-                    var textColor: Color = MaterialTheme.colors.onBackground
+    Layout({
+        month.fastForEach {
+            if (it != -1) {
+                var selectedModifier: Modifier = Modifier
+                var textColor: Color = MaterialTheme.colors.onBackground
 
-                    if (check && selected.value.dayOfMonth == it) {
-                        selectedModifier = Modifier.drawBackground(
-                            MaterialTheme.colors.primaryVariant.copy(0.7f),
-                            CircleShape
-                        )
-                        textColor = Color.White
-                    }
-
-                    Text(
-                        it.toString(),
-                        modifier = Modifier.size(boxSize)
-                            .clickable(
-                                onClick = {
-                                    selected.value =
-                                        LocalDate.of(yearMonth.year, yearMonth.month, it)
-                                },
-                                indication = null
-                            )
-                            .plus(selectedModifier)
-                            .wrapContentSize(Alignment.Center),
-                        style = textStyle,
-                        color = textColor
+                if (check && selected.value.dayOfMonth == it) {
+                    selectedModifier = Modifier.drawBackground(
+                        MaterialTheme.colors.primaryVariant.copy(0.7f),
+                        CircleShape
                     )
-                } else {
-                    Box(Modifier.size(boxSize))
+                    textColor = Color.White
                 }
+
+                Text(
+                    it.toString(),
+                    modifier = Modifier.size(boxSize)
+                        .clickable(
+                            onClick = {
+                                selected.value =
+                                    LocalDate.of(yearMonth.year, yearMonth.month, it)
+                            },
+                            indication = null
+                        )
+                        .plus(selectedModifier)
+                        .wrapContentSize(Alignment.Center),
+                    style = textStyle,
+                    color = textColor
+                )
+            } else {
+                Box(Modifier.size(boxSize))
             }
-        },
-        modifier = Modifier.padding(
+        }
+    },
+        Modifier.padding(
             top = 8.dp,
             start = 24.dp,
             end = 24.dp
         )
             .fillMaxWidth()
-            .gravity(Alignment.CenterHorizontally)
-    ) { measurables, constraints, _ ->
-        val horizontalSpacing = (constraints.maxWidth - (boxSizePx * 7)) / 6
+            .gravity(Alignment.CenterHorizontally),
+        { measurables, constraints ->
+            val horizontalSpacing = (constraints.maxWidth - (boxSizePx * 7)) / 6
 
-        layout(constraints.maxWidth, layoutHeight) {
-            measurables
-                .map { it.measure(Constraints(maxHeight = boxSizePx, maxWidth = boxSizePx)) }
-                .fastForEachIndexed { index, it ->
-                    it.place(
-                        x = (index % 7) * (boxSizePx + horizontalSpacing),
-                        y = (index / 7) * (boxSizePx + verticalSpacing)
-                    )
-                }
-        }
-    }
+            layout(constraints.maxWidth, layoutHeight) {
+                measurables
+                    .map { it.measure(Constraints(maxHeight = boxSizePx, maxWidth = boxSizePx)) }
+                    .fastForEachIndexed { index, it ->
+                        it.place(
+                            x = (index % 7) * (boxSizePx + horizontalSpacing),
+                            y = (index / 7) * (boxSizePx + verticalSpacing)
+                        )
+                    }
+            }
+        })
 }
 
 @Composable

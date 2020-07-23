@@ -52,28 +52,33 @@ class CommonModulePlugin : Plugin<Project> {
                 project.tasks.withType(KotlinCompile::class.java).configureEach {
                     kotlinOptions {
                         jvmTarget = "1.8"
+                        val newArgs = freeCompilerArgs.toMutableList()
+                        newArgs.add("-Xallow-jvm-ir-dependencies")
+                        newArgs.add("-Xskip-prerelease-check")
+                        freeCompilerArgs = newArgs
                     }
                 }
 
                 composeOptions {
-                    kotlinCompilerExtensionVersion = "0.1.0-dev14"
-                    kotlinCompilerVersion = "1.3.70-dev-withExperimentalGoogleExtensions-20200424"
+                    kotlinCompilerVersion = "1.4.0-dev-withExperimentalGoogleExtensions-20200720"
+                    kotlinCompilerExtensionVersion = "0.1.0-dev15"
                 }
             }
 
             project.dependencies {
-                val composeVersion = "0.1.0-dev14"
-                val kotlinVersion = "1.3.72"
+                val composeVersion = "0.1.0-dev15"
+                val kotlinVersion = "1.4-M3"
 
                 add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
                 add("implementation", "androidx.core:core-ktx:1.0.2")
                 add("implementation", "androidx.appcompat:appcompat:1.1.0")
                 add("implementation", "com.google.android.material:material:1.1.0")
 
-                add("implementation", "androidx.ui:ui-layout:$composeVersion")
-                add("implementation", "androidx.ui:ui-material:$composeVersion")
+                add("implementation", "androidx.compose.foundation:foundation-layout:$composeVersion")
+                add("implementation", "androidx.compose.material:material:$composeVersion")
                 add("implementation", "androidx.ui:ui-tooling:$composeVersion")
-                add("implementation", "androidx.ui:ui-material-icons-extended:$composeVersion")
+                add("implementation", "androidx.compose.material:material-icons-extended:$composeVersion")
+                add("implementation", "androidx.compose.animation:animation:$composeVersion")
 
                 add("testImplementation", "junit:junit:4.12")
                 add("androidTestImplementation", "androidx.test.ext:junit:1.1.1")

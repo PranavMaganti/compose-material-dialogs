@@ -19,12 +19,12 @@ import androidx.ui.foundation.Border
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Canvas
 import androidx.ui.foundation.ContentGravity
-import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.foundation.Image
-import androidx.ui.foundation.ScrollerPosition
+import androidx.ui.foundation.ScrollState
+import androidx.ui.foundation.ScrollableColumn
+import androidx.ui.foundation.ScrollableRow
 import androidx.ui.foundation.Text
-import androidx.ui.foundation.VerticalScroller
-import androidx.ui.foundation.animation.AnchorsFlingConfig
+import androidx.ui.foundation.animation.FlingConfig
 import androidx.ui.foundation.clickable
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.geometry.Offset
@@ -84,14 +84,13 @@ fun MaterialDialog.colorChooser(
 ) {
     WithConstraints {
         val selectedColor = state { colors[initialSelection] }
-        val flingConfig = AnchorsFlingConfig(listOf(0f, -constraints.maxWidth.toFloat()))
+        val flingConfig = FlingConfig(listOf(0f, -constraints.maxWidth.toFloat()))
 
-        val scrollerPosition by state {
-            ScrollerPosition(
-                flingConfig = flingConfig,
+        val scrollerPosition =
+            ScrollState(
+                initial = 0f, flingConfig = flingConfig,
                 animationClock = AnimationClockAmbient.current
             )
-        }
 
         remember {
             if (waitForPositiveButton) {
@@ -104,7 +103,7 @@ fun MaterialDialog.colorChooser(
         Column(Modifier.padding(bottom = 8.dp)) {
             if (allowCustomArgb) {
                 PageIndicator(scrollerPosition, constraints)
-                HorizontalScroller(scrollerPosition = scrollerPosition) {
+                ScrollableRow(children = {
                     Box(Modifier.width(maxWidth)) {
                         ColorGridLayout(
                             colors = colors,
@@ -117,7 +116,7 @@ fun MaterialDialog.colorChooser(
                     Box(Modifier.width(maxWidth)) {
                         CustomARGB(selectedColor)
                     }
-                }
+                })
             } else {
                 ColorGridLayout(
                     colors = colors,
@@ -132,13 +131,13 @@ fun MaterialDialog.colorChooser(
 }
 
 @Composable
-private fun PageIndicator(scrollerPosition: ScrollerPosition, constraints: Constraints) {
+private fun PageIndicator(scrollerState: ScrollState, constraints: Constraints) {
     Row(
         Modifier.fillMaxWidth()
             .wrapContentWidth(Alignment.CenterHorizontally)
             .padding(top = 8.dp, bottom = 16.dp)
     ) {
-        val ratio = scrollerPosition.value / constraints.maxWidth
+        val ratio = scrollerState.value / constraints.maxWidth
         val color = MaterialTheme.colors.onBackground
         Canvas(modifier = Modifier) {
             val offset = Offset(30f, 0f)
@@ -337,43 +336,45 @@ private fun GridView(
     content: @Composable() () -> Unit
 ) {
     WithConstraints {
-        VerticalScroller(modifier = Modifier.preferredHeightIn(maxHeight = (maxHeight * 0.7f))) {
-            Layout(
-                children = {
+        ScrollableColumn(
+            modifier = Modifier.preferredHeightIn(maxHeight = (maxHeight * 0.7f)),
+            children = {
+                Layout({
                     content()
                 },
-                modifier = Modifier.padding(
-                    top = 8.dp,
-                    start = 24.dp,
-                    end = 24.dp
-                )
-                    .fillMaxWidth()
-                    .gravity(Alignment.CenterHorizontally)
-            ) { measurables, constraints, _ ->
-                val spacing = (constraints.maxWidth - (itemSize * itemsInRow)) / (itemsInRow - 1)
-                val rows = (measurables.size / itemsInRow) + 1
+                    Modifier.padding(
+                        top = 8.dp,
+                        start = 24.dp,
+                        end = 24.dp
+                    )
+                        .fillMaxWidth()
+                        .gravity(Alignment.CenterHorizontally),
+                    { measurables, constraints ->
+                        val spacing =
+                            (constraints.maxWidth - (itemSize * itemsInRow)) / (itemsInRow - 1)
+                        val rows = (measurables.size / itemsInRow) + 1
 
-                val layoutHeight = (rows * itemSize) + ((rows - 1) * spacing)
+                        val layoutHeight = (rows * itemSize) + ((rows - 1) * spacing)
 
-                layout(constraints.maxWidth, layoutHeight) {
-                    measurables
-                        .fastMap {
-                            it.measure(
-                                Constraints(
-                                    maxHeight = itemSize,
-                                    maxWidth = itemSize
-                                )
-                            )
+                        layout(constraints.maxWidth, layoutHeight) {
+                            measurables
+                                .fastMap {
+                                    it.measure(
+                                        Constraints(
+                                            maxHeight = itemSize,
+                                            maxWidth = itemSize
+                                        )
+                                    )
+                                }
+                                .fastForEachIndexed { index, it ->
+                                    it.place(
+                                        x = (index % itemsInRow) * (itemSize + spacing),
+                                        y = (index / itemsInRow) * (itemSize + spacing)
+                                    )
+                                }
                         }
-                        .fastForEachIndexed { index, it ->
-                            it.place(
-                                x = (index % itemsInRow) * (itemSize + spacing),
-                                y = (index / itemsInRow) * (itemSize + spacing)
-                            )
-                        }
-                }
-            }
-        }
+                    })
+            })
     }
 }
 

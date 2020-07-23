@@ -12,12 +12,12 @@ android {
 }
 
 dependencies {
-    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.6")
+    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.7")
 }
 
 val artifactName = "core"
 val artifactGroup = "com.vanpra.compose-material-dialogs"
-val artifactVersion = "0.1.4"
+val artifactVersion = "0.1.5"
 
 val sourcesJar by tasks.creating(Jar::class) {
     from(android.sourceSets.getByName("main").java.srcDirs)

@@ -5,7 +5,7 @@ import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
-import androidx.ui.core.tag
+import androidx.ui.core.layoutId
 import androidx.ui.foundation.Text
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TextButton
@@ -48,7 +48,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
 
                 onClick()
             },
-            modifier = Modifier.tag("button_${buttonsTagOrder.size}"),
+            modifier = Modifier.layoutId("button_${buttonsTagOrder.size}"),
             enabled = dialog.positiveEnabled.value.all { it }
         ) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
@@ -81,7 +81,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
                 }
                 onClick()
             },
-            modifier = Modifier.tag("button_${buttonsTagOrder.size}")
+            modifier = Modifier.layoutId("button_${buttonsTagOrder.size}")
         ) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
         }

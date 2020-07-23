@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.ui.core.setContent
-import androidx.ui.foundation.VerticalScroller
+import androidx.ui.foundation.ScrollableColumn
 import androidx.ui.layout.Column
 import com.vanpra.composematerialdialogsdemos.demos.BasicDialogDemo
 import com.vanpra.composematerialdialogsdemos.demos.BasicListDialogDemo
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
  */
 @Composable
 fun DialogDemos() {
-    VerticalScroller {
+    ScrollableColumn {
         Column {
             DialogSection(title = "Basic Dialogs") {
                 BasicDialogDemo()

@@ -1,7 +1,6 @@
 package com.vanpra.composematerialdialogs.datetime
 
 import androidx.compose.Composable
-import androidx.compose.getValue
 import androidx.compose.remember
 import androidx.compose.state
 import androidx.ui.core.Alignment
@@ -10,10 +9,10 @@ import androidx.ui.core.WithConstraints
 import androidx.ui.core.clip
 import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.Canvas
-import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.foundation.Image
-import androidx.ui.foundation.ScrollerPosition
+import androidx.ui.foundation.ScrollableRow
 import androidx.ui.foundation.clickable
+import androidx.ui.foundation.rememberScrollState
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.geometry.Offset
 import androidx.ui.graphics.ColorFilter
@@ -53,13 +52,13 @@ fun MaterialDialog.datetimepicker(
     val currentTime = remember { initialDateTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES) }
     val selectedTime = state { currentTime }
 
-    val scrollerPosition by state { ScrollerPosition() }
+    val scrollState = rememberScrollState()
     val scrollTo = state { 0f }
     val currentScreen = state { 0 }
 
     Stack(Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 24.dp)) {
         WithConstraints {
-            val ratio = scrollerPosition.value / constraints.maxWidth
+            val ratio = scrollState.value / constraints.maxWidth
             Image(
                 Icons.Default.ArrowBack,
                 colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
@@ -67,7 +66,7 @@ fun MaterialDialog.datetimepicker(
                     .clip(CircleShape)
                     .clickable(
                         onClick = {
-                            scrollerPosition.smoothScrollTo(0f)
+                            scrollState.smoothScrollTo(0f)
                             currentScreen.value = 0
                         }
                     )
@@ -80,7 +79,7 @@ fun MaterialDialog.datetimepicker(
 
     Row(Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally)) {
         WithConstraints {
-            val ratio = scrollerPosition.value / constraints.maxWidth
+            val ratio = scrollState.value / constraints.maxWidth
             val color = MaterialTheme.colors.onBackground
             Canvas(modifier = Modifier) {
                 val offset = Offset(30f, 0f)
@@ -100,7 +99,7 @@ fun MaterialDialog.datetimepicker(
 
     WithConstraints {
         scrollTo.value = constraints.maxWidth.toFloat()
-        HorizontalScroller(isScrollable = false, scrollerPosition = scrollerPosition) {
+        ScrollableRow(scrollState = scrollState, children = {
             DatePickerLayout(
                 Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
                 selectedDate,
@@ -110,7 +109,7 @@ fun MaterialDialog.datetimepicker(
                 Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
                 selectedTime
             )
-        }
+        })
     }
 
     buttons {
@@ -123,7 +122,7 @@ fun MaterialDialog.datetimepicker(
             disableDismiss = currentScreen.value == 0
         ) {
             if (currentScreen.value == 0) {
-                scrollerPosition.smoothScrollTo(scrollTo.value)
+                scrollState.smoothScrollTo(scrollTo.value)
                 currentScreen.value = 1
             } else {
                 onComplete(LocalDateTime.of(selectedDate.value, selectedTime.value))

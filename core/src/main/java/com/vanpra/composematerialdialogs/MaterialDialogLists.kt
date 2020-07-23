@@ -1,7 +1,6 @@
 package com.vanpra.composematerialdialogs
 
 import androidx.compose.Composable
-import androidx.compose.StructurallyEqual
 import androidx.compose.getValue
 import androidx.compose.mutableStateOf
 import androidx.compose.remember
@@ -11,8 +10,8 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.core.WithConstraints
 import androidx.ui.foundation.Box
+import androidx.ui.foundation.ScrollableColumn
 import androidx.ui.foundation.Text
-import androidx.ui.foundation.VerticalScroller
 import androidx.ui.foundation.clickable
 import androidx.ui.layout.Row
 import androidx.ui.layout.Spacer
@@ -50,7 +49,7 @@ fun MaterialDialog.listItems(
             modifier = modifier.plus(bottomPadding)
         }
 
-        VerticalScroller(modifier = modifier) {
+        ScrollableColumn(modifier = modifier, children = {
             list.fastForEachIndexed { index, it ->
                 Text(
                     it,
@@ -69,7 +68,7 @@ fun MaterialDialog.listItems(
                         .padding(top = 12.dp, bottom = 12.dp, start = 24.dp, end = 24.dp)
                 )
             }
-        }
+        })
     }
 }
 
@@ -95,7 +94,7 @@ fun <T> MaterialDialog.listItems(
         if (buttons.buttonsTagOrder.isEmpty()) {
             modifier = modifier.plus(bottomPadding)
         }
-        VerticalScroller(modifier = modifier) {
+        ScrollableColumn(modifier = modifier, children = {
             list.fastForEachIndexed { index, it ->
                 Box(
                     Modifier.fillMaxWidth()
@@ -113,7 +112,7 @@ fun <T> MaterialDialog.listItems(
                     item(index, it)
                 }
             }
-        }
+        })
     }
 }
 
@@ -135,7 +134,7 @@ fun MaterialDialog.listItemsMultiChoice(
     waitForPositiveButton: Boolean = false,
     onCheckedChange: (indices: List<Int>) -> Unit = {}
 ) {
-    var selectedItems by mutableStateOf(initialSelection.toMutableList(), StructurallyEqual)
+    var selectedItems by mutableStateOf(initialSelection.toMutableList())
     val onChecked = { index: Int ->
         if (index !in disabledIndices) {
             val newSelectedItems = selectedItems.toMutableList()
@@ -272,18 +271,12 @@ private fun SingleChoiceItem(
     ) {
         RadioButton(
             selected = selected == index,
-            onSelect = {
+            onClick = {
                 if (isEnabled(index)) {
                     onSelect(index)
                 }
             },
-            color = if (isEnabled(index)) {
-                MaterialTheme.colors.secondary
-            } else {
-                EmphasisAmbient.current.disabled.applyEmphasis(
-                    MaterialTheme.colors.onSurface
-                )
-            }
+            enabled = isEnabled(index)
         )
         Spacer(modifier = Modifier.fillMaxHeight().width(32.dp))
         Text(

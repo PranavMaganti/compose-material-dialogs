@@ -14,7 +14,8 @@ import androidx.ui.core.ContextAmbient
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
-import androidx.ui.core.tag
+import androidx.ui.core.id
+import androidx.ui.core.layoutId
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Image
 import androidx.ui.foundation.Text
@@ -200,42 +201,46 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         val interButtonPadding = with(DensityAmbient.current) { 12.dp.toIntPx() }
         val defaultBoxHeight = with(DensityAmbient.current) { 36.dp.toIntPx() }
 
-        Box(Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp, end = 8.dp).tag("buttons")) {
-            Layout({ content(buttons) }) { measurables, constraints, _ ->
-                val placeables = measurables.map { it.tag to it.measure(constraints) }
-                val totalWidth = placeables.map { it.second.width }.sum()
-                val column = totalWidth > 0.8 * constraints.maxWidth
+        Box(
+            Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
+                .layoutId("buttons")
+        ) {
+            Layout({ content(buttons) }, Modifier,
+                { measurables, constraints ->
+                    val placeables = measurables.map { it.id to it.measure(constraints) }
+                    val totalWidth = placeables.map { it.second.width }.sum()
+                    val column = totalWidth > 0.8 * constraints.maxWidth
 
-                val height =
-                    if (column) {
-                        val buttonHeight = placeables.map { it.second.height }.sum()
-                        val heightPadding = (placeables.size - 1) * interButtonPadding
-                        buttonHeight + heightPadding
-                    } else {
-                        defaultBoxHeight
-                    }
-
-                layout(constraints.maxWidth, height) {
-                    var currX = constraints.maxWidth
-                    var currY = 0
-
-                    buttons.buttonsTagOrder.forEach { tagNum ->
-                        val button =
-                            placeables.fastFirstOrNull { it.first == "button_$tagNum" }!!.second
-
-                        currX -= button.width
-
-                        if (!column) {
-                            button.place(currX, 0)
+                    val height =
+                        if (column) {
+                            val buttonHeight = placeables.map { it.second.height }.sum()
+                            val heightPadding = (placeables.size - 1) * interButtonPadding
+                            buttonHeight + heightPadding
                         } else {
-                            button.place(currX, currY)
+                            defaultBoxHeight
+                        }
 
-                            currY += button.height + interButtonPadding
-                            currX = constraints.maxWidth
+                    layout(constraints.maxWidth, height) {
+                        var currX = constraints.maxWidth
+                        var currY = 0
+
+                        buttons.buttonsTagOrder.forEach { tagNum ->
+                            val button =
+                                placeables.fastFirstOrNull { it.first == "button_$tagNum" }!!.second
+
+                            currX -= button.width
+
+                            if (!column) {
+                                button.place(currX, 0)
+                            } else {
+                                button.place(currX, currY)
+
+                                currY += button.height + interButtonPadding
+                                currX = constraints.maxWidth
+                            }
                         }
                     }
-                }
-            }
+                })
         }
     }
 
