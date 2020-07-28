@@ -10,6 +10,7 @@ import androidx.ui.core.clip
 import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.Canvas
 import androidx.ui.foundation.Image
+import androidx.ui.foundation.ScrollableColumn
 import androidx.ui.foundation.ScrollableRow
 import androidx.ui.foundation.clickable
 import androidx.ui.foundation.rememberScrollState
@@ -19,10 +20,12 @@ import androidx.ui.graphics.ColorFilter
 import androidx.ui.layout.Row
 import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.height
+import androidx.ui.layout.heightIn
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredWidth
 import androidx.ui.layout.wrapContentHeight
-import androidx.ui.layout.wrapContentWidth
+import androidx.ui.layout.wrapContentSize
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
@@ -55,7 +58,6 @@ fun MaterialDialog.datetimepicker(
     val scrollState = rememberScrollState()
     val scrollTo = state { 0f }
     val currentScreen = state { 0 }
-
     Stack(Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 24.dp)) {
         WithConstraints {
             val ratio = scrollState.value / constraints.maxWidth
@@ -73,12 +75,11 @@ fun MaterialDialog.datetimepicker(
                     .drawOpacity(1f * ratio)
                     .wrapContentHeight(Alignment.CenterVertically)
             )
+            DialogTitle(title)
         }
-        DialogTitle(title)
     }
-
-    Row(Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally)) {
-        WithConstraints {
+    WithConstraints {
+        Row(Modifier.fillMaxWidth().wrapContentSize(Alignment.Center).height(10.dp)) {
             val ratio = scrollState.value / constraints.maxWidth
             val color = MaterialTheme.colors.onBackground
             Canvas(modifier = Modifier) {
@@ -95,21 +96,23 @@ fun MaterialDialog.datetimepicker(
                 )
             }
         }
-    }
 
-    WithConstraints {
-        scrollTo.value = constraints.maxWidth.toFloat()
-        ScrollableRow(scrollState = scrollState, children = {
-            DatePickerLayout(
-                Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
-                selectedDate,
-                currentDate
-            )
-            TimePickerLayout(
-                Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
-                selectedTime
-            )
-        })
+        WithConstraints {
+            ScrollableColumn(Modifier.heightIn(maxHeight = maxHeight * 0.7f)) {
+                scrollTo.value = constraints.maxWidth.toFloat()
+                ScrollableRow(scrollState = scrollState, isScrollEnabled = false, children = {
+                    DatePickerLayout(
+                        Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
+                        selectedDate,
+                        currentDate
+                    )
+                    TimePickerLayout(
+                        Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
+                        selectedTime
+                    )
+                })
+            }
+        }
     }
 
     buttons {
