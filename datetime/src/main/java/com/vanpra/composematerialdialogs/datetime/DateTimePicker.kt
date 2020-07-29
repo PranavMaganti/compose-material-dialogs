@@ -103,23 +103,21 @@ fun MaterialDialog.datetimepicker(
                 }
             }
 
-            ScrollableColumn(Modifier.heightIn(maxHeight = maxHeight * 0.7f)) {
-                scrollTo.value = constraints.maxWidth.toFloat()
-                ScrollableRow(
-                    scrollState = scrollState,
-                    isScrollEnabled = false,
-                    children = {
-                        DatePickerLayout(
-                            Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
-                            selectedDate,
-                            currentDate
-                        )
-                        TimePickerLayout(
-                            Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
-                            selectedTime
-                        )
-                    })
-            }
+            scrollTo.value = constraints.maxWidth.toFloat()
+            ScrollableRow(
+                scrollState = scrollState,
+                isScrollEnabled = false,
+                children = {
+                    DatePickerLayout(
+                        Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
+                        selectedDate,
+                        currentDate
+                    )
+                    TimePickerLayout(
+                        Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
+                        selectedTime
+                    )
+                })
         }
     }
 
