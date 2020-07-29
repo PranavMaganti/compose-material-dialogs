@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.config.KotlinCompilerVersion
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("org.jmailen.kotlinter")
+    // id("org.jmailen.kotlinter")
 }
 
 android {
@@ -57,10 +57,7 @@ android {
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).configureEach {
     kotlinOptions {
         jvmTarget = "1.8"
-        val newArgs = freeCompilerArgs.toMutableList()
-        newArgs.add("-Xallow-jvm-ir-dependencies")
-        newArgs.add("-Xskip-prerelease-check")
-        freeCompilerArgs = newArgs
+        freeCompilerArgs = listOf("-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check")
     }
 }
 
@@ -74,7 +71,7 @@ dependencies {
     implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.7")
 
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
-    implementation("androidx.core:core-ktx:1.3.0")
+    implementation("androidx.core:core-ktx:1.3.1")
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("com.google.android.material:material:1.1.0")
 
