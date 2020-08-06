@@ -64,11 +64,11 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).conf
 dependencies {
     val composeVersion = "0.1.0-dev16"
 
-    implementation(project(":core"))
-    implementation(project(":datetime"))
-    implementation(project(":color"))
+    implementation("com.vanpra.compose-material-dialogs:core:0.1.6")
+    implementation("com.vanpra.compose-material-dialogs:datetime:0.1.6")
+    implementation("com.vanpra.compose-material-dialogs:color:0.1.6")
 
-    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.8.ui-6721902-SNAPSHOT")
+    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.8")
 
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation("androidx.core:core-ktx:1.3.1")

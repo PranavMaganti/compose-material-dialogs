@@ -12,9 +12,7 @@ android {
 }
 
 dependencies {
-
-    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.8.ui-6721902-SNAPSHOT")
-    // implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.8")
+    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.8")
 }
 
 val artifactName = "core"
