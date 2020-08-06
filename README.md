@@ -14,12 +14,12 @@ This library's design is heavily inspired by https://github.com/afollestad/mater
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/full_core.png)
 
-[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:core/images/download.svg?version=0.1.6) ](https://bintray.com/vanpra/maven/compose-material-dialogs:core/0.1.6/link)
+[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:core/images/download.svg?version=0.1.7) ](https://bintray.com/vanpra/maven/compose-material-dialogs:core/0.1.7/link)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:core:0.1.6" 
+  implementation "com.vanpra.compose-material-dialogs:core:0.1.7" 
   ...
 }
 ```

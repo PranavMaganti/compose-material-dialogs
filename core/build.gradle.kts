@@ -17,7 +17,7 @@ dependencies {
 
 val artifactName = "core"
 val artifactGroup = "com.vanpra.compose-material-dialogs"
-val artifactVersion = "0.1.6"
+val artifactVersion = "0.1.7"
 
 val sourcesJar by tasks.creating(Jar::class) {
     from(android.sourceSets.getByName("main").java.srcDirs)
@@ -41,7 +41,7 @@ afterEvaluate {
     bintray {
         user = project.findProperty("bintrayUser").toString()
         key = project.findProperty("bintrayKey").toString()
-        publish = true
+        publish = false
         override = true
 
         setPublications("release")
