@@ -65,7 +65,7 @@ dependencies {
 
 ## Changelog
 
-### 0.1.6  - 2020-07-23
+### 0.1.5  - 2020-07-23
 
 - Updated compose version to dev15
 - Updated kotlin version to 1.4-M3
