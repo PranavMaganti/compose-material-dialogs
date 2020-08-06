@@ -16,12 +16,12 @@ android {
 
 dependencies {
     api(project(":core"))
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.9")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.10")
 }
 
 val artifactName = "datetime"
 val artifactGroup = "com.vanpra.compose-material-dialogs"
-val artifactVersion = "0.1.5"
+val artifactVersion = "0.1.6"
 
 val sourcesJar by tasks.creating(Jar::class) {
     from(android.sourceSets.getByName("main").java.srcDirs)

@@ -2,10 +2,10 @@ package com.vanpra.composematerialdialogsdemos
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.Composable
-import androidx.ui.core.setContent
-import androidx.ui.foundation.ScrollableColumn
-import androidx.ui.layout.Column
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.setContent
 import com.vanpra.composematerialdialogsdemos.demos.BasicDialogDemo
 import com.vanpra.composematerialdialogsdemos.demos.BasicListDialogDemo
 import com.vanpra.composematerialdialogsdemos.demos.ColorDialogDemo

@@ -1,15 +1,15 @@
 package com.vanpra.composematerialdialogsdemos
 
-import androidx.compose.Composable
-import androidx.ui.core.Alignment
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.padding
-import androidx.ui.layout.wrapContentSize
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.TextButton
-import androidx.ui.unit.dp
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogsdemos.ui.dialogBackground
 

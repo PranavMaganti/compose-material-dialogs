@@ -2,10 +2,10 @@ package com.vanpra.composematerialdialogs
 
 import android.content.Context
 import androidx.annotation.StringRes
-import androidx.compose.Composable
-import androidx.ui.core.ContextAmbient
-import androidx.ui.foundation.Dialog
-import androidx.ui.material.MaterialTheme
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.window.Dialog
 
 @Composable
 internal fun Context.getString(@StringRes res: Int? = null, default: String? = null): String {

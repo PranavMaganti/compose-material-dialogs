@@ -1,6 +1,6 @@
 package com.vanpra.composematerialdialogsdemos.demos
 
-import androidx.compose.Composable
+import androidx.compose.runtime.Composable
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.color.ColorPalette
 import com.vanpra.composematerialdialogs.color.colorChooser

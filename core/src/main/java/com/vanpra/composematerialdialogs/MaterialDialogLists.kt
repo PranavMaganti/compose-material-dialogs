@@ -1,32 +1,32 @@
 package com.vanpra.composematerialdialogs
 
-import androidx.compose.Composable
-import androidx.compose.getValue
-import androidx.compose.mutableStateOf
-import androidx.compose.remember
-import androidx.compose.setValue
-import androidx.compose.state
-import androidx.ui.core.Alignment
-import androidx.ui.core.Modifier
-import androidx.ui.core.WithConstraints
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ScrollableColumn
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.clickable
-import androidx.ui.layout.Row
-import androidx.ui.layout.Spacer
-import androidx.ui.layout.fillMaxHeight
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.heightIn
-import androidx.ui.layout.padding
-import androidx.ui.layout.preferredHeight
-import androidx.ui.layout.width
-import androidx.ui.material.Checkbox
-import androidx.ui.material.EmphasisAmbient
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.RadioButton
-import androidx.ui.unit.dp
-import androidx.ui.util.fastForEachIndexed
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.preferredHeight
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Checkbox
+import androidx.compose.material.EmphasisAmbient
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.RadioButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.state
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.WithConstraints
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEachIndexed
 
 private const val listRatio = 0.6f
 val bottomPadding = Modifier.padding(bottom = 8.dp)
@@ -46,7 +46,7 @@ fun MaterialDialog.listItems(
     WithConstraints {
         var modifier = Modifier.heightIn(maxHeight = maxHeight * listRatio)
         if (buttons.buttonsTagOrder.isEmpty()) {
-            modifier = modifier.plus(bottomPadding)
+            modifier = modifier.then(bottomPadding)
         }
 
         ScrollableColumn(modifier = modifier, children = {
@@ -92,7 +92,7 @@ fun <T> MaterialDialog.listItems(
     WithConstraints {
         var modifier = Modifier.heightIn(maxHeight = maxHeight * listRatio)
         if (buttons.buttonsTagOrder.isEmpty()) {
-            modifier = modifier.plus(bottomPadding)
+            modifier = modifier.then(bottomPadding)
         }
         ScrollableColumn(modifier = modifier, children = {
             list.fastForEachIndexed { index, it ->

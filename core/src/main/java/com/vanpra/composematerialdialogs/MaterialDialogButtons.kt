@@ -1,14 +1,14 @@
 package com.vanpra.composematerialdialogs
 
 import androidx.annotation.StringRes
-import androidx.compose.Composable
-import androidx.compose.remember
-import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Modifier
-import androidx.ui.core.layoutId
-import androidx.ui.foundation.Text
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.TextButton
+import androidx.compose.foundation.Text
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.ContextAmbient
 import java.util.Locale
 
 /**

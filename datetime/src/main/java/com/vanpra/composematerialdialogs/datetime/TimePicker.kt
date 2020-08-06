@@ -2,38 +2,39 @@ package com.vanpra.composematerialdialogs.datetime
 
 import android.graphics.Paint
 import android.graphics.Rect
-import androidx.compose.Composable
-import androidx.compose.MutableState
-import androidx.compose.remember
-import androidx.compose.state
-import androidx.ui.animation.Crossfade
-import androidx.ui.core.Alignment
-import androidx.ui.core.DensityAmbient
-import androidx.ui.core.Modifier
-import androidx.ui.core.WithConstraints
-import androidx.ui.core.gesture.DragObserver
-import androidx.ui.core.gesture.dragGestureFilter
-import androidx.ui.core.gesture.pressIndicatorGestureFilter
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.Canvas
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.clickable
-import androidx.ui.foundation.drawBackground
-import androidx.ui.geometry.Offset
-import androidx.ui.graphics.Canvas
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.drawscope.drawCanvas
-import androidx.ui.graphics.toArgb
-import androidx.ui.layout.Column
-import androidx.ui.layout.Row
-import androidx.ui.layout.RowScope.gravity
-import androidx.ui.layout.fillMaxSize
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.preferredSize
-import androidx.ui.layout.wrapContentWidth
-import androidx.ui.material.MaterialTheme
-import androidx.ui.unit.dp
-import androidx.ui.unit.sp
+import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope.gravity
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.state
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.WithConstraints
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.gesture.DragObserver
+import androidx.compose.ui.gesture.dragGestureFilter
+import androidx.compose.ui.gesture.pressIndicatorGestureFilter
+import androidx.compose.ui.graphics.Canvas
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.drawCanvas
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
@@ -123,7 +124,7 @@ internal fun TimePickerLayout(
 
 @Composable
 private fun TimeLayout(currentScreen: MutableState<Int>, selectedTime: MutableState<LocalTime>) {
-    Box(Modifier.fillMaxWidth().drawBackground(MaterialTheme.colors.primaryVariant)) {
+    Box(Modifier.fillMaxWidth().background(color = MaterialTheme.colors.primaryVariant)) {
         val textSize = 60.sp
         val color = MaterialTheme.colors.onPrimary
         val hourAlpha = 1f - 0.4f * currentScreen.value
@@ -363,7 +364,6 @@ private fun drawText(
     color: Int = android.graphics.Color.WHITE
 ) {
     val outerText = Paint()
-    Color.White
     outerText.color = color
     outerText.textSize = textSize
     outerText.textAlign = Paint.Align.CENTER

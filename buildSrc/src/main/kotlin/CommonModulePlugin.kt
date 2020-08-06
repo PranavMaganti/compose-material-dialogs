@@ -52,21 +52,18 @@ class CommonModulePlugin : Plugin<Project> {
                 project.tasks.withType(KotlinCompile::class.java).configureEach {
                     kotlinOptions {
                         jvmTarget = "1.8"
-                        val newArgs = freeCompilerArgs.toMutableList()
-                        newArgs.add("-Xallow-jvm-ir-dependencies")
-                        newArgs.add("-Xskip-prerelease-check")
-                        freeCompilerArgs = newArgs
+                        freeCompilerArgs = listOf("-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check")
                     }
                 }
 
                 composeOptions {
-                    kotlinCompilerVersion = "1.4.0-dev-withExperimentalGoogleExtensions-20200720"
-                    kotlinCompilerExtensionVersion = "0.1.0-dev15"
+                    kotlinCompilerVersion = "1.4.0-rc"
+                    kotlinCompilerExtensionVersion = "0.1.0-dev16"
                 }
             }
 
             project.dependencies {
-                val composeVersion = "0.1.0-dev15"
+                val composeVersion = "0.1.0-dev16"
                 val kotlinVersion = "1.4-M3"
 
                 add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")

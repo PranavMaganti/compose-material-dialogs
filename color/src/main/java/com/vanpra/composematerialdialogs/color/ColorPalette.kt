@@ -19,11 +19,11 @@
 
 package com.vanpra.composematerialdialogs.color
 
-import androidx.ui.graphics.Color
+import androidx.compose.ui.graphics.Color
 
 /**
  * Object used to store common colors and subColors that can be used with [colorChooser]
- * Credit for the color schemes got to "Aidan Follestad" as stated at the top of this file
+ * Credit for the color schemes goes to "Aidan Follestad" as stated at the top of this file
  */
 object ColorPalette {
     val Primary = listOf(

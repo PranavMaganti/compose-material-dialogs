@@ -1,8 +1,8 @@
 package com.vanpra.composematerialdialogsdemos.demos
 
-import androidx.compose.Composable
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.LocationOn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.runtime.Composable
 import com.vanpra.composematerialdialogsdemos.DialogAndShowButton
 import com.vanpra.composematerialdialogsdemos.R
 

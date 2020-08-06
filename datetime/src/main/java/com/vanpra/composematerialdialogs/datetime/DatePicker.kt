@@ -1,48 +1,48 @@
 package com.vanpra.composematerialdialogs.datetime
 
-import androidx.compose.Composable
-import androidx.compose.MutableState
-import androidx.compose.remember
-import androidx.compose.state
-import androidx.ui.core.Alignment
-import androidx.ui.core.Constraints
-import androidx.ui.core.DensityAmbient
-import androidx.ui.core.Layout
-import androidx.ui.core.Modifier
-import androidx.ui.core.clip
-import androidx.ui.core.drawOpacity
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.Image
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.clickable
-import androidx.ui.foundation.drawBackground
-import androidx.ui.foundation.shape.corner.CircleShape
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.ColorFilter
-import androidx.ui.layout.Arrangement
-import androidx.ui.layout.Column
-import androidx.ui.layout.ColumnScope.gravity
-import androidx.ui.layout.Row
-import androidx.ui.layout.fillMaxSize
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.padding
-import androidx.ui.layout.preferredSize
-import androidx.ui.layout.size
-import androidx.ui.layout.wrapContentSize
-import androidx.ui.layout.wrapContentWidth
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.ChevronLeft
-import androidx.ui.material.icons.filled.ChevronRight
-import androidx.ui.text.TextStyle
-import androidx.ui.text.font.FontWeight.Companion.W400
-import androidx.ui.text.font.FontWeight.Companion.W500
-import androidx.ui.text.font.FontWeight.Companion.W600
-import androidx.ui.text.font.FontWeight.Companion.W700
-import androidx.ui.unit.dp
-import androidx.ui.unit.sp
-import androidx.ui.util.fastForEach
-import androidx.ui.util.fastForEachIndexed
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope.gravity
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.state
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Layout
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawOpacity
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight.Companion.W400
+import androidx.compose.ui.text.font.FontWeight.Companion.W500
+import androidx.compose.ui.text.font.FontWeight.Companion.W600
+import androidx.compose.ui.text.font.FontWeight.Companion.W700
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastForEachIndexed
 import com.vanpra.composematerialdialogs.MaterialDialog
 import java.time.LocalDate
 import java.time.YearMonth
@@ -86,7 +86,7 @@ internal fun DatePickerLayout(
 ) {
     Column(modifier) {
         DateTitle(selectedDate)
-        ViewPager(Modifier.drawBackground(Color.Transparent), useAlpha = true) {
+        ViewPager(Modifier.background(color = Color.Transparent), useAlpha = true) {
             val newDate = remember(index) {
                 currentDate.plusMonths(index.toLong())
             }
@@ -128,9 +128,9 @@ private fun DateLayout(
                 var textColor: Color = MaterialTheme.colors.onBackground
 
                 if (check && selected.value.dayOfMonth == it) {
-                    selectedModifier = Modifier.drawBackground(
-                        MaterialTheme.colors.primaryVariant.copy(0.7f),
-                        CircleShape
+                    selectedModifier = Modifier.background(
+                        color = MaterialTheme.colors.primaryVariant.copy(0.7f),
+                        shape = CircleShape
                     )
                     textColor = Color.White
                 }
@@ -145,7 +145,7 @@ private fun DateLayout(
                             },
                             indication = null
                         )
-                        .plus(selectedModifier)
+                        .then(selectedModifier)
                         .wrapContentSize(Alignment.Center),
                     style = textStyle,
                     color = textColor

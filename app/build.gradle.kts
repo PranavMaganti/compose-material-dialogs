@@ -49,8 +49,8 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "0.1.0-dev15"
-        kotlinCompilerVersion = "1.4.0-dev-withExperimentalGoogleExtensions-20200720"
+        kotlinCompilerExtensionVersion = "0.1.0-dev16"
+        kotlinCompilerVersion = "1.4.0-rc"
     }
 }
 
@@ -62,18 +62,18 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).conf
 }
 
 dependencies {
-    val composeVersion = "0.1.0-dev15"
+    val composeVersion = "0.1.0-dev16"
 
     implementation(project(":core"))
     implementation(project(":datetime"))
     implementation(project(":color"))
 
-    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.7")
+    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.8.ui-6721902-SNAPSHOT")
 
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation("androidx.core:core-ktx:1.3.1")
-    implementation("androidx.appcompat:appcompat:1.1.0")
-    implementation("com.google.android.material:material:1.1.0")
+    implementation("androidx.appcompat:appcompat:1.2.0")
+    implementation("com.google.android.material:material:1.2.0")
 
     implementation("androidx.compose.foundation:foundation-layout:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")

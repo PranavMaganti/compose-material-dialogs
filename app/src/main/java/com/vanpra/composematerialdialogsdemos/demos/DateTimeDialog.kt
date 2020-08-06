@@ -1,6 +1,6 @@
 package com.vanpra.composematerialdialogsdemos.demos
 
-import androidx.compose.Composable
+import androidx.compose.runtime.Composable
 import com.vanpra.composematerialdialogs.datetime.datepicker
 import com.vanpra.composematerialdialogs.datetime.datetimepicker
 import com.vanpra.composematerialdialogs.datetime.timepicker

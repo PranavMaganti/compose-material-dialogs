@@ -1,16 +1,16 @@
 package com.vanpra.composematerialdialogs.datetime
 
-import androidx.compose.Composable
-import androidx.ui.core.Alignment
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.geometry.Offset
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.wrapContentWidth
-import androidx.ui.material.MaterialTheme
-import androidx.ui.text.TextStyle
-import androidx.ui.text.font.FontWeight
-import androidx.ui.unit.sp
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month
