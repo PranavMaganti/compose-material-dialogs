@@ -49,8 +49,8 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "0.1.0-dev16"
-        kotlinCompilerVersion = "1.4.0-rc"
+        kotlinCompilerExtensionVersion = "0.1.0-dev17"
+        kotlinCompilerVersion = "1.4.0"
     }
 }
 
@@ -62,13 +62,13 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).conf
 }
 
 dependencies {
-    val composeVersion = "0.1.0-dev16"
+    val composeVersion = "0.1.0-dev17"
 
-    implementation("com.vanpra.compose-material-dialogs:core:0.1.6")
-    implementation("com.vanpra.compose-material-dialogs:datetime:0.1.6")
-    implementation("com.vanpra.compose-material-dialogs:color:0.1.6")
+    implementation(project(":core"))
+    implementation(project(":datetime"))
+    implementation(project(":color"))
 
-    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.8")
+    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.9")
 
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation("androidx.core:core-ktx:1.3.1")

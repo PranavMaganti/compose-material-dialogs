@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredWidth
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
@@ -20,8 +20,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.state
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
@@ -50,16 +50,16 @@ fun MaterialDialog.datetimepicker(
     onComplete: (LocalDateTime) -> Unit = {}
 ) {
     val currentDate = initialDateTime.toLocalDate()
-    val selectedDate = state { currentDate }
+    val selectedDate = remember { mutableStateOf(currentDate) }
 
     val currentTime = remember { initialDateTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES) }
-    val selectedTime = state { currentTime }
+    val selectedTime = remember { mutableStateOf(currentTime) }
 
     val scrollState = rememberScrollState()
     val columnScrollState = rememberScrollState()
 
-    val scrollTo = state { 0f }
-    val currentScreen = state { 0 }
+    val scrollTo = remember { mutableStateOf(0f) }
+    val currentScreen = remember { mutableStateOf(0) }
 
     WithConstraints {
         ScrollableColumn(
@@ -109,12 +109,14 @@ fun MaterialDialog.datetimepicker(
                 isScrollEnabled = false,
                 children = {
                     DatePickerLayout(
-                        Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
+                        Modifier.padding(top = 16.dp)
+                            .sizeIn(maxWidth = maxWidth, maxHeight = maxHeight),
                         selectedDate,
                         currentDate
                     )
                     TimePickerLayout(
-                        Modifier.padding(top = 16.dp).preferredWidth(maxWidth),
+                        Modifier.padding(top = 16.dp)
+                            .sizeIn(maxWidth = maxWidth, maxHeight = maxHeight),
                         selectedTime
                     )
                 })

@@ -16,11 +16,11 @@ internal fun Context.getString(@StringRes res: Int? = null, default: String? = n
 }
 
 @Composable
-internal fun ThemedDialog(onCloseRequest: () -> Unit, children: @Composable() () -> Unit) {
+internal fun ThemedDialog(onCloseRequest: () -> Unit, children: @Composable () -> Unit) {
     val colors = MaterialTheme.colors
     val typography = MaterialTheme.typography
 
-    Dialog(onCloseRequest = onCloseRequest) {
+    Dialog(onDismissRequest = onCloseRequest) {
         MaterialTheme(colors = colors, typography = typography) {
             children()
         }

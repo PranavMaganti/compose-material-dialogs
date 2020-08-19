@@ -24,7 +24,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.state
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
@@ -54,7 +53,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
 
     val buttons = MaterialDialogButtons(this)
     val callbacks = mutableListOf<() -> Unit>()
-    val positiveEnabled = mutableStateOf(mutableListOf<Boolean>())
+    var positiveEnabled by mutableStateOf(mutableListOf<Boolean>())
 
     /**
      * @brief Shows the dialog
@@ -83,7 +82,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
     @Composable
     fun build(
         backgroundColor: Color = MaterialTheme.colors.background,
-        content: @Composable() MaterialDialog.() -> Unit
+        content: @Composable MaterialDialog.() -> Unit
     ) {
         if (showing.value) {
             ThemedDialog(onCloseRequest = { hide() }) {
@@ -196,7 +195,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
      * See [MaterialDialogButtons] for more information about the content
      */
     @Composable
-    fun MaterialDialog.buttons(content: @Composable() MaterialDialogButtons.() -> Unit) {
+    fun MaterialDialog.buttons(content: @Composable MaterialDialogButtons.() -> Unit) {
         buttons.buttonsTagOrder.clear()
 
         val interButtonPadding = with(DensityAmbient.current) { 12.dp.toIntPx() }
@@ -272,10 +271,10 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         onInput: (String) -> Unit = {}
     ) {
         var text by savedInstanceState { prefill }
-        val index by state { positiveEnabled.value.size }
-        var valid by state { allowEmpty }
+        val index by mutableStateOf(positiveEnabled.size)
+        var valid by mutableStateOf(allowEmpty)
 
-        remember { positiveEnabled.value.add(index, allowEmpty) }
+        remember { positiveEnabled.add(index, allowEmpty) }
 
         if (waitForPositiveButton) {
             callbacks.add { onInput(text) }
@@ -291,7 +290,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
                     }
 
                     // Have to make temp list in order for state to register change
-                    val tempList = positiveEnabled.value.toMutableList()
+                    val tempList = positiveEnabled.toMutableList()
                     valid = if (text == "" && allowEmpty) {
                         true
                     } else if (text == "") {
@@ -300,7 +299,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
                         isTextValid(text)
                     }
                     tempList[index] = valid
-                    positiveEnabled.value = tempList
+                    positiveEnabled = tempList
                 },
                 label = { Text(label) },
                 modifier = Modifier.fillMaxWidth(),
@@ -329,7 +328,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
      * @param children the content of the custom view
      */
     @Composable
-    fun MaterialDialog.customView(children: @Composable() () -> Unit) {
+    fun MaterialDialog.customView(children: @Composable () -> Unit) {
         Box(modifier = Modifier.padding(bottom = 28.dp, start = 24.dp, end = 24.dp)) {
             children()
         }

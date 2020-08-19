@@ -5,21 +5,22 @@ import android.graphics.Rect
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope.gravity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.state
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
@@ -63,7 +64,7 @@ fun MaterialDialog.timepicker(
     onCancel: () -> Unit = {},
     onComplete: (LocalTime) -> Unit = {}
 ) {
-    val selectedTime = state { initialTime.truncatedTo(ChronoUnit.MINUTES) }
+    val selectedTime = remember { mutableStateOf(initialTime.truncatedTo(ChronoUnit.MINUTES)) }
 
     TimePickerLayout(selectedTime = selectedTime)
 
@@ -82,41 +83,45 @@ internal fun TimePickerLayout(
     modifier: Modifier = Modifier,
     selectedTime: MutableState<LocalTime>
 ) {
-    val currentScreen = state { 0 }
-    Column(modifier) {
-        TimeLayout(currentScreen, selectedTime)
-        Crossfade(currentScreen) {
-            when (it.value) {
-                0 ->
-                    ClockLayout(
-                        isHours = true,
-                        anchorPoints = 12,
-                        label = { index ->
-                            if (index == 0) {
-                                "12"
-                            } else {
-                                index.toString()
+    val currentScreen = remember { mutableStateOf(0) }
+    Box(modifier) {
+        WithConstraints {
+            ScrollableColumn(Modifier.heightIn(maxHeight = maxHeight * 0.8f)) {
+                TimeLayout(currentScreen, selectedTime)
+                Crossfade(currentScreen) {
+                    when (it.value) {
+                        0 ->
+                            ClockLayout(
+                                isHours = true,
+                                anchorPoints = 12,
+                                label = { index ->
+                                    if (index == 0) {
+                                        "12"
+                                    } else {
+                                        index.toString()
+                                    }
+                                },
+                                onAnchorChange = { hours ->
+                                    selectedTime.value = selectedTime.value.withHour(hours)
+                                },
+                                selectedTime = selectedTime
+                            ) {
+                                currentScreen.value = 1
                             }
-                        },
-                        onAnchorChange = { hours ->
-                            selectedTime.value = selectedTime.value.withHour(hours)
-                        },
-                        selectedTime = selectedTime
-                    ) {
-                        currentScreen.value = 1
-                    }
 
-                1 -> ClockLayout(
-                    isHours = false,
-                    anchorPoints = 60,
-                    label = { index ->
-                        index.toString().padStart(2, '0')
-                    },
-                    onAnchorChange = { mins ->
-                        selectedTime.value = selectedTime.value.withMinute(mins)
-                    },
-                    selectedTime = selectedTime
-                )
+                        1 -> ClockLayout(
+                            isHours = false,
+                            anchorPoints = 60,
+                            label = { index ->
+                                index.toString().padStart(2, '0')
+                            },
+                            onAnchorChange = { mins ->
+                                selectedTime.value = selectedTime.value.withMinute(mins)
+                            },
+                            selectedTime = selectedTime
+                        )
+                    }
+                }
             }
         }
     }
@@ -172,9 +177,9 @@ private fun ClockLayout(
     val innerRadius = with(DensityAmbient.current) { 60.dp.toPx() }
     val selectedRadius = 70f
 
-    val offset = state { Offset.Zero }
-    val center = state { Offset.Zero }
-    val namedAnchor = state { true }
+    val offset = remember { mutableStateOf(Offset.Zero) }
+    val center = remember { mutableStateOf(Offset.Zero) }
+    val namedAnchor = remember { mutableStateOf(true) }
 
     val anchors = remember {
         val anchors = mutableListOf<SelectedOffset>()
@@ -204,18 +209,20 @@ private fun ClockLayout(
         anchors
     }
 
-    val anchoredOffset = state {
-        if (!isHours) {
-            namedAnchor.value = selectedTime.value.minute % 5 == 0
-            anchors[selectedTime.value.minute]
-        } else {
-            when (selectedTime.value.hour) {
-                0 -> anchors[1]
-                in 1..11 -> anchors[selectedTime.value.hour * 2]
-                in 13..23 -> anchors[(selectedTime.value.hour - 12) * 2 + 1]
-                else -> anchors[0]
+    val anchoredOffset = remember {
+        mutableStateOf(
+            if (!isHours) {
+                namedAnchor.value = selectedTime.value.minute % 5 == 0
+                anchors[selectedTime.value.minute]
+            } else {
+                when (selectedTime.value.hour) {
+                    0 -> anchors[1]
+                    in 1..11 -> anchors[selectedTime.value.hour * 2]
+                    in 13..23 -> anchors[(selectedTime.value.hour - 12) * 2 + 1]
+                    else -> anchors[0]
+                }
             }
-        }
+        )
     }
 
     fun updateAnchor() {

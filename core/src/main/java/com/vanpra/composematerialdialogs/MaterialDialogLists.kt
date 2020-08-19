@@ -21,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.state
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
@@ -86,7 +85,7 @@ fun <T> MaterialDialog.listItems(
     closeOnClick: Boolean = true,
     onClick: (index: Int, item: T) -> Unit = { _, _ -> },
     isEnabled: (index: Int) -> Boolean = { _ -> true },
-    item: @Composable() (index: Int, T) -> Unit
+    item: @Composable (index: Int, T) -> Unit
 ) {
 
     WithConstraints {
@@ -134,7 +133,7 @@ fun MaterialDialog.listItemsMultiChoice(
     waitForPositiveButton: Boolean = false,
     onCheckedChange: (indices: List<Int>) -> Unit = {}
 ) {
-    var selectedItems by mutableStateOf(initialSelection.toMutableList())
+    var selectedItems by remember { mutableStateOf(initialSelection.toMutableList()) }
     val onChecked = { index: Int ->
         if (index !in disabledIndices) {
             val newSelectedItems = selectedItems.toMutableList()
@@ -207,18 +206,18 @@ fun MaterialDialog.listItemsSingleChoice(
     waitForPositiveButton: Boolean = false,
     onChoiceChange: (selected: Int) -> Unit = {}
 ) {
-    val disableIndex by state { positiveEnabled.value.size }
+    val disableIndex = remember { positiveEnabled.size }
     remember {
-        positiveEnabled.value.add(disableIndex, initialSelection != null)
+        positiveEnabled.add(disableIndex, initialSelection != null)
     }
 
-    var selected by state { initialSelection }
+    var selected by remember { mutableStateOf(initialSelection) }
     val onSelect = { index: Int ->
         if (index !in disabledIndices) {
-            if (!positiveEnabled.value[disableIndex]) {
-                val tempList = positiveEnabled.value.toMutableList()
+            if (!positiveEnabled[disableIndex]) {
+                val tempList = positiveEnabled.toMutableList()
                 tempList[disableIndex] = true
-                positiveEnabled.value = tempList
+                positiveEnabled = tempList
             }
 
             selected = index

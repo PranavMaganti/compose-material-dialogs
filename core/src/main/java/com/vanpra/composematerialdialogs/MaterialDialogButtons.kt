@@ -49,7 +49,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
                 onClick()
             },
             modifier = Modifier.layoutId("button_${buttonsTagOrder.size}"),
-            enabled = dialog.positiveEnabled.value.all { it }
+            enabled = dialog.positiveEnabled.all { it }
         ) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
         }

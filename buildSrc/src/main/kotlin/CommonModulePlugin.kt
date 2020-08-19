@@ -57,14 +57,14 @@ class CommonModulePlugin : Plugin<Project> {
                 }
 
                 composeOptions {
-                    kotlinCompilerVersion = "1.4.0-rc"
-                    kotlinCompilerExtensionVersion = "0.1.0-dev16"
+                    kotlinCompilerVersion = "1.4.0"
+                    kotlinCompilerExtensionVersion = "0.1.0-dev17"
                 }
             }
 
             project.dependencies {
-                val composeVersion = "0.1.0-dev16"
-                val kotlinVersion = "1.4-M3"
+                val composeVersion = "0.1.0-dev17"
+                val kotlinVersion = "1.4.0"
 
                 add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
                 add("implementation", "androidx.core:core-ktx:1.0.2")

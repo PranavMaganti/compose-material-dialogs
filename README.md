@@ -2,7 +2,7 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5990ad24f5ca434299916697e3fc0fe2)](https://app.codacy.com/manual/pranav.maganti/compose-material-dialogs?utm_source=github.com&utm_medium=referral&utm_content=vanpra/compose-material-dialogs&utm_campaign=Badge_Grade_Dashboard)
 
-**Current Compose Version: dev16**
+**Current Compose Version: dev17**
 
 ## Credits
 
@@ -14,12 +14,12 @@ This library's design is heavily inspired by https://github.com/afollestad/mater
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/full_core.png)
 
-[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:core/images/download.svg?version=0.1.7) ](https://bintray.com/vanpra/maven/compose-material-dialogs:core/0.1.7/link)
+[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:core/images/download.svg?version=0.1.8) ](https://bintray.com/vanpra/maven/compose-material-dialogs:core/0.1.8/link)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:core:0.1.7" 
+  implementation "com.vanpra.compose-material-dialogs:core:0.1.8" 
   ...
 }
 ```
@@ -30,12 +30,12 @@ dependencies {
 
 ![](https://raw.githubusercontent.com/vanpra/ComposeDateTimePicker/master/imgs/datetime.jpg)
 
-[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:datetime/images/download.svg?version=0.1.6) ](https://bintray.com/vanpra/maven/compose-material-dialogs:datetime/0.1.6/link)
+[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:datetime/images/download.svg?version=0.1.8) ](https://bintray.com/vanpra/maven/compose-material-dialogs:datetime/0.1.8/link)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:datetime:0.1.6"
+  implementation "com.vanpra.compose-material-dialogs:datetime:0.1.8"
   ...
 }
 ```
@@ -46,12 +46,12 @@ dependencies {
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/color_picker.png)
 
-[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:color/images/download.svg?version=0.1.6) ](https://bintray.com/vanpra/maven/compose-material-dialogs:color/0.1.6/link)
+[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:color/images/download.svg?version=0.1.8) ](https://bintray.com/vanpra/maven/compose-material-dialogs:color/0.1.8/link)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:color:0.1.6"
+  implementation "com.vanpra.compose-material-dialogs:color:0.1.8"
   ...
 }
 ```
@@ -76,3 +76,10 @@ dependencies {
 - Updated compose version to dev16
 - Updated kotlin version to 1.4.0-rc
 - Fix datetime dialog to fit on smaller screens
+
+### 0.1.8  - 2020-08-19
+
+- Updated compose version to dev17
+- Updated kotlin version to 1.4.0
+- Fix date dialog and time dialog to also fit on smaller screens
+

@@ -2,6 +2,7 @@ package com.vanpra.composematerialdialogs.datetime
 
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.ColumnScope.gravity
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.foundation.layout.size
@@ -23,11 +25,12 @@ import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.state
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawOpacity
 import androidx.compose.ui.graphics.Color
@@ -64,7 +67,7 @@ fun MaterialDialog.datepicker(
     onComplete: (LocalDate) -> Unit = {}
 ) {
     val currentDate = remember { initialDate }
-    val selectedDate = state { currentDate }
+    val selectedDate = remember { mutableStateOf(currentDate) }
 
     DatePickerLayout(currentDate = currentDate, selectedDate = selectedDate)
 
@@ -84,19 +87,27 @@ internal fun DatePickerLayout(
     selectedDate: MutableState<LocalDate>,
     currentDate: LocalDate
 ) {
-    Column(modifier) {
-        DateTitle(selectedDate)
-        ViewPager(Modifier.background(color = Color.Transparent), useAlpha = true) {
-            val newDate = remember(index) {
-                currentDate.plusMonths(index.toLong())
-            }
-            val dates = remember(newDate) { getDates(newDate) }
-            val yearMonth = remember(newDate) { newDate.yearMonth }
+    Box(modifier) {
+        WithConstraints {
+            ScrollableColumn(Modifier.heightIn(maxHeight = maxHeight * 0.8f)) {
+                DateTitle(selectedDate)
+                ViewPager(Modifier.background(color = Color.Transparent), useAlpha = true) {
+                    val newDate = remember(index) {
+                        currentDate.plusMonths(index.toLong())
+                    }
+                    val dates = remember(newDate) { getDates(newDate) }
+                    val yearMonth = remember(newDate) { newDate.yearMonth }
 
-            Column {
-                MonthTitle(this@ViewPager, newDate.month.fullLocalName, newDate.year.toString())
-                DaysTitle()
-                DateLayout(dates, yearMonth, selectedDate)
+                    Column {
+                        MonthTitle(
+                            this@ViewPager,
+                            newDate.month.fullLocalName,
+                            newDate.year.toString()
+                        )
+                        DaysTitle()
+                        DateLayout(dates, yearMonth, selectedDate)
+                    }
+                }
             }
         }
     }

@@ -1,6 +1,6 @@
 package com.vanpra.composematerialdialogs.color
 
-import androidx.compose.foundation.Border
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ContentGravity
@@ -29,9 +29,9 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.state
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
@@ -83,7 +83,7 @@ fun MaterialDialog.colorChooser(
     onColorSelected: (Color) -> Unit = {}
 ) {
     WithConstraints {
-        val selectedColor = state { colors[initialSelection] }
+        val selectedColor = remember { mutableStateOf(colors[initialSelection]) }
         val flingConfig = FlingConfig(listOf(0f, -constraints.maxWidth.toFloat()))
 
         val scrollerPosition =
@@ -235,7 +235,8 @@ private fun LabelSlider(
             valueRange = 0f..255f,
             steps = 255,
             modifier = Modifier.padding(start = 16.dp, end = 24.dp),
-            color = sliderColor
+            activeTrackColor = sliderColor,
+            thumbColor = sliderColor
         )
 
         Box(Modifier.width(30.dp), gravity = ContentGravity.Center) {
@@ -257,12 +258,12 @@ private fun ColorGridLayout(
     waitForPositiveButton: Boolean = false,
     onColorSelected: (Color) -> Unit = {}
 ) {
-    var mainSelectedIndex by state { 0 }
-    var showSubColors by state { false }
+    var mainSelectedIndex by remember { mutableStateOf(0) }
+    var showSubColors by remember { mutableStateOf(false) }
 
     val itemSize = with(DensityAmbient.current) { itemSizeDp.toIntPx() }
 
-    GridView(itemsInRow = 4, itemSize = itemSize) {
+    GridView(itemSize = itemSize) {
         if (!showSubColors) {
             colors.fastForEachIndexed { index, item ->
                 ColorView(color = item, selected = index == mainSelectedIndex) {
@@ -314,7 +315,7 @@ private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
     Box(
         Modifier.size(itemSizeDp).clip(CircleShape).clickable(onClick = onClick, indication = null),
         shape = CircleShape,
-        border = Border(1.dp, SolidColor(MaterialTheme.colors.onBackground)),
+        border = BorderStroke(1.dp, SolidColor(MaterialTheme.colors.onBackground)),
         backgroundColor = color,
         gravity = ContentGravity.Center
     ) {
@@ -331,9 +332,9 @@ private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
 
 @Composable
 private fun GridView(
-    itemsInRow: Int,
+    itemsInRow: Int = 4,
     itemSize: Int,
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
     WithConstraints {
         ScrollableColumn(

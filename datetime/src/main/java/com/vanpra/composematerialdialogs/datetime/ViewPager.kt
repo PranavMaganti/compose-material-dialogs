@@ -13,8 +13,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.preferredWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.onPreCommit
-import androidx.compose.runtime.state
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.draw.drawOpacity
@@ -67,19 +68,18 @@ fun ViewPager(
     onNext: () -> Unit = {},
     onPrevious: () -> Unit = {},
     useAlpha: Boolean = false,
-    range: IntRange = IntRange.EMPTY,
     enabled: Boolean = true,
     screenItem: @Composable() ViewPagerScope.() -> Unit
 ) {
     Box(backgroundColor = Color.Transparent) {
         WithConstraints {
-            val alphas = state { mutableListOf(1f, 1f, 1f) }
+            val alphas = remember { mutableStateOf(mutableListOf(1f, 1f, 1f)) }
             val width = constraints.maxWidth.toFloat()
             val offset = animatedFloat(width)
             offset.setBounds(0f, 2 * width)
 
             val anchors = listOf(0f, width, 2 * width)
-            val index = state { 0 }
+            val index = remember { mutableStateOf(0) }
 
             val flingConfig = FlingConfig(
                 anchors,
