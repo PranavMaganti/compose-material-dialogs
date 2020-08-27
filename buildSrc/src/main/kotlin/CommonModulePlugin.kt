@@ -1,17 +1,9 @@
 import com.android.build.gradle.BaseExtension
-import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.publish.PublishingExtension
-import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.api.tasks.bundling.Jar
-import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.extra
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.util.Date
 
 class CommonModulePlugin : Plugin<Project> {
     override fun apply(project: Project) {
@@ -52,30 +44,34 @@ class CommonModulePlugin : Plugin<Project> {
                 project.tasks.withType(KotlinCompile::class.java).configureEach {
                     kotlinOptions {
                         jvmTarget = "1.8"
-                        freeCompilerArgs = listOf("-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check")
+                        freeCompilerArgs =
+                            listOf("-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check")
                     }
                 }
 
                 composeOptions {
-                    kotlinCompilerVersion = "1.4.0"
-                    kotlinCompilerExtensionVersion = "0.1.0-dev17"
+                    kotlinCompilerVersion = Versions.kotlin
+                    kotlinCompilerExtensionVersion = Versions.compose
                 }
             }
 
             project.dependencies {
-                val composeVersion = "0.1.0-dev17"
-                val kotlinVersion = "1.4.0"
-
-                add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
+                add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}")
                 add("implementation", "androidx.core:core-ktx:1.0.2")
                 add("implementation", "androidx.appcompat:appcompat:1.1.0")
                 add("implementation", "com.google.android.material:material:1.1.0")
 
-                add("implementation", "androidx.compose.foundation:foundation-layout:$composeVersion")
-                add("implementation", "androidx.compose.material:material:$composeVersion")
-                add("implementation", "androidx.ui:ui-tooling:$composeVersion")
-                add("implementation", "androidx.compose.material:material-icons-extended:$composeVersion")
-                add("implementation", "androidx.compose.animation:animation:$composeVersion")
+                add(
+                    "implementation",
+                    "androidx.compose.foundation:foundation-layout:${Versions.compose}"
+                )
+                add("implementation", "androidx.compose.material:material:${Versions.compose}")
+                add("implementation", "androidx.ui:ui-tooling:${Versions.compose}")
+                add(
+                    "implementation",
+                    "androidx.compose.material:material-icons-extended:${Versions.compose}"
+                )
+                add("implementation", "androidx.compose.animation:animation:${Versions.compose}")
 
                 add("testImplementation", "junit:junit:4.12")
                 add("androidTestImplementation", "androidx.test.ext:junit:1.1.1")

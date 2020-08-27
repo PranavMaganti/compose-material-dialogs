@@ -21,7 +21,7 @@ dependencies {
 
 val artifactName = "datetime"
 val artifactGroup = "com.vanpra.compose-material-dialogs"
-val artifactVersion = "0.1.8"
+val artifactVersion = Versions.library
 
 val sourcesJar by tasks.creating(Jar::class) {
     from(android.sourceSets.getByName("main").java.srcDirs)

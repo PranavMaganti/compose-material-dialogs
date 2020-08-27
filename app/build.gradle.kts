@@ -49,8 +49,8 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "0.1.0-dev17"
-        kotlinCompilerVersion = "1.4.0"
+        kotlinCompilerExtensionVersion = Versions.compose
+        kotlinCompilerVersion = Versions.kotlin
     }
 }
 
@@ -62,25 +62,23 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).conf
 }
 
 dependencies {
-    val composeVersion = "0.1.0-dev17"
-
     implementation(project(":core"))
     implementation(project(":datetime"))
     implementation(project(":color"))
 
-    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.1.9")
+    implementation("dev.chrisbanes.accompanist:accompanist-coil:${Versions.accompanist}")
 
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation("androidx.core:core-ktx:1.3.1")
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("com.google.android.material:material:1.2.0")
 
-    implementation("androidx.compose.foundation:foundation-layout:$composeVersion")
-    implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.ui:ui-tooling:$composeVersion")
+    implementation("androidx.compose.foundation:foundation-layout:${Versions.compose}")
+    implementation("androidx.compose.material:material:${Versions.compose}")
+    implementation("androidx.ui:ui-tooling:${Versions.compose}")
 
     testImplementation("junit:junit:4.13")
-    androidTestImplementation("androidx.test.ext:junit:1.1.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.2")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
 }
 

@@ -24,7 +24,7 @@ dependencies {
     compileOnly(gradleApi())
 
     implementation("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5")
-    implementation("com.android.tools.build:gradle:4.2.0-alpha07")
-    implementation(kotlin("gradle-plugin", "1.4.0"))
+    implementation("com.android.tools.build:gradle:4.2.0-alpha08")
+    implementation(kotlin("gradle-plugin"))
     implementation(kotlin("android-extensions"))
 }
