@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.config.KotlinCompilerVersion
 plugins {
     id("com.android.application")
     kotlin("android")
-    // id("org.jmailen.kotlinter")
+    id("org.jmailen.kotlinter")
 }
 
 android {
@@ -62,9 +62,13 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).conf
 }
 
 dependencies {
+    // implementation("com.vanpra.compose-material-dialogs:core:0.2.1" )
+    // implementation("com.vanpra.compose-material-dialogs:datetime:0.2.1" )
+    // implementation("com.vanpra.compose-material-dialogs:color:0.2.1" )
+
     implementation(project(":core"))
-    implementation(project(":datetime"))
     implementation(project(":color"))
+    implementation(project(":datetime"))
 
     implementation("dev.chrisbanes.accompanist:accompanist-coil:${Versions.accompanist}")
 

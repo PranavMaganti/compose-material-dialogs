@@ -11,7 +11,7 @@ class CommonModulePlugin : Plugin<Project> {
         project.plugins.apply("kotlin-android-extensions")
         project.plugins.apply("maven-publish")
         project.plugins.apply("com.jfrog.bintray")
-        // project.plugins.apply("org.jmailen.kotlinter")
+        project.plugins.apply("org.jmailen.kotlinter")
 
         val androidExtension = project.extensions.getByName("android")
         if (androidExtension is BaseExtension) {

@@ -41,7 +41,7 @@ afterEvaluate {
     bintray {
         user = project.findProperty("bintrayUser").toString()
         key = project.findProperty("bintrayKey").toString()
-        publish = false
+        publish = true
         override = true
 
         setPublications("release")
