@@ -63,7 +63,7 @@ fun MaterialDialog.datetimepicker(
 
     WithConstraints {
         ScrollableColumn(
-            Modifier.heightIn(maxHeight = maxHeight * 0.8f),
+            Modifier.heightIn(max = maxHeight * 0.8f),
             scrollState = columnScrollState
         ) {
             Stack(Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 24.dp)) {

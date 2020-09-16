@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.jmailen.gradle:kotlinter-gradle:3.0.2")
+        classpath("org.jmailen.gradle:kotlinter-gradle:3.2.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -22,6 +22,17 @@ allprojects {
         jcenter()
         maven { url = uri("https://dl.bintray.com/kotlin/kotlin-eap") }
         maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
+    }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = listOf(
+            "-Xallow-jvm-ir-dependencies",
+            "-Xskip-prerelease-check",
+            "-Xopt-in=kotlin.Experimental"
+        )
     }
 }
 

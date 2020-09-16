@@ -149,7 +149,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         val titleText = ContextAmbient.current.getString(textRes, text)
         Row(
             modifier = Modifier.padding(start = 24.dp, end = 24.dp).preferredHeight(64.dp),
-            verticalGravity = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically
         ) {
             if (iconAsset != null) {
                 Image(

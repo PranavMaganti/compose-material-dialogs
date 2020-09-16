@@ -43,7 +43,7 @@ fun MaterialDialog.listItems(
     onClick: (index: Int, item: String) -> Unit = { _, _ -> }
 ) {
     WithConstraints {
-        var modifier = Modifier.heightIn(maxHeight = maxHeight * listRatio)
+        var modifier = Modifier.heightIn(max = maxHeight * listRatio)
         if (buttons.buttonsTagOrder.isEmpty()) {
             modifier = modifier.then(bottomPadding)
         }
@@ -89,7 +89,7 @@ fun <T> MaterialDialog.listItems(
 ) {
 
     WithConstraints {
-        var modifier = Modifier.heightIn(maxHeight = maxHeight * listRatio)
+        var modifier = Modifier.heightIn(max = maxHeight * listRatio)
         if (buttons.buttonsTagOrder.isEmpty()) {
             modifier = modifier.then(bottomPadding)
         }
@@ -169,7 +169,7 @@ fun MaterialDialog.listItemsMultiChoice(
 
         Row(
             Modifier.fillMaxWidth().preferredHeight(48.dp),
-            verticalGravity = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(checked = selected, onCheckedChange = { onChecked(index) }, enabled = enabled)
             Spacer(modifier = Modifier.fillMaxHeight().width(32.dp))
@@ -266,7 +266,7 @@ private fun SingleChoiceItem(
 
     Row(
         Modifier.fillMaxWidth().preferredHeight(48.dp),
-        verticalGravity = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
             selected = selected == index,

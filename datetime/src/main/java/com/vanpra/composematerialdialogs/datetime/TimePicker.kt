@@ -86,7 +86,7 @@ internal fun TimePickerLayout(
     val currentScreen = remember { mutableStateOf(0) }
     Box(modifier) {
         WithConstraints {
-            ScrollableColumn(Modifier.heightIn(maxHeight = maxHeight * 0.8f)) {
+            ScrollableColumn(Modifier.heightIn(max = maxHeight * 0.8f)) {
                 TimeLayout(currentScreen, selectedTime)
                 Crossfade(currentScreen) {
                     when (it.value) {

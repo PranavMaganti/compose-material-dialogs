@@ -89,7 +89,7 @@ internal fun DatePickerLayout(
 ) {
     Box(modifier) {
         WithConstraints {
-            ScrollableColumn(Modifier.heightIn(maxHeight = maxHeight * 0.8f)) {
+            ScrollableColumn(Modifier.heightIn(max = maxHeight * 0.8f)) {
                 DateTitle(selectedDate)
                 ViewPager(Modifier.background(color = Color.Transparent), useAlpha = true) {
                     val newDate = remember(index) {

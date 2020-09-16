@@ -2,7 +2,7 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5990ad24f5ca434299916697e3fc0fe2)](https://app.codacy.com/manual/pranav.maganti/compose-material-dialogs?utm_source=github.com&utm_medium=referral&utm_content=vanpra/compose-material-dialogs&utm_campaign=Badge_Grade_Dashboard)
 
-**Current Compose Version: 1.0.0-alpha02**
+**Current Compose Version: 1.0.0-alpha03**
 
 ## Credits
 
@@ -14,12 +14,12 @@ This library's design is heavily inspired by https://github.com/afollestad/mater
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/full_core.png)
 
-[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:core/images/download.svg?version=0.2.1) ](https://bintray.com/vanpra/maven/compose-material-dialogs:core/0.2.1/link)
+[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:core/images/download.svg?version=0.2.2) ](https://bintray.com/vanpra/maven/compose-material-dialogs:core/0.2.2/link)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:core:0.2.1" 
+  implementation "com.vanpra.compose-material-dialogs:core:0.2.2" 
   ...
 }
 ```
@@ -30,12 +30,12 @@ dependencies {
 
 ![](https://raw.githubusercontent.com/vanpra/ComposeDateTimePicker/master/imgs/datetime.jpg)
 
-[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:datetime/images/download.svg?version=0.2.1) ](https://bintray.com/vanpra/maven/compose-material-dialogs:datetime/0.2.1/link)
+[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:datetime/images/download.svg?version=0.2.2) ](https://bintray.com/vanpra/maven/compose-material-dialogs:datetime/0.2.2/link)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:datetime:0.2.1"
+  implementation "com.vanpra.compose-material-dialogs:datetime:0.2.2"
   ...
 }
 ```
@@ -46,12 +46,12 @@ dependencies {
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/color_picker.png)
 
-[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:color/images/download.svg?version=0.2.1) ](https://bintray.com/vanpra/maven/compose-material-dialogs:color/0.2.1/link)
+[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs:color/images/download.svg?version=0.2.2) ](https://bintray.com/vanpra/maven/compose-material-dialogs:color/0.2.2/link)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:color:0.2.1"
+  implementation "com.vanpra.compose-material-dialogs:color:0.2.2"
   ...
 }
 ```
@@ -64,6 +64,10 @@ dependencies {
 2. Add tests to all modules
 
 ## Changelog
+
+### 0.2.2  - 2020-09-16
+
+- Updated compose version to 1.0.0-alpha03
 
 ### 0.2.1  - 2020-09-02
 

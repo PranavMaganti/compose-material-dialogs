@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.config.KotlinCompilerVersion
-
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -54,13 +52,6 @@ android {
     }
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).configureEach {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs = listOf("-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check")
-    }
-}
-
 dependencies {
     // implementation("com.vanpra.compose-material-dialogs:core:0.2.1" )
     // implementation("com.vanpra.compose-material-dialogs:datetime:0.2.1" )
@@ -72,7 +63,7 @@ dependencies {
 
     implementation("dev.chrisbanes.accompanist:accompanist-coil:${Versions.accompanist}")
 
-    implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
+    implementation(kotlin("stdlib-jdk8", Versions.kotlin))
     implementation("androidx.core:core-ktx:1.3.1")
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("com.google.android.material:material:1.2.0")

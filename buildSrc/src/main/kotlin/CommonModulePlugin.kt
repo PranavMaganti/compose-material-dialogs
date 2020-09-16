@@ -56,7 +56,7 @@ class CommonModulePlugin : Plugin<Project> {
             }
 
             project.dependencies {
-                add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}")
+                add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}")
                 add("implementation", "androidx.core:core-ktx:1.0.2")
                 add("implementation", "androidx.appcompat:appcompat:1.1.0")
                 add("implementation", "com.google.android.material:material:1.1.0")

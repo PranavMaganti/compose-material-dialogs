@@ -222,7 +222,7 @@ private fun LabelSlider(
     sliderColor: Color,
     onSliderChange: (Float) -> Unit
 ) {
-    Row(modifier.fillMaxWidth(), verticalGravity = Alignment.CenterVertically) {
+    Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Text(
             label,
             style = MaterialTheme.typography.h6,
@@ -338,7 +338,7 @@ private fun GridView(
 ) {
     WithConstraints {
         ScrollableColumn(
-            modifier = Modifier.preferredHeightIn(maxHeight = (maxHeight * 0.7f)),
+            modifier = Modifier.preferredHeightIn(max = (maxHeight * 0.7f)),
             children = {
                 Layout({
                     content()
@@ -349,7 +349,7 @@ private fun GridView(
                         end = 24.dp
                     )
                         .fillMaxWidth()
-                        .gravity(Alignment.CenterHorizontally),
+                        .align(Alignment.CenterHorizontally),
                     { measurables, constraints ->
                         val spacing =
                             (constraints.maxWidth - (itemSize * itemsInRow)) / (itemsInRow - 1)
