@@ -4,7 +4,6 @@ import androidx.compose.animation.animatedFloat
 import androidx.compose.animation.core.AnimatedFloat
 import androidx.compose.animation.core.AnimationEndReason
 import androidx.compose.animation.core.SpringSpec
-import androidx.compose.foundation.Box
 import androidx.compose.foundation.ScrollableRow
 import androidx.compose.foundation.animation.FlingConfig
 import androidx.compose.foundation.animation.fling
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.preferredWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.onPreCommit
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints

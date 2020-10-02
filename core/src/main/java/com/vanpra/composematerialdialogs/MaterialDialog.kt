@@ -88,7 +88,8 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
     ) {
         if (showing.value) {
             ThemedDialog(onCloseRequest = { hide() }) {
-                Column(modifier =
+                Column(
+                    modifier =
                     Modifier.fillMaxWidth().background(backgroundColor)
                         .clip(MaterialTheme.shapes.medium)
                 ) {
