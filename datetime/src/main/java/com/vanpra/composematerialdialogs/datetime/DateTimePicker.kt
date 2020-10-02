@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.ScrollableRow
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Stack
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -66,7 +67,7 @@ fun MaterialDialog.datetimepicker(
             Modifier.heightIn(max = maxHeight * 0.8f),
             scrollState = columnScrollState
         ) {
-            Stack(Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 24.dp)) {
+            Box(Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 24.dp)) {
                 val ratio = scrollState.value / constraints.maxWidth
                 Image(
                     Icons.Default.ArrowBack,

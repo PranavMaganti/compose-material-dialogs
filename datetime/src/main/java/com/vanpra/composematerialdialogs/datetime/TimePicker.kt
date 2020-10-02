@@ -3,14 +3,13 @@ package com.vanpra.composematerialdialogs.datetime
 import android.graphics.Paint
 import android.graphics.Rect
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope.gravity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -31,6 +30,7 @@ import androidx.compose.ui.gesture.pressIndicatorGestureFilter
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawCanvas
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.DensityAmbient
@@ -135,10 +135,7 @@ private fun TimeLayout(currentScreen: MutableState<Int>, selectedTime: MutableSt
         val hourAlpha = 1f - 0.4f * currentScreen.value
         val minAlpha = 0.6f + 0.4f * currentScreen.value
 
-        Row(
-            Modifier.gravity(Alignment.CenterVertically)
-                .wrapContentWidth(Alignment.CenterHorizontally)
-        ) {
+        Row(Modifier.align(Alignment.Center)) {
             Text(
                 selectedTime.value.hour.toString().padStart(2, '0'),
                 fontSize = textSize,
@@ -320,7 +317,7 @@ private fun ClockLayout(
                     )
                 }
 
-                drawCanvas { canvas, _ ->
+                drawIntoCanvas { canvas ->
                     for (x in 0 until 12) {
                         val angle = (2 * PI / 12) * (x - 15)
                         val textOuter = label(x * anchorPoints / 12)

@@ -2,9 +2,10 @@ package com.vanpra.composematerialdialogs
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Box
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.VectorAsset
@@ -86,10 +88,9 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
     ) {
         if (showing.value) {
             ThemedDialog(onCloseRequest = { hide() }) {
-                Box(
-                    Modifier.fillMaxWidth(),
-                    backgroundColor = backgroundColor,
-                    shape = MaterialTheme.shapes.medium
+                Column(modifier =
+                    Modifier.fillMaxWidth().background(backgroundColor)
+                        .clip(MaterialTheme.shapes.medium)
                 ) {
                     this@MaterialDialog.content()
                 }
@@ -316,7 +317,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
                         message,
                         fontSize = 14.sp,
                         color = MaterialTheme.colors.error,
-                        modifier = Modifier.gravity(Alignment.End)
+                        modifier = Modifier.align(Alignment.End)
                     )
                 }
             }

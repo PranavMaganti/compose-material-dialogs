@@ -10,6 +10,7 @@ class CommonModulePlugin : Plugin<Project> {
         project.plugins.apply("kotlin-android")
         project.plugins.apply("kotlin-android-extensions")
         project.plugins.apply("maven-publish")
+        project.plugins.apply("com.jfrog.artifactory")
         project.plugins.apply("com.jfrog.bintray")
         project.plugins.apply("org.jmailen.kotlinter")
 
@@ -44,6 +45,7 @@ class CommonModulePlugin : Plugin<Project> {
                 project.tasks.withType(KotlinCompile::class.java).configureEach {
                     kotlinOptions {
                         jvmTarget = "1.8"
+                        useIR = true
                         freeCompilerArgs =
                             listOf("-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check")
                     }
@@ -72,10 +74,6 @@ class CommonModulePlugin : Plugin<Project> {
                     "androidx.compose.material:material-icons-extended:${Versions.compose}"
                 )
                 add("implementation", "androidx.compose.animation:animation:${Versions.compose}")
-
-                add("testImplementation", "junit:junit:4.12")
-                add("androidTestImplementation", "androidx.test.ext:junit:1.1.1")
-                add("androidTestImplementation", "androidx.test.espresso:espresso-core:3.2.0")
             }
         }
     }

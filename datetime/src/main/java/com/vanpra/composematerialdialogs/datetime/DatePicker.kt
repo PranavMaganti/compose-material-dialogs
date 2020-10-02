@@ -1,23 +1,25 @@
 package com.vanpra.composematerialdialogs.datetime
 
-import androidx.compose.foundation.Box
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope.gravity
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
@@ -37,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
 import androidx.compose.ui.text.font.FontWeight.Companion.W500
 import androidx.compose.ui.text.font.FontWeight.Companion.W600
@@ -87,25 +90,83 @@ internal fun DatePickerLayout(
     selectedDate: MutableState<LocalDate>,
     currentDate: LocalDate
 ) {
-    Box(modifier) {
-        WithConstraints {
-            ScrollableColumn(Modifier.heightIn(max = maxHeight * 0.8f)) {
-                DateTitle(selectedDate)
-                ViewPager(Modifier.background(color = Color.Transparent), useAlpha = true) {
-                    val newDate = remember(index) {
-                        currentDate.plusMonths(index.toLong())
-                    }
-                    val dates = remember(newDate) { getDates(newDate) }
-                    val yearMonth = remember(newDate) { newDate.yearMonth }
+    val yearSelection = remember { mutableStateOf(true) }
+    val yearSelectionState = rememberScrollState()
 
-                    Column {
-                        MonthTitle(
-                            this@ViewPager,
-                            newDate.month.fullLocalName,
-                            newDate.year.toString()
-                        )
-                        DaysTitle()
-                        DateLayout(dates, yearMonth, selectedDate)
+    WithConstraints {
+        Column(modifier.heightIn(max = maxHeight * 0.8f)) {
+            DateTitle(selectedDate, yearSelection)
+            Crossfade(current = yearSelection.value) {
+                when (it) {
+                    false -> {
+                        ViewPager(Modifier.background(color = Color.Transparent), useAlpha = true) {
+                            val newDate = remember(index) { currentDate.plusMonths(index.toLong()) }
+                            val dates = remember(newDate) { getDates(newDate) }
+                            val yearMonth = remember(newDate) { newDate.yearMonth }
+
+                            Column {
+                                MonthTitle(
+                                    this@ViewPager,
+                                    newDate.month.fullLocalName,
+                                    newDate.year.toString()
+                                )
+                                DaysTitle()
+                                DateLayout(dates, yearMonth, selectedDate)
+                            }
+                        }
+                    }
+                    true -> {
+                        val selectorHeight = maxHeight * 0.5f
+                        val itemHeight = 50.dp
+                        val startSelection = 1960
+                        val endSelection = 2100
+                        val density = DensityAmbient.current
+
+                        remember {
+                            val middleOffset = (selectorHeight / 2) - (itemHeight / 2)
+                            val scrollTo = with(density) {
+                                ((itemHeight * (selectedDate.value.year - startSelection)) - middleOffset).toPx()
+                            }
+                            yearSelectionState.scrollTo(scrollTo)
+                        }
+
+
+                        ScrollableColumn(
+                            modifier = Modifier.height(selectorHeight).fillMaxWidth(),
+                            scrollState = yearSelectionState
+                        ) {
+                            IntRange(startSelection, endSelection).forEach { year ->
+                                val textStyle = if (selectedDate.value.year == year) {
+                                    TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                                } else {
+                                    TextStyle(fontSize = 18.sp)
+                                }
+
+                                val background = if (selectedDate.value.year == year) {
+                                    Color.White.copy(0.2f)
+                                } else {
+                                    MaterialTheme.colors.background
+                                }
+
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center,
+                                    modifier = Modifier.fillMaxWidth().height(itemHeight)
+                                        .background(background).clickable(
+                                            onClick = {
+                                                selectedDate.value =
+                                                    selectedDate.value.withYear(year)
+                                            }
+                                        )
+                                ) {
+                                    Text(
+                                        year.toString(),
+                                        color = MaterialTheme.colors.onBackground,
+                                        style = textStyle
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -151,10 +212,8 @@ private fun DateLayout(
                     modifier = Modifier.size(boxSize)
                         .clickable(
                             onClick = {
-                                selected.value =
-                                    LocalDate.of(yearMonth.year, yearMonth.month, it)
-                            },
-                            indication = null
+                                selected.value = LocalDate.of(yearMonth.year, yearMonth.month, it)
+                            }, indication = null
                         )
                         .then(selectedModifier)
                         .wrapContentSize(Alignment.Center),
@@ -165,17 +224,10 @@ private fun DateLayout(
                 Box(Modifier.size(boxSize))
             }
         }
-    },
-        Modifier.padding(
-            top = 8.dp,
-            start = 24.dp,
-            end = 24.dp
-        )
-            .fillMaxWidth()
-            .gravity(Alignment.CenterHorizontally),
+    }, Modifier.padding(top = 8.dp, start = 24.dp, end = 24.dp)
+        .fillMaxWidth(),
         { measurables, constraints ->
             val horizontalSpacing = (constraints.maxWidth - (boxSizePx * 7)) / 6
-
             layout(constraints.maxWidth, layoutHeight) {
                 measurables
                     .map { it.measure(Constraints(maxHeight = boxSizePx, maxWidth = boxSizePx)) }
@@ -251,23 +303,31 @@ private fun MonthTitle(scope: ViewPagerScope, month: String, year: String) {
 }
 
 @Composable
-private fun DateTitle(selected: MutableState<LocalDate>) {
+private fun DateTitle(selected: MutableState<LocalDate>, yearSelection: MutableState<Boolean>) {
     val month = selected.value.month.shortLocalName
     val day = selected.value.dayOfWeek.shortLocalName
 
-    Box(backgroundColor = MaterialTheme.colors.primaryVariant, modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = selected.value.year.toString(), color = MaterialTheme.colors.onPrimary,
-                modifier = Modifier.drawOpacity(0.8f).padding(bottom = 2.dp),
-                style = TextStyle(fontSize = 18.sp, fontWeight = W700)
-            )
-            Text(
-                text = "$day, $month ${selected.value.dayOfMonth}",
-                color = MaterialTheme.colors.onPrimary,
-                style = TextStyle(fontSize = 26.sp, fontWeight = W700)
-            )
-        }
+    Column(
+        modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.primaryVariant)
+            .padding(16.dp)
+    ) {
+        Text(
+            text = selected.value.year.toString(), color = MaterialTheme.colors.onPrimary,
+            modifier = Modifier.drawOpacity(if (yearSelection.value) 1f else 0.8f)
+                .padding(bottom = 2.dp)
+                .clickable {
+                    yearSelection.value = true
+                },
+            style = TextStyle(fontSize = 18.sp, fontWeight = W700)
+        )
+        Text(
+            text = "$day, $month ${selected.value.dayOfMonth}",
+            modifier = Modifier.drawOpacity(if (yearSelection.value) 0.8f else 1f).clickable {
+                yearSelection.value = false
+            },
+            color = MaterialTheme.colors.onPrimary,
+            style = TextStyle(fontSize = 26.sp, fontWeight = W700)
+        )
     }
 }
 
