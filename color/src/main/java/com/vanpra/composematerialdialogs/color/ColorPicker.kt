@@ -1,16 +1,16 @@
 package com.vanpra.composematerialdialogs.color
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Box
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.ScrollableRow
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.animation.FlingConfig
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,7 +40,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
@@ -84,7 +83,7 @@ fun MaterialDialog.colorChooser(
 ) {
     WithConstraints {
         val selectedColor = remember { mutableStateOf(colors[initialSelection]) }
-        val flingConfig = FlingConfig(listOf(0f, -constraints.maxWidth.toFloat()))
+        val flingConfig = FlingConfig(listOf(0f, constraints.maxWidth.toFloat()))
 
         val scrollerPosition =
             ScrollState(
@@ -103,7 +102,7 @@ fun MaterialDialog.colorChooser(
         Column(Modifier.padding(bottom = 8.dp)) {
             if (allowCustomArgb) {
                 PageIndicator(scrollerPosition, constraints)
-                ScrollableRow(children = {
+                ScrollableRow(scrollState = scrollerPosition, children = {
                     Box(Modifier.width(maxWidth)) {
                         ColorGridLayout(
                             colors = colors,
@@ -159,9 +158,8 @@ private fun PageIndicator(scrollerState: ScrollState, constraints: Constraints) 
 private fun CustomARGB(selectedColor: MutableState<Color>) {
     Column(Modifier.padding(start = 24.dp, end = 24.dp)) {
         Box(
-            Modifier.fillMaxWidth().height(70.dp),
-            backgroundColor = selectedColor.value,
-            gravity = ContentGravity.Center
+            Modifier.fillMaxWidth().height(70.dp).background(selectedColor.value),
+            alignment = Alignment.Center
         ) {
             Text(
                 "#${Integer.toHexString(selectedColor.value.toArgb())}",
@@ -239,7 +237,7 @@ private fun LabelSlider(
             thumbColor = sliderColor
         )
 
-        Box(Modifier.width(30.dp), gravity = ContentGravity.Center) {
+        Box(Modifier.width(30.dp).align(Alignment.CenterVertically)) {
             Text(
                 value.toInt().toString(),
                 style = MaterialTheme.typography.h6,
@@ -281,14 +279,13 @@ private fun ColorGridLayout(
             }
         } else {
             Box(
-                Modifier.size(itemSizeDp).clickable(
+                Modifier.size(itemSizeDp).clip(CircleShape).clickable(
                     onClick = {
                         showSubColors = false
                     },
                     indication = null
                 ),
-                shape = CircleShape,
-                gravity = ContentGravity.Center
+                alignment = Alignment.Center
             ) {
                 Image(
                     Icons.Default.ArrowBack,
@@ -313,11 +310,12 @@ private fun ColorGridLayout(
 @Composable
 private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
     Box(
-        Modifier.size(itemSizeDp).clip(CircleShape).clickable(onClick = onClick, indication = null),
-        shape = CircleShape,
-        border = BorderStroke(1.dp, SolidColor(MaterialTheme.colors.onBackground)),
-        backgroundColor = color,
-        gravity = ContentGravity.Center
+        Modifier.size(itemSizeDp)
+            .clip(CircleShape)
+            .background(color)
+            .border(1.dp, MaterialTheme.colors.onBackground, CircleShape)
+            .clickable(onClick = onClick, indication = null),
+        alignment = Alignment.Center
     ) {
         if (selected) {
             Image(

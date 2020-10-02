@@ -3,6 +3,7 @@ import java.util.Date
 plugins {
     id("com.android.library")
     id("common-library")
+    id("org.jmailen.kotlinter") version "3.2.0"
 }
 
 android {
@@ -13,6 +14,17 @@ android {
 
 dependencies {
     implementation("dev.chrisbanes.accompanist:accompanist-coil:${Versions.accompanist}")
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = listOf(
+            "-Xallow-jvm-ir-dependencies",
+            "-Xskip-prerelease-check",
+            "-Xopt-in=kotlin.Experimental"
+        )
+    }
 }
 
 val artifactName = "core"
@@ -37,24 +49,46 @@ afterEvaluate {
             }
         }
     }
+}
 
-    bintray {
-        user = project.findProperty("bintrayUser").toString()
-        key = project.findProperty("bintrayKey").toString()
-        publish = true
-        override = true
+artifactory {
+    setContextUrl("http://oss.jfrog.org")
+    publish(delegateClosureOf<org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig> {
+        repository(delegateClosureOf<groovy.lang.GroovyObject> {
+            setProperty("repoKey", "oss-snapshot-local")
+            setProperty("username", project.findProperty("bintrayUser").toString())
+            setProperty("password", project.findProperty("bintrayKey").toString())
+            setProperty("maven", true)
+        })
 
-        setPublications("release")
+        defaults(delegateClosureOf<groovy.lang.GroovyObject> {
+            invokeMethod("publications", "release")
+            setProperty("publishPom", true)
+            setProperty("publishArtifacts", true)
+        })
+    })
 
-        pkg.apply {
-            repo = "maven"
-            name = "compose-material-dialogs:$artifactName"
+    resolve(delegateClosureOf<org.jfrog.gradle.plugin.artifactory.dsl.ResolverConfig> {
+        setProperty("repoKey", "jcenter")
+    })
+}
 
-            version.apply {
-                name = artifactVersion
-                released = Date().toString()
-                vcsTag = artifactVersion
-            }
+bintray {
+    user = project.findProperty("bintrayUser").toString()
+    key = project.findProperty("bintrayKey").toString()
+    publish = true
+    override = true
+
+    setPublications("release")
+
+    pkg.apply {
+        repo = "maven"
+        name = "compose-material-dialogs:$artifactName"
+
+        version.apply {
+            name = artifactVersion
+            released = Date().toString()
+            vcsTag = artifactVersion
         }
     }
 }

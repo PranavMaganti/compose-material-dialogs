@@ -4,17 +4,18 @@ import androidx.compose.animation.animatedFloat
 import androidx.compose.animation.core.AnimatedFloat
 import androidx.compose.animation.core.AnimationEndReason
 import androidx.compose.animation.core.SpringSpec
-import androidx.compose.foundation.Box
 import androidx.compose.foundation.ScrollableRow
 import androidx.compose.foundation.animation.FlingConfig
 import androidx.compose.foundation.animation.fling
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.preferredWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.onPreCommit
+import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
@@ -71,7 +72,7 @@ fun ViewPager(
     enabled: Boolean = true,
     screenItem: @Composable() ViewPagerScope.() -> Unit
 ) {
-    Box(backgroundColor = Color.Transparent) {
+    Column(Modifier.background(Color.Transparent)) {
         WithConstraints {
             val alphas = remember { mutableStateOf(mutableListOf(1f, 1f, 1f)) }
             val width = constraints.maxWidth.toFloat()
@@ -125,7 +126,7 @@ fun ViewPager(
                 enabled = enabled
             )
 
-            onPreCommit(index.value) {
+            onCommit(index.value, {
                 if (useAlpha) {
                     if (offset.value < width) {
                         alphas.value[0] = 1 - offset.value / width
@@ -135,7 +136,7 @@ fun ViewPager(
 
                     alphas.value[1] = 1 - abs(offset.value - width) / width
                 }
-            }
+            })
 
             ScrollableRow(children = {
                 Row(
@@ -147,7 +148,7 @@ fun ViewPager(
                         val current = x == 0
                         val next = offset.value > width && x == 1
 
-                        Box(Modifier.preferredWidth(maxWidth).drawOpacity(alphas.value[x + 1])) {
+                        Column(Modifier.preferredWidth(maxWidth).drawOpacity(alphas.value[x + 1])) {
                             if (previous || current || next) {
                                 val viewPagerImpl = ViewPagerImpl(index.value + x, increment)
                                 screenItem(viewPagerImpl)

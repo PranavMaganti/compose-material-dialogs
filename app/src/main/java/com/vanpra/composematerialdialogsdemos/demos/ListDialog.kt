@@ -9,8 +9,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.state
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -87,7 +88,7 @@ fun BasicListDialogDemo() {
                 )
                 Text(
                     emailIcon.email,
-                    modifier = Modifier.padding(start = 16.dp).gravity(Alignment.CenterVertically),
+                    modifier = Modifier.padding(start = 16.dp).align(Alignment.CenterVertically),
                     color = MaterialTheme.colors.onBackground,
                     style = MaterialTheme.typography.body1
                 )
@@ -101,7 +102,7 @@ fun BasicListDialogDemo() {
  */
 @Composable
 fun MultiSelectionDemo() {
-    var initialSelection by state { listOf(3, 5) }
+    var initialSelection by remember { mutableStateOf(listOf(3, 5)) }
 
     DialogAndShowButton(buttonText = "Multi-Selection Dialog") {
         title(res = R.string.labels_dialog_title)
@@ -135,7 +136,7 @@ fun MultiSelectionDemo() {
  */
 @Composable
 fun SingleSelectionDemo() {
-    var initialSingleSelection by state { 4 }
+    var initialSingleSelection by remember { mutableStateOf(4) }
 
     DialogAndShowButton(buttonText = "Single Selection Dialog") {
         title(res = R.string.ringtone_dialog_title)

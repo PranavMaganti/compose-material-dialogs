@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("org.jmailen.kotlinter")
+    id("org.jmailen.kotlinter") version "3.2.0"
 }
 
 android {
@@ -52,10 +52,22 @@ android {
     }
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+    kotlinOptions {
+        useIR = true
+        jvmTarget = "1.8"
+        freeCompilerArgs = listOf(
+            "-Xallow-jvm-ir-dependencies",
+            "-Xskip-prerelease-check",
+            "-Xopt-in=kotlin.Experimental"
+        )
+    }
+}
+
 dependencies {
-    // implementation("com.vanpra.compose-material-dialogs:core:0.2.1" )
-    // implementation("com.vanpra.compose-material-dialogs:datetime:0.2.1" )
-    // implementation("com.vanpra.compose-material-dialogs:color:0.2.1" )
+    // implementation("com.vanpra.compose-material-dialogs:core:0.2.2")
+    // implementation("com.vanpra.compose-material-dialogs:datetime:0.2.2")
+    // implementation("com.vanpra.compose-material-dialogs:color:0.2.2")
 
     implementation(project(":core"))
     implementation(project(":color"))
@@ -66,7 +78,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8", Versions.kotlin))
     implementation("androidx.core:core-ktx:1.3.1")
     implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("com.google.android.material:material:1.2.0")
+    implementation("com.google.android.material:material:1.2.1")
 
     implementation("androidx.compose.foundation:foundation-layout:${Versions.compose}")
     implementation("androidx.compose.material:material:${Versions.compose}")
