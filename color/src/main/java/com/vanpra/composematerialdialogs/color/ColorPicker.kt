@@ -85,7 +85,7 @@ fun MaterialDialog.colorChooser(
 ) {
     WithConstraints {
         val selectedColor = remember { mutableStateOf(colors[initialSelection]) }
-        val flingConfig = FlingConfig(listOf(0f, -constraints.maxWidth.toFloat()))
+        val flingConfig = FlingConfig(listOf(0f, constraints.maxWidth.toFloat()))
 
         val scrollerPosition =
             ScrollState(
@@ -104,7 +104,7 @@ fun MaterialDialog.colorChooser(
         Column(Modifier.padding(bottom = 8.dp)) {
             if (allowCustomArgb) {
                 PageIndicator(scrollerPosition, constraints)
-                ScrollableRow(children = {
+                ScrollableRow(scrollState = scrollerPosition, children = {
                     Box(Modifier.width(maxWidth)) {
                         ColorGridLayout(
                             colors = colors,
@@ -160,8 +160,8 @@ private fun PageIndicator(scrollerState: ScrollState, constraints: Constraints) 
 private fun CustomARGB(selectedColor: MutableState<Color>) {
     Column(Modifier.padding(start = 24.dp, end = 24.dp)) {
         Box(
-            Modifier.fillMaxWidth().height(70.dp).background(selectedColor.value)
-                .align(Alignment.CenterHorizontally),
+            Modifier.fillMaxWidth().height(70.dp).background(selectedColor.value),
+            alignment = Alignment.Center
         ) {
             Text(
                 "#${Integer.toHexString(selectedColor.value.toArgb())}",
@@ -315,7 +315,7 @@ private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
         Modifier.size(itemSizeDp)
             .clip(CircleShape)
             .background(color)
-            .border(BorderStroke(1.dp, SolidColor(MaterialTheme.colors.onBackground)))
+            .border(1.dp, MaterialTheme.colors.onBackground, CircleShape)
             .clickable(onClick = onClick, indication = null),
         alignment = Alignment.Center
     ) {
