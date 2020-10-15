@@ -1,80 +1,86 @@
-import com.android.build.gradle.BaseExtension
-import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.dependencies
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.android.build.gradle.BaseExtension
+import org.gradle.api.JavaVersion
+import org.gradle.api.plugins.ExtensionAware
+import org.gradle.kotlin.dsl.configure
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
-class CommonModulePlugin : Plugin<Project> {
+class CommonModulePlugin: Plugin<Project> {
+    private val Project.android: BaseExtension
+        get() = extensions.findByName("android") as? BaseExtension
+            ?: error("Not an Android module $name")
+
     override fun apply(project: Project) {
-        project.plugins.apply("kotlin-android")
-        project.plugins.apply("kotlin-android-extensions")
-        project.plugins.apply("maven-publish")
-        project.plugins.apply("com.jfrog.artifactory")
-        project.plugins.apply("com.jfrog.bintray")
-        project.plugins.apply("org.jmailen.kotlinter")
+        with(project) {
+            applyPlugins()
+            androidConf()
+            dependenciesConf()
+        }
+    }
 
-        val androidExtension = project.extensions.getByName("android")
-        if (androidExtension is BaseExtension) {
-            androidExtension.apply {
-                compileSdkVersion(30)
+    private fun Project.applyPlugins() {
+        plugins.run {
+            apply("com.android.library")
+            apply("kotlin-android")
+            apply("kotlin-android-extensions")
+            apply("maven-publish")
+            apply("com.jfrog.bintray")
+            apply("org.jmailen.kotlinter")
+        }
+    }
 
-                defaultConfig {
-                    minSdkVersion(21)
-                    targetSdkVersion(30)
-                    versionCode = 1
+    private fun Project.androidConf() {
+        android.run {
+            compileSdkVersion(30)
 
-                    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-                }
+            defaultConfig {
+                minSdkVersion(21)
+                targetSdkVersion(30)
+                versionCode = 1
 
-                buildTypes {
-                    getByName("release") {
-                        isMinifyEnabled = false
-                        proguardFiles(
-                            getDefaultProguardFile("proguard-android.txt"),
-                            "proguard-rules.pro"
-                        )
-                    }
-                }
+                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+            }
 
-                compileOptions {
-                    sourceCompatibility = JavaVersion.VERSION_1_8
-                    targetCompatibility = JavaVersion.VERSION_1_8
-                }
+            buildFeatures.compose = true
 
-                project.tasks.withType(KotlinCompile::class.java).configureEach {
-                    kotlinOptions {
-                        jvmTarget = "1.8"
-                        useIR = true
-                        freeCompilerArgs =
-                            listOf("-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check")
-                    }
-                }
-
-                composeOptions {
-                    kotlinCompilerVersion = Versions.kotlin
-                    kotlinCompilerExtensionVersion = Versions.compose
+            buildTypes {
+                getByName("release") {
+                    isMinifyEnabled = false
+                    proguardFiles(
+                        getDefaultProguardFile("proguard-android.txt"),
+                        "proguard-rules.pro"
+                    )
                 }
             }
 
-            project.dependencies {
-                add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}")
-                add("implementation", "androidx.core:core-ktx:1.0.2")
-                add("implementation", "androidx.appcompat:appcompat:1.1.0")
-                add("implementation", "com.google.android.material:material:1.1.0")
-
-                add(
-                    "implementation",
-                    "androidx.compose.foundation:foundation-layout:${Versions.compose}"
-                )
-                add("implementation", "androidx.compose.material:material:${Versions.compose}")
-                add("implementation", "androidx.ui:ui-tooling:${Versions.compose}")
-                add(
-                    "implementation",
-                    "androidx.compose.material:material-icons-extended:${Versions.compose}"
-                )
-                add("implementation", "androidx.compose.animation:animation:${Versions.compose}")
+            (this as ExtensionAware).configure<KotlinJvmOptions> {
+                jvmTarget = "1.8"
             }
+
+            compileOptions {
+                sourceCompatibility = JavaVersion.VERSION_1_8
+                targetCompatibility = JavaVersion.VERSION_1_8
+            }
+
+            composeOptions {
+                kotlinCompilerVersion = Dependencies.Kotlin.version
+                kotlinCompilerExtensionVersion = Dependencies.AndroidX.Compose.version
+            }
+        }
+    }
+
+    private fun Project.dependenciesConf() {
+        dependencies.apply {
+            add("implementation", Dependencies.Kotlin.stdlib)
+            add("implementation", Dependencies.AndroidX.coreKtx)
+            add("implementation", Dependencies.AndroidX.appcompat)
+            add("implementation", Dependencies.material)
+
+            add("implementation", Dependencies.AndroidX.Compose.ui)
+            add("implementation", Dependencies.AndroidX.Compose.tooling)
+            add("implementation", Dependencies.AndroidX.Compose.material)
+            add("implementation", Dependencies.AndroidX.Compose.materialIconsExtended)
         }
     }
 }

@@ -3,17 +3,9 @@ package com.vanpra.composematerialdialogs
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeight
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Checkbox
-import androidx.compose.material.EmphasisAmbient
+import androidx.compose.material.AmbientEmphasisLevels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
@@ -65,6 +57,7 @@ fun MaterialDialog.listItems(
                             }
                         )
                         .padding(top = 12.dp, bottom = 12.dp, start = 24.dp, end = 24.dp)
+                        .wrapContentWidth(Alignment.Start)
                 )
             }
         })
@@ -178,7 +171,7 @@ fun MaterialDialog.listItemsMultiChoice(
                 color = if (enabled) {
                     MaterialTheme.colors.onSurface
                 } else {
-                    EmphasisAmbient.current.disabled.applyEmphasis(
+                    AmbientEmphasisLevels.current.disabled.applyEmphasis(
                         MaterialTheme.colors.onSurface
                     )
                 },
@@ -283,7 +276,7 @@ private fun SingleChoiceItem(
             color = if (enabled) {
                 MaterialTheme.colors.onSurface
             } else {
-                EmphasisAmbient.current.disabled.applyEmphasis(
+                AmbientEmphasisLevels.current.disabled.applyEmphasis(
                     MaterialTheme.colors.onSurface
                 )
             },

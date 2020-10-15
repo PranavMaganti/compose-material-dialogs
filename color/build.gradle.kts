@@ -1,35 +1,16 @@
 import java.util.Date
 
 plugins {
-    id("com.android.library")
     id("common-library")
-    id("org.jmailen.kotlinter") version "3.2.0"
-}
-
-android {
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
     api(project(":core"))
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs = listOf(
-            "-Xallow-jvm-ir-dependencies",
-            "-Xskip-prerelease-check",
-            "-Xopt-in=kotlin.Experimental"
-        )
-    }
-}
-
 val artifactName = "color"
 val artifactGroup = "com.vanpra.compose-material-dialogs"
-val artifactVersion = Versions.library
+val artifactVersion = Dependencies.ComposeMaterialDialogs.version
 
 val sourcesJar by tasks.creating(Jar::class) {
     from(android.sourceSets.getByName("main").java.srcDirs)

@@ -1,4 +1,4 @@
-package com.vanpra.composematerialdialogsdemos
+package com.vanpra.composematerialdialogdemos
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogsdemos.ui.dialogBackground
+import com.vanpra.composematerialdialogdemos.ui.dialogBackground
 
 /**
  * @brief Builds a dialog and adds button to the layout which shows the dialog on click

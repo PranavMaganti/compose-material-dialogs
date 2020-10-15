@@ -1,4 +1,4 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     repositories {
@@ -9,7 +9,9 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
+        classpath(Dependencies.androidGradlePlugin)
+        classpath(Dependencies.Kotlin.gradlePlugin)
+        classpath("org.jmailen.gradle:kotlinter-gradle:3.2.0")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -19,13 +21,19 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral()
+        gradlePluginPortal()
         maven { url = uri("https://dl.bintray.com/kotlin/kotlin-eap") }
-        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
+        maven { url = uri("https://kotlin.bintray.com/kotlinx/") }
+    }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+        kotlinOptions {
+            jvmTarget = "1.8"
+            freeCompilerArgs = listOf(
+                "-Xallow-jvm-ir-dependencies",
+                "-Xskip-prerelease-check"
+            )
+        }
     }
 }
-
-
-tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
-}
-

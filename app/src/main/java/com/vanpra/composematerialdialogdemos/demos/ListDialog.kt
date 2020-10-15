@@ -1,4 +1,4 @@
-package com.vanpra.composematerialdialogsdemos.demos
+package com.vanpra.composematerialdialogdemos.demos
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Text
@@ -20,8 +20,8 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.listItems
 import com.vanpra.composematerialdialogs.listItemsMultiChoice
 import com.vanpra.composematerialdialogs.listItemsSingleChoice
-import com.vanpra.composematerialdialogsdemos.DialogAndShowButton
-import com.vanpra.composematerialdialogsdemos.R
+import com.vanpra.composematerialdialogdemos.DialogAndShowButton
+import com.vanpra.composematerialdialogdemos.R
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 private val ringtones =

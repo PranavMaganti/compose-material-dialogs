@@ -5,26 +5,11 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeight
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
@@ -117,9 +102,15 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
             .preferredHeight(64.dp)
             .wrapContentHeight(Alignment.CenterVertically)
 
-        if (center) {
-            modifier = modifier.then(Modifier.wrapContentWidth(Alignment.CenterHorizontally))
-        }
+        modifier = modifier.then(
+            Modifier.wrapContentWidth(
+                if (center) {
+                    Alignment.CenterHorizontally
+                } else {
+                    Alignment.Start
+                }
+            )
+        )
 
         Text(
             text = titleText,
@@ -227,18 +218,21 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
                         var currY = 0
 
                         buttons.buttonsTagOrder.forEach { tagNum ->
-                            val button =
-                                placeables.fastFirstOrNull { it.first == "button_$tagNum" }!!.second
+                            val buttonPlaceable =
+                                placeables.fastFirstOrNull { it.first == "button_$tagNum" }
 
-                            currX -= button.width
+                            if (buttonPlaceable != null) {
+                                val button = buttonPlaceable.second
+                                currX -= button.width
 
-                            if (!column) {
-                                button.place(currX, 0)
-                            } else {
-                                button.place(currX, currY)
+                                if (!column) {
+                                    button.place(currX, 0)
+                                } else {
+                                    button.place(currX, currY)
 
-                                currY += button.height + interButtonPadding
-                                currX = constraints.maxWidth
+                                    currY += button.height + interButtonPadding
+                                    currX = constraints.maxWidth
+                                }
                             }
                         }
                     }
