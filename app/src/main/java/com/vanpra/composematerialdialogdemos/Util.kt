@@ -1,6 +1,7 @@
 package com.vanpra.composematerialdialogdemos
 
 import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
@@ -10,8 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogdemos.ui.dialogBackground
+import com.vanpra.composematerialdialogs.MaterialDialog
 
 /**
  * @brief Builds a dialog and adds button to the layout which shows the dialog on click
@@ -26,8 +27,8 @@ fun DialogAndShowButton(buttonText: String, content: @Composable() MaterialDialo
 
     TextButton(
         onClick = { dialog.show() },
-        modifier = Modifier.fillMaxWidth().padding(8.dp),
-        backgroundColor = MaterialTheme.colors.primaryVariant
+        modifier = Modifier.fillMaxWidth()
+            .padding(8.dp).background(MaterialTheme.colors.primaryVariant),
     ) {
         Text(
             buttonText,

@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -50,13 +48,13 @@ android {
 }
 
 dependencies {
-//    implementation(project(":core"))
-//    implementation(project(":datetime"))
-//    implementation(project(":color"))
+    implementation(project(":core"))
+    implementation(project(":datetime"))
+    implementation(project(":color"))
 
-    implementation(Dependencies.ComposeMaterialDialogs.core)
-    implementation(Dependencies.ComposeMaterialDialogs.datetime)
-    implementation(Dependencies.ComposeMaterialDialogs.color)
+   // implementation(Dependencies.ComposeMaterialDialogs.core)
+   // implementation(Dependencies.ComposeMaterialDialogs.datetime)
+   // implementation(Dependencies.ComposeMaterialDialogs.color)
 
     implementation(Dependencies.Kotlin.stdlib)
 

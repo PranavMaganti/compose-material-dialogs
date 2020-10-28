@@ -15,7 +15,7 @@ kotlinDslPluginOptions {
 dependencies {
     implementation("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5")
     implementation("org.jfrog.buildinfo:build-info-extractor-gradle:4.17.2")
-    implementation("com.android.tools.build:gradle:4.2.0-alpha13")
+    implementation("com.android.tools.build:gradle:4.2.0-alpha15")
     implementation(kotlin("gradle-plugin"))
     implementation(kotlin("android-extensions"))
 }

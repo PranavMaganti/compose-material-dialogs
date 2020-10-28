@@ -1,5 +1,4 @@
 import java.util.Date
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("common-library")
