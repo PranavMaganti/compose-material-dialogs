@@ -2,7 +2,6 @@ package com.vanpra.composematerialdialogs.datetime
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +18,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
@@ -27,13 +27,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawOpacity
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
@@ -131,39 +131,42 @@ private fun DateLayout(
     val maxRows = 6
     val layoutHeight = maxRows * boxSizePx + (verticalSpacing * (maxRows - 1))
 
-    Layout({
-        month.fastForEach {
-            if (it != -1) {
-                var selectedModifier: Modifier = Modifier
-                var textColor: Color = MaterialTheme.colors.onBackground
+    Layout(
+        {
+            month.fastForEach {
+                if (it != -1) {
+                    var selectedModifier: Modifier = Modifier
+                    var textColor: Color = MaterialTheme.colors.onBackground
 
-                if (check && selected.value.dayOfMonth == it) {
-                    selectedModifier = Modifier.background(
-                        color = MaterialTheme.colors.primaryVariant.copy(0.7f),
-                        shape = CircleShape
-                    )
-                    textColor = Color.White
-                }
-
-                Text(
-                    it.toString(),
-                    modifier = Modifier.size(boxSize)
-                        .clickable(
-                            onClick = {
-                                selected.value = LocalDate.of(yearMonth.year, yearMonth.month, it)
-                            }, indication = null
+                    if (check && selected.value.dayOfMonth == it) {
+                        selectedModifier = Modifier.background(
+                            color = MaterialTheme.colors.primaryVariant.copy(0.7f),
+                            shape = CircleShape
                         )
-                        .then(selectedModifier)
-                        .wrapContentSize(Alignment.Center),
-                    style = textStyle,
-                    color = textColor
-                )
-            } else {
-                Box(Modifier.size(boxSize))
+                        textColor = Color.White
+                    }
+
+                    Text(
+                        it.toString(),
+                        modifier = Modifier.size(boxSize)
+                            .clickable(
+                                onClick = {
+                                    selected.value = LocalDate.of(yearMonth.year, yearMonth.month, it)
+                                },
+                                indication = null
+                            )
+                            .then(selectedModifier)
+                            .wrapContentSize(Alignment.Center),
+                        color = textColor,
+                        style = textStyle
+                    )
+                } else {
+                    Box(Modifier.size(boxSize))
+                }
             }
-        }
-    }, Modifier.padding(top = 8.dp, start = 24.dp, end = 24.dp)
-        .fillMaxWidth(),
+        },
+        Modifier.padding(top = 8.dp, start = 24.dp, end = 24.dp)
+            .fillMaxWidth(),
         { measurables, constraints ->
             val horizontalSpacing = (constraints.maxWidth - (boxSizePx * 7)) / 6
             layout(constraints.maxWidth, layoutHeight) {
@@ -176,7 +179,8 @@ private fun DateLayout(
                         )
                     }
             }
-        })
+        }
+    )
 }
 
 @Composable

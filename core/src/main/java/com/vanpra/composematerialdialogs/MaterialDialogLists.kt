@@ -1,7 +1,6 @@
 package com.vanpra.composematerialdialogs
 
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -13,10 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material.AmbientEmphasisLevels
 import androidx.compose.material.Checkbox
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,7 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.WithConstraints
+import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 
@@ -49,27 +49,30 @@ fun MaterialDialog.listItems(
             modifier = modifier.then(bottomPadding)
         }
 
-        ScrollableColumn(modifier = modifier, children = {
-            list.fastForEachIndexed { index, it ->
-                Text(
-                    it,
-                    color = MaterialTheme.colors.onSurface,
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(
-                            onClick = {
-                                if (closeOnClick) {
-                                    hide()
+        ScrollableColumn(
+            modifier = modifier,
+            children = {
+                list.fastForEachIndexed { index, it ->
+                    Text(
+                        it,
+                        color = MaterialTheme.colors.onSurface,
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(
+                                onClick = {
+                                    if (closeOnClick) {
+                                        hide()
+                                    }
+                                    onClick(index, it)
                                 }
-                                onClick(index, it)
-                            }
-                        )
-                        .padding(top = 12.dp, bottom = 12.dp, start = 24.dp, end = 24.dp)
-                        .wrapContentWidth(Alignment.Start)
-                )
+                            )
+                            .padding(top = 12.dp, bottom = 12.dp, start = 24.dp, end = 24.dp)
+                            .wrapContentWidth(Alignment.Start)
+                    )
+                }
             }
-        })
+        )
     }
 }
 
@@ -95,25 +98,28 @@ fun <T> MaterialDialog.listItems(
         if (buttons.buttonsTagOrder.isEmpty()) {
             modifier = modifier.then(bottomPadding)
         }
-        ScrollableColumn(modifier = modifier, children = {
-            list.fastForEachIndexed { index, it ->
-                Box(
-                    Modifier.fillMaxWidth()
-                        .clickable(
-                            onClick = {
-                                if (closeOnClick) {
-                                    hide()
-                                }
-                                onClick(index, it)
-                            },
-                            enabled = isEnabled(index)
-                        )
-                        .padding(start = 24.dp, end = 24.dp)
-                ) {
-                    item(index, it)
+        ScrollableColumn(
+            modifier = modifier,
+            children = {
+                list.fastForEachIndexed { index, it ->
+                    Box(
+                        Modifier.fillMaxWidth()
+                            .clickable(
+                                onClick = {
+                                    if (closeOnClick) {
+                                        hide()
+                                    }
+                                    onClick(index, it)
+                                },
+                                enabled = isEnabled(index)
+                            )
+                            .padding(start = 24.dp, end = 24.dp)
+                    ) {
+                        item(index, it)
+                    }
                 }
             }
-        })
+        )
     }
 }
 
@@ -180,9 +186,7 @@ fun MaterialDialog.listItemsMultiChoice(
                 color = if (enabled) {
                     MaterialTheme.colors.onSurface
                 } else {
-                    AmbientEmphasisLevels.current.disabled.applyEmphasis(
-                        MaterialTheme.colors.onSurface
-                    )
+                    MaterialTheme.colors.onSurface.copy(ContentAlpha.disabled)
                 },
                 style = MaterialTheme.typography.body1
             )
@@ -282,12 +286,11 @@ private fun SingleChoiceItem(
         Spacer(modifier = Modifier.fillMaxHeight().width(32.dp))
         Text(
             item,
+            modifier = Modifier,
             color = if (enabled) {
                 MaterialTheme.colors.onSurface
             } else {
-                AmbientEmphasisLevels.current.disabled.applyEmphasis(
-                    MaterialTheme.colors.onSurface
-                )
+                MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
             },
             style = MaterialTheme.typography.body1
         )

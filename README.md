@@ -2,7 +2,7 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5990ad24f5ca434299916697e3fc0fe2)](https://app.codacy.com/manual/pranav.maganti/compose-material-dialogs?utm_source=github.com&utm_medium=referral&utm_content=vanpra/compose-material-dialogs&utm_campaign=Badge_Grade_Dashboard)
 
-**Current Compose Version: 1.0.0-alpha06**
+**Current Compose Version: 1.0.0-alpha07**
 
 ## Credits
 
@@ -19,7 +19,7 @@ This library's design is heavily inspired by https://github.com/afollestad/mater
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:core:0.2.5" 
+  implementation "com.vanpra.compose-material-dialogs:core:0.2.6" 
   ...
 }
 ```
@@ -35,7 +35,7 @@ dependencies {
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:datetime:0.2.5"
+  implementation "com.vanpra.compose-material-dialogs:datetime:0.2.6"
   ...
 }
 ```
@@ -51,7 +51,7 @@ dependencies {
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:color:0.2.5"
+  implementation "com.vanpra.compose-material-dialogs:color:0.2.6"
   ...
 }
 ```
@@ -65,6 +65,11 @@ dependencies {
 3. Add tests to all modules
 
 ## Changelog
+
+### 0.2.6  - 2020-11-11
+
+- Updated compose version to 1.0.0-alpha07
+- Fix core module manifest to fix errors
 
 ### 0.2.5  - 2020-10-28
 

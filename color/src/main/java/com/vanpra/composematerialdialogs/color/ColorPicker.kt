@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.ScrollableRow
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.animation.FlingConfig
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,6 +22,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
@@ -33,9 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -43,6 +41,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.platform.AnimationClockAmbient
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.text.TextStyle
@@ -102,20 +102,23 @@ fun MaterialDialog.colorChooser(
         Column(Modifier.padding(bottom = 8.dp)) {
             if (allowCustomArgb) {
                 PageIndicator(scrollerPosition, constraints)
-                ScrollableRow(scrollState = scrollerPosition, children = {
-                    Box(Modifier.width(maxWidth)) {
-                        ColorGridLayout(
-                            colors = colors,
-                            selectedColor = selectedColor,
-                            subColors = subColors,
-                            waitForPositiveButton = waitForPositiveButton,
-                            onColorSelected = onColorSelected
-                        )
+                ScrollableRow(
+                    scrollState = scrollerPosition,
+                    children = {
+                        Box(Modifier.width(maxWidth)) {
+                            ColorGridLayout(
+                                colors = colors,
+                                selectedColor = selectedColor,
+                                subColors = subColors,
+                                waitForPositiveButton = waitForPositiveButton,
+                                onColorSelected = onColorSelected
+                            )
+                        }
+                        Box(Modifier.width(maxWidth)) {
+                            CustomARGB(selectedColor)
+                        }
                     }
-                    Box(Modifier.width(maxWidth)) {
-                        CustomARGB(selectedColor)
-                    }
-                })
+                )
             } else {
                 ColorGridLayout(
                     colors = colors,
@@ -240,9 +243,10 @@ private fun LabelSlider(
         Box(Modifier.width(30.dp).align(Alignment.CenterVertically)) {
             Text(
                 value.toInt().toString(),
-                style = MaterialTheme.typography.h6,
+                modifier = Modifier,
+                color = MaterialTheme.colors.onBackground,
                 fontSize = 16.sp,
-                color = MaterialTheme.colors.onBackground
+                style = MaterialTheme.typography.h6
             )
         }
     }
@@ -338,9 +342,10 @@ private fun GridView(
         ScrollableColumn(
             modifier = Modifier.preferredHeightIn(max = (maxHeight * 0.7f)),
             children = {
-                Layout({
-                    content()
-                },
+                Layout(
+                    {
+                        content()
+                    },
                     Modifier.padding(
                         top = 8.dp,
                         start = 24.dp,
@@ -372,8 +377,10 @@ private fun GridView(
                                     )
                                 }
                         }
-                    })
-            })
+                    }
+                )
+            }
+        )
     }
 }
 

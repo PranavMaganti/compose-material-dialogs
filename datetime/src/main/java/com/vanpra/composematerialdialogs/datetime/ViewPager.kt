@@ -18,10 +18,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.draw.drawOpacity
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.unit.Dp
 import kotlin.math.abs
@@ -107,7 +107,8 @@ fun ViewPager(
                     offset.value - old
                 },
                 onDragStopped = {
-                    offset.fling(-(it * 0.6f),
+                    offset.fling(
+                        -(it * 0.6f),
                         config = flingConfig,
                         onAnimationEnd = { reason, end, _ ->
                             offset.snapTo(width)
@@ -121,42 +122,48 @@ fun ViewPager(
                                     onPrevious()
                                 }
                             }
-                        })
+                        }
+                    )
                 },
                 enabled = enabled
             )
 
-            onCommit(index.value, {
-                if (useAlpha) {
-                    if (offset.value < width) {
-                        alphas.value[0] = 1 - offset.value / width
-                    } else if (offset.value > width) {
-                        alphas.value[2] = ((offset.value - width) / width)
+            onCommit(
+                index.value,
+                {
+                    if (useAlpha) {
+                        if (offset.value < width) {
+                            alphas.value[0] = 1 - offset.value / width
+                        } else if (offset.value > width) {
+                            alphas.value[2] = ((offset.value - width) / width)
+                        }
+
+                        alphas.value[1] = 1 - abs(offset.value - width) / width
                     }
-
-                    alphas.value[1] = 1 - abs(offset.value - width) / width
                 }
-            })
+            )
 
-            ScrollableRow(children = {
-                Row(
-                    draggable.preferredWidth(maxWidth * 3)
-                        .offset(-offset.toDp())
-                ) {
-                    for (x in -1..1) {
-                        val previous = offset.value < width && x == -1
-                        val current = x == 0
-                        val next = offset.value > width && x == 1
+            ScrollableRow(
+                children = {
+                    Row(
+                        draggable.preferredWidth(maxWidth * 3)
+                            .offset(-offset.toDp())
+                    ) {
+                        for (x in -1..1) {
+                            val previous = offset.value < width && x == -1
+                            val current = x == 0
+                            val next = offset.value > width && x == 1
 
-                        Column(Modifier.preferredWidth(maxWidth).drawOpacity(alphas.value[x + 1])) {
-                            if (previous || current || next) {
-                                val viewPagerImpl = ViewPagerImpl(index.value + x, increment)
-                                screenItem(viewPagerImpl)
+                            Column(Modifier.preferredWidth(maxWidth).drawOpacity(alphas.value[x + 1])) {
+                                if (previous || current || next) {
+                                    val viewPagerImpl = ViewPagerImpl(index.value + x, increment)
+                                    screenItem(viewPagerImpl)
+                                }
                             }
                         }
                     }
                 }
-            })
+            )
         }
     }
 }

@@ -3,7 +3,6 @@ package com.vanpra.composematerialdialogs
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -26,12 +28,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.id
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.ContextAmbient
@@ -90,8 +92,8 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
             ThemedDialog(onCloseRequest = { hide() }) {
                 Column(
                     modifier =
-                    Modifier.fillMaxWidth().background(backgroundColor)
-                        .clip(MaterialTheme.shapes.medium)
+                        Modifier.fillMaxWidth().background(backgroundColor)
+                            .clip(MaterialTheme.shapes.medium)
                 ) {
                     this@MaterialDialog.content()
                 }
@@ -213,7 +215,8 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
             Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
                 .layoutId("buttons")
         ) {
-            Layout({ content(buttons) }, Modifier,
+            Layout(
+                { content(buttons) }, Modifier,
                 { measurables, constraints ->
                     val placeables = measurables.map { it.id to it.measure(constraints) }
                     val totalWidth = placeables.map { it.second.width }.sum()
@@ -251,7 +254,8 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
                             }
                         }
                     }
-                })
+                }
+            )
         }
     }
 
@@ -294,7 +298,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)) {
             TextField(
                 value = text,
-                onValueChange = {
+                onValueChange = { it ->
                     text = it
                     if (!waitForPositiveButton) {
                         onInput(text)
@@ -312,12 +316,12 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
                     tempList[index] = valid
                     positiveEnabled = tempList
                 },
-                label = { Text(label) },
+                label = { BasicText(label) },
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text(hint) },
+                placeholder = { BasicText(hint) },
                 isErrorValue = !valid,
                 visualTransformation = visualTransformation,
-                keyboardType = KeyboardType.Text,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             )
 
             if (!valid) {
