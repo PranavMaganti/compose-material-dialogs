@@ -1,24 +1,8 @@
 package com.vanpra.composematerialdialogs.color
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.ScrollableRow
+import androidx.compose.foundation.*
 import androidx.compose.foundation.animation.FlingConfig
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeightIn
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
@@ -26,12 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,16 +22,14 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.platform.AnimationClockAmbient
-import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.platform.AmbientAnimationClock
+import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.util.fastForEachIndexed
-import androidx.compose.ui.util.fastMap
 import com.vanpra.composematerialdialogs.MaterialDialog
 
 val itemSizeDp = 55.dp
@@ -88,7 +65,7 @@ fun MaterialDialog.colorChooser(
         val scrollerPosition =
             ScrollState(
                 initial = 0f, flingConfig = flingConfig,
-                animationClock = AnimationClockAmbient.current
+                animationClock = AmbientAnimationClock.current
             )
 
         remember {
@@ -104,7 +81,7 @@ fun MaterialDialog.colorChooser(
                 PageIndicator(scrollerPosition, constraints)
                 ScrollableRow(
                     scrollState = scrollerPosition,
-                    children = {
+                    content = {
                         Box(Modifier.width(maxWidth)) {
                             ColorGridLayout(
                                 colors = colors,
@@ -162,7 +139,7 @@ private fun CustomARGB(selectedColor: MutableState<Color>) {
     Column(Modifier.padding(start = 24.dp, end = 24.dp)) {
         Box(
             Modifier.fillMaxWidth().height(70.dp).background(selectedColor.value),
-            alignment = Alignment.Center
+            contentAlignment = Alignment.Center
         ) {
             Text(
                 "#${Integer.toHexString(selectedColor.value.toArgb())}",
@@ -263,11 +240,11 @@ private fun ColorGridLayout(
     var mainSelectedIndex by remember { mutableStateOf(0) }
     var showSubColors by remember { mutableStateOf(false) }
 
-    val itemSize = with(DensityAmbient.current) { itemSizeDp.toIntPx() }
+    val itemSize = with(AmbientDensity.current) { itemSizeDp.toIntPx() }
 
     GridView(itemSize = itemSize) {
         if (!showSubColors) {
-            colors.fastForEachIndexed { index, item ->
+            colors.forEachIndexed { index, item ->
                 ColorView(color = item, selected = index == mainSelectedIndex) {
                     if (mainSelectedIndex != index) {
                         mainSelectedIndex = index
@@ -289,7 +266,7 @@ private fun ColorGridLayout(
                     },
                     indication = null
                 ),
-                alignment = Alignment.Center
+                contentAlignment = Alignment.Center
             ) {
                 Image(
                     Icons.Default.ArrowBack,
@@ -299,7 +276,7 @@ private fun ColorGridLayout(
                 )
             }
 
-            subColors[mainSelectedIndex].fastForEachIndexed { _, item ->
+            subColors[mainSelectedIndex].forEachIndexed { _, item ->
                 ColorView(color = item, selected = selectedColor.value == item) {
                     selectedColor.value = item
                     if (!waitForPositiveButton) {
@@ -319,7 +296,7 @@ private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
             .background(color)
             .border(1.dp, MaterialTheme.colors.onBackground, CircleShape)
             .clickable(onClick = onClick, indication = null),
-        alignment = Alignment.Center
+        contentAlignment = Alignment.Center
     ) {
         if (selected) {
             Image(
@@ -341,7 +318,7 @@ private fun GridView(
     WithConstraints {
         ScrollableColumn(
             modifier = Modifier.preferredHeightIn(max = (maxHeight * 0.7f)),
-            children = {
+            content = {
                 Layout(
                     {
                         content()
@@ -362,7 +339,7 @@ private fun GridView(
 
                         layout(constraints.maxWidth, layoutHeight) {
                             measurables
-                                .fastMap {
+                                .map {
                                     it.measure(
                                         Constraints(
                                             maxHeight = itemSize,
@@ -370,7 +347,7 @@ private fun GridView(
                                         )
                                     )
                                 }
-                                .fastForEachIndexed { index, it ->
+                                .forEachIndexed { index, it ->
                                     it.place(
                                         x = (index % itemsInRow) * (itemSize + spacing),
                                         y = (index / itemsInRow) * (itemSize + spacing)

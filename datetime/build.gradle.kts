@@ -1,4 +1,4 @@
-import java.util.Date
+import java.util.*
 
 plugins {
     id("common-library")
@@ -7,6 +7,23 @@ plugins {
 android {
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
+    }
+    defaultConfig {
+        minSdkVersion(21)
+        targetSdkVersion(30)
+        versionCode = 1
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            proguardFiles(
+                    getDefaultProguardFile("proguard-android.txt"),
+                    "proguard-rules.pro"
+            )
+        }
     }
 }
 

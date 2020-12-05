@@ -4,6 +4,26 @@ plugins {
     id("common-library")
 }
 
+android {
+    defaultConfig {
+        minSdkVersion(21)
+        targetSdkVersion(30)
+        versionCode = 1
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            proguardFiles(
+                    getDefaultProguardFile("proguard-android.txt"),
+                    "proguard-rules.pro"
+            )
+        }
+    }
+}
+
 dependencies {
     api(project(":core"))
 }

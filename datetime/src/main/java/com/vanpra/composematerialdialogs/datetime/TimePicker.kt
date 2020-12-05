@@ -31,7 +31,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -168,8 +168,8 @@ private fun ClockLayout(
     onAnchorChange: (Int) -> Unit = {},
     onLift: () -> Unit = {}
 ) {
-    val outerRadius = with(DensityAmbient.current) { 100.dp.toPx() }
-    val innerRadius = with(DensityAmbient.current) { 60.dp.toPx() }
+    val outerRadius = with(AmbientDensity.current) { 100.dp.toPx() }
+    val innerRadius = with(AmbientDensity.current) { 60.dp.toPx() }
     val selectedRadius = 70f
 
     val offset = remember { mutableStateOf(Offset.Zero) }

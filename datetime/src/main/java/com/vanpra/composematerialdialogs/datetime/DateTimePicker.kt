@@ -24,8 +24,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawOpacity
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.WithConstraints
@@ -79,7 +79,7 @@ fun MaterialDialog.datetimepicker(
                                 currentScreen.value = 0
                             }
                         )
-                        .drawOpacity(1f * ratio)
+                        .alpha(1f * ratio)
                         .wrapContentHeight(Alignment.CenterVertically)
                 )
                 DialogTitle(title)
@@ -107,7 +107,7 @@ fun MaterialDialog.datetimepicker(
             ScrollableRow(
                 scrollState = scrollState,
                 isScrollEnabled = false,
-                children = {
+                content = {
                     DatePickerLayout(
                         Modifier.padding(top = 16.dp)
                             .sizeIn(maxWidth = maxWidth, maxHeight = maxHeight),

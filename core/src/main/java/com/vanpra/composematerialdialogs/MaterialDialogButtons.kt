@@ -8,8 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.platform.ContextAmbient
-import java.util.Locale
+import java.util.*
 
 /**
  * A class used to build a buttons layout for a MaterialDialog. This should be used in conjunction
@@ -34,7 +33,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         disableDismiss: Boolean = false,
         onClick: () -> Unit = {}
     ) {
-        val buttonText = ContextAmbient.current.getString(res, text).toUpperCase(Locale.ROOT)
+        val buttonText = getString(res, text).toUpperCase(Locale.ROOT)
         val buttonId = remember { buttonsTagOrder.size }
 
         TextButton(
@@ -74,7 +73,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         @StringRes res: Int? = null,
         onClick: () -> Unit = {}
     ) {
-        val buttonText = ContextAmbient.current.getString(res, text).toUpperCase(Locale.ROOT)
+        val buttonText = getString(res, text).toUpperCase(Locale.ROOT)
         val buttonId = remember { buttonsTagOrder.size }
 
         TextButton(

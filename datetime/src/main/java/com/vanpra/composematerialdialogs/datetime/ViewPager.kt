@@ -18,11 +18,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawOpacity
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.unit.Dp
 import kotlin.math.abs
 import kotlin.math.sign
@@ -70,7 +70,7 @@ fun ViewPager(
     onPrevious: () -> Unit = {},
     useAlpha: Boolean = false,
     enabled: Boolean = true,
-    screenItem: @Composable() ViewPagerScope.() -> Unit
+    content: @Composable ViewPagerScope.() -> Unit
 ) {
     Column(Modifier.background(Color.Transparent)) {
         WithConstraints {
@@ -144,7 +144,7 @@ fun ViewPager(
             )
 
             ScrollableRow(
-                children = {
+                content = {
                     Row(
                         draggable.preferredWidth(maxWidth * 3)
                             .offset(-offset.toDp())
@@ -154,10 +154,10 @@ fun ViewPager(
                             val current = x == 0
                             val next = offset.value > width && x == 1
 
-                            Column(Modifier.preferredWidth(maxWidth).drawOpacity(alphas.value[x + 1])) {
+                            Column(Modifier.preferredWidth(maxWidth).alpha(alphas.value[x + 1])) {
                                 if (previous || current || next) {
                                     val viewPagerImpl = ViewPagerImpl(index.value + x, increment)
-                                    screenItem(viewPagerImpl)
+                                    content(viewPagerImpl)
                                 }
                             }
                         }
@@ -169,4 +169,4 @@ fun ViewPager(
 }
 
 @Composable
-private fun AnimatedFloat.toDp(): Dp = with(DensityAmbient.current) { this@toDp.value.toDp() }
+private fun AnimatedFloat.toDp(): Dp = with(AmbientDensity.current) { this@toDp.value.toDp() }

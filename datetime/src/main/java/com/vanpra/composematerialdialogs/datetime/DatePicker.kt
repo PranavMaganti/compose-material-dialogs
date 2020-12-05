@@ -28,13 +28,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawOpacity
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
 import androidx.compose.ui.text.font.FontWeight.Companion.W500
@@ -43,8 +43,6 @@ import androidx.compose.ui.text.font.FontWeight.Companion.W700
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.util.fastForEach
-import androidx.compose.ui.util.fastForEachIndexed
 import com.vanpra.composematerialdialogs.MaterialDialog
 import java.time.LocalDate
 import java.time.YearMonth
@@ -125,7 +123,7 @@ private fun DateLayout(
 
     val textStyle = TextStyle(fontSize = 13.sp, fontWeight = W400)
     val boxSize = 35.dp
-    val boxSizePx = with(DensityAmbient.current) { boxSize.toIntPx() }
+    val boxSizePx = with(AmbientDensity.current) { boxSize.toIntPx() }
 
     val verticalSpacing = 30
     val maxRows = 6
@@ -133,7 +131,7 @@ private fun DateLayout(
 
     Layout(
         {
-            month.fastForEach {
+            month.forEach {
                 if (it != -1) {
                     var selectedModifier: Modifier = Modifier
                     var textColor: Color = MaterialTheme.colors.onBackground
@@ -172,7 +170,7 @@ private fun DateLayout(
             layout(constraints.maxWidth, layoutHeight) {
                 measurables
                     .map { it.measure(Constraints(maxHeight = boxSizePx, maxWidth = boxSizePx)) }
-                    .fastForEachIndexed { index, it ->
+                    .forEachIndexed { index, it ->
                         it.place(
                             x = (index % 7) * (boxSizePx + horizontalSpacing),
                             y = (index / 7) * (boxSizePx + verticalSpacing)
@@ -190,11 +188,11 @@ private fun DaysTitle() {
         modifier = Modifier.padding(top = 16.dp, bottom = 12.dp, start = 18.dp, end = 18.dp)
             .fillMaxWidth()
     ) {
-        listOf("M", "T", "W", "T", "F", "S", "S").fastForEach {
+        listOf("M", "T", "W", "T", "F", "S", "S").forEach {
             Box(Modifier.preferredSize(dateBoxDp)) {
                 Text(
                     it,
-                    modifier = Modifier.drawOpacity(0.8f).fillMaxSize()
+                    modifier = Modifier.alpha(0.8f).fillMaxSize()
                         .wrapContentSize(Alignment.Center),
                     style = TextStyle(fontSize = 14.sp, fontWeight = W600),
                     color = MaterialTheme.colors.onBackground
@@ -255,7 +253,7 @@ private fun DateTitle(selected: MutableState<LocalDate>) {
     ) {
         Text(
             text = selected.value.year.toString(), color = MaterialTheme.colors.onPrimary,
-            modifier = Modifier.drawOpacity(0.8f).padding(bottom = 2.dp),
+            modifier = Modifier.alpha(0.8f).padding(bottom = 2.dp),
             style = TextStyle(fontSize = 18.sp, fontWeight = W700)
         )
         Text(

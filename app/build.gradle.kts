@@ -1,3 +1,4 @@
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -16,13 +17,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    packagingOptions {
-        exclude("META-INF/LICENSE")
-        exclude("META-INF/AL2.0")
-        exclude("META-INF/**")
-        exclude("META-INF/*.kotlin_module")
     }
 
     buildFeatures {
@@ -48,19 +42,18 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":datetime"))
-    implementation(project(":color"))
+//    implementation(project(":core"))
+//    implementation(project(":datetime"))
+//    implementation(project(":color"))
 
-   // implementation(Dependencies.ComposeMaterialDialogs.core)
-   // implementation(Dependencies.ComposeMaterialDialogs.datetime)
-   // implementation(Dependencies.ComposeMaterialDialogs.color)
+    implementation(Dependencies.ComposeMaterialDialogs.core)
+    implementation(Dependencies.ComposeMaterialDialogs.datetime)
+    implementation(Dependencies.ComposeMaterialDialogs.color)
 
     implementation(Dependencies.Kotlin.stdlib)
 
     implementation(Dependencies.AndroidX.Compose.ui)
     implementation(Dependencies.AndroidX.Compose.material)
-    implementation(Dependencies.AndroidX.Compose.tooling)
     implementation(Dependencies.AndroidX.Compose.materialIconsExtended)
 
     implementation(Dependencies.AndroidX.coreKtx)

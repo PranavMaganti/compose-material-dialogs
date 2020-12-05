@@ -23,7 +23,6 @@ class CommonModulePlugin: Plugin<Project> {
         plugins.run {
             apply("com.android.library")
             apply("kotlin-android")
-            apply("kotlin-android-extensions")
             apply("maven-publish")
             apply("com.jfrog.bintray")
             apply("org.jmailen.kotlinter")
@@ -34,25 +33,7 @@ class CommonModulePlugin: Plugin<Project> {
         android.run {
             compileSdkVersion(30)
 
-            defaultConfig {
-                minSdkVersion(21)
-                targetSdkVersion(30)
-                versionCode = 1
-
-                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-            }
-
             buildFeatures.compose = true
-
-            buildTypes {
-                getByName("release") {
-                    isMinifyEnabled = false
-                    proguardFiles(
-                        getDefaultProguardFile("proguard-android.txt"),
-                        "proguard-rules.pro"
-                    )
-                }
-            }
 
             (this as ExtensionAware).configure<KotlinJvmOptions> {
                 jvmTarget = "1.8"
@@ -78,7 +59,6 @@ class CommonModulePlugin: Plugin<Project> {
             add("implementation", Dependencies.material)
 
             add("implementation", Dependencies.AndroidX.Compose.ui)
-            add("implementation", Dependencies.AndroidX.Compose.tooling)
             add("implementation", Dependencies.AndroidX.Compose.material)
             add("implementation", Dependencies.AndroidX.Compose.materialIconsExtended)
         }
