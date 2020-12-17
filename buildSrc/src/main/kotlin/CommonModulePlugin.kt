@@ -31,6 +31,8 @@ class CommonModulePlugin: Plugin<Project> {
 
     private fun Project.androidConf() {
         android.run {
+            lintOptions.isAbortOnError = false
+
             compileSdkVersion(30)
 
             buildFeatures.compose = true

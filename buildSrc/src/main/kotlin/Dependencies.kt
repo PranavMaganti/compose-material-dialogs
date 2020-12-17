@@ -3,7 +3,7 @@ object Dependencies {
     const val material = "com.google.android.material:material:1.2.1"
 
     object ComposeMaterialDialogs {
-        const val version = "0.2.7"
+        const val version = "0.2.8"
 
         const val core = "com.vanpra.compose-material-dialogs:core:$version"
         const val datetime = "com.vanpra.compose-material-dialogs:datetime:$version"
@@ -11,12 +11,12 @@ object Dependencies {
     }
 
     object Accompanist {
-        private const val version = "0.4.0"
+        private const val version = "0.4.1"
         const val coil = "dev.chrisbanes.accompanist:accompanist-coil:$version"
     }
 
     object Kotlin {
-        const val version = "1.4.20"
+        const val version = "1.4.21"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
@@ -26,7 +26,7 @@ object Dependencies {
         const val coreKtx = "androidx.core:core-ktx:1.5.0-alpha02"
 
         object Compose {
-            const val version = "1.0.0-alpha08"
+            const val version = "1.0.0-alpha09"
 
             const val ui = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"

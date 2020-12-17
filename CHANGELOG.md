@@ -1,5 +1,11 @@
 # Changelog
 
+### 0.2.7  - 2020-12-17
+
+- Updated compose version to 1.0.0-alpha09
+- Fix bug in input dialog component which caused callback to be called multiple times
+- Add documentation and code sample for input dialog component
+
 ### 0.2.7  - 2020-12-05
 
 - Updated compose version to 1.0.0-alpha08

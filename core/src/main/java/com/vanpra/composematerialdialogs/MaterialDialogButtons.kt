@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
-import java.util.*
+import java.util.Locale
 
 /**
  * A class used to build a buttons layout for a MaterialDialog. This should be used in conjunction
