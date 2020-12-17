@@ -46,7 +46,7 @@ If the text of the buttons is too long to fit in one row the buttons will be aut
 
 ### Input Dialogs
 
-<img src="https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/input.jpg" style="zoom:25%;" />
+<img src="https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/input.jpg" width="300" height="600"  />
 
 ```kotlin
 dialog.build {
@@ -65,7 +65,7 @@ In the code snippet above creates the dialog seen in the image (without the titl
 
 ### List Dialogs
 
-<img src="https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/basic_list.jpg" style="zoom:25%;" />
+<img src="https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/basic_list.jpg" width="300" height="600" />
 
 Below is an example of a plain list dialog:
 
