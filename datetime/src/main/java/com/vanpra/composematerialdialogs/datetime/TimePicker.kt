@@ -18,6 +18,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -127,7 +128,11 @@ internal fun TimePickerLayout(
 
 @Composable
 private fun TimeLayout(currentScreen: MutableState<Int>, selectedTime: MutableState<LocalTime>) {
-    Box(Modifier.fillMaxWidth().background(color = MaterialTheme.colors.primaryVariant)) {
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .background(color = MaterialTheme.colors.primaryVariant)
+    ) {
         val textSize = 60.sp
         val color = MaterialTheme.colors.onPrimary
         val hourAlpha = 1f - 0.4f * currentScreen.value
@@ -277,10 +282,12 @@ private fun ClockLayout(
 
     WithConstraints {
         Box(
-            Modifier.preferredSize(maxWidth).pressIndicatorGestureFilter(touchFilter, onLift)
+            Modifier
+                .preferredSize(maxWidth)
+                .pressIndicatorGestureFilter(touchFilter, onLift)
                 .dragGestureFilter(dragObserver)
         ) {
-            remember {
+            onCommit {
                 center.value =
                     Offset(constraints.maxWidth / 2f, constraints.maxWidth / 2f)
                 offset.value = center.value

@@ -1,9 +1,8 @@
 object Dependencies {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha02"
     const val material = "com.google.android.material:material:1.2.1"
 
     object ComposeMaterialDialogs {
-        const val version = "0.2.8"
+        const val version = "0.2.9"
 
         const val core = "com.vanpra.compose-material-dialogs:core:$version"
         const val datetime = "com.vanpra.compose-material-dialogs:datetime:$version"

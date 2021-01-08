@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * A class used to build a buttons layout for a MaterialDialog. This should be used in conjunction
@@ -16,6 +17,7 @@ import java.util.Locale
  */
 class MaterialDialogButtons(private val dialog: MaterialDialog) {
     val buttonsTagOrder = mutableListOf<Int>()
+    private val currentButtonId = AtomicInteger(0)
 
     /**
      * Adds a positive button to the dialog
@@ -34,7 +36,11 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         onClick: () -> Unit = {}
     ) {
         val buttonText = getString(res, text).toUpperCase(Locale.ROOT)
-        val buttonId = remember { buttonsTagOrder.size }
+        val buttonId = remember {
+            val buttonId = currentButtonId.incrementAndGet()
+            buttonsTagOrder.add(0, buttonId)
+            buttonId
+        }
 
         TextButton(
             onClick = {
@@ -53,10 +59,6 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         ) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
         }
-
-        remember {
-            buttonsTagOrder.add(0, buttonsTagOrder.size)
-        }
     }
 
     /**
@@ -74,7 +76,11 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         onClick: () -> Unit = {}
     ) {
         val buttonText = getString(res, text).toUpperCase(Locale.ROOT)
-        val buttonId = remember { buttonsTagOrder.size }
+        val buttonId = remember {
+            val buttonId = currentButtonId.incrementAndGet()
+            buttonsTagOrder.add(buttonId)
+            buttonId
+        }
 
         TextButton(
             onClick = {
@@ -86,10 +92,6 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
             modifier = Modifier.layoutId("button_$buttonId")
         ) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
-        }
-
-        remember {
-            buttonsTagOrder.add(buttonsTagOrder.size)
         }
     }
 }

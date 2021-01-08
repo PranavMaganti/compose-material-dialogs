@@ -21,7 +21,7 @@ This library's design is heavily inspired by https://github.com/afollestad/mater
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:core:0.2.8" 
+  implementation "com.vanpra.compose-material-dialogs:core:0.2.9" 
   ...
 }
 ```
@@ -37,7 +37,7 @@ dependencies {
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:datetime:0.2.8"
+  implementation "com.vanpra.compose-material-dialogs:datetime:0.2.9"
   ...
 }
 ```
@@ -53,7 +53,7 @@ dependencies {
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:color:0.2.8"
+  implementation "com.vanpra.compose-material-dialogs:color:0.2.9"
   ...
 }
 ```

@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.2.9  - 2021-01-08
+
+- Update usages of remember to onCommit
+- Fix concurrency issues during button creation
+
 ### 0.2.8  - 2020-12-17
 
 - Updated compose version to 1.0.0-alpha09

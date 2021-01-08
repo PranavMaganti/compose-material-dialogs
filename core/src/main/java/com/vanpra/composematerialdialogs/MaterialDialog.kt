@@ -23,7 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -89,7 +89,9 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
             ThemedDialog(onCloseRequest = { hide() }) {
                 Column(
                     modifier =
-                        Modifier.fillMaxWidth().background(backgroundColor)
+                        Modifier
+                            .fillMaxWidth()
+                            .background(backgroundColor)
                             .clip(MaterialTheme.shapes.medium)
                 ) {
                     this@MaterialDialog.content()
@@ -111,7 +113,8 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         center: Boolean = false
     ) {
         val titleText = getString(res, text)
-        var modifier = Modifier.fillMaxWidth()
+        var modifier = Modifier
+            .fillMaxWidth()
             .padding(start = 24.dp, end = 24.dp)
             .preferredHeight(64.dp)
             .wrapContentHeight(Alignment.CenterVertically)
@@ -155,7 +158,9 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         }
         val titleText = getString(textRes, text)
         Row(
-            modifier = Modifier.padding(start = 24.dp, end = 24.dp).preferredHeight(64.dp),
+            modifier = Modifier
+                .padding(start = 24.dp, end = 24.dp)
+                .preferredHeight(64.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (iconAsset != null) {
@@ -209,7 +214,9 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         val defaultBoxHeight = with(AmbientDensity.current) { 36.dp.toIntPx() }
 
         Box(
-            Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
                 .layoutId("buttons")
         ) {
             Layout(
@@ -286,7 +293,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         val index by mutableStateOf(positiveEnabled.size)
         var valid by mutableStateOf(allowEmpty)
 
-        remember {
+        onCommit {
             positiveEnabled.add(index, allowEmpty)
             if (waitForPositiveButton) {
                 callbacks.add { onInput(text) }

@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -89,7 +90,7 @@ fun MaterialDialog.colorChooser(
                 animationClock = AmbientAnimationClock.current
             )
 
-        remember {
+        onCommit {
             if (waitForPositiveButton) {
                 callbacks.add {
                     onColorSelected(selectedColor.value)
@@ -133,7 +134,8 @@ fun MaterialDialog.colorChooser(
 @Composable
 private fun PageIndicator(scrollerState: ScrollState, constraints: Constraints) {
     Row(
-        Modifier.fillMaxWidth()
+        Modifier
+            .fillMaxWidth()
             .wrapContentWidth(Alignment.CenterHorizontally)
             .padding(top = 8.dp, bottom = 16.dp)
     ) {
@@ -159,7 +161,10 @@ private fun PageIndicator(scrollerState: ScrollState, constraints: Constraints) 
 private fun CustomARGB(selectedColor: MutableState<Color>) {
     Column(Modifier.padding(start = 24.dp, end = 24.dp)) {
         Box(
-            Modifier.fillMaxWidth().height(70.dp).background(selectedColor.value),
+            Modifier
+                .fillMaxWidth()
+                .height(70.dp)
+                .background(selectedColor.value),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -238,7 +243,11 @@ private fun LabelSlider(
             thumbColor = sliderColor
         )
 
-        Box(Modifier.width(30.dp).align(Alignment.CenterVertically)) {
+        Box(
+            Modifier
+                .width(30.dp)
+                .align(Alignment.CenterVertically)
+        ) {
             Text(
                 value.toInt().toString(),
                 modifier = Modifier,
@@ -281,12 +290,15 @@ private fun ColorGridLayout(
             }
         } else {
             Box(
-                Modifier.size(itemSizeDp).clip(CircleShape).clickable(
-                    onClick = {
-                        showSubColors = false
-                    },
-                    indication = null
-                ),
+                Modifier
+                    .size(itemSizeDp)
+                    .clip(CircleShape)
+                    .clickable(
+                        onClick = {
+                            showSubColors = false
+                        },
+                        indication = null
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -312,7 +324,8 @@ private fun ColorGridLayout(
 @Composable
 private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
     Box(
-        Modifier.size(itemSizeDp)
+        Modifier
+            .size(itemSizeDp)
             .clip(CircleShape)
             .background(color)
             .border(1.dp, MaterialTheme.colors.onBackground, CircleShape)
@@ -344,11 +357,12 @@ private fun GridView(
                     {
                         content()
                     },
-                    Modifier.padding(
-                        top = 8.dp,
-                        start = 24.dp,
-                        end = 24.dp
-                    )
+                    Modifier
+                        .padding(
+                            top = 8.dp,
+                            start = 24.dp,
+                            end = 24.dp
+                        )
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally),
                     { measurables, constraints ->
