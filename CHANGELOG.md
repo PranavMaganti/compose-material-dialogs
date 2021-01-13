@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.2.10  - 2021-01-13
+
+- Updated compose version to 1.0.0-alpha10
+- Add `onCloseRequest` parameter to the `MaterialDialog` constructor
+
 ### 0.2.9  - 2021-01-08
 
 - Update usages of remember to onCommit

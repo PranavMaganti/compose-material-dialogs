@@ -4,7 +4,7 @@
 
 ### [See Releases and Changelog](https://github.com/vanpra/compose-material-dialogs/blob/main/CHANGELOG.md)
 
-**Current Compose Version: 1.0.0-alpha09**
+**Current Compose Version: 1.0.0-alpha10**
 
 ## Credits
 
@@ -21,7 +21,7 @@ This library's design is heavily inspired by https://github.com/afollestad/mater
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:core:0.2.9" 
+  implementation "com.vanpra.compose-material-dialogs:core:0.2.10" 
   ...
 }
 ```
@@ -37,7 +37,7 @@ dependencies {
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:datetime:0.2.9"
+  implementation "com.vanpra.compose-material-dialogs:datetime:0.2.10"
   ...
 }
 ```
@@ -53,7 +53,7 @@ dependencies {
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:color:0.2.9"
+  implementation "com.vanpra.compose-material-dialogs:color:0.2.10"
   ...
 }
 ```
@@ -61,5 +61,4 @@ dependencies {
 ## To do
 
 1. [WIP] Add year picker to date dialog
-2. Add missing file/folder picker dialog
-3. Add tests to all modules
+2. Add tests to all modules

@@ -48,8 +48,15 @@ import dev.chrisbanes.accompanist.coil.CoilImage
  *
  * @param autoDismiss when true the dialog will be automatically dismissed when a positive or
  * negative button is pressed
+ * @param onCloseRequest a callback for when the user tries to exit the dialog by clicking outside
+ * the dialog. This callback takes the current MaterialDialog as
+ * a parameter to allow for the hide method of the dialog to be called if required. By default
+ * this callback hides the dialog.
  */
-class MaterialDialog(private val autoDismiss: Boolean = true) {
+class MaterialDialog(
+    private val autoDismiss: Boolean = true,
+    private val onCloseRequest: (MaterialDialog) -> Unit = { it.hide() }
+) {
     private val showing: MutableState<Boolean> = mutableStateOf(false)
 
     val buttons = MaterialDialogButtons(this)
@@ -86,7 +93,7 @@ class MaterialDialog(private val autoDismiss: Boolean = true) {
         content: @Composable MaterialDialog.() -> Unit
     ) {
         if (showing.value) {
-            ThemedDialog(onCloseRequest = { hide() }) {
+            ThemedDialog(onCloseRequest = { onCloseRequest(this) }) {
                 Column(
                     modifier =
                         Modifier

@@ -21,7 +21,7 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 fun DialogAndShowButton(buttonText: String, content: @Composable() MaterialDialog.() -> Unit) {
     val dialog = MaterialDialog()
 
-    dialog.build(dialogBackground) {
+    dialog.build {
         content()
     }
 

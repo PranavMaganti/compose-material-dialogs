@@ -17,11 +17,11 @@ dialog.build {
 dialog.show()
 ```
 
-The dialog is shown when the `dialog.show()` is called. 
-
-The hard coded strings for all the components in the example above can be replaced with a string resource id. 
+The dialog is shown when the `dialog.show()` is called. The hard coded strings for all the components in the example above can be replaced with a string resource id. 
 
 If the `autoDismiss` parameter of a `MaterialDialog`  is set to false then the dialog will not close when the positive or negative buttons are clicked, allowing for flexibility in custom views.
+
+The `MaterialDialog` class also has a `onCancelRequest` parameter which is a callback which is used when the user clicks outside the dialog area. By default this parameter is set to hide the dialog.
 
 Buttons can be added to the dialog by adding the following:
 
