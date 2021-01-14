@@ -1,5 +1,6 @@
 package com.vanpra.composematerialdialogdemos.demos
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -83,12 +84,16 @@ fun BasicListDialogDemo() {
             Row(Modifier.fillMaxWidth()) {
                 CoilImage(
                     emailIcon.icon,
-                    modifier = Modifier.padding(vertical = 8.dp).size(30.dp),
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .size(30.dp),
                     contentScale = ContentScale.FillHeight
                 )
                 Text(
                     emailIcon.email,
-                    modifier = Modifier.padding(start = 16.dp).align(Alignment.CenterVertically),
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .align(Alignment.CenterVertically),
                     color = MaterialTheme.colors.onBackground,
                     style = MaterialTheme.typography.body1
                 )
@@ -156,10 +161,9 @@ fun SingleSelectionDemo() {
         title(res = R.string.ringtone_dialog_title)
         listItemsSingleChoice(
             ringtones,
-            initialSelection = initialSingleSelection,
-            onChoiceChange = { initialSingleSelection = it },
-            waitForPositiveButton = true
-        )
+            initialSelection = initialSingleSelection
+        ) { initialSingleSelection = it }
+
         defaultListButtons()
     }
 }

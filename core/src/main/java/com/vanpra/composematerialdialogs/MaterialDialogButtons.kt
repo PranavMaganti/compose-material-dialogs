@@ -41,6 +41,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
             buttonsTagOrder.add(0, buttonId)
             buttonId
         }
+        val buttonEnabled = remember(dialog.positiveEnabled) { dialog.positiveEnabled.all { it } }
 
         TextButton(
             onClick = {
@@ -55,7 +56,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
                 onClick()
             },
             modifier = Modifier.layoutId("button_$buttonId"),
-            enabled = dialog.positiveEnabled.all { it }
+            enabled = buttonEnabled && dialog.positiveButtonEnabledOverride
         ) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
         }

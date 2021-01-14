@@ -1,5 +1,13 @@
 # Changelog
 
+### 0.2.11 - 2021-01-14
+
+- Fix issues with disabling positive button for the `input` and `listItemsSingleChoice` components
+- Fix bug lifecycle bug for repeated callbacks on subsequent uses of the same dialog
+- Add `keyboardOptions` parameter to `input` component
+- Remove `allowEmpty` parameter from `input` component in favour of using `isTextValid` parameter to do this validation
+- Add `disablePositiveButton` and `enablePositiveButton` methods to the `MaterialDialog` class to allow for further customisation of the dialog when using custom layouts
+
 ### 0.2.10  - 2021-01-13
 
 - Updated compose version to 1.0.0-alpha10

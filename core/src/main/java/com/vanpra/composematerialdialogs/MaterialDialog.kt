@@ -24,7 +24,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.onDispose
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,11 +38,11 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.chrisbanes.accompanist.coil.CoilImage
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * @brief The MaterialDialog class is used to build and display a dialog using both pre-made and
@@ -61,7 +63,20 @@ class MaterialDialog(
 
     val buttons = MaterialDialogButtons(this)
     val callbacks = mutableListOf<() -> Unit>()
+    val callbackCounter = AtomicInteger(0)
+
     var positiveEnabled by mutableStateOf(mutableListOf<Boolean>())
+    val positiveEnabledCounter = AtomicInteger(0)
+    var positiveButtonEnabledOverride by mutableStateOf(true)
+
+    internal fun setPositiveEnabled(index: Int, value: Boolean) {
+        // Have to make temp list in order for state to register change
+        synchronized(positiveEnabled) {
+            val tempList = positiveEnabled.toMutableList()
+            tempList[index] = value
+            positiveEnabled = tempList
+        }
+    }
 
     /**
      * @brief Shows the dialog
@@ -75,6 +90,20 @@ class MaterialDialog(
      */
     fun hide() {
         showing.value = false
+    }
+
+    /**
+     * @brief Disables the positive dialog button if present
+     */
+    fun disablePositiveButton() {
+        positiveButtonEnabledOverride = false
+    }
+
+    /**
+     * @brief Enables the positive dialog button if present
+     */
+    fun enablePositiveButton() {
+        positiveButtonEnabledOverride = true
     }
 
     /**
@@ -94,6 +123,14 @@ class MaterialDialog(
     ) {
         if (showing.value) {
             ThemedDialog(onCloseRequest = { onCloseRequest(this) }) {
+                onDispose {
+                    positiveEnabled.clear()
+                    callbacks.clear()
+
+                    positiveEnabledCounter.set(0)
+                    callbackCounter.set(0)
+                }
+
                 Column(
                     modifier =
                         Modifier
@@ -277,8 +314,9 @@ class MaterialDialog(
      * @param prefill string to be input into the text field by default
      * @param waitForPositiveButton if true the [onInput] callback will only be called when the
      * positive button is pressed, otherwise it will be called when the input value is changed
-     * @param allowEmpty if true then an empty string will be a valid input
      * @param visualTransformation a visual transformation of the content of the text field
+     * @param keyboardOptions software keyboard options which can be used to customize parts
+     * of the keyboard
      * @param errorMessage a message to be shown to the user when the input is not valid
      * @param isTextValid a function which is called to check if the user input is valid
      * @param onInput a function which is called with the user input. The timing of this call is
@@ -290,21 +328,38 @@ class MaterialDialog(
         hint: String = "",
         prefill: String = "",
         waitForPositiveButton: Boolean = true,
-        allowEmpty: Boolean = false,
         visualTransformation: VisualTransformation = VisualTransformation.None,
-        errorMessage: (String) -> String = { "" },
+        keyboardOptions: KeyboardOptions = KeyboardOptions(),
+        errorMessage: String = "",
         isTextValid: (String) -> Boolean = { true },
         onInput: (String) -> Unit = {}
     ) {
-        var text by savedInstanceState { prefill }
-        val index by mutableStateOf(positiveEnabled.size)
-        var valid by mutableStateOf(allowEmpty)
+        var text by remember { mutableStateOf(prefill) }
+        val valid = rememberSavedInstanceState(text) { isTextValid(text) }
 
-        onCommit {
-            positiveEnabled.add(index, allowEmpty)
-            if (waitForPositiveButton) {
-                callbacks.add { onInput(text) }
+        val positiveEnabledIndex =
+            rememberSavedInstanceState {
+                val index = positiveEnabledCounter.getAndIncrement()
+                positiveEnabled.add(index, valid)
+                index
             }
+        val callbackIndex = rememberSavedInstanceState {
+            val index = callbackCounter.getAndIncrement()
+            if (waitForPositiveButton) {
+                callbacks.add(index) { onInput(text) }
+            } else {
+                callbacks.add(index) { }
+            }
+            index
+        }
+
+        onCommit(valid) {
+            setPositiveEnabled(positiveEnabledIndex, valid)
+        }
+
+        onDispose {
+            callbacks[callbackIndex] = {}
+            setPositiveEnabled(positiveEnabledIndex, true)
         }
 
         Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)) {
@@ -315,37 +370,23 @@ class MaterialDialog(
                     if (!waitForPositiveButton) {
                         onInput(text)
                     }
-                    // Have to make temp list in order for state to register change
-                    val tempList = positiveEnabled.toMutableList()
-                    valid = if (text == "" && allowEmpty) {
-                        true
-                    } else if (text == "") {
-                        false
-                    } else {
-                        isTextValid(text)
-                    }
-                    tempList[index] = valid
-                    positiveEnabled = tempList
                 },
                 label = { Text(label, color = MaterialTheme.colors.onBackground.copy(0.8f)) },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text(hint, color = MaterialTheme.colors.onBackground.copy(0.5f)) },
                 isErrorValue = !valid,
                 visualTransformation = visualTransformation,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                keyboardOptions = keyboardOptions,
                 textStyle = TextStyle(MaterialTheme.colors.onBackground, fontSize = 16.sp)
             )
 
             if (!valid) {
-                val message = errorMessage(text)
-                if (message != "") {
-                    Text(
-                        message,
-                        fontSize = 14.sp,
-                        color = MaterialTheme.colors.error,
-                        modifier = Modifier.align(Alignment.End)
-                    )
-                }
+                Text(
+                    errorMessage,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colors.error,
+                    modifier = Modifier.align(Alignment.End)
+                )
             }
         }
     }

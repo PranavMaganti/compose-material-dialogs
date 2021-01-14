@@ -20,8 +20,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.onCommit
+import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -139,10 +140,27 @@ fun MaterialDialog.listItemsMultiChoice(
     list: List<String>,
     disabledIndices: List<Int> = listOf(),
     initialSelection: List<Int> = listOf(),
-    waitForPositiveButton: Boolean = false,
+    waitForPositiveButton: Boolean = true,
     onCheckedChange: (indices: List<Int>) -> Unit = {}
 ) {
     var selectedItems by remember { mutableStateOf(initialSelection.toMutableList()) }
+
+    val callbackIndex = rememberSavedInstanceState {
+        val index = callbackCounter.getAndIncrement()
+
+        if (waitForPositiveButton) {
+            callbacks.add(index) { onCheckedChange(selectedItems) }
+        } else {
+            callbacks.add(index) { }
+        }
+
+        index
+    }
+
+    onDispose {
+        callbacks[callbackIndex] = {}
+    }
+
     val onChecked = { index: Int ->
         if (index !in disabledIndices) {
             val newSelectedItems = selectedItems.toMutableList()
@@ -153,14 +171,6 @@ fun MaterialDialog.listItemsMultiChoice(
             }
             selectedItems = newSelectedItems
             if (!waitForPositiveButton) {
-                onCheckedChange(selectedItems)
-            }
-        }
-    }
-
-    onCommit {
-        if (waitForPositiveButton) {
-            callbacks.add {
                 onCheckedChange(selectedItems)
             }
         }
@@ -217,33 +227,42 @@ fun MaterialDialog.listItemsSingleChoice(
     list: List<String>,
     disabledIndices: List<Int> = listOf(),
     initialSelection: Int? = null,
-    waitForPositiveButton: Boolean = false,
+    waitForPositiveButton: Boolean = true,
     onChoiceChange: (selected: Int) -> Unit = {}
 ) {
-    val disableIndex = remember { positiveEnabled.size }
-    onCommit {
-        positiveEnabled.add(disableIndex, initialSelection != null)
+    var selected by remember { mutableStateOf(initialSelection) }
+
+    val positiveEnabledIndex = rememberSavedInstanceState {
+        val index = positiveEnabledCounter.getAndIncrement()
+        positiveEnabled.add(index, selected != null)
+        index
     }
 
-    var selected by remember { mutableStateOf(initialSelection) }
+    val callbackIndex = rememberSavedInstanceState {
+        val index = callbackCounter.getAndIncrement()
+
+        if (waitForPositiveButton) {
+            callbacks.add(index) { onChoiceChange(selected!!) }
+        } else {
+            callbacks.add(index) { }
+        }
+
+        index
+    }
+
+    onDispose {
+        callbacks[callbackIndex] = {}
+        setPositiveEnabled(positiveEnabledIndex, true)
+    }
+
     val onSelect = { index: Int ->
         if (index !in disabledIndices) {
-            if (!positiveEnabled[disableIndex]) {
-                val tempList = positiveEnabled.toMutableList()
-                tempList[disableIndex] = true
-                positiveEnabled = tempList
-            }
+            setPositiveEnabled(positiveEnabledIndex, true)
 
             selected = index
             if (!waitForPositiveButton) {
                 onChoiceChange(selected!!)
             }
-        }
-    }
-
-    onCommit {
-        if (waitForPositiveButton) {
-            callbacks.add { onChoiceChange(selected!!) }
         }
     }
 
