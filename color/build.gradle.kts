@@ -7,6 +7,7 @@ plugins {
 android {
     defaultConfig {
         minSdkVersion(21)
+        compileSdkVersion(30)
         targetSdkVersion(30)
         versionCode = 1
 
@@ -21,6 +22,17 @@ android {
                     "proguard-rules.pro"
             )
         }
+    }
+
+    buildFeatures.compose = true
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = Dependencies.AndroidX.Compose.version
     }
 }
 

@@ -11,6 +11,8 @@ android {
     defaultConfig {
         minSdkVersion(21)
         targetSdkVersion(30)
+        compileSdkVersion(30)
+
         versionCode = 1
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -24,6 +26,17 @@ android {
                     "proguard-rules.pro"
             )
         }
+    }
+
+    buildFeatures.compose = true
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = Dependencies.AndroidX.Compose.version
     }
 }
 

@@ -1,13 +1,14 @@
 package com.vanpra.composematerialdialogdemos.demos
 
-import android.util.Log
-import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,7 +24,6 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.listItems
 import com.vanpra.composematerialdialogs.listItemsMultiChoice
 import com.vanpra.composematerialdialogs.listItemsSingleChoice
-import dev.chrisbanes.accompanist.coil.CoilImage
 
 private val ringtones =
     listOf(
@@ -45,18 +45,12 @@ private val ringtones =
         "Zen Too"
     )
 private val labels = listOf("None", "Forums", "Social", "Updates", "Promotions", "Spam", "Bin")
-
-private data class EmailIcon(
-    val email: String,
-    @DrawableRes val icon: Int
-)
-
-private val emailItems = listOf(
-    EmailIcon("joe@material-dialog.com", R.drawable.tick),
-    EmailIcon("jane@material-dialog.com", R.drawable.tick),
-    EmailIcon("dan@material-dialog.com", R.drawable.tick),
-    EmailIcon("helen@material-dialog.com", R.drawable.tick),
-    EmailIcon("karen@material-dialog.com", R.drawable.tick)
+private val emails = listOf(
+    "joe@material-dialog.com",
+    "jane@material-dialog.com",
+    "dan@material-dialog.com",
+    "helen@material-dialog.com",
+    "karen@material-dialog.com"
 )
 
 @Composable
@@ -73,24 +67,24 @@ private fun MaterialDialog.defaultListButtons() {
 @Composable
 fun BasicListDialogDemo() {
     DialogAndShowButton(buttonText = "Simple List Dialog") {
-        val emails = emailItems.map { it.email }
         title(res = R.string.backup_dialog_title)
         listItems(emails)
     }
 
     DialogAndShowButton(buttonText = "Custom List Dialog") {
         title(res = R.string.backup_dialog_title)
-        listItems(emailItems) { _, emailIcon ->
+        listItems(emails, item =  { _, email ->
             Row(Modifier.fillMaxWidth()) {
-                CoilImage(
-                    emailIcon.icon,
+                Image(
+                    Icons.Default.AccountCircle,
+                    contentDescription = "Account icon",
                     modifier = Modifier
                         .padding(vertical = 8.dp)
                         .size(30.dp),
                     contentScale = ContentScale.FillHeight
                 )
                 Text(
-                    emailIcon.email,
+                    email,
                     modifier = Modifier
                         .padding(start = 16.dp)
                         .align(Alignment.CenterVertically),
@@ -98,7 +92,7 @@ fun BasicListDialogDemo() {
                     style = MaterialTheme.typography.body1
                 )
             }
-        }
+        })
     }
 }
 

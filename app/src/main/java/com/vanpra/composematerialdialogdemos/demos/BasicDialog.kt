@@ -2,6 +2,7 @@ package com.vanpra.composematerialdialogdemos.demos
 
 import android.util.Log
 import android.util.Patterns
+import androidx.compose.foundation.Image
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
@@ -29,7 +30,7 @@ fun BasicDialogDemo() {
 
     DialogAndShowButton(buttonText = "Basic Dialog With Buttons and Icon Title") {
         iconTitle(
-            iconAsset = Icons.Default.LocationOn,
+            icon = { Image(Icons.Default.LocationOn, contentDescription = "Location Icon") },
             textRes = R.string.location_dialog_title
         )
         message(res = R.string.location_dialog_message)
