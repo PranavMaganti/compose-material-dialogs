@@ -21,7 +21,7 @@ object Dependencies {
         const val composeActivity = "androidx.activity:activity-compose:1.3.0-SNAPSHOT"
 
         object Compose {
-            const val version = "1.0.0-SNAPSHOT"
+            const val version = "1.0.0-beta01"
 
             const val ui = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"
