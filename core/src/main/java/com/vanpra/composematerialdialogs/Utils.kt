@@ -10,6 +10,7 @@ import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.defaultDecayAnimationSpec
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.ScrollScope
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

@@ -6,6 +6,7 @@
 //import androidx.compose.animation.core.SpringSpec
 //import androidx.compose.foundation.ScrollableRow
 //import androidx.compose.foundation.animation.FlingConfig
+//import androidx.compose.foundation.animation.fling
 //import androidx.compose.foundation.background
 //import androidx.compose.foundation.gestures.draggable
 //import androidx.compose.foundation.layout.Column
@@ -106,23 +107,23 @@
 //                    offset.value - old
 //                },
 //                onDragStopped = {
-////                    offset.fling(
-////                        -(it * 0.6f),
-////                        config = flingConfig,
-////                        onAnimationEnd = { reason, end, _ ->
-////                            offset.snapTo(width)
-////
-////                            if (reason != AnimationEndReason.Interrupted) {
-////                                if (end == width * 2) {
-////                                    index.value += 1
-////                                    onNext()
-////                                } else if (end == 0f) {
-////                                    index.value -= 1
-////                                    onPrevious()
-////                                }
-////                            }
-////                        }
-////                    )
+//                    offset.fling(
+//                        -(it * 0.6f),
+//                        config = flingConfig,
+//                        onAnimationEnd = { reason, end, _ ->
+//                            offset.snapTo(width)
+//
+//                            if (reason != AnimationEndReason.Interrupted) {
+//                                if (end == width * 2) {
+//                                    index.value += 1
+//                                    onNext()
+//                                } else if (end == 0f) {
+//                                    index.value -= 1
+//                                    onPrevious()
+//                                }
+//                            }
+//                        }
+//                    )
 //                },
 //                enabled = enabled
 //            )

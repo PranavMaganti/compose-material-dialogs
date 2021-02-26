@@ -1,38 +1,30 @@
 package com.vanpra.composematerialdialogs.color
 
-import android.util.Log
-import androidx.compose.animation.core.AnimationState
-import androidx.compose.animation.core.animateTo
-import androidx.compose.animation.core.calculateTargetValue
-import androidx.compose.animation.defaultDecayAnimationSpec
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollScope
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
+import androidx.compose.material.SwipeableState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -61,11 +53,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vanpra.composematerialdialogs.MaterialDialog
-import kotlin.math.abs
 
 val itemSizeDp = 55.dp
 val tickSize = 35.dp
@@ -96,33 +86,8 @@ fun MaterialDialog.colorChooser(
     BoxWithConstraints {
         val selectedColor = remember { mutableStateOf(colors[initialSelection]) }
 
-        val decay = defaultDecayAnimationSpec()
-        val anchors = listOf(0f, constraints.maxWidth.toFloat())
-        val scrollState = rememberScrollState(constraints.maxWidth)
-        val flingBehavior = object : FlingBehavior {
-            override suspend fun ScrollScope.performFling(initialVelocity: Float): Float {
-                val initialValue = scrollState.value.toFloat()
-                val target = decay.calculateTargetValue(initialValue, initialVelocity)
-                val point = anchors.minByOrNull { abs(it - target) } ?: 0f
-
-                var velocityLeft = initialVelocity
-                var lastValue = initialValue
-                AnimationState(
-                    initialValue = initialValue,
-                    initialVelocity = initialVelocity,
-                ).animateTo(point) {
-                    val delta = value - lastValue
-                    val left = scrollBy(delta)
-                    lastValue = value
-                    velocityLeft = this.velocity
-                    // avoid rounding errors and stop if anything is unconsumed
-                    if (abs(left) > 0.5f) this.cancelAnimation()
-                }
-
-                return velocityLeft
-            }
-        }
-
+        val anchors = mapOf(0f to "ColorPicker", constraints.maxWidth.toFloat() to "ARGBPicker")
+        val swipeState = rememberSwipeableState("ColorPicker")
 
         SideEffect {
             if (waitForPositiveButton) {
@@ -132,18 +97,21 @@ fun MaterialDialog.colorChooser(
             }
         }
 
-        Column(Modifier.padding(bottom = 8.dp)) {
+        Column(
+            Modifier.padding(bottom = 8.dp).swipeable(
+                swipeState,
+                anchors = anchors,
+                orientation = Orientation.Horizontal,
+                reverseDirection = true,
+                resistance = null
+            )
+        ) {
+            
             if (allowCustomArgb) {
-                PageIndicator(scrollState, this@BoxWithConstraints.constraints)
+                PageIndicator(swipeState, this@BoxWithConstraints.constraints)
             }
-            Row(
-                Modifier.horizontalScroll(
-                    state = scrollState,
-                    reverseScrolling =  true,
-                    flingBehavior = flingBehavior,
-                    enabled = allowCustomArgb
-                )
-            ) {
+
+            Layout(content = {
                 ColorGridLayout(
                     Modifier.width(this@BoxWithConstraints.maxWidth),
                     colors = colors,
@@ -152,8 +120,21 @@ fun MaterialDialog.colorChooser(
                     waitForPositiveButton = waitForPositiveButton,
                     onColorSelected = onColorSelected
                 )
+
                 Box(Modifier.width(this@BoxWithConstraints.maxWidth)) {
                     CustomARGB(selectedColor)
+                }
+            }) { measurables, constraints ->
+                val placeables = measurables.map { it.measure(constraints) }
+                val height = placeables.maxByOrNull { it.height }?.height ?: 0
+
+                layout(constraints.maxWidth, height) {
+                    placeables.forEachIndexed { index, placeable ->
+                        placeable.place(
+                            x = -swipeState.offset.value.toInt() + index * constraints.maxWidth,
+                            y = 0
+                        )
+                    }
                 }
             }
         }
@@ -161,27 +142,27 @@ fun MaterialDialog.colorChooser(
 }
 
 @Composable
-private fun PageIndicator(scrollerPosition: ScrollState, constraints: Constraints) {
+private fun PageIndicator(swipeState: SwipeableState<String>, constraints: Constraints) {
     Row(
         Modifier
             .fillMaxWidth()
             .wrapContentWidth(Alignment.CenterHorizontally)
             .padding(top = 8.dp, bottom = 16.dp)
     ) {
-        val ratio = remember(constraints.maxWidth, scrollerPosition.value) {
-            scrollerPosition.value.toFloat() / constraints.maxWidth.toFloat()
+        val ratio = remember(constraints.maxWidth, swipeState.offset.value) {
+            swipeState.offset.value / constraints.maxWidth.toFloat()
         }
         val color = MaterialTheme.colors.onBackground
         Canvas(modifier = Modifier) {
             val offset = Offset(30f, 0f)
             drawCircle(
-                color.copy(0.7f + 0.3f * ratio),
-                radius = 8f + 7f * ratio,
+                color.copy(0.7f + 0.3f * (1 - ratio)),
+                radius = 8f + 7f * (1 - ratio),
                 center = center - offset
             )
             drawCircle(
-                color.copy(0.7f + 0.3f * (1 - ratio)),
-                radius = 8f + 7f * (1 - ratio),
+                color.copy(0.7f + 0.3f * ratio),
+                radius = 8f + 7f * ratio,
                 center = center + offset
             )
         }
@@ -257,40 +238,47 @@ private fun LabelSlider(
     sliderColor: Color,
     onSliderChange: (Float) -> Unit
 ) {
-    Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Text(
-            label,
-            style = MaterialTheme.typography.h6,
-            fontSize = 16.sp,
-            color = MaterialTheme.colors.onBackground
-        )
-        Slider(
-            value = value,
-            onValueChange = onSliderChange,
-            valueRange = 0f..255f,
-            steps = 255,
-            modifier = Modifier.padding(start = 16.dp, end = 40.dp),
-            colors = SliderDefaults.colors(
-                activeTickColor = Color.Unspecified,
-                activeTrackColor = sliderColor,
-                thumbColor = sliderColor,
-                inactiveTickColor = Color.Unspecified
+    BoxWithConstraints {
+        Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                label,
+                style = MaterialTheme.typography.h6,
+                fontSize = 16.sp,
+                color = MaterialTheme.colors.onBackground,
+                modifier = Modifier.width(10.dp)
             )
-        )
 
-//        Box(
-//            Modifier
-//                .width(10.dp)
-//                .align(Alignment.CenterVertically)
-//        ) {
-//            Text(
-//                value.toInt().toString(),
-//                modifier = Modifier,
-//                color = MaterialTheme.colors.onBackground,
-//                fontSize = 16.sp,
-//                style = MaterialTheme.typography.h6
-//            )
-//        }
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Slider(
+                value = value,
+                onValueChange = onSliderChange,
+                valueRange = 0f..255f,
+                steps = 255,
+                modifier = Modifier.width(this@BoxWithConstraints.maxWidth - 56Z.dp),
+                colors = SliderDefaults.colors(
+                    activeTickColor = Color.Unspecified,
+                    activeTrackColor = sliderColor,
+                    thumbColor = sliderColor,
+                    inactiveTickColor = Color.Unspecified
+                )
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Box(
+                Modifier
+                    .width(30.dp)
+                    .align(Alignment.CenterVertically)
+            ) {
+                Text(
+                    value.toInt().toString(),
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    style = MaterialTheme.typography.h6
+                )
+            }
+        }
     }
 }
 
