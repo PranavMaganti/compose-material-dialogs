@@ -6,9 +6,6 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -355,18 +352,11 @@ private fun GridView(
     content: @Composable () -> Unit
 ) {
     BoxWithConstraints {
-        var offset by remember { mutableStateOf(0f) }
+        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .heightIn(max = (maxHeight * 0.7f))
-                .scrollable(
-                    orientation = Orientation.Vertical,
-                    // Scrollable state: describes how to consume
-                    // scrolling delta and update offset
-                    state = rememberScrollableState { delta ->
-                        offset += delta
-                        delta
-                    }),
+                .verticalScroll(scrollState),
             content = {
                 Layout(
                     {

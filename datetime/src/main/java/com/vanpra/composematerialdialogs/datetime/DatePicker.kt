@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -88,18 +90,10 @@ internal fun DatePickerLayout(
     currentDate: LocalDate
 ) {
     Column(modifier) {
-        var offset by remember { mutableStateOf(0f) }
-
+        val scrollState = rememberScrollState()
         BoxWithConstraints {
             Column(
-                Modifier
-                    .heightIn(max = maxHeight * 0.8f)
-                    .scrollable(
-                        orientation = Orientation.Vertical,
-                        state = rememberScrollableState { delta ->
-                            offset += delta
-                            delta
-                        })
+                Modifier.verticalScroll(scrollState)
             ) {
                 DateTitle(selectedDate)
                 ViewPager(Modifier.background(color = Color.Transparent), useAlpha = true) {

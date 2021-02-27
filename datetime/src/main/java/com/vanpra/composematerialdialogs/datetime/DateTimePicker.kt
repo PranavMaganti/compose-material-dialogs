@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -128,13 +129,9 @@ fun MaterialDialog.datetimepicker(
             }
 
             scrollTo.value = constraints.maxWidth
-            var offset by remember { mutableStateOf(0f) }
-            BoxWithConstraints(modifier = Modifier.scrollable(
-                orientation = Orientation.Vertical,
-                state = rememberScrollableState { delta ->
-                    offset += delta
-                    delta
-                }),
+
+            val scrollState = rememberScrollState()
+            BoxWithConstraints(modifier = Modifier.verticalScroll(scrollState),
                 content = {
                     DatePickerLayout(
                         Modifier

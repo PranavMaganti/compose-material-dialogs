@@ -17,12 +17,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -87,13 +88,11 @@ internal fun TimePickerLayout(
     val currentScreen = remember { mutableStateOf(0) }
     Box(modifier) {
         BoxWithConstraints {
-            var offset by remember { mutableStateOf(0f) }
-            Column(Modifier.heightIn(max = maxHeight * 0.8f).scrollable(
-                orientation = Orientation.Vertical,
-                state = rememberScrollableState { delta ->
-                    offset += delta
-                    delta
-                })) {
+            val scrollState = rememberScrollState()
+            Column(
+                Modifier
+                    .heightIn(max = maxHeight * 0.8f)
+                    .verticalScroll(scrollState)) {
                 TimeLayout(currentScreen, selectedTime)
                 Crossfade(currentScreen) {
                     when (it.value) {

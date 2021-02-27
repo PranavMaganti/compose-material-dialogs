@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Checkbox
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
@@ -106,22 +108,15 @@ fun <T> MaterialDialog.listItems(
     item: @Composable (index: Int, T) -> Unit
 ) {
 
-    var offset by remember { mutableStateOf(0f) }
+    val scrollState = rememberScrollState()
+
     BoxWithConstraints {
         var modifier = Modifier.heightIn(max = maxHeight * listRatio)
         if (buttons.buttonsTagOrder.isEmpty()) {
             modifier = modifier.then(bottomPadding)
         }
         Column(
-            modifier = modifier.scrollable(
-                orientation = Orientation.Vertical,
-                // Scrollable state: describes how to consume
-                // scrolling delta and update offset
-                state = rememberScrollableState { delta ->
-                    offset += delta
-                    delta
-                }
-            ),
+            modifier = modifier.verticalScroll(scrollState),
             content = {
                 list.forEachIndexed { index, it ->
                     Box(

@@ -1,28 +1,16 @@
 package com.vanpra.composematerialdialogs.datetime
 
-import androidx.compose.animation.core.AnimationEndReason
-import androidx.compose.animation.core.SpringSpec
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
-import kotlin.math.abs
-import kotlin.math.sign
 
 /**
  * @brief Interface used to pass data to children of ViewPager
@@ -139,14 +127,9 @@ fun ViewPager(
 //                    }
 //                }
 //            )
-            var offset by remember { mutableStateOf(0f) }
+            val scrollState = rememberScrollState()
             Row(
-                modifier = Modifier.scrollable(
-                    orientation = Orientation.Vertical,
-                    state = rememberScrollableState { delta ->
-                        offset += delta
-                        delta
-                    }),
+                modifier = Modifier.verticalScroll(scrollState),
                 content = {
                     BoxWithConstraints(
 //                        draggable.preferredWidth(maxWidth * 3)

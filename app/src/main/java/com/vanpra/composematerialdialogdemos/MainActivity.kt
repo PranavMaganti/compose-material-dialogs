@@ -3,15 +3,10 @@ package com.vanpra.composematerialdialogdemos
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.vanpra.composematerialdialogdemos.demos.BasicDialogDemo
 import com.vanpra.composematerialdialogdemos.demos.BasicListDialogDemo
@@ -41,14 +36,9 @@ class MainActivity : AppCompatActivity() {
  */
 @Composable
 fun DialogDemos() {
-    var offset by remember { mutableStateOf(0f) }
+    val scrollState = rememberScrollState()
     Column(
-        modifier = Modifier.scrollable(
-            orientation = Orientation.Vertical,
-            state = rememberScrollableState { delta ->
-                offset += delta
-                delta
-            })
+        modifier = Modifier.verticalScroll(scrollState)
     ) {
         DialogSection(title = "Basic Dialogs") {
             BasicDialogDemo()
