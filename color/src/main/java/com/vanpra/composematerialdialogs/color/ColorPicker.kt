@@ -255,7 +255,7 @@ private fun LabelSlider(
                 onValueChange = onSliderChange,
                 valueRange = 0f..255f,
                 steps = 255,
-                modifier = Modifier.width(this@BoxWithConstraints.maxWidth - 56Z.dp),
+                modifier = Modifier.width(this@BoxWithConstraints.maxWidth - 56.dp),
                 colors = SliderDefaults.colors(
                     activeTickColor = Color.Unspecified,
                     activeTrackColor = sliderColor,

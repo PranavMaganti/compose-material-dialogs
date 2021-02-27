@@ -1,9 +1,17 @@
 package com.vanpra.composematerialdialogdemos.demos
 
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
 import com.vanpra.composematerialdialogs.datetime.ViewPager
 
@@ -26,8 +34,13 @@ fun DateTimeDialogDemo() {
 //        title("Select a date", center = true)
 //        datepicker()
 
-        ViewPager {
-            Text(index.toString(), style = TextStyle(color = MaterialTheme.colors.onBackground))
+        ViewPager(Modifier.height(100.dp)) {
+            Box(
+                Modifier.padding(8.dp).fillMaxSize().background(Color.Blue),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Index: $index", style = TextStyle(color = Color.White))
+            }
         }
     }
 //
@@ -36,6 +49,8 @@ fun DateTimeDialogDemo() {
 //        datetimepicker("Select a date and time")
 //    }
 }
+
+class Modifer
 
 fun datepicker() {
     TODO("Not yet implemented")
