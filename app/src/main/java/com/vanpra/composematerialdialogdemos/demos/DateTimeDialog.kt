@@ -12,12 +12,10 @@ import com.vanpra.composematerialdialogs.datetime.timepicker
 @Composable
 fun DateTimeDialogDemo() {
     DialogAndShowButton(buttonText = "Time Picker Dialog") {
-        title("Select a time", center = true)
         timepicker()
     }
 
     DialogAndShowButton(buttonText = "Date Picker Dialog") {
-        title("Select a date", center = true)
         datepicker()
     }
 
