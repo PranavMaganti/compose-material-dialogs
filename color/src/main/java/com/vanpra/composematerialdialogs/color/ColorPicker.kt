@@ -103,7 +103,8 @@ fun MaterialDialog.colorChooser(
                 anchors = anchors,
                 orientation = Orientation.Horizontal,
                 reverseDirection = true,
-                resistance = null
+                resistance = null,
+                enabled = allowCustomArgb
             )
         ) {
             

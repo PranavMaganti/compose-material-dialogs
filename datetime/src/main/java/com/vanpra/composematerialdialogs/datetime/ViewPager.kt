@@ -80,7 +80,7 @@ fun ViewPager(
 ) {
     BoxWithConstraints(Modifier.background(Color.Transparent)) {
         val coroutineScope = rememberCoroutineScope()
-        val width = constraints.maxWidth.toFloat()
+        val width = remember(constraints) { constraints.maxWidth.toFloat() }
         val offset = remember { Animatable(initialValue = 0f) }
         offset.updateBounds(lowerBound = -width, upperBound = width)
 
@@ -92,7 +92,7 @@ fun ViewPager(
             }
         }
 
-        val anchors = listOf(-width, 0f, width)
+        val anchors = remember { listOf(-width, 0f, width) }
         val index = remember { mutableStateOf(0) }
 
         val increment: suspend (Int) -> Unit = { increment: Int ->
@@ -110,47 +110,57 @@ fun ViewPager(
         }
 
         val decayAnimation = defaultDecayAnimationSpec()
-        val draggable = modifier.draggable(
-            state = draggableState,
-            orientation = Orientation.Horizontal,
-            onDragStopped = { velocity ->
-                val initialTarget = decayAnimation.calculateTargetValue(offset.value, -velocity)
-                val target = anchors.minByOrNull { abs(it - initialTarget) } ?: 0f
-                val flingResult = offset.animateTo(target, spring(stiffness = 10000f))
-                offset.snapTo(0f)
+        val draggable = remember {
+            modifier.draggable(
+                state = draggableState,
+                orientation = Orientation.Horizontal,
+                onDragStopped = { velocity ->
+                    val initialTarget =
+                        decayAnimation.calculateTargetValue(offset.value, -3f * velocity)
+                    val target = anchors.minByOrNull { abs(it - initialTarget) } ?: 0f
+                    val flingResult = offset.animateTo(target, spring(stiffness = 5000f))
+                    offset.snapTo(0f)
 
-                if (flingResult.endReason == AnimationEndReason.Finished) {
-                    if (flingResult.endState.value < 0) {
-                        index.value += 1
-                        onNext()
-                    } else if (flingResult.endState.value > 0) {
-                        index.value -= 1
-                        onPrevious()
+                    if (flingResult.endReason == AnimationEndReason.Finished) {
+                        if (flingResult.endState.value < 0) {
+                            index.value += 1
+                            onNext()
+                        } else if (flingResult.endState.value > 0) {
+                            index.value -= 1
+                            onPrevious()
+                        }
                     }
-                }
 
 
-            },
-            reverseDirection = true,
-            enabled = enabled
-        )
+                },
+                reverseDirection = true,
+                enabled = enabled
+            )
+        }
 
         Layout(content = {
-            for (x in -1..1) {
+            val shownIndexes = remember(offset.value) {
+                when {
+                    offset.value < 0 -> listOf(0, 1)
+                    offset.value > 0 -> listOf(-1, 0)
+                    else -> listOf(0)
+                }
+            }
+
+            shownIndexes.forEach { x ->
                 Column(Modifier.width(this@BoxWithConstraints.maxWidth).layoutId(x)) {
                     val viewPagerImpl = ViewPagerImpl(index.value + x, increment, moveBy)
                     content(viewPagerImpl)
                 }
             }
         }, modifier = draggable) { measurables, constraints ->
-            val placeables =
-                measurables.sortedBy { it.layoutId.toString() }.map { it.measure(constraints) }
-            val height = placeables.maxByOrNull { it.height }?.height ?: 0
+            val placeables = measurables.map { it.layoutId to it.measure(constraints) }
+            val height = placeables.maxByOrNull { it.second.height }?.second?.height ?: 0
 
             layout(constraints.maxWidth, height) {
-                placeables.forEachIndexed { index, placeable ->
+                placeables.forEach { (layoutId, placeable) ->
                     placeable.place(
-                        x = offset.value.toInt() + (index - 1) * constraints.maxWidth,
+                        x = offset.value.toInt() + (layoutId as Int) * constraints.maxWidth,
                         y = 0
                     )
                 }
