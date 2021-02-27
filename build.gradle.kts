@@ -28,7 +28,8 @@ allprojects {
             jvmTarget = "1.8"
             useIR = true
             freeCompilerArgs = freeCompilerArgs + listOf(
-                "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi"
+                "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
+                "-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi"
             )
 
         }

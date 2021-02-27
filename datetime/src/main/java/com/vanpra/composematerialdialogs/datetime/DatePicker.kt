@@ -1,55 +1,40 @@
-//package com.vanpra.composematerialdialogs.datetime
+package com.vanpra.composematerialdialogs.datetime
 //
+//import androidx.compose.animation.slideInVertically
+//import androidx.compose.animation.slideOutVertically
 //import androidx.compose.foundation.Image
-//import androidx.compose.foundation.InteractionState
 //import androidx.compose.foundation.background
 //import androidx.compose.foundation.clickable
-//import androidx.compose.foundation.layout.Arrangement
-//import androidx.compose.foundation.layout.Box
-//import androidx.compose.foundation.layout.BoxWithConstraints
-//import androidx.compose.foundation.layout.Column
-//import androidx.compose.foundation.layout.Row
-//import androidx.compose.foundation.layout.fillMaxSize
-//import androidx.compose.foundation.layout.fillMaxWidth
-//import androidx.compose.foundation.layout.heightIn
-//import androidx.compose.foundation.layout.padding
-//import androidx.compose.foundation.layout.preferredSize
-//import androidx.compose.foundation.layout.size
-//import androidx.compose.foundation.layout.wrapContentSize
-//import androidx.compose.foundation.layout.wrapContentWidth
+//import androidx.compose.foundation.layout.*
 //import androidx.compose.foundation.lazy.LazyColumn
-//import androidx.compose.foundation.rememberScrollState
+//import androidx.compose.foundation.lazy.rememberLazyListState
 //import androidx.compose.foundation.shape.CircleShape
+//import androidx.compose.foundation.shape.RoundedCornerShape
 //import androidx.compose.material.MaterialTheme
 //import androidx.compose.material.Text
 //import androidx.compose.material.icons.Icons
-//import androidx.compose.material.icons.filled.ChevronLeft
-//import androidx.compose.material.icons.filled.ChevronRight
-//import androidx.compose.runtime.Composable
-//import androidx.compose.runtime.MutableState
-//import androidx.compose.runtime.mutableStateOf
-//import androidx.compose.runtime.remember
+//import androidx.compose.material.icons.filled.*
+//import androidx.compose.material.primarySurface
+//import androidx.compose.runtime.*
 //import androidx.compose.ui.Alignment
 //import androidx.compose.ui.Modifier
 //import androidx.compose.ui.draw.alpha
 //import androidx.compose.ui.draw.clip
-//import androidx.compose.ui.graphics.Color
 //import androidx.compose.ui.graphics.ColorFilter
-//import androidx.compose.ui.layout.Layout
-//import androidx.compose.ui.platform.LocalDensity
 //import androidx.compose.ui.text.TextStyle
 //import androidx.compose.ui.text.font.FontWeight.Companion.W400
-//import androidx.compose.ui.text.font.FontWeight.Companion.W500
 //import androidx.compose.ui.text.font.FontWeight.Companion.W600
-//import androidx.compose.ui.text.font.FontWeight.Companion.W700
-//import androidx.compose.ui.unit.Constraints
 //import androidx.compose.ui.unit.dp
 //import androidx.compose.ui.unit.sp
+//import androidx.compose.ui.zIndex
 //import com.vanpra.composematerialdialogs.MaterialDialog
 //import java.time.LocalDate
-//import java.time.YearMonth
+//import java.time.format.TextStyle.FULL
+//import java.util.*
 //
-//val dateBoxDp = 35.dp
+//internal class DatePickerData(val current: LocalDate) {
+//    var selected by mutableStateOf(current)
+//}
 //
 ///**
 // * @brief A date picker body layout
@@ -62,17 +47,17 @@
 //@Composable
 //fun MaterialDialog.datepicker(
 //    initialDate: LocalDate = LocalDate.now(),
+//    yearRange: IntRange = IntRange(1900, 2100),
 //    onCancel: () -> Unit = {},
 //    onComplete: (LocalDate) -> Unit = {}
 //) {
-//    val currentDate = remember { initialDate }
-//    val selectedDate = remember { mutableStateOf(currentDate) }
+//    val datePickerData = remember { DatePickerData(initialDate) }
 //
-//    DatePickerLayout(currentDate = currentDate, selectedDate = selectedDate)
+//    DatePickerLayout(datePickerData, yearRange)
 //
 //    buttons {
 //        positiveButton("Ok") {
-//            onComplete(selectedDate.value)
+//            onComplete(datePickerData.selected)
 //        }
 //        negativeButton("Cancel") {
 //            onCancel()
@@ -81,199 +66,293 @@
 //}
 //
 //@Composable
-//internal fun DatePickerLayout(
-//    modifier: Modifier = Modifier,
-//    selectedDate: MutableState<LocalDate>,
-//    currentDate: LocalDate
-//) {
-//    Column(modifier) {
-//        // use `item` for separate elements like headers
-//        // and `items` for lists of identical elements
-//        BoxWithConstraints {
-//            rememberScrollState(0f)
-//            LazyColumn(modifier = Modifier.heightIn(max = maxHeight * 0.8f)) {
-//                // use `item` for separate elements like headers
-//                // and `items` for lists of identical elements
-//                item {
-//                    DateTitle(selectedDate)
-//                    ViewPager(Modifier.background(color = Color.Transparent), useAlpha = true) {
-//                        val newDate = remember(index) {
-//                            currentDate.plusMonths(index.toLong())
-//                        }
-//                        val dates = remember(newDate) { getDates(newDate) }
-//                        val yearMonth = remember(newDate) { newDate.yearMonth }
+//internal fun DatePickerLayout(datePickerData: DatePickerData, yearRange: IntRange) {
+//    /* Height doesn't include datePickerData height */
+//    Column(Modifier.size(328.dp, 460.dp)) {
+//        CalendarHeader(datePickerData)
 //
-//                        Column {
-//                            MonthTitle(
-//                                this@ViewPager,
-//                                newDate.month.fullLocalName,
-//                                newDate.year.toString()
-//                            )
-//                            DaysTitle()
-//                            DateLayout(dates, yearMonth, selectedDate)
-//                        }
-//                    }
+//        val yearPickerShowing = mutableStateOf(false)
+//        ViewPager {
+//            val viewDate = remember(index) { datePickerData.current.plusMonths(index.toLong()) }
+//            CalendarViewHeader(viewDate, yearPickerShowing)
+//
+//            Box {
+//                androidx.compose.animation.AnimatedVisibility(
+//                    yearPickerShowing.value,
+//                    Modifier
+//                        .fillMaxSize()
+//                        .zIndex(0.7f),
+//                    enter = slideInVertically({ -it }),
+//                    exit = slideOutVertically({ -it })
+//                ) {
+//                    YearPicker(yearRange, viewDate, yearPickerShowing)
 //                }
+//
+//                CalendarView(viewDate, datePickerData)
 //            }
 //        }
 //    }
 //}
 //
 //@Composable
-//private fun DateLayout(
-//    month: List<Int>,
-//    yearMonth: YearMonth,
-//    selected: MutableState<LocalDate>
+//private fun ViewPagerScope.YearPicker(
+//    yearRange: IntRange,
+//    viewDate: LocalDate,
+//    yearPickerShowing: MutableState<Boolean>
 //) {
-//    val check = remember(selected.value, yearMonth) {
-//        selected.value.monthValue == yearMonth.monthValue &&
-//                selected.value.year == yearMonth.year
-//    }
+//    val state = rememberLazyListState((viewDate.year - yearRange.first) / 3)
 //
-//    val textStyle = TextStyle(fontSize = 13.sp, fontWeight = W400)
-//    val boxSize = 35.dp
-//    val boxSizePx = with(LocalDensity.current) { boxSize.toPx().toInt() }
-//
-//    val verticalSpacing = 30
-//    val maxRows = 6
-//    val layoutHeight = maxRows * boxSizePx + (verticalSpacing * (maxRows - 1))
-//
-//    Layout(
-//        {
-//            month.forEach {
-//                if (it != -1) {
-//                    var selectedModifier: Modifier = Modifier
-//                    var textColor: Color = MaterialTheme.colors.onBackground
-//
-//                    if (check && selected.value.dayOfMonth == it) {
-//                        selectedModifier = Modifier.background(
-//                            color = MaterialTheme.colors.primaryVariant.copy(0.7f),
-//                            shape = CircleShape
-//                        )
-//                        textColor = Color.White
-//                    }
-//
-//                    Text(
-//                        it.toString(),
-//                        modifier = Modifier.size(boxSize)
-//                            .clickable(
-//                                onClick = {
-//                                    selected.value =
-//                                        LocalDate.of(yearMonth.year, yearMonth.month, it)
-//                                },
-//                                indication = null,
-//                                interactionState = InteractionState()
-//                            )
-//                            .then(selectedModifier)
-//                            .wrapContentSize(Alignment.Center),
-//                        color = textColor,
-//                        style = textStyle
-//                    )
-//                } else {
-//                    Box(Modifier.size(boxSize))
-//                }
-//            }
-//        },
-//        Modifier.padding(top = 8.dp, start = 24.dp, end = 24.dp)
-//            .fillMaxWidth(),
-//        { measurables, constraints ->
-//            val horizontalSpacing = (constraints.maxWidth - (boxSizePx * 7)) / 6
-//            layout(constraints.maxWidth, layoutHeight) {
-//                measurables
-//                    .map { it.measure(Constraints(maxHeight = boxSizePx, maxWidth = boxSizePx)) }
-//                    .forEachIndexed { index, it ->
-//                        it.place(
-//                            x = (index % 7) * (boxSizePx + horizontalSpacing),
-//                            y = (index / 7) * (boxSizePx + verticalSpacing)
-//                        )
-//                    }
-//            }
-//        }
-//    )
-//}
-//
-//@Composable
-//private fun DaysTitle() {
-//    Row(
-//        horizontalArrangement = Arrangement.SpaceEvenly,
-//        modifier = Modifier.padding(top = 16.dp, bottom = 12.dp, start = 18.dp, end = 18.dp)
-//            .fillMaxWidth()
+//    LazyColumn(
+//        modifier = Modifier
+//            .background(MaterialTheme.colors.surface)
+//            .padding(start = 24.dp, end = 24.dp), state = state
 //    ) {
-//        listOf("M", "T", "W", "T", "F", "S", "S").forEach {
-//            Box(Modifier.preferredSize(dateBoxDp)) {
+//        for (i in yearRange step 3) {
+//            item {
+//                Row {
+//                    for (x in 0 until 3) {
+//                        val year = remember(yearRange) { i + x }
+//                        val selected = remember(yearRange, viewDate) { year == viewDate.year }
+//                        YearPickerItem(year = year, selected = selected) {
+//                            if (!selected) {
+//                                plusPages((year - viewDate.year) * 12)
+//                            }
+//                            yearPickerShowing.value = false
+//                        }
+//
+//                        if (x != 2) {
+//                            Spacer(modifier = Modifier.width(8.dp))
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//private fun YearPickerItem(year: Int, selected: Boolean, onClick: () -> Unit) {
+//    val backgroundColor =
+//        if (selected) MaterialTheme.colors.primary else MaterialTheme.colors.surface
+//    val textColor = if (selected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
+//
+//    Box(Modifier.size(88.dp, 52.dp), contentAlignment = Alignment.Center) {
+//        Box(
+//            Modifier
+//                .size(72.dp, 36.dp)
+//                .clip(RoundedCornerShape(16.dp))
+//                .background(backgroundColor)
+//                .clickable(onClick = onClick, indication = null),
+//            contentAlignment = Alignment.Center
+//        ) {
+//            Text(year.toString(), style = TextStyle(color = textColor, fontSize = 18.sp))
+//        }
+//    }
+//}
+//
+//@Composable
+//private fun ViewPagerScope.CalendarViewHeader(
+//    viewDate: LocalDate,
+//    yearPickerShowing: MutableState<Boolean>
+//) {
+//    val month = viewDate.month.getDisplayName(FULL, Locale.getDefault())
+//    val year = viewDate.year
+//
+//    val yearDropdownIcon = remember(yearPickerShowing.value) {
+//        if (yearPickerShowing.value) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown
+//    }
+//
+//    Box(
+//        Modifier
+//            .background(MaterialTheme.colors.primarySurface)
+//            .padding(top = 16.dp, bottom = 16.dp, start = 24.dp, end = 24.dp)
+//            .height(24.dp)
+//            .fillMaxWidth()
+//            .zIndex(1f)
+//    ) {
+//        Row(
+//            Modifier
+//                .fillMaxHeight()
+//                .align(Alignment.CenterStart)
+//                .clickable(onClick = { yearPickerShowing.value = !yearPickerShowing.value })
+//        ) {
+//            Text(
+//                "$month $year",
+//                modifier = Modifier
+//                    .paddingFromBaseline(top = 16.dp)
+//                    .wrapContentSize(Alignment.Center),
+//                style = TextStyle(fontSize = 14.sp, fontWeight = W600),
+//                color = MaterialTheme.colors.onBackground
+//            )
+//
+//            Spacer(Modifier.width(4.dp))
+//            Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
+//                Image(
+//                    yearDropdownIcon,
+//                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+//                )
+//            }
+//        }
+//
+//        Row(
+//            Modifier
+//                .fillMaxHeight()
+//                .align(Alignment.CenterEnd)
+//        ) {
+//            Image(
+//                Icons.Default.KeyboardArrowLeft,
+//                modifier = Modifier
+//                    .size(24.dp)
+//                    .clickable(onClick = { previous() }),
+//                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+//            )
+//
+//            Spacer(modifier = Modifier.width(24.dp))
+//
+//            Image(
+//                Icons.Default.KeyboardArrowRight,
+//                modifier = Modifier
+//                    .size(24.dp)
+//                    .clickable(onClick = { next() }),
+//                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+//            )
+//        }
+//    }
+//}
+//
+//@Composable
+//private fun CalendarView(viewDate: LocalDate, datePickerData: DatePickerData) {
+//    Column(Modifier.padding(start = 12.dp, end = 12.dp)) {
+//        DayOfWeekHeader()
+//        val month = getDates(viewDate)
+//        val possibleSelected = remember(datePickerData.selected) {
+//            viewDate.year == datePickerData.selected.year &&
+//                    viewDate.month == datePickerData.selected.month
+//        }
+//
+//        for (y in 0..5) {
+//            Row(
+//                modifier = Modifier
+//                    .height(40.dp)
+//                    .fillMaxWidth(),
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                for (x in 0 until 7) {
+//                    val day = month[y * 7 + x]
+//                    if (day != -1) {
+//                        val selected = remember(datePickerData.selected) {
+//                            possibleSelected && day == datePickerData.selected.dayOfMonth
+//                        }
+//                        DateSelectionBox(day, selected) {
+//                            datePickerData.selected =
+//                                LocalDate.of(viewDate.year, viewDate.month, day)
+//                        }
+//                    } else {
+//                        Box(Modifier.size(40.dp))
+//                    }
+//
+//                    if (x != 6) {
+//                        Spacer(modifier = Modifier.width(4.dp))
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun DateSelectionBox(date: Int, selected: Boolean, onClick: () -> Unit) {
+//    val backgroundColor =
+//        if (selected) MaterialTheme.colors.primary else MaterialTheme.colors.surface
+//    val textColor = if (selected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
+//    Box(
+//        Modifier
+//            .size(40.dp)
+//            .clickable(
+//                onClick = onClick,
+//                indication = null
+//            ), contentAlignment = Alignment.Center
+//    ) {
+//        Text(
+//            date.toString(),
+//            modifier = Modifier
+//                .size(36.dp)
+//                .clip(CircleShape)
+//                .background(backgroundColor)
+//                .wrapContentSize(Alignment.Center),
+//            style = TextStyle(color = textColor, fontSize = 12.sp)
+//        )
+//    }
+//}
+//
+//@Composable
+//private fun DayOfWeekHeader() {
+//    Row(
+//        modifier = Modifier
+//            .height(40.dp)
+//            .fillMaxWidth(),
+//        verticalAlignment = Alignment.CenterVertically
+//    ) {
+//        listOf("S", "M", "T", "W", "T", "F", "S").forEachIndexed { index, it ->
+//            Box(Modifier.size(40.dp)) {
 //                Text(
 //                    it,
-//                    modifier = Modifier.alpha(0.8f).fillMaxSize()
+//                    modifier = Modifier
+//                        .alpha(0.8f)
+//                        .fillMaxSize()
 //                        .wrapContentSize(Alignment.Center),
 //                    style = TextStyle(fontSize = 14.sp, fontWeight = W600),
 //                    color = MaterialTheme.colors.onBackground
 //                )
 //            }
+//            if (index != 6) {
+//                Spacer(modifier = Modifier.width(4.dp))
+//            }
 //        }
 //    }
 //}
 //
+//// Input: Selected Date
 //@Composable
-//private fun MonthTitle(scope: ViewPagerScope, month: String, year: String) {
-//    Row(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
-//        Box(
-//            Modifier.clip(CircleShape)
-//                .clickable(
-//                    onClick = { scope.previous() },
-//                    enabled = true
-//                )
-//        ) {
-//            Image(
-//                Icons.Default.ChevronLeft,
-//                contentDescription = "Go to previous month",
-//                modifier = Modifier.padding(start = 24.dp).wrapContentWidth(Alignment.Start),
-//                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
-//            )
-//        }
+//private fun CalendarHeader(datePickerData: DatePickerData) {
+//    val month = datePickerData.selected.month.shortLocalName
+//    val day = datePickerData.selected.dayOfWeek.shortLocalName
 //
-//        Text(
-//            "$month $year",
-//            modifier = Modifier.weight(3f).wrapContentSize(Alignment.Center),
-//            style = TextStyle(fontSize = 16.sp, fontWeight = W500),
-//            color = MaterialTheme.colors.onBackground
-//        )
-//
-//        Box(
-//            Modifier.clip(CircleShape)
-//                .clickable(
-//                    onClick = { scope.next() },
-//                    enabled = true
-//                )
-//        ) {
-//            Image(
-//                Icons.Default.ChevronRight,
-//                contentDescription = "Go to next month",
-//                modifier = Modifier.padding(end = 24.dp).wrapContentWidth(Alignment.End),
-//                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
-//            )
-//        }
-//    }
-//}
-//
-//@Composable
-//private fun DateTitle(selected: MutableState<LocalDate>) {
-//    val month = selected.value.month.shortLocalName
-//    val day = selected.value.dayOfWeek.shortLocalName
-//
-//    Column(
-//        modifier = Modifier.background(MaterialTheme.colors.primaryVariant).fillMaxWidth()
-//            .padding(16.dp)
+//    Box(
+//        Modifier
+//            .background(MaterialTheme.colors.primaryVariant)
+//            .fillMaxWidth()
+//            .height(120.dp)
 //    ) {
-//        Text(
-//            text = selected.value.year.toString(), color = MaterialTheme.colors.onPrimary,
-//            modifier = Modifier.alpha(0.8f).padding(bottom = 2.dp),
-//            style = TextStyle(fontSize = 18.sp, fontWeight = W700)
-//        )
-//        Text(
-//            text = "$day, $month ${selected.value.dayOfMonth}",
-//            color = MaterialTheme.colors.onPrimary,
-//            style = TextStyle(fontSize = 26.sp, fontWeight = W700)
-//        )
+//        Column(Modifier.padding(start = 24.dp, end = 24.dp)) {
+//            Text(
+//                text = "SELECT DATE",
+//                modifier = Modifier.paddingFromBaseline(top = 32.dp),
+//                color = MaterialTheme.colors.onPrimary,
+//                style = TextStyle(fontSize = 12.sp)
+//            )
+//            Box(
+//                Modifier
+//                    .fillMaxWidth()
+//                    .paddingFromBaseline(top = 64.dp)
+//            ) {
+//                Text(
+//                    text = "$day, $month ${datePickerData.selected.dayOfMonth}",
+//                    modifier = Modifier.align(Alignment.CenterStart),
+//                    color = MaterialTheme.colors.onPrimary,
+//                    style = TextStyle(fontSize = 30.sp, fontWeight = W400)
+//                )
+//
+//                Image(
+//                    Icons.Default.Edit,
+//                    modifier = Modifier
+//                        .size(24.dp)
+//                        .align(Alignment.CenterEnd),
+//                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary)
+//                )
+//            }
+//
+//        }
 //    }
 //}
 //
@@ -281,13 +360,13 @@
 //    val dates = mutableListOf<Int>()
 //
 //    val firstDate = LocalDate.of(date.year, date.monthValue, 1)
-//    val firstDay = firstDate.dayOfWeek.value - 1
+//    val firstDay = firstDate.dayOfWeek.value % 7
 //    val numDays = date.month.length(firstDate.isLeapYear)
 //
 //    var counter = 1
-//    while (counter <= numDays) {
+//    for (y in 0..5) {
 //        for (x in 0..6) {
-//            if ((counter == 1 && x != firstDay) || counter > numDays) {
+//            if ((y == 0 && x < firstDay && firstDay != 0) || counter > numDays) {
 //                dates.add(-1)
 //            } else {
 //                dates.add(counter)
