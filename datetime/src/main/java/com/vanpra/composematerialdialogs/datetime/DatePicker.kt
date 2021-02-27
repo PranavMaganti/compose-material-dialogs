@@ -1,18 +1,20 @@
 package com.vanpra.composematerialdialogs.datetime
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -24,8 +26,10 @@ import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -33,8 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.platform.AmbientDensity
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
 import androidx.compose.ui.text.font.FontWeight.Companion.W500
@@ -85,8 +88,19 @@ internal fun DatePickerLayout(
     currentDate: LocalDate
 ) {
     Column(modifier) {
-        WithConstraints {
-            ScrollableColumn(Modifier.heightIn(max = maxHeight * 0.8f)) {
+        var offset by remember { mutableStateOf(0f) }
+
+        BoxWithConstraints {
+            Column(
+                Modifier
+                    .heightIn(max = maxHeight * 0.8f)
+                    .scrollable(
+                        orientation = Orientation.Vertical,
+                        state = rememberScrollableState { delta ->
+                            offset += delta
+                            delta
+                        })
+            ) {
                 DateTitle(selectedDate)
                 ViewPager(Modifier.background(color = Color.Transparent), useAlpha = true) {
                     val newDate = remember(index) {
@@ -118,12 +132,12 @@ private fun DateLayout(
 ) {
     val check = remember(selected.value, yearMonth) {
         selected.value.monthValue == yearMonth.monthValue &&
-            selected.value.year == yearMonth.year
+                selected.value.year == yearMonth.year
     }
 
     val textStyle = TextStyle(fontSize = 13.sp, fontWeight = W400)
     val boxSize = 35.dp
-    val boxSizePx = with(AmbientDensity.current) { boxSize.toIntPx() }
+    val boxSizePx = with(LocalDensity.current) { boxSize.toPx().toInt() }
 
     val verticalSpacing = 30
     val maxRows = 6
@@ -146,12 +160,13 @@ private fun DateLayout(
 
                     Text(
                         it.toString(),
-                        modifier = Modifier.size(boxSize)
+                        modifier = Modifier
+                            .size(boxSize)
                             .clickable(
                                 onClick = {
-                                    selected.value = LocalDate.of(yearMonth.year, yearMonth.month, it)
+                                    selected.value =
+                                        LocalDate.of(yearMonth.year, yearMonth.month, it)
                                 },
-                                indication = null
                             )
                             .then(selectedModifier)
                             .wrapContentSize(Alignment.Center),
@@ -163,7 +178,8 @@ private fun DateLayout(
                 }
             }
         },
-        Modifier.padding(top = 8.dp, start = 24.dp, end = 24.dp)
+        Modifier
+            .padding(top = 8.dp, start = 24.dp, end = 24.dp)
             .fillMaxWidth(),
         { measurables, constraints ->
             val horizontalSpacing = (constraints.maxWidth - (boxSizePx * 7)) / 6
@@ -185,14 +201,17 @@ private fun DateLayout(
 private fun DaysTitle() {
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.padding(top = 16.dp, bottom = 12.dp, start = 18.dp, end = 18.dp)
+        modifier = Modifier
+            .padding(top = 16.dp, bottom = 12.dp, start = 18.dp, end = 18.dp)
             .fillMaxWidth()
     ) {
         listOf("M", "T", "W", "T", "F", "S", "S").forEach {
-            Box(Modifier.preferredSize(dateBoxDp)) {
+            Box(Modifier.size(dateBoxDp)) {
                 Text(
                     it,
-                    modifier = Modifier.alpha(0.8f).fillMaxSize()
+                    modifier = Modifier
+                        .alpha(0.8f)
+                        .fillMaxSize()
                         .wrapContentSize(Alignment.Center),
                     style = TextStyle(fontSize = 14.sp, fontWeight = W600),
                     color = MaterialTheme.colors.onBackground
@@ -204,9 +223,12 @@ private fun DaysTitle() {
 
 @Composable
 private fun MonthTitle(scope: ViewPagerScope, month: String, year: String) {
-    Row(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(top = 16.dp)) {
         Box(
-            Modifier.clip(CircleShape)
+            Modifier
+                .clip(CircleShape)
                 .clickable(
                     onClick = { scope.previous() },
                     enabled = true
@@ -214,20 +236,26 @@ private fun MonthTitle(scope: ViewPagerScope, month: String, year: String) {
         ) {
             Image(
                 Icons.Default.ChevronLeft,
-                modifier = Modifier.padding(start = 24.dp).wrapContentWidth(Alignment.Start),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                modifier = Modifier
+                    .padding(start = 24.dp)
+                    .wrapContentWidth(Alignment.Start),
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
+                contentDescription = null,
             )
         }
 
         Text(
             "$month $year",
-            modifier = Modifier.weight(3f).wrapContentSize(Alignment.Center),
+            modifier = Modifier
+                .weight(3f)
+                .wrapContentSize(Alignment.Center),
             style = TextStyle(fontSize = 16.sp, fontWeight = W500),
             color = MaterialTheme.colors.onBackground
         )
 
         Box(
-            Modifier.clip(CircleShape)
+            Modifier
+                .clip(CircleShape)
                 .clickable(
                     onClick = { scope.next() },
                     enabled = true
@@ -235,8 +263,11 @@ private fun MonthTitle(scope: ViewPagerScope, month: String, year: String) {
         ) {
             Image(
                 Icons.Default.ChevronRight,
-                modifier = Modifier.padding(end = 24.dp).wrapContentWidth(Alignment.End),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                modifier = Modifier
+                    .padding(end = 24.dp)
+                    .wrapContentWidth(Alignment.End),
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
+                contentDescription = null,
             )
         }
     }
@@ -248,12 +279,16 @@ private fun DateTitle(selected: MutableState<LocalDate>) {
     val day = selected.value.dayOfWeek.shortLocalName
 
     Column(
-        modifier = Modifier.background(MaterialTheme.colors.primaryVariant).fillMaxWidth()
+        modifier = Modifier
+            .background(MaterialTheme.colors.primaryVariant)
+            .fillMaxWidth()
             .padding(16.dp)
     ) {
         Text(
             text = selected.value.year.toString(), color = MaterialTheme.colors.onPrimary,
-            modifier = Modifier.alpha(0.8f).padding(bottom = 2.dp),
+            modifier = Modifier
+                .alpha(0.8f)
+                .padding(bottom = 2.dp),
             style = TextStyle(fontSize = 18.sp, fontWeight = W700)
         )
         Text(

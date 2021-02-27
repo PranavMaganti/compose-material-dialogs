@@ -49,8 +49,7 @@ dependencies {
    // implementation(Dependencies.ComposeMaterialDialogs.datetime)
    // implementation(Dependencies.ComposeMaterialDialogs.color)
 
-    implementation(Dependencies.Kotlin.stdlib)
-
+    implementation("androidx.activity:activity-compose:1.3.0-alpha03")
     implementation(Dependencies.AndroidX.Compose.ui)
     implementation(Dependencies.AndroidX.Compose.material)
     implementation(Dependencies.AndroidX.Compose.materialIconsExtended)
@@ -61,5 +60,4 @@ dependencies {
     implementation(Dependencies.material)
 
     implementation(Dependencies.Accompanist.coil)
-    implementation(kotlin("stdlib-jdk8"))
 }

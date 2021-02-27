@@ -55,7 +55,6 @@ class CommonModulePlugin: Plugin<Project> {
 
     private fun Project.dependenciesConf() {
         dependencies.apply {
-            add("implementation", Dependencies.Kotlin.stdlib)
             add("implementation", Dependencies.AndroidX.coreKtx)
             add("implementation", Dependencies.AndroidX.appcompat)
             add("implementation", Dependencies.material)

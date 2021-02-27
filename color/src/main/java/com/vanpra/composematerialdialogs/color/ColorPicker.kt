@@ -3,34 +3,39 @@ package com.vanpra.composematerialdialogs.color
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.ScrollableRow
-import androidx.compose.foundation.animation.FlingConfig
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
+import androidx.compose.material.SliderColors
+import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,9 +48,7 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.platform.AmbientAnimationClock
-import androidx.compose.ui.platform.AmbientDensity
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -80,17 +83,18 @@ fun MaterialDialog.colorChooser(
     waitForPositiveButton: Boolean = false,
     onColorSelected: (Color) -> Unit = {}
 ) {
-    WithConstraints {
+    BoxWithConstraints {
         val selectedColor = remember { mutableStateOf(colors[initialSelection]) }
-        val flingConfig = FlingConfig(listOf(0f, constraints.maxWidth.toFloat()))
+        //val flingConfig = FlingConfig(listOf(0f, constraints.maxWidth.toFloat()))
 
         val scrollerPosition =
             ScrollState(
-                initial = 0f, flingConfig = flingConfig,
-                animationClock = AmbientAnimationClock.current
+                initial = 0,
+                //flingConfig = flingConfig,
+                //animationClock = AmbientAnimationClock.current
             )
 
-        onCommit {
+        SideEffect {
             if (waitForPositiveButton) {
                 callbacks.add {
                     onColorSelected(selectedColor.value)
@@ -98,11 +102,12 @@ fun MaterialDialog.colorChooser(
             }
         }
 
-        Column(Modifier.padding(bottom = 8.dp)) {
+        BoxWithConstraints(Modifier.padding(bottom = 8.dp)) {
             if (allowCustomArgb) {
                 PageIndicator(scrollerPosition, constraints)
-                ScrollableRow(
-                    scrollState = scrollerPosition,
+                BoxWithConstraints(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState()),
                     content = {
                         Box(Modifier.width(maxWidth)) {
                             ColorGridLayout(
@@ -185,7 +190,7 @@ private fun SliderLayout(selectedColor: MutableState<Color>) {
         modifier = Modifier.padding(top = 16.dp),
         label = "A",
         value = selectedColor.value.alpha * 255,
-        sliderColor = Color.DarkGray
+        sliderColor = SliderDefaults.colors()
     ) {
         selectedColor.value = selectedColor.value.copy(alpha = it / 255f)
     }
@@ -194,7 +199,7 @@ private fun SliderLayout(selectedColor: MutableState<Color>) {
         modifier = Modifier.padding(top = 16.dp),
         label = "R",
         value = selectedColor.value.red * 255,
-        sliderColor = Color.Red
+        sliderColor = SliderDefaults.colors()
     ) {
         selectedColor.value = selectedColor.value.copy(red = it / 255f)
     }
@@ -203,7 +208,7 @@ private fun SliderLayout(selectedColor: MutableState<Color>) {
         modifier = Modifier.padding(top = 16.dp),
         label = "G",
         value = selectedColor.value.green * 255,
-        sliderColor = Color.Green
+        sliderColor = SliderDefaults.colors()
     ) {
         selectedColor.value = selectedColor.value.copy(green = it / 255f)
     }
@@ -212,7 +217,7 @@ private fun SliderLayout(selectedColor: MutableState<Color>) {
         modifier = Modifier.padding(top = 16.dp),
         label = "B",
         value = selectedColor.value.blue * 255,
-        sliderColor = Color.Blue
+        sliderColor = SliderDefaults.colors()
     ) {
         selectedColor.value = selectedColor.value.copy(blue = it / 255f)
     }
@@ -223,7 +228,7 @@ private fun LabelSlider(
     modifier: Modifier = Modifier,
     label: String,
     value: Float,
-    sliderColor: Color,
+    sliderColor: SliderColors,
     onSliderChange: (Float) -> Unit
 ) {
     Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -239,8 +244,7 @@ private fun LabelSlider(
             valueRange = 0f..255f,
             steps = 255,
             modifier = Modifier.padding(start = 16.dp, end = 24.dp),
-            activeTrackColor = sliderColor,
-            thumbColor = sliderColor
+            colors = sliderColor
         )
 
         Box(
@@ -270,7 +274,7 @@ private fun ColorGridLayout(
     var mainSelectedIndex by remember { mutableStateOf(0) }
     var showSubColors by remember { mutableStateOf(false) }
 
-    val itemSize = with(AmbientDensity.current) { itemSizeDp.toIntPx() }
+    val itemSize = with(LocalDensity.current) { itemSizeDp.toPx().toInt() }
 
     GridView(itemSize = itemSize) {
         if (!showSubColors) {
@@ -297,7 +301,6 @@ private fun ColorGridLayout(
                         onClick = {
                             showSubColors = false
                         },
-                        indication = null
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -305,7 +308,8 @@ private fun ColorGridLayout(
                     Icons.Default.ArrowBack,
                     colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
                     contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(tickSize)
+                    modifier = Modifier.size(tickSize),
+                    contentDescription = null,
                 )
             }
 
@@ -329,7 +333,7 @@ private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
             .clip(CircleShape)
             .background(color)
             .border(1.dp, MaterialTheme.colors.onBackground, CircleShape)
-            .clickable(onClick = onClick, indication = null),
+            .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         if (selected) {
@@ -337,7 +341,8 @@ private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
                 Icons.Default.Done,
                 colorFilter = ColorFilter.tint(color.foreground()),
                 contentScale = ContentScale.Fit,
-                modifier = Modifier.size(tickSize)
+                modifier = Modifier.size(tickSize),
+                contentDescription = null,
             )
         }
     }
@@ -349,9 +354,19 @@ private fun GridView(
     itemSize: Int,
     content: @Composable () -> Unit
 ) {
-    WithConstraints {
-        ScrollableColumn(
-            modifier = Modifier.preferredHeightIn(max = (maxHeight * 0.7f)),
+    BoxWithConstraints {
+        var offset by remember { mutableStateOf(0f) }
+        Column(
+            modifier = Modifier
+                .heightIn(max = (maxHeight * 0.7f))
+                .scrollable(
+                    orientation = Orientation.Vertical,
+                    // Scrollable state: describes how to consume
+                    // scrolling delta and update offset
+                    state = rememberScrollableState { delta ->
+                        offset += delta
+                        delta
+                    }),
             content = {
                 Layout(
                     {

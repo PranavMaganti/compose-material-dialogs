@@ -10,22 +10,21 @@ object Dependencies {
     }
 
     object Accompanist {
-        private const val version = "0.4.2"
+        private const val version = "0.6.0"
         const val coil = "dev.chrisbanes.accompanist:accompanist-coil:$version"
     }
 
     object Kotlin {
-        const val version = "1.4.21"
-        const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
+        const val version = "1.4.30"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
 
     object AndroidX {
-        const val appcompat = "androidx.appcompat:appcompat:1.2.0-rc01"
-        const val coreKtx = "androidx.core:core-ktx:1.5.0-alpha02"
+        const val appcompat = "androidx.appcompat:appcompat:1.2.0"
+        const val coreKtx = "androidx.core:core-ktx:1.5.0-beta02"
 
         object Compose {
-            const val version = "1.0.0-alpha10"
+            const val version = "1.0.0-beta01"
 
             const val ui = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"

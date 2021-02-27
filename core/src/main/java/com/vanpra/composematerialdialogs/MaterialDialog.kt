@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -20,13 +20,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +36,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.platform.AmbientDensity
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -123,20 +123,21 @@ class MaterialDialog(
     ) {
         if (showing.value) {
             ThemedDialog(onCloseRequest = { onCloseRequest(this) }) {
-                onDispose {
-                    positiveEnabled.clear()
-                    callbacks.clear()
+                DisposableEffect(Unit) {
+                    onDispose {
+                        positiveEnabled.clear()
+                        callbacks.clear()
 
-                    positiveEnabledCounter.set(0)
-                    callbackCounter.set(0)
+                        positiveEnabledCounter.set(0)
+                        callbackCounter.set(0)
+                    }
                 }
-
                 Column(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .background(backgroundColor)
-                            .clip(MaterialTheme.shapes.medium)
+                    Modifier
+                        .fillMaxWidth()
+                        .background(backgroundColor)
+                        .clip(MaterialTheme.shapes.medium)
                 ) {
                     this@MaterialDialog.content()
                 }
@@ -160,7 +161,7 @@ class MaterialDialog(
         var modifier = Modifier
             .fillMaxWidth()
             .padding(start = 24.dp, end = 24.dp)
-            .preferredHeight(64.dp)
+            .height(64.dp)
             .wrapContentHeight(Alignment.CenterVertically)
 
         modifier = modifier.then(
@@ -204,18 +205,20 @@ class MaterialDialog(
         Row(
             modifier = Modifier
                 .padding(start = 24.dp, end = 24.dp)
-                .preferredHeight(64.dp),
+                .height(64.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (iconAsset != null) {
                 Image(
                     imageVector = iconAsset,
-                    colorFilter = ColorFilter.tint(assetTint)
+                    colorFilter = ColorFilter.tint(assetTint),
+                    contentDescription = null
                 )
             } else {
                 CoilImage(
                     data = iconRes!!,
-                    modifier = Modifier.size(36.dp)
+                    modifier = Modifier.size(36.dp),
+                    contentDescription = null
                 )
             }
             Spacer(Modifier.width(14.dp))
@@ -254,8 +257,8 @@ class MaterialDialog(
     fun MaterialDialog.buttons(content: @Composable MaterialDialogButtons.() -> Unit) {
         buttons.buttonsTagOrder.clear()
 
-        val interButtonPadding = with(AmbientDensity.current) { 12.dp.toIntPx() }
-        val defaultBoxHeight = with(AmbientDensity.current) { 36.dp.toIntPx() }
+        val interButtonPadding = with(LocalDensity.current) { 12.dp.toPx().toInt() }
+        val defaultBoxHeight = with(LocalDensity.current) { 36.dp.toPx().toInt() }
 
         Box(
             Modifier
@@ -335,15 +338,15 @@ class MaterialDialog(
         onInput: (String) -> Unit = {}
     ) {
         var text by remember { mutableStateOf(prefill) }
-        val valid = rememberSavedInstanceState(text) { isTextValid(text) }
+        val valid = rememberSaveable(text) { isTextValid(text) }
 
         val positiveEnabledIndex =
-            rememberSavedInstanceState {
+            rememberSaveable {
                 val index = positiveEnabledCounter.getAndIncrement()
                 positiveEnabled.add(index, valid)
                 index
             }
-        val callbackIndex = rememberSavedInstanceState {
+        val callbackIndex = rememberSaveable {
             val index = callbackCounter.getAndIncrement()
             if (waitForPositiveButton) {
                 callbacks.add(index) { onInput(text) }
@@ -352,14 +355,15 @@ class MaterialDialog(
             }
             index
         }
-
-        onCommit(valid) {
+        SideEffect {
             setPositiveEnabled(positiveEnabledIndex, valid)
         }
 
-        onDispose {
-            callbacks[callbackIndex] = {}
-            setPositiveEnabled(positiveEnabledIndex, true)
+        DisposableEffect(Unit) {
+            onDispose {
+                callbacks[callbackIndex] = {}
+                setPositiveEnabled(positiveEnabledIndex, true)
+            }
         }
 
         Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)) {
@@ -374,7 +378,7 @@ class MaterialDialog(
                 label = { Text(label, color = MaterialTheme.colors.onBackground.copy(0.8f)) },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text(hint, color = MaterialTheme.colors.onBackground.copy(0.5f)) },
-                isErrorValue = !valid,
+                isError = !valid,
                 visualTransformation = visualTransformation,
                 keyboardOptions = keyboardOptions,
                 textStyle = TextStyle(MaterialTheme.colors.onBackground, fontSize = 16.sp)
