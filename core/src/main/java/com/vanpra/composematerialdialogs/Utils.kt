@@ -14,7 +14,9 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.window.Dialog
 import kotlin.math.abs
 
@@ -38,31 +40,5 @@ internal fun ThemedDialog(onCloseRequest: () -> Unit, children: @Composable () -
     }
 }
 
-class DefaultAnchorFlingBehavior(
-    private val anchors: List<Float>,
-    private val decay: DecayAnimationSpec<Float>,
-    private val currentValue: Int
-) : FlingBehavior {
-    override suspend fun ScrollScope.performFling(initialVelocity: Float): Float {
-        Log.d("VELOC", initialVelocity.toString())
-        val initialValue = currentValue.toFloat()
-        val target = decay.calculateTargetValue(initialValue, initialVelocity)
-        val point = anchors.minByOrNull { abs(it - target) } ?: 0f
-
-        var velocityLeft = initialVelocity
-        var lastValue = initialValue
-        AnimationState(
-            initialValue = initialValue,
-            initialVelocity = initialVelocity,
-        ).animateTo(point) {
-            val delta = value - lastValue
-            val left = scrollBy(delta)
-            lastValue = value
-            velocityLeft = this.velocity
-            // avoid rounding errors and stop if anything is unconsumed
-            if (abs(left) > 0.5f) this.cancelAnimation()
-        }
-
-        return velocityLeft
-    }
-}
+fun List<Pair<MaterialDialogButtonTypes, Placeable>>.buttons(type: MaterialDialogButtonTypes)
+    = this.filter { it.first == type }.map { it.second }

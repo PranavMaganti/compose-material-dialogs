@@ -26,6 +26,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
@@ -145,7 +147,7 @@ object DialogDefaults {
     }
 }
 
-internal enum class TimePickerScreen {
+internal enum class ClockScreen {
     Hour,
     Minute;
 
@@ -170,8 +172,9 @@ fun MaterialDialog.timepicker(
     onComplete: (LocalTime) -> Unit = {}
 ) {
     val selectedTime = remember { mutableStateOf(SimpleLocalTime.fromLocalTime(initialTime)) }
+    val currentScreen = remember { mutableStateOf(ClockScreen.Minute) }
 
-    TimePickerImpl(selectedTime = selectedTime, colors = colors)
+    TimePickerImpl(selectedTime = selectedTime, currentScreen = currentScreen, colors = colors)
     buttons {
         positiveButton("Ok") {
             onComplete(selectedTime.value.toLocalTime())
@@ -179,32 +182,33 @@ fun MaterialDialog.timepicker(
         negativeButton("Cancel") {
             onCancel()
         }
+
+        accessibilityButton(Icons.Default.Keyboard) {}
     }
 }
 
 @Composable
 internal fun TimePickerImpl(
     modifier: Modifier = Modifier,
+    currentScreen: MutableState<ClockScreen>,
     selectedTime: MutableState<SimpleLocalTime>,
     colors: TimePickerColors
 ) {
     Column(modifier.padding(start = 24.dp, end = 24.dp)) {
-        val currentScreen = remember { mutableStateOf(TimePickerScreen.Minute) }
-
         TimePickerTitle()
         TimeLayout(currentScreen = currentScreen, selectedTime = selectedTime, colors = colors)
         Spacer(modifier = Modifier.height(36.dp))
         Crossfade(currentScreen) {
             when (it.value) {
-                TimePickerScreen.Hour -> ClockLayout(
+                ClockScreen.Hour -> ClockLayout(
                     anchorPoints = 12,
                     label = { index -> if (index == 0) "12" else index.toString() },
                     onAnchorChange = { hours -> selectedTime.value.hour = hours },
                     startAnchor = selectedTime.value.hour,
-                    onLift = { currentScreen.value = TimePickerScreen.Minute }
+                    onLift = { currentScreen.value = ClockScreen.Minute }
                 )
 
-                TimePickerScreen.Minute -> ClockLayout(
+                ClockScreen.Minute -> ClockLayout(
                     anchorPoints = 60,
                     label = { index -> index.toString().padStart(2, '0') },
                     onAnchorChange = { mins -> selectedTime.value.minute = mins },
@@ -230,7 +234,7 @@ internal fun TimePickerTitle() {
 
 @Composable
 internal fun TimeLayout(
-    currentScreen: MutableState<TimePickerScreen>,
+    currentScreen: MutableState<ClockScreen>,
     selectedTime: MutableState<SimpleLocalTime>,
     colors: TimePickerColors
 ) {
@@ -246,7 +250,7 @@ internal fun TimeLayout(
         Box(
             Modifier.width(96.dp).fillMaxHeight().clip(MaterialTheme.shapes.medium)
                 .background(colors.backgroundColor(currentScreen.value.isHour()).value)
-                .clickable { currentScreen.value = TimePickerScreen.Hour },
+                .clickable { currentScreen.value = ClockScreen.Hour },
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -271,7 +275,7 @@ internal fun TimeLayout(
         Box(
             modifier = Modifier.width(96.dp).fillMaxHeight().clip(MaterialTheme.shapes.medium)
                 .background(colors.backgroundColor(currentScreen.value.isMinute()).value)
-                .clickable { currentScreen.value = TimePickerScreen.Minute },
+                .clickable { currentScreen.value = ClockScreen.Minute },
             contentAlignment = Alignment.Center
         ) {
             Text(
