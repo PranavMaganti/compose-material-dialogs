@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
@@ -95,7 +97,7 @@ internal fun DatePickerLayout(datePickerData: DatePickerData, yearRange: IntRang
     Column(Modifier.size(328.dp, 460.dp)) {
         CalendarHeader(datePickerData)
 
-        val yearPickerShowing = mutableStateOf(false)
+        val yearPickerShowing = remember { mutableStateOf(false) }
         ViewPager {
             val viewDate = remember(index) { datePickerData.current.plusMonths(index.toLong()) }
             CalendarViewHeader(viewDate, yearPickerShowing)
@@ -105,7 +107,8 @@ internal fun DatePickerLayout(datePickerData: DatePickerData, yearRange: IntRang
                     yearPickerShowing.value,
                     Modifier
                         .fillMaxSize()
-                        .zIndex(0.7f),
+                        .zIndex(0.7f)
+                        .clipToBounds(),
                     enter = slideInVertically({ -it }),
                     exit = slideOutVertically({ -it })
                 ) {
@@ -188,9 +191,8 @@ private fun ViewPagerScope.CalendarViewHeader(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val month = viewDate.month.getDisplayName(FULL, Locale.getDefault())
-    val year = viewDate.year
-
+    val month = remember(viewDate) { viewDate.month.getDisplayName(FULL, Locale.getDefault()) }
+    val year = remember(viewDate) { viewDate.year }
     val yearDropdownIcon = remember(yearPickerShowing.value) {
         if (yearPickerShowing.value) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown
     }
@@ -260,8 +262,8 @@ private fun ViewPagerScope.CalendarViewHeader(
 private fun CalendarView(viewDate: LocalDate, datePickerData: DatePickerData) {
     Column(Modifier.padding(start = 12.dp, end = 12.dp)) {
         DayOfWeekHeader()
-        val month = getDates(viewDate)
-        val possibleSelected = remember(datePickerData.selected) {
+        val month = remember(viewDate) { getDates(viewDate) }
+        val possibleSelected = remember(datePickerData.selected, viewDate) {
             viewDate.year == datePickerData.selected.year &&
                     viewDate.month == datePickerData.selected.month
         }
@@ -276,7 +278,7 @@ private fun CalendarView(viewDate: LocalDate, datePickerData: DatePickerData) {
                 for (x in 0 until 7) {
                     val day = month[y * 7 + x]
                     if (day != -1) {
-                        val selected = remember(datePickerData.selected) {
+                        val selected = remember(datePickerData.selected, possibleSelected) {
                             possibleSelected && day == datePickerData.selected.dayOfMonth
                         }
                         DateSelectionBox(day, selected) {
@@ -298,9 +300,14 @@ private fun CalendarView(viewDate: LocalDate, datePickerData: DatePickerData) {
 
 @Composable
 fun DateSelectionBox(date: Int, selected: Boolean, onClick: () -> Unit) {
-    val backgroundColor =
-        if (selected) MaterialTheme.colors.primary else MaterialTheme.colors.surface
-    val textColor = if (selected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
+    val colors = MaterialTheme.colors
+    val backgroundColor = remember(selected) {
+        if (selected) colors.primary else colors.surface
+    }
+    val textColor = remember(selected) {
+        if (selected) colors.onPrimary else colors.onSurface
+    }
+
     Box(
         Modifier
             .size(40.dp)

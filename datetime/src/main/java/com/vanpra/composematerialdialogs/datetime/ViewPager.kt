@@ -22,7 +22,6 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import kotlinx.coroutines.launch
 import kotlin.math.abs
-import kotlin.math.sign
 
 /**
  * @brief Interface used to pass data to children of ViewPager
@@ -96,9 +95,9 @@ fun ViewPager(
         val index = remember { mutableStateOf(0) }
 
         val increment: suspend (Int) -> Unit = { increment: Int ->
-            val animationResult =
-                offset.animateTo(width * sign(increment.toDouble()).toFloat())
-            if (animationResult.endReason == AnimationEndReason.Finished) {
+            val animationResult = offset.animateTo(width * -increment)
+            if (animationResult.endReason == AnimationEndReason.Finished
+                || animationResult.endReason == AnimationEndReason.BoundReached) {
                 index.value += increment
                 offset.snapTo(0f)
             }
@@ -116,9 +115,9 @@ fun ViewPager(
                 orientation = Orientation.Horizontal,
                 onDragStopped = { velocity ->
                     val initialTarget =
-                        decayAnimation.calculateTargetValue(offset.value, -3f * velocity)
+                        decayAnimation.calculateTargetValue(offset.value, -2f * velocity)
                     val target = anchors.minByOrNull { abs(it - initialTarget) } ?: 0f
-                    val flingResult = offset.animateTo(target, spring(stiffness = 5000f))
+                    val flingResult = offset.animateTo(target, spring())
                     offset.snapTo(0f)
 
                     if (flingResult.endReason == AnimationEndReason.Finished) {
@@ -130,8 +129,6 @@ fun ViewPager(
                             onPrevious()
                         }
                     }
-
-
                 },
                 reverseDirection = true,
                 enabled = enabled
