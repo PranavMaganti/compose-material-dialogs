@@ -46,11 +46,7 @@ fun MaterialDialog.listItems(
     onClick: (index: Int, item: String) -> Unit = { _, _ -> }
 ) {
     BoxWithConstraints {
-        var modifier = Modifier.heightIn(max = maxHeight * listRatio)
-        //TODO: Add this padding
-//        if (buttons.buttonsTagOrder.isEmpty()) {
-//            modifier = modifier.then(bottomPadding)
-//        }
+        var modifier = Modifier.heightIn(max = maxHeight * listRatio).then(bottomPadding)
 
         LazyColumn(modifier = modifier) {
             itemsIndexed(list) { index, it ->
@@ -94,13 +90,9 @@ fun <T> MaterialDialog.listItems(
 ) {
 
     BoxWithConstraints {
-        var modifier = Modifier.heightIn(max = maxHeight * listRatio)
-        //TODO: Add this padding
+        var modifier = Modifier.heightIn(max = maxHeight * listRatio).then(bottomPadding)
 
-//        if (buttons.buttonsTagOrder.isEmpty()) {
-//            modifier = modifier.then(bottomPadding)
-//        }
-        LazyColumn(modifier = modifier) {
+        LazyColumn(modifier = modifier.padding(24.dp, end = 24.dp)) {
             itemsIndexed(list) { index, it ->
                 Box(
                     Modifier
@@ -114,7 +106,6 @@ fun <T> MaterialDialog.listItems(
                             },
                             enabled = isEnabled(index)
                         )
-                        .padding(start = 24.dp, end = 24.dp)
                 ) {
                     item(index, it)
                 }

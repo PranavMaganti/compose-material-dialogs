@@ -3,6 +3,7 @@ package com.vanpra.composematerialdialogdemos.demos
 import androidx.compose.runtime.Composable
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
 import com.vanpra.composematerialdialogs.datetime.datepicker
+import com.vanpra.composematerialdialogs.datetime.datetimepicker
 import com.vanpra.composematerialdialogs.datetime.timepicker
 
 
@@ -19,8 +20,8 @@ fun DateTimeDialogDemo() {
         datepicker()
     }
 
-//    DialogAndShowButton(buttonText = "Date and Time Picker Dialog") {
-//        // Date time picker has a custom title as it needs to show a back icon
-//        datetimepicker("Select a date and time")
-//    }
+    DialogAndShowButton(buttonText = "Date and Time Picker Dialog") {
+        // Date time picker has a custom title as it needs to show a back icon
+        datetimepicker()
+    }
 }

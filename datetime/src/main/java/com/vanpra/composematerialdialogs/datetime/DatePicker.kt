@@ -28,7 +28,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.primarySurface
@@ -57,7 +56,7 @@ import java.time.LocalDate
 import java.time.format.TextStyle.FULL
 import java.util.*
 
-internal class DatePickerData(val current: LocalDate) {
+internal class DatePickerState(val current: LocalDate) {
     var selected by mutableStateOf(current)
 }
 
@@ -76,13 +75,13 @@ fun MaterialDialog.datepicker(
     onCancel: () -> Unit = {},
     onComplete: (LocalDate) -> Unit = {}
 ) {
-    val datePickerData = remember { DatePickerData(initialDate) }
+    val datePickerState = remember { DatePickerState(initialDate) }
 
-    DatePickerImpl(datePickerData, yearRange)
+    DatePickerImpl(state = datePickerState, yearRange = yearRange)
 
     buttons {
         positiveButton("Ok") {
-            onComplete(datePickerData.selected)
+            onComplete(datePickerState.selected)
         }
         negativeButton("Cancel") {
             onCancel()
@@ -91,14 +90,18 @@ fun MaterialDialog.datepicker(
 }
 
 @Composable
-internal fun DatePickerImpl(datePickerData: DatePickerData, yearRange: IntRange) {
+internal fun DatePickerImpl(
+    modifier: Modifier = Modifier,
+    state: DatePickerState,
+    yearRange: IntRange
+) {
     /* Height doesn't include datePickerData height */
-    Column(Modifier.size(328.dp, 460.dp)) {
-        CalendarHeader(datePickerData)
+    Column(modifier.size(328.dp, 460.dp)) {
+        CalendarHeader(state)
 
         val yearPickerShowing = remember { mutableStateOf(false) }
         ViewPager {
-            val viewDate = remember(index) { datePickerData.current.plusMonths(index.toLong()) }
+            val viewDate = remember(index) { state.current.plusMonths(index.toLong()) }
             CalendarViewHeader(viewDate, yearPickerShowing)
 
             Box {
@@ -114,7 +117,7 @@ internal fun DatePickerImpl(datePickerData: DatePickerData, yearRange: IntRange)
                     YearPicker(yearRange, viewDate, yearPickerShowing)
                 }
 
-                CalendarView(viewDate, datePickerData)
+                CalendarView(viewDate, state)
             }
         }
     }
@@ -258,7 +261,7 @@ private fun ViewPagerScope.CalendarViewHeader(
 }
 
 @Composable
-private fun CalendarView(viewDate: LocalDate, datePickerData: DatePickerData) {
+private fun CalendarView(viewDate: LocalDate, datePickerData: DatePickerState) {
     Column(Modifier.padding(start = 12.dp, end = 12.dp)) {
         DayOfWeekHeader()
         val month = remember(viewDate) { getDates(viewDate) }
@@ -357,7 +360,7 @@ private fun DayOfWeekHeader() {
 
 // Input: Selected Date
 @Composable
-private fun CalendarHeader(datePickerData: DatePickerData) {
+private fun CalendarHeader(datePickerData: DatePickerState) {
     val month = datePickerData.selected.month.shortLocalName
     val day = datePickerData.selected.dayOfWeek.shortLocalName
 

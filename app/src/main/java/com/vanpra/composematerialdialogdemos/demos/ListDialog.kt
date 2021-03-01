@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
@@ -49,7 +50,6 @@ private val emails = listOf(
     "joe@material-dialog.com",
     "jane@material-dialog.com",
     "dan@material-dialog.com",
-    "helen@material-dialog.com",
     "karen@material-dialog.com"
 )
 
@@ -81,7 +81,8 @@ fun BasicListDialogDemo() {
                     modifier = Modifier
                         .padding(vertical = 8.dp)
                         .size(30.dp),
-                    contentScale = ContentScale.FillHeight
+                    contentScale = ContentScale.FillHeight,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
                 )
                 Text(
                     email,

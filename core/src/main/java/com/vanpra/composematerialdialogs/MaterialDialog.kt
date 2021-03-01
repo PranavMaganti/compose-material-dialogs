@@ -19,6 +19,7 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,6 +56,7 @@ class MaterialDialog(
     private val showing: MutableState<Boolean> = mutableStateOf(false)
 
     val buttons = MaterialDialogButtons(this)
+
     val callbacks = mutableListOf<() -> Unit>()
     val callbackCounter = AtomicInteger(0)
 
@@ -197,7 +199,7 @@ class MaterialDialog(
             Spacer(Modifier.width(14.dp))
             Text(
                 text = titleText,
-                color = MaterialTheme.colors.onSurface,
+                color = MaterialTheme.colors.onBackground,
                 style = MaterialTheme.typography.h6
             )
         }
@@ -315,15 +317,14 @@ class MaterialDialog(
         onInput: (String) -> Unit = {}
     ) {
         var text by remember { mutableStateOf(prefill) }
-        val valid = rememberSaveable(text) { isTextValid(text) }
+        val valid = remember(text) { isTextValid(text) }
 
-        val positiveEnabledIndex =
-            rememberSaveable {
+        val positiveEnabledIndex = remember {
                 val index = positiveEnabledCounter.getAndIncrement()
                 positiveEnabled.add(index, valid)
                 index
             }
-        val callbackIndex = rememberSaveable {
+        val callbackIndex = remember {
             val index = callbackCounter.getAndIncrement()
             if (waitForPositiveButton) {
                 callbacks.add(index) { onInput(text) }
@@ -333,7 +334,6 @@ class MaterialDialog(
             index
         }
 
-        // TODO: Look into alternative as DisposableEffect should usually not have empty onDispose
         DisposableEffect(valid) {
             setPositiveEnabled(positiveEnabledIndex, valid)
             onDispose { }
