@@ -128,7 +128,7 @@ class MaterialDialog(
                     onDispose { resetDialog() }
                 }
 
-                Column(Modifier.fillMaxWidth().clipToBounds().background(backgroundColor)) {
+                Column(Modifier.fillMaxWidth().background(backgroundColor).clipToBounds()) {
                     this@MaterialDialog.content()
                 }
             }

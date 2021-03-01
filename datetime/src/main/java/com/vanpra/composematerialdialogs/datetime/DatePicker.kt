@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -79,7 +78,7 @@ fun MaterialDialog.datepicker(
 ) {
     val datePickerData = remember { DatePickerData(initialDate) }
 
-    DatePickerLayout(datePickerData, yearRange)
+    DatePickerImpl(datePickerData, yearRange)
 
     buttons {
         positiveButton("Ok") {
@@ -92,7 +91,7 @@ fun MaterialDialog.datepicker(
 }
 
 @Composable
-internal fun DatePickerLayout(datePickerData: DatePickerData, yearRange: IntRange) {
+internal fun DatePickerImpl(datePickerData: DatePickerData, yearRange: IntRange) {
     /* Height doesn't include datePickerData height */
     Column(Modifier.size(328.dp, 460.dp)) {
         CalendarHeader(datePickerData)
@@ -320,7 +319,7 @@ fun DateSelectionBox(date: Int, selected: Boolean, onClick: () -> Unit) {
         Text(
             date.toString(),
             modifier = Modifier
-                .size(36.dp)
+                .size(32.dp)
                 .clip(CircleShape)
                 .background(backgroundColor)
                 .wrapContentSize(Alignment.Center),
@@ -386,17 +385,7 @@ private fun CalendarHeader(datePickerData: DatePickerData) {
                     color = MaterialTheme.colors.onPrimary,
                     style = TextStyle(fontSize = 30.sp, fontWeight = W400)
                 )
-
-                Image(
-                    Icons.Default.Edit,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .align(Alignment.CenterEnd),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary)
-                )
             }
-
         }
     }
 }

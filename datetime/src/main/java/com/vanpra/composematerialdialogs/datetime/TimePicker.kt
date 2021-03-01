@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -49,8 +50,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
@@ -203,13 +206,6 @@ fun MaterialDialog.timepicker(
         negativeButton("Cancel") {
             onCancel()
         }
-
-        val icon = remember(timePickerState.clockInput) {
-            if (timePickerState.clockInput) Icons.Default.Keyboard else Icons.Default.Schedule
-        }
-        accessibilityButton(icon) {
-            timePickerState.clockInput = !timePickerState.clockInput
-        }
     }
 }
 
@@ -223,31 +219,23 @@ internal fun TimePickerImpl(
         TimeLayout(state)
 
         Spacer(modifier = Modifier.height(36.dp))
+        Crossfade(state.currentScreen) {
+            when (it) {
+                ClockScreen.Hour -> ClockLayout(
+                    anchorPoints = 12,
+                    label = { index -> if (index == 0) "12" else index.toString() },
+                    onAnchorChange = { hours -> state.selectedTime.hour = hours },
+                    startAnchor = state.selectedTime.hour,
+                    onLift = { state.currentScreen = ClockScreen.Minute }
+                )
 
-        AnimatedVisibility(
-            modifier = Modifier.clipToBounds(),
-            visible = state.clockInput,
-            enter = slideInVertically({ -it }) + expandVertically(),
-            exit = slideOutVertically({ -it }) + shrinkVertically()
-        ) {
-            Crossfade(state.currentScreen) {
-                when (it) {
-                    ClockScreen.Hour -> ClockLayout(
-                        anchorPoints = 12,
-                        label = { index -> if (index == 0) "12" else index.toString() },
-                        onAnchorChange = { hours -> state.selectedTime.hour = hours },
-                        startAnchor = state.selectedTime.hour,
-                        onLift = { state.currentScreen = ClockScreen.Minute }
-                    )
-
-                    ClockScreen.Minute -> ClockLayout(
-                        anchorPoints = 60,
-                        label = { index -> index.toString().padStart(2, '0') },
-                        onAnchorChange = { mins -> state.selectedTime.minute = mins },
-                        startAnchor = state.selectedTime.minute,
-                        isNamedAnchor = { anchor -> anchor % 5 == 0 }
-                    )
-                }
+                ClockScreen.Minute -> ClockLayout(
+                    anchorPoints = 60,
+                    label = { index -> index.toString().padStart(2, '0') },
+                    onAnchorChange = { mins -> state.selectedTime.minute = mins },
+                    startAnchor = state.selectedTime.minute,
+                    isNamedAnchor = { anchor -> anchor % 5 == 0 }
+                )
             }
         }
 
@@ -301,26 +289,12 @@ internal fun TimeLayout(state: TimePickerState) {
 
 
     Row(Modifier.height(80.dp)) {
-        if (state.clockInput) {
-            ClockLabel(
-                text = state.selectedTime.hour.toString(),
-                backgroundColor = state.colors.backgroundColor(state.currentScreen.isHour()).value,
-                textColor = state.colors.textColor(state.currentScreen.isHour()).value,
-                onClick = { state.currentScreen = ClockScreen.Hour }
-            )
-        } else {
-            OutlinedTextField(
-                modifier = Modifier.width(96.dp).fillMaxHeight(),
-                value = state.selectedTime.hour.toString(),
-                onValueChange = { /*TODO*/ },
-                textStyle = TextStyle(
-                    fontSize = 50.sp,
-                    color = MaterialTheme.colors.onBackground,
-                    textAlign = TextAlign.Center
-                ),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
-        }
+        ClockLabel(
+            text = state.selectedTime.hour.toString(),
+            backgroundColor = state.colors.backgroundColor(state.currentScreen.isHour()).value,
+            textColor = state.colors.textColor(state.currentScreen.isHour()).value,
+            onClick = { state.currentScreen = ClockScreen.Hour }
+        )
 
         Box(
             Modifier.width(24.dp).fillMaxHeight(),

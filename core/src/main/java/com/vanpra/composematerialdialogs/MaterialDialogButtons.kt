@@ -18,7 +18,7 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.dp
 import java.util.*
 
-enum class MaterialDialogButtonTypes {
+internal enum class MaterialDialogButtonTypes {
     Text,
     Positive,
     Negative,
