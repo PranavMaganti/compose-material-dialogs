@@ -4,7 +4,7 @@
 
 ### [See Releases and Changelog](https://github.com/vanpra/compose-material-dialogs/blob/main/CHANGELOG.md)
 
-**Current Compose Version: 1.0.0-alpha10**
+**Current Compose Version: 1.0.0-beta01**
 
 ## Credits
 
@@ -21,7 +21,7 @@ This library's design is heavily inspired by https://github.com/afollestad/mater
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:core:0.2.11" 
+  implementation "com.vanpra.compose-material-dialogs:core:0.3.0" 
   ...
 }
 ```
@@ -30,14 +30,14 @@ dependencies {
 
 #### [Date and Time Picker Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/documentation/DateTimePicker.md)
 
-![](https://raw.githubusercontent.com/vanpra/ComposeDateTimePicker/master/imgs/datetime.jpg)
+![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/date_and_time.png)
 
  [ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs%3Adatetime/images/download.svg) ](https://bintray.com/vanpra/maven/compose-material-dialogs%3Adatetime/_latestVersion)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:datetime:0.2.11"
+  implementation "com.vanpra.compose-material-dialogs:datetime:0.3.0"
   ...
 }
 ```
@@ -53,7 +53,7 @@ dependencies {
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:color:0.2.11"
+  implementation "com.vanpra.compose-material-dialogs:color:0.3.0"
   ...
 }
 ```

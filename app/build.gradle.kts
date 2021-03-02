@@ -9,7 +9,7 @@ android {
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
-        applicationId = "com.vanpra.amblor"
+        applicationId = "com.vanpra.composematerialdialogs"
         minSdkVersion(23)
         targetSdkVersion(30)
         versionCode = 1
@@ -28,14 +28,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    kotlinOptions {
-        jvmTarget = "1.8"
-        useIR = true
-    }
-
     composeOptions {
         kotlinCompilerExtensionVersion = Dependencies.AndroidX.Compose.version
-        kotlinCompilerVersion = Dependencies.Kotlin.version
     }
 
 }
@@ -54,12 +48,12 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.ui)
     implementation(Dependencies.AndroidX.Compose.material)
     implementation(Dependencies.AndroidX.Compose.materialIconsExtended)
+    implementation(Dependencies.AndroidX.composeActivity)
 
     implementation(Dependencies.AndroidX.coreKtx)
     implementation(Dependencies.AndroidX.appcompat)
 
     implementation(Dependencies.material)
 
-    implementation(Dependencies.Accompanist.coil)
     implementation(kotlin("stdlib-jdk8"))
 }

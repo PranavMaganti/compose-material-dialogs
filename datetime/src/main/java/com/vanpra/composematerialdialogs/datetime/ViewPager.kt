@@ -1,31 +1,27 @@
 package com.vanpra.composematerialdialogs.datetime
 
-import androidx.compose.animation.animatedFloat
-import androidx.compose.animation.core.AnimatedFloat
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationEndReason
-import androidx.compose.animation.core.SpringSpec
-import androidx.compose.foundation.ScrollableRow
-import androidx.compose.foundation.animation.FlingConfig
-import androidx.compose.foundation.animation.fling
+import androidx.compose.animation.core.calculateTargetValue
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.defaultDecayAnimationSpec
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.preferredWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.platform.AmbientDensity
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.layoutId
+import kotlinx.coroutines.launch
 import kotlin.math.abs
-import kotlin.math.sign
 
 /**
  * @brief Interface used to pass data to children of ViewPager
@@ -39,24 +35,34 @@ interface ViewPagerScope {
     /**
      * @brief Scroll viewpager to next page
      */
-    fun next()
+    suspend fun next()
 
     /**
      * @brief Scroll viewpager to previous page
      */
-    fun previous()
+    suspend fun previous()
+
+    /**
+     * @brief Changes current index based on the value given
+     */
+    suspend fun plusPages(pages: Int)
 }
 
 private data class ViewPagerImpl(
     override val index: Int,
-    val increment: (Int) -> Unit
+    val increment: suspend (Int) -> Unit,
+    val moveBy: suspend (Int) -> Unit
 ) : ViewPagerScope {
-    override fun next() {
+    override suspend fun next() {
         increment(1)
     }
 
-    override fun previous() {
+    override suspend fun previous() {
         increment(-1)
+    }
+
+    override suspend fun plusPages(pages: Int) {
+        moveBy(pages)
     }
 }
 
@@ -68,105 +74,98 @@ fun ViewPager(
     modifier: Modifier = Modifier,
     onNext: () -> Unit = {},
     onPrevious: () -> Unit = {},
-    useAlpha: Boolean = false,
     enabled: Boolean = true,
     content: @Composable ViewPagerScope.() -> Unit
 ) {
-    Column(Modifier.background(Color.Transparent)) {
-        WithConstraints {
-            val alphas = remember { mutableStateOf(mutableListOf(1f, 1f, 1f)) }
-            val width = constraints.maxWidth.toFloat()
-            val offset = animatedFloat(width)
-            offset.setBounds(0f, 2 * width)
+    BoxWithConstraints(Modifier.background(Color.Transparent)) {
+        val coroutineScope = rememberCoroutineScope()
+        val width = remember(constraints) { constraints.maxWidth.toFloat() }
+        val offset = remember { Animatable(initialValue = 0f) }
+        offset.updateBounds(lowerBound = -width, upperBound = width)
 
-            val anchors = listOf(0f, width, 2 * width)
-            val index = remember { mutableStateOf(0) }
+        val draggableState = rememberDraggableState {
+            coroutineScope.launch {
+                val old = offset.value
+                offset.snapTo(offset.value - it)
+                offset.value - old
+            }
+        }
 
-            val flingConfig = FlingConfig(
-                anchors,
-                animationSpec = SpringSpec(dampingRatio = 0.8f, stiffness = 1000f),
-            )
+        val anchors = remember { listOf(-width, 0f, width) }
+        val index = remember { mutableStateOf(0) }
 
-            val increment = { increment: Int ->
-                offset.animateTo(
-                    width * sign(increment.toDouble()).toFloat() + width,
-                    onEnd = { animationEndReason, _ ->
-                        if (animationEndReason != AnimationEndReason.Interrupted) {
-                            index.value += increment
-                            offset.snapTo(width)
+        val increment: suspend (Int) -> Unit = { increment: Int ->
+            val animationResult = offset.animateTo(width * -increment)
+            if (animationResult.endReason == AnimationEndReason.Finished ||
+                animationResult.endReason == AnimationEndReason.BoundReached
+            ) {
+                index.value += increment
+                offset.snapTo(0f)
+            }
+        }
+
+        val moveBy: suspend (Int) -> Unit = { pages: Int ->
+            index.value += pages
+            offset.snapTo(0f)
+        }
+
+        val decayAnimation = defaultDecayAnimationSpec()
+        val draggable = remember {
+            modifier.draggable(
+                state = draggableState,
+                orientation = Orientation.Horizontal,
+                onDragStopped = { velocity ->
+                    val initialTarget =
+                        decayAnimation.calculateTargetValue(offset.value, -2f * velocity)
+                    val target = anchors.minByOrNull { abs(it - initialTarget) } ?: 0f
+                    val flingResult = offset.animateTo(target, spring())
+                    offset.snapTo(0f)
+
+                    if (flingResult.endReason == AnimationEndReason.Finished) {
+                        if (flingResult.endState.value < 0) {
+                            index.value += 1
+                            onNext()
+                        } else if (flingResult.endState.value > 0) {
+                            index.value -= 1
+                            onPrevious()
                         }
                     }
-                )
-            }
-
-            val draggable = modifier.draggable(
-                orientation = Orientation.Horizontal,
-                onDrag = {
-                    val old = offset.value
-                    offset.snapTo(offset.value - (it * 0.5f))
-                    offset.value - old
                 },
-                onDragStopped = {
-                    offset.fling(
-                        -(it * 0.6f),
-                        config = flingConfig,
-                        onAnimationEnd = { reason, end, _ ->
-                            offset.snapTo(width)
-
-                            if (reason != AnimationEndReason.Interrupted) {
-                                if (end == width * 2) {
-                                    index.value += 1
-                                    onNext()
-                                } else if (end == 0f) {
-                                    index.value -= 1
-                                    onPrevious()
-                                }
-                            }
-                        }
-                    )
-                },
+                reverseDirection = true,
                 enabled = enabled
             )
+        }
 
-            onCommit(
-                index.value,
-                {
-                    if (useAlpha) {
-                        if (offset.value < width) {
-                            alphas.value[0] = 1 - offset.value / width
-                        } else if (offset.value > width) {
-                            alphas.value[2] = ((offset.value - width) / width)
-                        }
-
-                        alphas.value[1] = 1 - abs(offset.value - width) / width
+        Layout(
+            content = {
+                val shownIndexes = remember(offset.value) {
+                    when {
+                        offset.value < 0 -> listOf(0, 1)
+                        offset.value > 0 -> listOf(-1, 0)
+                        else -> listOf(0)
                     }
                 }
-            )
 
-            ScrollableRow(
-                content = {
-                    Row(
-                        draggable.preferredWidth(maxWidth * 3)
-                            .offset(-offset.toDp())
-                    ) {
-                        for (x in -1..1) {
-                            val previous = offset.value < width && x == -1
-                            val current = x == 0
-                            val next = offset.value > width && x == 1
-
-                            Column(Modifier.preferredWidth(maxWidth).alpha(alphas.value[x + 1])) {
-                                if (previous || current || next) {
-                                    val viewPagerImpl = ViewPagerImpl(index.value + x, increment)
-                                    content(viewPagerImpl)
-                                }
-                            }
-                        }
+                shownIndexes.forEach { x ->
+                    Column(Modifier.width(this@BoxWithConstraints.maxWidth).layoutId(x)) {
+                        val viewPagerImpl = ViewPagerImpl(index.value + x, increment, moveBy)
+                        content(viewPagerImpl)
                     }
                 }
-            )
+            },
+            modifier = draggable
+        ) { measurables, constraints ->
+            val placeables = measurables.map { it.layoutId to it.measure(constraints) }
+            val height = placeables.maxByOrNull { it.second.height }?.second?.height ?: 0
+
+            layout(constraints.maxWidth, height) {
+                placeables.forEach { (layoutId, placeable) ->
+                    placeable.place(
+                        x = offset.value.toInt() + (layoutId as Int) * constraints.maxWidth,
+                        y = 0
+                    )
+                }
+            }
         }
     }
 }
-
-@Composable
-private fun AnimatedFloat.toDp(): Dp = with(AmbientDensity.current) { this@toDp.value.toDp() }

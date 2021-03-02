@@ -30,7 +30,7 @@ Note, this only has to be done if you intend to target an Android API level < 26
 
 ### Date Picker
 
-![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/date.jpg)
+![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/date.png)
 
 ```kotlin
 val dialog = MaterialDialog()
@@ -46,7 +46,7 @@ dialog.show()
 
 ### Time Picker
 
-![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/time.jpg)
+![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/time.png)
 
 ```kotlin
 dialog.build {
@@ -62,8 +62,6 @@ dialog.build {
 
 ### Date and Time Picker
 
-![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/datetime.jpg)
-
 ```kotlin
 dialog.build {
     datetimepicker { dateTime ->
@@ -72,7 +70,7 @@ dialog.build {
 }
 ```
 
-Unlike the other two dialogs the date and time picker has a title build-in and also had a title parameter which can be used set the title. This is needed as the date time picker uses the title space to show the back button.
+This combines both the time and date picker dialogs into one so that the user can input both values without switching between dialogs. 
 
 ### Change initial date
 

@@ -8,6 +8,8 @@ android {
     defaultConfig {
         minSdkVersion(21)
         targetSdkVersion(30)
+        compileSdkVersion(30)
+
         versionCode = 1
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -22,10 +24,20 @@ android {
             )
         }
     }
+
+    buildFeatures.compose = true
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = Dependencies.AndroidX.Compose.version
+    }
 }
 
 dependencies {
-    implementation(Dependencies.Accompanist.coil)
     implementation(kotlin("stdlib-jdk8"))
 }
 
