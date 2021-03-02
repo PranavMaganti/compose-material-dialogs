@@ -30,7 +30,7 @@ dependencies {
 
 #### [Date and Time Picker Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/documentation/DateTimePicker.md)
 
-![](https://raw.githubusercontent.com/vanpra/ComposeDateTimePicker/master/imgs/date_and_time.png)
+![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/date_and_time.png)
 
  [ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs%3Adatetime/images/download.svg) ](https://bintray.com/vanpra/maven/compose-material-dialogs%3Adatetime/_latestVersion)
 
