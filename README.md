@@ -60,5 +60,4 @@ dependencies {
 
 ## To do
 
-1. [WIP] Add year picker to date dialog
-2. Add tests to all modules
+1. Add tests to all modules
