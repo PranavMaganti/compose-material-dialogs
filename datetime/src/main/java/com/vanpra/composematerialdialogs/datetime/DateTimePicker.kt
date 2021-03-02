@@ -46,13 +46,14 @@ fun MaterialDialog.datetimepicker(
                 scrollTo.value = this@BoxWithConstraints.constraints.maxWidth.toFloat()
             }
 
-
-            Layout(content = {
-                DatePickerImpl(state = datePickerState, yearRange = yearRange)
-                TimePickerImpl(state = timePickerState) {
-                    coroutineScope.launch { scrollPos.animateTo(0f) }
+            Layout(
+                content = {
+                    DatePickerImpl(state = datePickerState, yearRange = yearRange)
+                    TimePickerImpl(state = timePickerState) {
+                        coroutineScope.launch { scrollPos.animateTo(0f) }
+                    }
                 }
-            }) { measurables, constraints ->
+            ) { measurables, constraints ->
                 val placeables = measurables.map { it.measure(constraints) }
                 val height = placeables.maxByOrNull { it.height }?.height ?: 0
 

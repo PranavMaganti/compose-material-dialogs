@@ -36,14 +36,20 @@ fun DateTimeDialogDemo() {
             )
         }
 
-        timepicker(colors = colors)
+        timepicker(colors = colors) {
+            println(it.toString())
+        }
     }
 
     DialogAndShowButton(buttonText = "Date Picker Dialog") {
-        datepicker()
+        datepicker {
+            println(it.toString())
+        }
     }
 
     DialogAndShowButton(buttonText = "Date and Time Picker Dialog") {
-        datetimepicker()
+        datetimepicker {
+            println(it.toString())
+        }
     }
 }

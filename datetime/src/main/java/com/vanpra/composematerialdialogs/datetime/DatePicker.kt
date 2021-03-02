@@ -30,7 +30,6 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -135,7 +134,8 @@ private fun ViewPagerScope.YearPicker(
     LazyColumn(
         modifier = Modifier
             .background(MaterialTheme.colors.surface)
-            .padding(start = 24.dp, end = 24.dp), state = state
+            .padding(start = 24.dp, end = 24.dp),
+        state = state
     ) {
         for (i in yearRange step 3) {
             item {
@@ -267,7 +267,7 @@ private fun CalendarView(viewDate: LocalDate, datePickerData: DatePickerState) {
         val month = remember(viewDate) { getDates(viewDate) }
         val possibleSelected = remember(datePickerData.selected, viewDate) {
             viewDate.year == datePickerData.selected.year &&
-                    viewDate.month == datePickerData.selected.month
+                viewDate.month == datePickerData.selected.month
         }
 
         for (y in 0..5) {
@@ -317,7 +317,8 @@ private fun DateSelectionBox(date: Int, selected: Boolean, onClick: () -> Unit) 
                 interactionSource = MutableInteractionSource(),
                 onClick = onClick,
                 indication = null
-            ), contentAlignment = Alignment.Center
+            ),
+        contentAlignment = Alignment.Center
     ) {
         Text(
             date.toString(),

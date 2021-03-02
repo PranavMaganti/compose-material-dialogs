@@ -2,7 +2,6 @@ package com.vanpra.composematerialdialogs.color
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -107,25 +106,27 @@ fun MaterialDialog.colorChooser(
                 enabled = allowCustomArgb
             )
         ) {
-            
+
             if (allowCustomArgb) {
                 PageIndicator(swipeState, this@BoxWithConstraints.constraints)
             }
 
-            Layout(content = {
-                ColorGridLayout(
-                    Modifier.width(this@BoxWithConstraints.maxWidth),
-                    colors = colors,
-                    selectedColor = selectedColor,
-                    subColors = subColors,
-                    waitForPositiveButton = waitForPositiveButton,
-                    onColorSelected = onColorSelected
-                )
+            Layout(
+                content = {
+                    ColorGridLayout(
+                        Modifier.width(this@BoxWithConstraints.maxWidth),
+                        colors = colors,
+                        selectedColor = selectedColor,
+                        subColors = subColors,
+                        waitForPositiveButton = waitForPositiveButton,
+                        onColorSelected = onColorSelected
+                    )
 
-                Box(Modifier.width(this@BoxWithConstraints.maxWidth)) {
-                    CustomARGB(selectedColor)
+                    Box(Modifier.width(this@BoxWithConstraints.maxWidth)) {
+                        CustomARGB(selectedColor)
+                    }
                 }
-            }) { measurables, constraints ->
+            ) { measurables, constraints ->
                 val placeables = measurables.map { it.measure(constraints) }
                 val height = placeables.maxByOrNull { it.height }?.height ?: 0
 
@@ -314,7 +315,7 @@ private fun ColorGridLayout(
                 }
             }
         } else {
-            //TODO: Remove indication
+            // TODO: Remove indication
             Box(
                 Modifier
                     .size(itemSizeDp)
@@ -350,7 +351,7 @@ private fun ColorGridLayout(
 @Composable
 private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
     Box(
-        //TODO: Remove indication
+        // TODO: Remove indication
         Modifier
             .size(itemSizeDp)
             .clip(CircleShape)
@@ -389,8 +390,7 @@ private fun GridView(
                         .padding(top = 8.dp, start = 24.dp, end = 24.dp)
                         .fillMaxWidth()
                         .align(Alignment.Center)
-                )
-                { measurables, constraints ->
+                ) { measurables, constraints ->
                     val spacing =
                         (constraints.maxWidth - (itemSize * itemsInRow)) / (itemsInRow - 1)
                     val rows = (measurables.size / itemsInRow) + 1

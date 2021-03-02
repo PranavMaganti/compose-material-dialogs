@@ -96,8 +96,9 @@ fun ViewPager(
 
         val increment: suspend (Int) -> Unit = { increment: Int ->
             val animationResult = offset.animateTo(width * -increment)
-            if (animationResult.endReason == AnimationEndReason.Finished
-                || animationResult.endReason == AnimationEndReason.BoundReached) {
+            if (animationResult.endReason == AnimationEndReason.Finished ||
+                animationResult.endReason == AnimationEndReason.BoundReached
+            ) {
                 index.value += increment
                 offset.snapTo(0f)
             }
@@ -135,22 +136,25 @@ fun ViewPager(
             )
         }
 
-        Layout(content = {
-            val shownIndexes = remember(offset.value) {
-                when {
-                    offset.value < 0 -> listOf(0, 1)
-                    offset.value > 0 -> listOf(-1, 0)
-                    else -> listOf(0)
+        Layout(
+            content = {
+                val shownIndexes = remember(offset.value) {
+                    when {
+                        offset.value < 0 -> listOf(0, 1)
+                        offset.value > 0 -> listOf(-1, 0)
+                        else -> listOf(0)
+                    }
                 }
-            }
 
-            shownIndexes.forEach { x ->
-                Column(Modifier.width(this@BoxWithConstraints.maxWidth).layoutId(x)) {
-                    val viewPagerImpl = ViewPagerImpl(index.value + x, increment, moveBy)
-                    content(viewPagerImpl)
+                shownIndexes.forEach { x ->
+                    Column(Modifier.width(this@BoxWithConstraints.maxWidth).layoutId(x)) {
+                        val viewPagerImpl = ViewPagerImpl(index.value + x, increment, moveBy)
+                        content(viewPagerImpl)
+                    }
                 }
-            }
-        }, modifier = draggable) { measurables, constraints ->
+            },
+            modifier = draggable
+        ) { measurables, constraints ->
             val placeables = measurables.map { it.layoutId to it.measure(constraints) }
             val height = placeables.maxByOrNull { it.second.height }?.second?.height ?: 0
 

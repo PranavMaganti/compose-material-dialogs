@@ -131,7 +131,6 @@ interface TimePickerColors {
     @Composable
     fun textColor(active: Boolean): State<Color>
 
-
     fun selectorColor(): Color
     fun selectorTextColor(): Color
 
@@ -243,7 +242,6 @@ internal class TimePickerState(
     var clockInput by mutableStateOf(clockInput)
 }
 
-
 /**
  * @brief A time picker dialog
  *
@@ -289,7 +287,7 @@ internal fun TimePickerImpl(
                     anchorPoints = 12,
                     label = { index -> if (index == 0) "12" else index.toString() },
                     onAnchorChange = { hours -> state.selectedTime.hour = hours },
-                    startAnchor = state.selectedTime.hour,
+                    startAnchor = if (state.selectedTime.hour == 12) 0 else state.selectedTime.hour,
                     onLift = { state.currentScreen = ClockScreen.Minute },
                     colors = state.colors
                 )
@@ -344,7 +342,6 @@ internal fun TimePickerTitle(onBack: (() -> Unit)?) {
     }
 }
 
-
 @Composable
 internal fun ClockLabel(
     text: String,
@@ -378,7 +375,6 @@ internal fun TimeLayout(state: TimePickerState) {
     )
     val bottomPeriodShape =
         MaterialTheme.shapes.medium.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp))
-
 
     Row(Modifier.height(80.dp)) {
         ClockLabel(
@@ -472,9 +468,7 @@ private fun ClockLayout(
         anchors
     }
 
-    val anchoredOffset = remember {
-        mutableStateOf(anchors[startAnchor])
-    }
+    val anchoredOffset = remember { mutableStateOf(anchors[startAnchor]) }
 
     fun updateAnchor(newOffset: Offset) {
         val absDiff = anchors.map {
@@ -491,7 +485,6 @@ private fun ClockLayout(
         }
     }
 
-
     val dragObserver: suspend PointerInputScope.() -> Unit = {
         detectDragGestures(
             onDragEnd = { onLift() }
@@ -502,13 +495,15 @@ private fun ClockLayout(
     }
 
     val tapObserver: suspend PointerInputScope.() -> Unit = {
-        detectTapGestures(onPress = {
-            updateAnchor(it)
-            val success = tryAwaitRelease()
-            if (success) {
-                onLift()
+        detectTapGestures(
+            onPress = {
+                updateAnchor(it)
+                val success = tryAwaitRelease()
+                if (success) {
+                    onLift()
+                }
             }
-        })
+        )
     }
 
     BoxWithConstraints(
@@ -576,7 +571,6 @@ private fun ClockLayout(
                     )
                 }
             }
-
         }
     }
 }
