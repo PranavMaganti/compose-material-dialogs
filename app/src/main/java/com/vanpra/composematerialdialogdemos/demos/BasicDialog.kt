@@ -1,7 +1,5 @@
 package com.vanpra.composematerialdialogdemos.demos
 
-import android.util.Log
-import android.util.Patterns
 import androidx.compose.foundation.Image
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
@@ -57,32 +55,32 @@ fun BasicDialogDemo() {
         }
     }
 
-    DialogAndShowButton(buttonText = "Basic Input Dialog") {
-        title(res = R.string.input_dialog_title)
-        input(label = "Name", hint = "Jon Smith")
-        buttons {
-            negativeButton("Cancel")
-            positiveButton("Ok")
-        }
-    }
-
-    DialogAndShowButton(buttonText = "Input Dialog with input validation") {
-        title("Please enter your email")
-        input(
-            label = "Email",
-            hint = "hello@example.com",
-            errorMessage = "Invalid email",
-            isTextValid = {
-                Patterns.EMAIL_ADDRESS.matcher(it).matches() && it.isNotEmpty()
-            }
-        ) {
-            Log.d("SELECTION:", it)
-        }
-
-        buttons {
-            negativeButton("Cancel")
-            positiveButton("Ok")
-        }
-
-    }
+//    DialogAndShowButton(buttonText = "Basic Input Dialog") {
+//        title(res = R.string.input_dialog_title)
+//        input(label = "Name", hint = "Jon Smith")
+//        buttons {
+//            negativeButton("Cancel")
+//            positiveButton("Ok")
+//        }
+//    }
+//
+//    DialogAndShowButton(buttonText = "Input Dialog with input validation") {
+//        title("Please enter your email")
+//        input(
+//            label = "Email",
+//            hint = "hello@example.com",
+//            errorMessage = "Invalid email",
+//            isTextValid = {
+//                Patterns.EMAIL_ADDRESS.matcher(it).matches() && it.isNotEmpty()
+//            }
+//        ) {
+//            Log.d("SELECTION:", it)
+//        }
+//
+//        buttons {
+//            negativeButton("Cancel")
+//            positiveButton("Ok")
+//        }
+//
+//    }
 }

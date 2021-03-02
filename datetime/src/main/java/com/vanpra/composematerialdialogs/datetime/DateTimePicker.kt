@@ -1,29 +1,14 @@
 package com.vanpra.composematerialdialogs.datetime
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -39,7 +24,7 @@ import java.time.LocalDateTime
 @Composable
 fun MaterialDialog.datetimepicker(
     initialDateTime: LocalDateTime = LocalDateTime.now(),
-    timePickerColors: TimePickerColors = DialogDefaults.timePickerColors(),
+    timePickerColors: TimePickerColors = TimePickerDefaults.colors(),
     yearRange: IntRange = IntRange(1900, 2100),
     onCancel: () -> Unit = {},
     onComplete: (LocalDateTime) -> Unit = {}

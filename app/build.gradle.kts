@@ -9,7 +9,7 @@ android {
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
-        applicationId = "com.vanpra.amblor"
+        applicationId = "com.vanpra.composematerialdialogs"
         minSdkVersion(23)
         targetSdkVersion(30)
         versionCode = 1

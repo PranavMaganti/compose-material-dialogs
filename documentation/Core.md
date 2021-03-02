@@ -33,6 +33,11 @@ dialog.build {
         positiveButton("Ok", onClick = { 
             //Do Something
         })
+        
+        button("Later", onClick = {
+            //Do Something
+        })
+        
         negativeButton("Cancel", onClick = { 
             //Do Something
         })
@@ -40,11 +45,9 @@ dialog.build {
 }
 ```
 
-If the text of the buttons is too long to fit in one row the buttons will be automatically stacked on top on one another:
+If the text of the buttons is too long to fit in one row the buttons will be automatically stacked on top on one another.
 
-
-
-### Input Dialogs
+### Input Dialogs (Temporarily Removed; Use customView instead) 
 
 <img src="https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/input.jpg" width="300" height="600"  />
 

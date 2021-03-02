@@ -31,7 +31,8 @@ internal enum class MaterialDialogButtonTypes {
  */
 class MaterialDialogButtons(private val dialog: MaterialDialog) {
     /**
-     * Adds a button which is always enabled to the bottom of the dialog
+     * Adds a button which is always enabled to the bottom of the dialog. This should
+     * only be used for neutral actions.
      *
      * @param text the string literal text shown in the button
      * @param res the string resource text shown in the button
@@ -120,6 +121,12 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         }
     }
 
+    /**
+     * Adds a accessibility button to the bottom left of the dialog
+     *
+     * @param icon the icon to be shown on the button
+     * @param onClick a callback which is called when the button is pressed
+     */
     @Composable
     fun accessibilityButton(icon: ImageVector, onClick: () -> Unit) {
         Box(

@@ -201,7 +201,7 @@ private fun ViewPagerScope.CalendarViewHeader(
 
     Box(
         Modifier
-            .background(MaterialTheme.colors.primarySurface)
+            .background(MaterialTheme.colors.background)
             .padding(top = 16.dp, bottom = 16.dp, start = 24.dp, end = 24.dp)
             .height(24.dp)
             .fillMaxWidth()
@@ -301,7 +301,7 @@ private fun CalendarView(viewDate: LocalDate, datePickerData: DatePickerState) {
 }
 
 @Composable
-fun DateSelectionBox(date: Int, selected: Boolean, onClick: () -> Unit) {
+private fun DateSelectionBox(date: Int, selected: Boolean, onClick: () -> Unit) {
     val colors = MaterialTheme.colors
     val backgroundColor = remember(selected) {
         if (selected) colors.primary else colors.surface

@@ -1,5 +1,16 @@
 # Changelog
 
+### 0.3.0 - 2021-03-01
+
+- Update compose version to 1.0.0-beta01
+- Redesign date picker and time picker to match the material specification ([material.io]())
+  - Introduce year picker
+  - Add `colors` attributes to the time picker dialog to allow for more customisation (see time picker documentation)
+  - Add am/pm toggle instead of using 24 hour time 
+  - Known Issue: calendar view can stutter when swiping between months
+- Temporarily remove `input` dialog component due to an unknown internal bug. This will be re-added as soon as a fix/workaround can be found and `customView` can be used in the meantime.
+- Add `button` function to the `MaterialDialogButtons` class which should be used when the button action is neutral. This button will be displayed in-between any `positive` and `negative` buttons which are being used
+
 ### 0.2.11 - 2021-01-14
 
 - Fix issues with disabling positive button for the `input` and `listItemsSingleChoice` components

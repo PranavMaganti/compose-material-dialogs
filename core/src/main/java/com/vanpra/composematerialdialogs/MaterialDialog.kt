@@ -289,91 +289,92 @@ class MaterialDialog(
         }
     }
 
-    /**
-     * @brief Adds an input field with the given parameters to the dialog
-     * @param label string to be shown in the input field before selection eg. Username
-     * @param hint hint to be shown in the input field when it is selected but empty eg. Joe
-     * @param prefill string to be input into the text field by default
-     * @param waitForPositiveButton if true the [onInput] callback will only be called when the
-     * positive button is pressed, otherwise it will be called when the input value is changed
-     * @param visualTransformation a visual transformation of the content of the text field
-     * @param keyboardOptions software keyboard options which can be used to customize parts
-     * of the keyboard
-     * @param errorMessage a message to be shown to the user when the input is not valid
-     * @param isTextValid a function which is called to check if the user input is valid
-     * @param onInput a function which is called with the user input. The timing of this call is
-     * dictated by [waitForPositiveButton]
-     */
-    @Composable
-    fun MaterialDialog.input(
-        label: String,
-        hint: String = "",
-        prefill: String = "",
-        waitForPositiveButton: Boolean = true,
-        visualTransformation: VisualTransformation = VisualTransformation.None,
-        keyboardOptions: KeyboardOptions = KeyboardOptions(),
-        errorMessage: String = "",
-        isTextValid: (String) -> Boolean = { true },
-        onInput: (String) -> Unit = {}
-    ) {
-        var text by remember { mutableStateOf(prefill) }
-        val valid = remember(text) { isTextValid(text) }
-
-        val positiveEnabledIndex = remember {
-                val index = positiveEnabledCounter.getAndIncrement()
-                positiveEnabled.add(index, valid)
-                index
-            }
-        val callbackIndex = remember {
-            val index = callbackCounter.getAndIncrement()
-            if (waitForPositiveButton) {
-                callbacks.add(index) { onInput(text) }
-            } else {
-                callbacks.add(index) { }
-            }
-            index
-        }
-
-        DisposableEffect(valid) {
-            setPositiveEnabled(positiveEnabledIndex, valid)
-            onDispose { }
-        }
-
-        DisposableEffect(Unit) {
-            onDispose {
-                callbacks[callbackIndex] = {}
-                setPositiveEnabled(positiveEnabledIndex, true)
-            }
-        }
-
-        Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)) {
-            TextField(
-                value = text,
-                onValueChange = {
-                    text = it
-                    if (!waitForPositiveButton) {
-                        onInput(text)
-                    }
-                },
-                label = { Text(label, color = MaterialTheme.colors.onBackground.copy(0.8f)) },
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text(hint, color = MaterialTheme.colors.onBackground.copy(0.5f)) },
-                isError = !valid,
-                visualTransformation = visualTransformation,
-                keyboardOptions = keyboardOptions,
-                textStyle = TextStyle(MaterialTheme.colors.onBackground, fontSize = 16.sp)
-            )
-
-            if (!valid) {
-                Text(
-                    errorMessage,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colors.error,
-                    modifier = Modifier.align(Alignment.End)
-                )
-            }
-        }
-    }
+//    /**
+//     * @brief Adds an input field with the given parameters to the dialog
+//     * @param label string to be shown in the input field before selection eg. Username
+//     * @param hint hint to be shown in the input field when it is selected but empty eg. Joe
+//     * @param prefill string to be input into the text field by default
+//     * @param waitForPositiveButton if true the [onInput] callback will only be called when the
+//     * positive button is pressed, otherwise it will be called when the input value is changed
+//     * @param visualTransformation a visual transformation of the content of the text field
+//     * @param keyboardOptions software keyboard options which can be used to customize parts
+//     * of the keyboard
+//     * @param errorMessage a message to be shown to the user when the input is not valid
+//     * @param isTextValid a function which is called to check if the user input is valid
+//     * @param onInput a function which is called with the user input. The timing of this call is
+//     * dictated by [waitForPositiveButton]
+//     */
+//    @Composable
+//    fun MaterialDialog.input(
+//        label: String,
+//        hint: String = "",
+//        prefill: String = "",
+//        waitForPositiveButton: Boolean = true,
+//        visualTransformation: VisualTransformation = VisualTransformation.None,
+//        keyboardOptions: KeyboardOptions = KeyboardOptions(),
+//        errorMessage: String = "",
+//        isTextValid: (String) -> Boolean = { true },
+//        onInput: (String) -> Unit = {}
+//    ) {
+//        var text by remember { mutableStateOf(prefill) }
+//        val valid = remember(text) { isTextValid(text) }
+//
+//        val positiveEnabledIndex = remember {
+//                val index = positiveEnabledCounter.getAndIncrement()
+//                positiveEnabled.add(index, valid)
+//                index
+//            }
+//
+//        val callbackIndex = remember {
+//            val index = callbackCounter.getAndIncrement()
+//            if (waitForPositiveButton) {
+//                callbacks.add(index) { onInput(text) }
+//            } else {
+//                callbacks.add(index) { }
+//            }
+//            index
+//        }
+//
+//        DisposableEffect(valid) {
+//            setPositiveEnabled(positiveEnabledIndex, valid)
+//            onDispose { }
+//        }
+//
+//        DisposableEffect(Unit) {
+//            onDispose {
+//                callbacks[callbackIndex] = {}
+//                setPositiveEnabled(positiveEnabledIndex, true)
+//            }
+//        }
+//
+//        Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)) {
+//            TextField(
+//                value = text,
+//                onValueChange = {
+//                    text = it
+//                    if (!waitForPositiveButton) {
+//                        onInput(text)
+//                    }
+//                },
+//                label = { Text(label, color = MaterialTheme.colors.onBackground.copy(0.8f)) },
+//                modifier = Modifier.fillMaxWidth(),
+//                placeholder = { Text(hint, color = MaterialTheme.colors.onBackground.copy(0.5f)) },
+//                isError = !valid,
+//                visualTransformation = visualTransformation,
+//                keyboardOptions = keyboardOptions,
+//                textStyle = TextStyle(MaterialTheme.colors.onBackground, fontSize = 16.sp)
+//            )
+//
+//            if (!valid) {
+//                Text(
+//                    errorMessage,
+//                    fontSize = 14.sp,
+//                    color = MaterialTheme.colors.error,
+//                    modifier = Modifier.align(Alignment.End)
+//                )
+//            }
+//        }
+//    }
 
     /**
      * Create an view in the dialog with the given content and appropriate padding
