@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import java.util.*
 
@@ -73,11 +74,12 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
     ) {
         val buttonText = getString(res, text).toUpperCase(Locale.ROOT)
         val buttonEnabled = remember(dialog.positiveEnabled) { dialog.positiveEnabled.all { it } }
+        val focusManager = LocalFocusManager.current
 
         TextButton(
             onClick = {
                 if (dialog.isAutoDismiss() && !disableDismiss) {
-                    dialog.hide()
+                    dialog.hide(focusManager)
                 }
 
                 dialog.callbacks.forEach {
@@ -108,10 +110,12 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         onClick: () -> Unit = {}
     ) {
         val buttonText = getString(res, text).toUpperCase(Locale.ROOT)
+        val focusManager = LocalFocusManager.current
+
         TextButton(
             onClick = {
                 if (dialog.isAutoDismiss()) {
-                    dialog.hide()
+                    dialog.hide(focusManager)
                 }
                 onClick()
             },

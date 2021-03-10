@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath(Dependencies.Kotlin.gradlePlugin)
         classpath("org.jmailen.gradle:kotlinter-gradle:3.3.0")
-        classpath("com.android.tools.build:gradle:7.0.0-alpha08")
+        classpath("com.android.tools.build:gradle:7.0.0-alpha09")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
