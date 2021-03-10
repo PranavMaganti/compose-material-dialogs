@@ -1,6 +1,6 @@
 # Compose Material Dialogs
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5990ad24f5ca434299916697e3fc0fe2)](https://app.codacy.com/manual/pranav.maganti/compose-material-dialogs?utm_source=github.com&utm_medium=referral&utm_content=vanpra/compose-material-dialogs&utm_campaign=Badge_Grade_Dashboard)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/042d629ab7dc4c40b6dcb595f286319e)](https://www.codacy.com/gh/vanpra/compose-material-dialogs/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vanpra/compose-material-dialogs&amp;utm_campaign=Badge_Grade)
 
 ### [See Releases and Changelog](https://github.com/vanpra/compose-material-dialogs/blob/main/CHANGELOG.md)
 
