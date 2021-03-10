@@ -322,10 +322,10 @@ class MaterialDialog(
         val valid = remember(text) { isTextValid(text) }
 
         val positiveEnabledIndex = remember {
-                val index = positiveEnabledCounter.getAndIncrement()
-                positiveEnabled.add(index, valid)
-                index
-            }
+            val index = positiveEnabledCounter.getAndIncrement()
+            positiveEnabled.add(index, valid)
+            index
+        }
 
         val callbackIndex = remember {
             val index = callbackCounter.getAndIncrement()
