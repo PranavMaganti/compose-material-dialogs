@@ -7,7 +7,7 @@ The date time picker relies on parts of the`java.time` API  which are only avail
 ````gradle
 android {
 	...
-    compilerOptions {
+    compileOptions {
       // Flag to enable support for the new language APIs
       coreLibraryDesugaringEnabled true
         
