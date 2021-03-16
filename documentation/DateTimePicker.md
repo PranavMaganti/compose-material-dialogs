@@ -33,7 +33,7 @@ Note, this only has to be done if you intend to target an Android API level < 26
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/date.png)
 
 ```kotlin
-val dialog = MaterialDialog()
+val dialog = remember { MaterialDialog() }
 dialog.build {
     ...
     datepicker { date ->
@@ -41,6 +41,7 @@ dialog.build {
     }
 }
 
+/* This should be called in an onClick or an Effect */ 
 dialog.show()
 ```
 

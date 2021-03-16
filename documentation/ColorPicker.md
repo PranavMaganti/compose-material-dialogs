@@ -7,7 +7,7 @@
 Here is an example of how to add a color picker to a dialog:
 
 ``` kotlin
-val dialog = MaterialDialog()
+val dialog = remember { MaterialDialog() }
 
 dialog.build {
     ...
@@ -15,6 +15,7 @@ dialog.build {
     ...
 }
 
+/* This should be called in an onClick or an Effect */ 
 dialog.show()
 ```
 
