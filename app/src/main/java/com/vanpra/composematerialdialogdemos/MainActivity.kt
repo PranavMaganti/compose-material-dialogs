@@ -37,7 +37,7 @@ data class DialogSectionData(val title: String, val content: @Composable () -> U
 fun DialogDemos() {
     val sections = listOf(
         DialogSectionData("Basic Dialogs") { BasicDialogDemo() },
-        DialogSectionData( "Basic List Dialogs") { BasicListDialogDemo() },
+        DialogSectionData("Basic List Dialogs") { BasicListDialogDemo() },
         DialogSectionData("Single Selection List Dialogs") { SingleSelectionDemo() },
         DialogSectionData("Multi-Selection List Dialogs") { MultiSelectionDemo() },
         DialogSectionData("Date and Time Picker Dialogs") { DateTimeDialogDemo() },

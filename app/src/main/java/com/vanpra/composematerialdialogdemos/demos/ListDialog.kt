@@ -73,27 +73,30 @@ fun BasicListDialogDemo() {
 
     DialogAndShowButton(buttonText = "Custom List Dialog") {
         title(res = R.string.backup_dialog_title)
-        listItems(emails, item =  { _, email ->
-            Row(Modifier.fillMaxWidth()) {
-                Image(
-                    Icons.Default.AccountCircle,
-                    contentDescription = "Account icon",
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .size(30.dp),
-                    contentScale = ContentScale.FillHeight,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
-                )
-                Text(
-                    email,
-                    modifier = Modifier
-                        .padding(start = 16.dp)
-                        .align(Alignment.CenterVertically),
-                    color = MaterialTheme.colors.onBackground,
-                    style = MaterialTheme.typography.body1
-                )
+        listItems(
+            emails,
+            item = { _, email ->
+                Row(Modifier.fillMaxWidth()) {
+                    Image(
+                        Icons.Default.AccountCircle,
+                        contentDescription = "Account icon",
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .size(30.dp),
+                        contentScale = ContentScale.FillHeight,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                    )
+                    Text(
+                        email,
+                        modifier = Modifier
+                            .padding(start = 16.dp)
+                            .align(Alignment.CenterVertically),
+                        color = MaterialTheme.colors.onBackground,
+                        style = MaterialTheme.typography.body1
+                    )
+                }
             }
-        })
+        )
     }
 }
 

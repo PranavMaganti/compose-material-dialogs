@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import java.util.*
+import java.util.Locale
 
 internal enum class MaterialDialogButtonTypes {
     Text,
@@ -134,7 +134,9 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
     @Composable
     fun accessibilityButton(icon: ImageVector, onClick: () -> Unit) {
         Box(
-            Modifier.size(48.dp).layoutId(MaterialDialogButtonTypes.Accessibility)
+            Modifier
+                .size(48.dp)
+                .layoutId(MaterialDialogButtonTypes.Accessibility)
                 .clickable(onClick = onClick),
             contentAlignment = Alignment.Center
         ) {

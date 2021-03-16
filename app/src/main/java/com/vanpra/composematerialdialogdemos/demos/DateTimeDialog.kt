@@ -5,12 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
-import com.vanpra.composematerialdialogs.datetime.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.TimePickerColors
+import com.vanpra.composematerialdialogs.datetime.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.datepicker
 import com.vanpra.composematerialdialogs.datetime.datetimepicker
 import com.vanpra.composematerialdialogs.datetime.timepicker
-
 
 /**
  * @brief Date and Time Picker Demos
@@ -27,7 +26,7 @@ fun DateTimeDialogDemo() {
                 selectorColor = purple,
                 inactiveBackgroundColor = Color(0xFF292929),
             )
-        } else  {
+        } else {
             TimePickerDefaults.colors(
                 inactiveBackgroundColor = Color.LightGray,
                 activeBackgroundColor = purple.copy(0.1f),

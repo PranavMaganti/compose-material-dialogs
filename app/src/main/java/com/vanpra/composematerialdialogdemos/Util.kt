@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vanpra.composematerialdialogdemos.ui.dialogBackground
 import com.vanpra.composematerialdialogs.MaterialDialog
 
 /**

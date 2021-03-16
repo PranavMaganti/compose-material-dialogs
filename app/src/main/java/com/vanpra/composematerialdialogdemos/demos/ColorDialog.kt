@@ -13,14 +13,22 @@ import com.vanpra.composematerialdialogs.color.colorChooser
 fun ColorDialogDemo() {
     DialogAndShowButton(buttonText = "Color Picker Dialog") {
         title("Select a Color")
-        colorChooser(colors = ColorPalette.Primary)
-        colorChooserButtons()
+        colorChooser(colors = ColorPalette.Primary, waitForPositiveButton = true) {
+            println(it)
+        }
+        buttons {
+            positiveButton("Select")
+            negativeButton("Cancel")
+        }
     }
 
     DialogAndShowButton(buttonText = "Color Picker Dialog With Sub Colors") {
         title("Select a Sub Color")
         colorChooser(colors = ColorPalette.Primary, subColors = ColorPalette.PrimarySub)
-        colorChooserButtons()
+        buttons {
+            positiveButton("Select")
+            negativeButton("Cancel")
+        }
     }
 
     DialogAndShowButton(buttonText = "Color Picker Dialog With ARGB Selector") {
@@ -30,14 +38,9 @@ fun ColorDialogDemo() {
             subColors = ColorPalette.PrimarySub,
             allowCustomArgb = true
         )
-        colorChooserButtons()
-    }
-}
-
-@Composable
-private fun MaterialDialog.colorChooserButtons() {
-    buttons {
-        positiveButton("Select")
-        negativeButton("Cancel")
+        buttons {
+            positiveButton("Select")
+            negativeButton("Cancel")
+        }
     }
 }

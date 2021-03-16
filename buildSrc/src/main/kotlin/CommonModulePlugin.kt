@@ -23,7 +23,6 @@ class CommonModulePlugin: Plugin<Project> {
             apply("kotlin-android")
             apply("maven-publish")
             apply("com.jfrog.bintray")
-            apply("org.jmailen.kotlinter")
         }
     }
 

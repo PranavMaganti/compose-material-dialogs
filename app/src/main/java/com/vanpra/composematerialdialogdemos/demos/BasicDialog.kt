@@ -83,6 +83,5 @@ fun BasicDialogDemo() {
             negativeButton("Cancel")
             positiveButton("Ok")
         }
-
     }
 }

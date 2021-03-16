@@ -31,8 +31,8 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -85,26 +85,37 @@ fun MaterialDialog.colorChooser(
     BoxWithConstraints {
         val selectedColor = remember { mutableStateOf(colors[initialSelection]) }
 
-        val anchors = mapOf(0f to "ColorPicker", constraints.maxWidth.toFloat() to "ARGBPicker")
+        val anchors =
+            remember {
+                mapOf(0f to "ColorPicker", constraints.maxWidth.toFloat() to "ARGBPicker")
+            }
         val swipeState = rememberSwipeableState("ColorPicker")
 
-        SideEffect {
+        val callbackIndex = remember(selectedColor.value) {
+            val index = callbackCounter.getAndIncrement()
             if (waitForPositiveButton) {
-                callbacks.add {
-                    onColorSelected(selectedColor.value)
-                }
+                callbacks.add(index) { onColorSelected(selectedColor.value) }
+            } else {
+                callbacks.add(index) { }
             }
+            index
+        }
+
+        DisposableEffect(selectedColor.value) {
+            onDispose { callbacks[callbackIndex] = {} }
         }
 
         Column(
-            Modifier.padding(bottom = 8.dp).swipeable(
-                swipeState,
-                anchors = anchors,
-                orientation = Orientation.Horizontal,
-                reverseDirection = true,
-                resistance = null,
-                enabled = allowCustomArgb
-            )
+            Modifier
+                .padding(bottom = 8.dp)
+                .swipeable(
+                    swipeState,
+                    anchors = anchors,
+                    orientation = Orientation.Horizontal,
+                    reverseDirection = true,
+                    resistance = null,
+                    enabled = allowCustomArgb
+                )
         ) {
 
             if (allowCustomArgb) {
@@ -315,7 +326,6 @@ private fun ColorGridLayout(
                 }
             }
         } else {
-            // TODO: Remove indication
             Box(
                 Modifier
                     .size(itemSizeDp)
@@ -351,7 +361,6 @@ private fun ColorGridLayout(
 @Composable
 private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
     Box(
-        // TODO: Remove indication
         Modifier
             .size(itemSizeDp)
             .clip(CircleShape)
