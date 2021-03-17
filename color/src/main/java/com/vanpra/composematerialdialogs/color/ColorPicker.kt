@@ -31,8 +31,8 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -84,29 +84,43 @@ fun MaterialDialog.colorChooser(
 ) {
     BoxWithConstraints {
         val selectedColor = remember { mutableStateOf(colors[initialSelection]) }
-
-        val anchors = mapOf(0f to "ColorPicker", constraints.maxWidth.toFloat() to "ARGBPicker")
+        val anchors = remember(allowCustomArgb) {
+            if (allowCustomArgb) {
+                mapOf(0f to "ColorPicker", constraints.maxWidth.toFloat() to "ARGBPicker")
+            } else {
+                mapOf(0f to "ColorPicker")
+            }
+        }
         val swipeState = rememberSwipeableState("ColorPicker")
 
-        SideEffect {
+        val index = remember {
+            val callbackIndex = callbackCounter.getAndIncrement()
+            callbacks.add(callbackIndex) {}
+            callbackIndex
+        }
+
+        DisposableEffect(selectedColor.value) {
             if (waitForPositiveButton) {
-                callbacks.add {
-                    onColorSelected(selectedColor.value)
-                }
+                callbacks[index] = { onColorSelected(selectedColor.value) }
+            } else {
+                onColorSelected(selectedColor.value)
             }
+
+            onDispose { callbacks[index] = {} }
         }
 
         Column(
-            Modifier.padding(bottom = 8.dp).swipeable(
-                swipeState,
-                anchors = anchors,
-                orientation = Orientation.Horizontal,
-                reverseDirection = true,
-                resistance = null,
-                enabled = allowCustomArgb
-            )
+            Modifier
+                .padding(bottom = 8.dp)
+                .swipeable(
+                    swipeState,
+                    anchors = anchors,
+                    orientation = Orientation.Horizontal,
+                    reverseDirection = true,
+                    resistance = null,
+                    enabled = allowCustomArgb
+                )
         ) {
-
             if (allowCustomArgb) {
                 PageIndicator(swipeState, this@BoxWithConstraints.constraints)
             }
@@ -118,12 +132,13 @@ fun MaterialDialog.colorChooser(
                         colors = colors,
                         selectedColor = selectedColor,
                         subColors = subColors,
-                        waitForPositiveButton = waitForPositiveButton,
-                        onColorSelected = onColorSelected
+                        initialSelection = initialSelection
                     )
 
-                    Box(Modifier.width(this@BoxWithConstraints.maxWidth)) {
-                        CustomARGB(selectedColor)
+                    if (allowCustomArgb) {
+                        Box(Modifier.width(this@BoxWithConstraints.maxWidth)) {
+                            CustomARGB(selectedColor)
+                        }
                     }
                 }
             ) { measurables, constraints ->
@@ -290,10 +305,9 @@ private fun ColorGridLayout(
     colors: List<Color>,
     selectedColor: MutableState<Color>,
     subColors: List<List<Color>> = listOf(),
-    waitForPositiveButton: Boolean = false,
-    onColorSelected: (Color) -> Unit = {}
+    initialSelection: Int
 ) {
-    var mainSelectedIndex by remember { mutableStateOf(0) }
+    var mainSelectedIndex by remember { mutableStateOf(initialSelection) }
     var showSubColors by remember { mutableStateOf(false) }
 
     val itemSize = with(LocalDensity.current) { itemSizeDp.toPx().toInt() }
@@ -304,11 +318,9 @@ private fun ColorGridLayout(
                 ColorView(color = item, selected = index == mainSelectedIndex) {
                     if (mainSelectedIndex != index) {
                         mainSelectedIndex = index
-                        if (!waitForPositiveButton && subColors.isNotEmpty()) {
-                            selectedColor.value = item
-                            onColorSelected(item)
-                        }
+                        selectedColor.value = item
                     }
+
                     if (subColors.isNotEmpty()) {
                         showSubColors = true
                     }
@@ -339,9 +351,6 @@ private fun ColorGridLayout(
             subColors[mainSelectedIndex].forEachIndexed { _, item ->
                 ColorView(color = item, selected = selectedColor.value == item) {
                     selectedColor.value = item
-                    if (!waitForPositiveButton) {
-                        onColorSelected(item)
-                    }
                 }
             }
         }

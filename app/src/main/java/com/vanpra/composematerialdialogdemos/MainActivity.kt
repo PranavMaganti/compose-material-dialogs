@@ -5,6 +5,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import com.vanpra.composematerialdialogdemos.demos.BasicDialogDemo
 import com.vanpra.composematerialdialogdemos.demos.BasicListDialogDemo
