@@ -7,13 +7,14 @@
 Here is an example to make a basic dialog with a title and text:
 
 ```kotlin
-val dialog = MaterialDialog()
+val dialog = remember { MaterialDialog() }
 
 dialog.build {
     title(text = "Use Location Services?")
     message(res = R.string.location_dialog_message)
 }
 
+/* This should be called in an onClick or an Effect */ 
 dialog.show()
 ```
 
@@ -47,7 +48,7 @@ dialog.build {
 
 If the text of the buttons is too long to fit in one row the buttons will be automatically stacked on top on one another.
 
-### Input Dialogs (Temporarily Removed; Use customView instead) 
+### Input Dialogs 
 
 <img src="https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/input.jpg" width="300" height="600"  />
 

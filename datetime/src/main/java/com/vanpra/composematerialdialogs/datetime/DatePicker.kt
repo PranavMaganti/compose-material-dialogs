@@ -53,7 +53,7 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.TextStyle.FULL
-import java.util.*
+import java.util.Locale
 
 internal class DatePickerState(val current: LocalDate) {
     var selected by mutableStateOf(current)

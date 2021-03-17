@@ -9,6 +9,10 @@ object Dependencies {
         const val color = "com.vanpra.compose-material-dialogs:color:$version"
     }
 
+    object Ktlint {
+        const val version = "0.40.0"
+    }
+
     object Kotlin {
         private const val version = "1.4.31"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"

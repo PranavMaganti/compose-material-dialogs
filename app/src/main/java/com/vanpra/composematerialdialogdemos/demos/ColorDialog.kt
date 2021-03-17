@@ -16,7 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
-import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.color.ColorPalette
 import com.vanpra.composematerialdialogs.color.colorChooser
 
@@ -79,7 +78,6 @@ fun ColorDialogDemo() {
         ) {
             println(it)
         }
-
         buttons {
             positiveButton("Select")
             negativeButton("Cancel")
@@ -96,6 +94,7 @@ fun ColorDialogDemo() {
         ) {
             println(it)
         }
+
         buttons {
             positiveButton("Select")
             negativeButton("Cancel")

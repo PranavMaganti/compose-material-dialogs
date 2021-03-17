@@ -327,7 +327,6 @@ private fun ColorGridLayout(
                 }
             }
         } else {
-            // TODO: Remove indication
             Box(
                 Modifier
                     .size(itemSizeDp)
@@ -360,7 +359,6 @@ private fun ColorGridLayout(
 @Composable
 private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
     Box(
-        // TODO: Remove indication
         Modifier
             .size(itemSizeDp)
             .clip(CircleShape)
