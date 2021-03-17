@@ -56,8 +56,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vanpra.composematerialdialogs.MaterialDialog
 
-val itemSizeDp = 55.dp
-val tickSize = 35.dp
+private val itemSizeDp = 55.dp
+private val tickSize = 35.dp
+
+enum class ColorPickerScreen {
+    Palette,
+    ARGB
+}
 
 /**
  * @brief Adds a color chooser to the dialog
@@ -86,12 +91,15 @@ fun MaterialDialog.colorChooser(
         val selectedColor = remember { mutableStateOf(colors[initialSelection]) }
         val anchors = remember(allowCustomArgb) {
             if (allowCustomArgb) {
-                mapOf(0f to "ColorPicker", constraints.maxWidth.toFloat() to "ARGBPicker")
+                mapOf(
+                    0f to ColorPickerScreen.Palette,
+                    constraints.maxWidth.toFloat() to ColorPickerScreen.ARGB
+                )
             } else {
-                mapOf(0f to "ColorPicker")
+                mapOf(0f to ColorPickerScreen.Palette)
             }
         }
-        val swipeState = rememberSwipeableState("ColorPicker")
+        val swipeState = rememberSwipeableState(ColorPickerScreen.Palette)
 
         val index = remember {
             val callbackIndex = callbackCounter.getAndIncrement()
@@ -159,7 +167,7 @@ fun MaterialDialog.colorChooser(
 }
 
 @Composable
-private fun PageIndicator(swipeState: SwipeableState<String>, constraints: Constraints) {
+private fun PageIndicator(swipeState: SwipeableState<ColorPickerScreen>, constraints: Constraints) {
     Row(
         Modifier
             .fillMaxWidth()

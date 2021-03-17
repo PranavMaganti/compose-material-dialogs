@@ -1,6 +1,5 @@
 package com.vanpra.composematerialdialogdemos.demos
 
-import android.widget.Space
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -16,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
+import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.color.ColorPalette
 import com.vanpra.composematerialdialogs.color.colorChooser
 
@@ -46,10 +46,8 @@ fun ColorDialogDemo() {
         colorChooser(colors = ColorPalette.Primary, waitForPositiveButton = waitForPositiveButton) {
             println(it)
         }
-        buttons {
-            positiveButton("Select")
-            negativeButton("Cancel")
-        }
+
+        defaultButtons()
     }
 
     DialogAndShowButton(buttonText = "Color Picker Dialog With Sub Colors") {
@@ -62,10 +60,7 @@ fun ColorDialogDemo() {
             println(it)
         }
 
-        buttons {
-            positiveButton("Select")
-            negativeButton("Cancel")
-        }
+        defaultButtons()
     }
 
     DialogAndShowButton(buttonText = "Color Picker Dialog With Initial Selection") {
@@ -78,10 +73,7 @@ fun ColorDialogDemo() {
         ) {
             println(it)
         }
-        buttons {
-            positiveButton("Select")
-            negativeButton("Cancel")
-        }
+        defaultButtons()
     }
 
     DialogAndShowButton(buttonText = "Color Picker Dialog With ARGB Selector") {
@@ -94,10 +86,14 @@ fun ColorDialogDemo() {
         ) {
             println(it)
         }
+        defaultButtons()
+    }
+}
 
-        buttons {
-            positiveButton("Select")
-            negativeButton("Cancel")
-        }
+@Composable
+private fun MaterialDialog.defaultButtons() {
+    buttons {
+        positiveButton("Select")
+        negativeButton("Cancel")
     }
 }
