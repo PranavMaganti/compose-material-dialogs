@@ -56,8 +56,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vanpra.composematerialdialogs.MaterialDialog
 
-val itemSizeDp = 55.dp
-val tickSize = 35.dp
+private val itemSizeDp = 55.dp
+private val tickSize = 35.dp
+
+enum class ColorPickerScreen {
+    Palette,
+    ARGB
+}
 
 /**
  * @brief Adds a color chooser to the dialog
@@ -84,25 +89,32 @@ fun MaterialDialog.colorChooser(
 ) {
     BoxWithConstraints {
         val selectedColor = remember { mutableStateOf(colors[initialSelection]) }
-
-        val anchors =
-            remember {
-                mapOf(0f to "ColorPicker", constraints.maxWidth.toFloat() to "ARGBPicker")
-            }
-        val swipeState = rememberSwipeableState("ColorPicker")
-
-        val callbackIndex = remember(selectedColor.value) {
-            val index = callbackCounter.getAndIncrement()
-            if (waitForPositiveButton) {
-                callbacks.add(index) { onColorSelected(selectedColor.value) }
+        val anchors = remember(allowCustomArgb) {
+            if (allowCustomArgb) {
+                mapOf(
+                    0f to ColorPickerScreen.Palette,
+                    constraints.maxWidth.toFloat() to ColorPickerScreen.ARGB
+                )
             } else {
-                callbacks.add(index) { }
+                mapOf(0f to ColorPickerScreen.Palette)
             }
-            index
+        }
+        val swipeState = rememberSwipeableState(ColorPickerScreen.Palette)
+
+        val index = remember {
+            val callbackIndex = callbackCounter.getAndIncrement()
+            callbacks.add(callbackIndex) {}
+            callbackIndex
         }
 
         DisposableEffect(selectedColor.value) {
-            onDispose { callbacks[callbackIndex] = {} }
+            if (waitForPositiveButton) {
+                callbacks[index] = { onColorSelected(selectedColor.value) }
+            } else {
+                onColorSelected(selectedColor.value)
+            }
+
+            onDispose { callbacks[index] = {} }
         }
 
         Column(
@@ -117,7 +129,6 @@ fun MaterialDialog.colorChooser(
                     enabled = allowCustomArgb
                 )
         ) {
-
             if (allowCustomArgb) {
                 PageIndicator(swipeState, this@BoxWithConstraints.constraints)
             }
@@ -129,12 +140,13 @@ fun MaterialDialog.colorChooser(
                         colors = colors,
                         selectedColor = selectedColor,
                         subColors = subColors,
-                        waitForPositiveButton = waitForPositiveButton,
-                        onColorSelected = onColorSelected
+                        initialSelection = initialSelection
                     )
 
-                    Box(Modifier.width(this@BoxWithConstraints.maxWidth)) {
-                        CustomARGB(selectedColor)
+                    if (allowCustomArgb) {
+                        Box(Modifier.width(this@BoxWithConstraints.maxWidth)) {
+                            CustomARGB(selectedColor)
+                        }
                     }
                 }
             ) { measurables, constraints ->
@@ -155,7 +167,7 @@ fun MaterialDialog.colorChooser(
 }
 
 @Composable
-private fun PageIndicator(swipeState: SwipeableState<String>, constraints: Constraints) {
+private fun PageIndicator(swipeState: SwipeableState<ColorPickerScreen>, constraints: Constraints) {
     Row(
         Modifier
             .fillMaxWidth()
@@ -301,10 +313,9 @@ private fun ColorGridLayout(
     colors: List<Color>,
     selectedColor: MutableState<Color>,
     subColors: List<List<Color>> = listOf(),
-    waitForPositiveButton: Boolean = false,
-    onColorSelected: (Color) -> Unit = {}
+    initialSelection: Int
 ) {
-    var mainSelectedIndex by remember { mutableStateOf(0) }
+    var mainSelectedIndex by remember { mutableStateOf(initialSelection) }
     var showSubColors by remember { mutableStateOf(false) }
 
     val itemSize = with(LocalDensity.current) { itemSizeDp.toPx().toInt() }
@@ -315,11 +326,9 @@ private fun ColorGridLayout(
                 ColorView(color = item, selected = index == mainSelectedIndex) {
                     if (mainSelectedIndex != index) {
                         mainSelectedIndex = index
-                        if (!waitForPositiveButton && subColors.isNotEmpty()) {
-                            selectedColor.value = item
-                            onColorSelected(item)
-                        }
+                        selectedColor.value = item
                     }
+
                     if (subColors.isNotEmpty()) {
                         showSubColors = true
                     }
@@ -349,9 +358,6 @@ private fun ColorGridLayout(
             subColors[mainSelectedIndex].forEachIndexed { _, item ->
                 ColorView(color = item, selected = selectedColor.value == item) {
                     selectedColor.value = item
-                    if (!waitForPositiveButton) {
-                        onColorSelected(item)
-                    }
                 }
             }
         }
