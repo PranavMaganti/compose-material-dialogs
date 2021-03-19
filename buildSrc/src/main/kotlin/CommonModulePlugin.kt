@@ -1,6 +1,7 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.JavaVersion
+import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.configure
 
@@ -47,14 +48,25 @@ class CommonModulePlugin: Plugin<Project> {
 
     private fun Project.dependenciesConf() {
         dependencies.apply {
-            add("implementation", Dependencies.Kotlin.stdlib)
-            add("implementation", Dependencies.AndroidX.coreKtx)
-            add("implementation", Dependencies.AndroidX.appcompat)
-            add("implementation", Dependencies.material)
+            implementation(Dependencies.Kotlin.stdlib)
+            implementation(Dependencies.AndroidX.coreKtx)
+            implementation(Dependencies.AndroidX.appcompat)
+            implementation(Dependencies.material)
 
-            add("implementation", Dependencies.AndroidX.Compose.ui)
-            add("implementation", Dependencies.AndroidX.Compose.material)
-            add("implementation", Dependencies.AndroidX.Compose.materialIconsExtended)
+            implementation(Dependencies.AndroidX.Compose.ui)
+            implementation(Dependencies.AndroidX.Compose.material)
+            implementation(Dependencies.AndroidX.Compose.materialIconsExtended)
+            implementation(Dependencies.AndroidX.composeActivity)
+
+            androidTestImplementation(Dependencies.AndroidX.Compose.testing)
         }
+    }
+
+    private fun DependencyHandler.implementation(dependency: String) {
+        add("implementation", dependency)
+    }
+
+    private fun DependencyHandler.androidTestImplementation(dependency: String) {
+        add("androidTestImplementation", dependency)
     }
 }

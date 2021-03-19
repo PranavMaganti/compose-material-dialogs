@@ -2,6 +2,7 @@ import java.util.Date
 
 plugins {
     id("common-library")
+    id("shot")
 }
 
 android {
@@ -11,8 +12,8 @@ android {
         compileSdkVersion(30)
 
         versionCode = 1
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.karumi.shot.ShotTestRunner"
+        testApplicationId = "com.vanpra.composematerialdialogs.test"
     }
 
     buildTypes {
@@ -25,7 +26,19 @@ android {
         }
     }
 
-    buildFeatures.compose = true
+    packagingOptions.excludes.addAll(
+        listOf(
+            "META-INF/LICENSE",
+            "META-INF/AL2.0",
+            "META-INF/**",
+            "META-INF/*.kotlin_module"
+        )
+    )
+
+    buildFeatures {
+        buildConfig = false
+        compose = true
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

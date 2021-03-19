@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import java.util.Locale
 
@@ -50,7 +51,9 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
             onClick = {
                 onClick()
             },
-            modifier = Modifier.layoutId(MaterialDialogButtonTypes.Text),
+            modifier = Modifier
+                .layoutId(MaterialDialogButtonTypes.Text)
+                .testTag(MaterialDialogButtonTypes.Text.toString()),
         ) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
         }
@@ -88,7 +91,8 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
 
                 onClick()
             },
-            modifier = Modifier.layoutId(MaterialDialogButtonTypes.Positive),
+            modifier = Modifier.layoutId(MaterialDialogButtonTypes.Positive)
+                .testTag(MaterialDialogButtonTypes.Positive.toString()),
             enabled = buttonEnabled && dialog.positiveButtonEnabledOverride
         ) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
@@ -120,6 +124,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
                 onClick()
             },
             modifier = Modifier.layoutId(MaterialDialogButtonTypes.Negative)
+                .testTag(MaterialDialogButtonTypes.Negative.toString()),
         ) {
             Text(text = buttonText, style = MaterialTheme.typography.button)
         }
@@ -137,6 +142,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
             Modifier
                 .size(48.dp)
                 .layoutId(MaterialDialogButtonTypes.Accessibility)
+                .testTag(MaterialDialogButtonTypes.Accessibility.toString())
                 .clickable(onClick = onClick),
             contentAlignment = Alignment.Center
         ) {

@@ -1,7 +1,17 @@
+import java.io.FileInputStream
+import java.io.InputStreamReader
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     kotlin("android")
     id("kotlin-kapt")
+}
+
+val secretsProperties = Properties()
+val propertiesFile = rootProject.file("./secret.properties")
+InputStreamReader(FileInputStream(propertiesFile), Charsets.UTF_8).use { reader ->
+    secretsProperties.load(reader)
 }
 
 android {
@@ -9,7 +19,7 @@ android {
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
-        applicationId = "com.vanpra.composematerialdialogs"
+        applicationId = "com.vanpra.composematerialdialogdemos"
         minSdkVersion(23)
         targetSdkVersion(30)
         versionCode = 1
@@ -17,6 +27,24 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        getByName("debug") {
+            storeFile = rootProject.file(secretsProperties["debug_keystore"] as String)
+            keyAlias = "androiddebugkey"
+            storePassword = "android"
+            keyPassword = "android"
+        }
+    }
+
+    packagingOptions.excludes.addAll(
+        listOf(
+            "META-INF/LICENSE",
+            "META-INF/AL2.0",
+            "META-INF/**",
+            "META-INF/*.kotlin_module"
+        )
+    )
 
     buildFeatures {
         viewBinding = true
@@ -56,4 +84,6 @@ dependencies {
     implementation(Dependencies.material)
 
     implementation(kotlin("stdlib-jdk8"))
+
+    androidTestImplementation(Dependencies.AndroidX.Compose.testing)
 }

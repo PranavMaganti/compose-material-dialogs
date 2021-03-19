@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -132,7 +133,13 @@ class MaterialDialog(
                     onDispose { resetDialog() }
                 }
 
-                Column(Modifier.fillMaxWidth().background(backgroundColor).clipToBounds()) {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .background(backgroundColor)
+                        .clipToBounds()
+                        .testTag("dialog")
+                ) {
                     this@MaterialDialog.content()
                 }
             }

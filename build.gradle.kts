@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("com.diffplug.spotless") version "5.9.0"
 }
@@ -12,6 +14,7 @@ buildscript {
     dependencies {
         classpath(Dependencies.Kotlin.gradlePlugin)
         classpath("com.android.tools.build:gradle:7.0.0-alpha10")
+        classpath("com.karumi:shot:5.10.3")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -26,7 +29,7 @@ allprojects {
         maven { url = uri("https://kotlin.bintray.com/kotlinx/") }
     }
 
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+    tasks.withType<KotlinCompile>().all {
         kotlinOptions {
             jvmTarget = "1.8"
             useIR = true

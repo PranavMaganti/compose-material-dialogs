@@ -46,9 +46,7 @@ fun MaterialDialog.listItems(
     onClick: (index: Int, item: String) -> Unit = { _, _ -> }
 ) {
     BoxWithConstraints {
-        var modifier = Modifier.heightIn(max = maxHeight * listRatio).then(bottomPadding)
-
-        LazyColumn(modifier = modifier) {
+        LazyColumn(Modifier.heightIn(max = maxHeight * listRatio).then(bottomPadding)) {
             itemsIndexed(list) { index, it ->
                 Text(
                     it,
