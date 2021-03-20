@@ -49,14 +49,12 @@ jobs:
       - name: Build tests
         run: ./gradlew assembleDebugAndroidTest
 
-      - name: Run tests
+      - name: Run functional tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
           profile: Nexus 6P
-          script: |
-          ./gradlew connectedCheck -Pandroid.testInstrumentationRunnerArguments.filter=com.vanpra.composematerialdialogs.test.util.NotScreenshotTestFilter
-          ./gradlew executeScreenshotTests -Pandroid.testInstrumentationRunnerArguments.filter=com.vanpra.composematerialdialogs.test.util.ScreenshotTestFilter
+          script: ./gradlew connectedCheck -Pandroid.testInstrumentationRunnerArguments.filter=com.vanpra.composematerialdialogs.test.util.NotScreenshotTestFilter
 
       - name: Upload functional test results
         if: always()
@@ -64,6 +62,13 @@ jobs:
         with:
           name: test-results-functional-${{ matrix.api-level }}
           path: "**/build/outputs/*/connected/*.xml"
+
+      - name: Run screenshot tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          profile: Nexus 6P
+          script: ./gradlew executeScreenshotTests -Pandroid.testInstrumentationRunnerArguments.filter=com.vanpra.composematerialdialogs.test.util.ScreenshotTestFilter
 
       - name: Upload screenshot test results
         if: always()
