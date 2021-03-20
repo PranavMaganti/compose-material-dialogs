@@ -1,4 +1,4 @@
-package com.vanpra.composematerialdialogs
+package com.vanpra.composematerialdialogs.test.screenshot
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
@@ -17,7 +17,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.dp
 import com.karumi.shot.ScreenshotTest
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.listItems
+import com.vanpra.composematerialdialogs.listItemsMultiChoice
+import com.vanpra.composematerialdialogs.listItemsSingleChoice
 import com.vanpra.composematerialdialogs.test.R
+import com.vanpra.composematerialdialogs.test.util.DialogWithContent
+import com.vanpra.composematerialdialogs.test.util.onDialog
 import org.junit.Rule
 import org.junit.Test
 
@@ -56,7 +62,7 @@ private val emails = listOf(
     "karen@material-dialog.com"
 )
 
-class ListDialogScreenshotTests : ScreenshotTest {
+class ListDialog : ScreenshotTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 

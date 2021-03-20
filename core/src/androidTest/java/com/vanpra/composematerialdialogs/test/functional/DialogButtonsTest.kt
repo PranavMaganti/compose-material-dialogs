@@ -1,15 +1,21 @@
-package com.vanpra.composematerialdialogs
+package com.vanpra.composematerialdialogs.test.functional
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.test.util.DialogWithContent
+import com.vanpra.composematerialdialogs.test.util.assertDialogDoesNotExist
+import com.vanpra.composematerialdialogs.test.util.assertDialogExists
+import com.vanpra.composematerialdialogs.test.util.onNegativeButton
+import com.vanpra.composematerialdialogs.test.util.onPositiveButton
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class DialogButtonTests {
+class DialogButtonsTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 

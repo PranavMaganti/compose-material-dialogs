@@ -1,17 +1,7 @@
-import java.io.FileInputStream
-import java.io.InputStreamReader
-import java.util.Properties
-
 plugins {
     id("com.android.application")
     kotlin("android")
     id("kotlin-kapt")
-}
-
-val secretsProperties = Properties()
-val propertiesFile = rootProject.file("./secret.properties")
-InputStreamReader(FileInputStream(propertiesFile), Charsets.UTF_8).use { reader ->
-    secretsProperties.load(reader)
 }
 
 android {
@@ -26,15 +16,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    signingConfigs {
-        getByName("debug") {
-            storeFile = rootProject.file(secretsProperties["debug_keystore"] as String)
-            keyAlias = "androiddebugkey"
-            storePassword = "android"
-            keyPassword = "android"
-        }
     }
 
     packagingOptions.excludes.addAll(
