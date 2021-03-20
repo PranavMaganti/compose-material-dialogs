@@ -55,10 +55,8 @@ jobs:
           api-level: ${{ matrix.api-level }}
           profile: Nexus 6P
           script: |
-          ./gradlew connectedCheck \-Pandroid.testInstrumentationRunnerArguments.filter=\
-          com.vanpra.composematerialdialogs.test.util.NotScreenshotTestFilter \
-          && ./gradlew executeScreenshotTests -Pandroid.testInstrumentationRunnerArguments.filter=\
-          com.vanpra.composematerialdialogs.test.util.ScreenshotTestFilter
+          ./gradlew connectedCheck -Pandroid.testInstrumentationRunnerArguments.filter=com.vanpra.composematerialdialogs.test.util.NotScreenshotTestFilter
+          ./gradlew executeScreenshotTests -Pandroid.testInstrumentationRunnerArguments.filter=com.vanpra.composematerialdialogs.test.util.ScreenshotTestFilter
 
       - name: Upload functional test results
         if: always()
