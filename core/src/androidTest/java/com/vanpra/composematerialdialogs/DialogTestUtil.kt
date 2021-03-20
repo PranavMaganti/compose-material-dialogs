@@ -31,8 +31,11 @@ internal fun ComposeTestRule.onPositiveButton() =
 internal fun ComposeTestRule.onNegativeButton() =
     this.onNodeWithTag(MaterialDialogButtonTypes.Positive.toString())
 
+internal fun ComposeTestRule.onDialog() =
+    this.onNodeWithTag(dialogTag)
+
 internal fun ComposeTestRule.assertDialogExists() =
-    this.onNodeWithTag(dialogTag).assertExists()
+    this.onDialog().assertExists()
 
 internal fun ComposeTestRule.assertDialogDoesNotExist() =
-    this.onNodeWithTag(dialogTag).assertDoesNotExist()
+    this.onDialog().assertDoesNotExist()
