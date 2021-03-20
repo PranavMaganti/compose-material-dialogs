@@ -57,6 +57,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          sdcard-path-or-size: 50M
           profile: Nexus 6P
           script: ./gradlew connectedCheck -Pandroid.testInstrumentationRunnerArguments.filter=com.vanpra.composematerialdialogs.test.util.NotScreenshotTestFilter
 
