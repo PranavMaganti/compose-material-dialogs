@@ -33,6 +33,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -254,20 +255,28 @@ internal class TimePickerState(
 fun MaterialDialog.timepicker(
     initialTime: LocalTime = LocalTime.now(),
     colors: TimePickerColors = TimePickerDefaults.colors(),
-    onCancel: () -> Unit = {},
+    waitForPositiveButton: Boolean = true,
     onComplete: (LocalTime) -> Unit = {}
 ) {
     val timePickerState = remember { TimePickerState(selectedTime = initialTime, colors = colors) }
 
-    TimePickerImpl(state = timePickerState)
-    buttons {
-        positiveButton("Ok") {
+    val index = remember {
+        val callbackIndex = callbackCounter.getAndIncrement()
+        callbacks.add(callbackIndex) {}
+        callbackIndex
+    }
+
+    DisposableEffect(timePickerState.selectedTime) {
+        if (waitForPositiveButton) {
+            callbacks[index] = { onComplete(timePickerState.selectedTime.toLocalTime()) }
+        } else {
             onComplete(timePickerState.selectedTime.toLocalTime())
         }
-        negativeButton("Cancel") {
-            onCancel()
-        }
+
+        onDispose { callbacks[index] = {} }
     }
+
+    TimePickerImpl(state = timePickerState)
 }
 
 @Composable

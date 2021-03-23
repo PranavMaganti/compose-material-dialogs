@@ -42,7 +42,7 @@ android {
 
 dependencies {
     api(project(":core"))
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.1")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 }
 
 val artifactName = "datetime"

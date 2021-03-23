@@ -26,6 +26,8 @@ fun MaterialDialog.datetimepicker(
     initialDateTime: LocalDateTime = LocalDateTime.now(),
     timePickerColors: TimePickerColors = TimePickerDefaults.colors(),
     yearRange: IntRange = IntRange(1900, 2100),
+    positiveButtonText: String = "Ok",
+    negativeButtonText: String = "Cancel",
     onCancel: () -> Unit = {},
     onComplete: (LocalDateTime) -> Unit = {}
 ) {
@@ -76,7 +78,7 @@ fun MaterialDialog.datetimepicker(
             text = if (isDateScreen) {
                 "Next"
             } else {
-                "Ok"
+                positiveButtonText
             },
             disableDismiss = isDateScreen
         ) {
@@ -94,7 +96,7 @@ fun MaterialDialog.datetimepicker(
             }
         }
 
-        negativeButton("Cancel") {
+        negativeButton(negativeButtonText) {
             onCancel()
         }
     }

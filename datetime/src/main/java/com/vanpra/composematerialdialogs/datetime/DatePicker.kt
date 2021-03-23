@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -71,20 +72,27 @@ internal class DatePickerState(val current: LocalDate) {
 fun MaterialDialog.datepicker(
     initialDate: LocalDate = LocalDate.now(),
     yearRange: IntRange = IntRange(1900, 2100),
-    onCancel: () -> Unit = {},
+    waitForPositiveButton: Boolean = true,
     onComplete: (LocalDate) -> Unit = {}
 ) {
     val datePickerState = remember { DatePickerState(initialDate) }
 
     DatePickerImpl(state = datePickerState, yearRange = yearRange)
 
-    buttons {
-        positiveButton("Ok") {
+    val index = remember {
+        val callbackIndex = callbackCounter.getAndIncrement()
+        callbacks.add(callbackIndex) {}
+        callbackIndex
+    }
+
+    DisposableEffect(datePickerState.selected) {
+        if (waitForPositiveButton) {
+            callbacks[index] = { onComplete(datePickerState.selected) }
+        } else {
             onComplete(datePickerState.selected)
         }
-        negativeButton("Cancel") {
-            onCancel()
-        }
+
+        onDispose { callbacks[index] = {} }
     }
 }
 
@@ -94,7 +102,7 @@ internal fun DatePickerImpl(
     state: DatePickerState,
     yearRange: IntRange
 ) {
-    /* Height doesn't include datePickerData height */
+    /* Height doesn't include datepicker button height */
     Column(modifier.size(328.dp, 460.dp)) {
         CalendarHeader(state)
 

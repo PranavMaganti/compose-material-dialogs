@@ -38,11 +38,21 @@ fun DateTimeDialogDemo() {
         timepicker(colors = colors) {
             println(it.toString())
         }
+
+        buttons {
+            positiveButton("Ok")
+            negativeButton("Cancel")
+        }
     }
 
     DialogAndShowButton(buttonText = "Date Picker Dialog") {
         datepicker {
             println(it.toString())
+        }
+
+        buttons {
+            positiveButton("Ok")
+            negativeButton("Cancel")
         }
     }
 
