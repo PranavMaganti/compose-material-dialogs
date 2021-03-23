@@ -49,14 +49,17 @@ import androidx.compose.ui.text.font.FontWeight.Companion.W600
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.rememberPagerState
 import com.vanpra.composematerialdialogs.MaterialDialog
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.TextStyle.FULL
 import java.util.Locale
 
-internal class DatePickerState(val current: LocalDate) {
-    var selected by mutableStateOf(current)
+internal class DatePickerState(val initialDate: LocalDate) {
+    var selected by mutableStateOf(initialDate)
 }
 
 /**
@@ -94,39 +97,50 @@ internal fun DatePickerImpl(
     state: DatePickerState,
     yearRange: IntRange
 ) {
+    val pagerState = rememberPagerState(
+        pageCount = (yearRange.last - yearRange.first) * 12,
+        initialPage = (state.initialDate.year - yearRange.first) * 12 + state.initialDate.monthValue - 1
+    )
+
     /* Height doesn't include datePickerData height */
     Column(modifier.size(328.dp, 460.dp)) {
         CalendarHeader(state)
-
         val yearPickerShowing = remember { mutableStateOf(false) }
-        ViewPager {
-            val viewDate = remember(index) { state.current.plusMonths(index.toLong()) }
-            CalendarViewHeader(viewDate, yearPickerShowing)
 
-            Box {
-                androidx.compose.animation.AnimatedVisibility(
-                    yearPickerShowing.value,
-                    Modifier
-                        .fillMaxSize()
-                        .zIndex(0.7f)
-                        .clipToBounds(),
-                    enter = slideInVertically({ -it }),
-                    exit = slideOutVertically({ -it })
-                ) {
-                    YearPicker(yearRange, viewDate, yearPickerShowing)
+        HorizontalPager(state = pagerState) { page ->
+            Column {
+                val viewDate = remember(this@HorizontalPager) {
+                    LocalDate.of(yearRange.first, 1, 1)
+                        .plusMonths(page.toLong())
                 }
+                CalendarViewHeader(viewDate, yearPickerShowing, pagerState)
 
-                CalendarView(viewDate, state)
+                Box {
+                    androidx.compose.animation.AnimatedVisibility(
+                        yearPickerShowing.value,
+                        Modifier
+                            .fillMaxSize()
+                            .zIndex(0.7f)
+                            .clipToBounds(),
+                        enter = slideInVertically({ -it }),
+                        exit = slideOutVertically({ -it })
+                    ) {
+                        YearPicker(yearRange, viewDate, yearPickerShowing, pagerState)
+                    }
+
+                    CalendarView(viewDate, state)
+                }
             }
         }
     }
 }
 
 @Composable
-private fun ViewPagerScope.YearPicker(
+private fun YearPicker(
     yearRange: IntRange,
     viewDate: LocalDate,
-    yearPickerShowing: MutableState<Boolean>
+    yearPickerShowing: MutableState<Boolean>,
+    pagerState: PagerState
 ) {
     val state = rememberLazyListState((viewDate.year - yearRange.first) / 3)
     val coroutineScope = rememberCoroutineScope()
@@ -146,7 +160,9 @@ private fun ViewPagerScope.YearPicker(
                         YearPickerItem(year = year, selected = selected) {
                             if (!selected) {
                                 coroutineScope.launch {
-                                    plusPages((year - viewDate.year) * 12)
+                                    pagerState.scrollToPage(
+                                        pagerState.currentPage + (year - viewDate.year) * 12
+                                    )
                                 }
                             }
                             yearPickerShowing.value = false
@@ -187,9 +203,10 @@ private fun YearPickerItem(year: Int, selected: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-private fun ViewPagerScope.CalendarViewHeader(
+private fun CalendarViewHeader(
     viewDate: LocalDate,
-    yearPickerShowing: MutableState<Boolean>
+    yearPickerShowing: MutableState<Boolean>,
+    pagerState: PagerState
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -242,7 +259,11 @@ private fun ViewPagerScope.CalendarViewHeader(
                 contentDescription = "Previous Month",
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable(onClick = { coroutineScope.launch { previous() } }),
+                    .clickable(onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                        }
+                    }),
                 colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
             )
 
@@ -253,7 +274,11 @@ private fun ViewPagerScope.CalendarViewHeader(
                 contentDescription = "Next Month",
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable(onClick = { coroutineScope.launch { next() } }),
+                    .clickable(onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        }
+                    }),
                 colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
             )
         }
@@ -267,7 +292,7 @@ private fun CalendarView(viewDate: LocalDate, datePickerData: DatePickerState) {
         val month = remember(viewDate) { getDates(viewDate) }
         val possibleSelected = remember(datePickerData.selected, viewDate) {
             viewDate.year == datePickerData.selected.year &&
-                viewDate.month == datePickerData.selected.month
+                    viewDate.month == datePickerData.selected.month
         }
 
         for (y in 0..5) {

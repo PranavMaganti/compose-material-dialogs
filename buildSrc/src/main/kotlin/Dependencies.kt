@@ -2,7 +2,7 @@ object Dependencies {
     const val material = "com.google.android.material:material:1.4.0-alpha01"
 
     object ComposeMaterialDialogs {
-        const val version = "0.3.1"
+        const val version = "0.3.2"
 
         const val core = "com.vanpra.compose-material-dialogs:core:$version"
         const val datetime = "com.vanpra.compose-material-dialogs:datetime:$version"
@@ -11,6 +11,11 @@ object Dependencies {
 
     object Ktlint {
         const val version = "0.40.0"
+    }
+
+    object Accompanist {
+        private const val version = "0.6.3.compose-7217131-SNAPSHOT"
+        const val pager = "com.google.accompanist:accompanist-pager:$version"
     }
 
     object Kotlin {
@@ -25,7 +30,7 @@ object Dependencies {
         const val composeActivity = "androidx.activity:activity-compose:1.3.0-alpha04"
 
         object Compose {
-            const val version = "1.0.0-beta02"
+            const val version = "1.0.0-SNAPSHOT"
 
             const val ui = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"
