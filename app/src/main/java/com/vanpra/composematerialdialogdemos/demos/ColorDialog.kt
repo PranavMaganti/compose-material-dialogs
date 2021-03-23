@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
 import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.color.ARGBPickerState
 import com.vanpra.composematerialdialogs.color.ColorPalette
 import com.vanpra.composematerialdialogs.color.colorChooser
 
@@ -81,8 +82,7 @@ fun ColorDialogDemo() {
         colorChooser(
             colors = ColorPalette.Primary,
             subColors = ColorPalette.PrimarySub,
-            allowCustomArgb = true,
-            showAlphaSelector = false,
+            argbPickerState = ARGBPickerState.WithoutAlphaSelector,
             waitForPositiveButton = waitForPositiveButton
         ) {
             println(it)
@@ -95,7 +95,7 @@ fun ColorDialogDemo() {
         colorChooser(
             colors = ColorPalette.Primary,
             subColors = ColorPalette.PrimarySub,
-            allowCustomArgb = true,
+            argbPickerState = ARGBPickerState.WithAlphaSelector,
             waitForPositiveButton = waitForPositiveButton
         ) {
             println(it)
