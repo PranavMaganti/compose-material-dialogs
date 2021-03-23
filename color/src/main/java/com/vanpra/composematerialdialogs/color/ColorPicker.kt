@@ -1,5 +1,7 @@
 package com.vanpra.composematerialdialogs.color
 
+import android.view.View
+import android.widget.FrameLayout
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -43,7 +46,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
@@ -54,7 +56,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.graphics.ColorUtils
 import com.vanpra.composematerialdialogs.MaterialDialog
+import java.util.Locale
+import android.graphics.Color as AndroidColor
 
 private val itemSizeDp = 55.dp
 private val tickSize = 35.dp
@@ -201,12 +207,30 @@ private fun CustomARGB(selectedColor: MutableState<Color>, showAlphaSelector: Bo
         Box(
             Modifier
                 .fillMaxWidth()
-                .height(70.dp)
-                .background(selectedColor.value),
+                .height(70.dp),
             contentAlignment = Alignment.Center
         ) {
+            AndroidView(
+                factory = { ctx ->
+                    FrameLayout(ctx).apply {
+                        setBackgroundResource(R.drawable.transparent_rect_repeat)
+                        addView(View(ctx))
+                    }
+                },
+                modifier = Modifier.fillMaxSize(),
+                update = { view ->
+                    view.getChildAt(0).setBackgroundColor(selectedColor.value.toArgb())
+                }
+            )
+            
+            var hexString = Integer.toHexString(selectedColor.value.toArgb())
+                .toUpperCase(Locale.ROOT)
+                .padStart(8, '0')
+            if (!showAlphaSelector) {
+                hexString = hexString.substring(2)
+            }
             Text(
-                "#${Integer.toHexString(selectedColor.value.toArgb())}",
+                text = "#$hexString",
                 color = selectedColor.value.foreground(),
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 textDecoration = TextDecoration.Underline,
@@ -440,5 +464,7 @@ private fun GridView(
     }
 }
 
-private fun Color.foreground(): Color =
-    if (this.luminance() > 0.5f) Color.Black else Color.White
+private fun Color.foreground(): Color {
+    val bg = ColorUtils.compositeColors(this.toArgb(), AndroidColor.WHITE /* Assume transparent rect white */)
+    return if (ColorUtils.calculateLuminance(bg) > 0.5f) Color.Black else Color.White
+}
