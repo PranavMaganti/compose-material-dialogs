@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogButtonTypes
@@ -16,16 +18,19 @@ private const val dialogTag = "dialog"
 @Composable
 internal fun DialogWithContent(
     autoDismiss: Boolean = true,
+    dialog: MaterialDialog = MaterialDialog(autoDismiss),
     content: @Composable MaterialDialog.() -> Unit
 ) {
     MaterialTheme {
         Box(Modifier.fillMaxSize()) {
-            val dialog = MaterialDialog(autoDismiss = autoDismiss)
             dialog.build { content() }
             SideEffect { dialog.show() }
         }
     }
 }
+
+internal fun ComposeTestRule.onListItem(index: Int) =
+    this.onAllNodesWithTag("list_$index").onFirst()
 
 internal fun ComposeTestRule.onPositiveButton() =
     this.onNodeWithTag(MaterialDialogButtonTypes.Positive.toString())

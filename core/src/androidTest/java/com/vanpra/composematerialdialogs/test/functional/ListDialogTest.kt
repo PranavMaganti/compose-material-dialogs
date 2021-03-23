@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -23,6 +24,9 @@ import com.vanpra.composematerialdialogs.listItemsMultiChoice
 import com.vanpra.composematerialdialogs.listItemsSingleChoice
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.util.DialogWithContent
+import com.vanpra.composematerialdialogs.test.util.onListItem
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -69,43 +73,56 @@ class ListDialog {
 
     @Test
     fun simpleListSelectionDialog() {
+        val dialog = MaterialDialog(autoDismiss = true)
+        var selectedItem: Pair<Int, String>? = null
+
         composeTestRule.setContent {
-            DialogWithContent {
+            DialogWithContent(dialog = dialog) {
                 title(res = R.string.backup_dialog_title)
-                listItems(emails)
+                listItems(emails) { index, item ->
+                    selectedItem = Pair(index, item)
+                }
             }
+        }
+
+        emails.forEachIndexed { index, email ->
+            composeTestRule.onListItem(index).performClick()
+            assertThat(selectedItem, equalTo(Pair(index, email)))
+            dialog.show()
         }
     }
 
     @Test
     fun customListSelectionDialog() {
+        var selectedItem: Pair<Int, String>? = null
+
         composeTestRule.setContent {
             DialogWithContent {
                 title(res = R.string.backup_dialog_title)
                 listItems(
                     emails,
-                    item = { _, email ->
-                        Row(Modifier.fillMaxWidth()) {
-                            Image(
-                                Icons.Default.AccountCircle,
-                                contentDescription = "Account icon",
-                                modifier = Modifier
-                                    .padding(vertical = 8.dp)
-                                    .size(30.dp),
-                                contentScale = ContentScale.FillHeight,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
-                            )
-                            Text(
-                                email,
-                                modifier = Modifier
-                                    .padding(start = 16.dp)
-                                    .align(Alignment.CenterVertically),
-                                color = MaterialTheme.colors.onBackground,
-                                style = MaterialTheme.typography.body1
-                            )
-                        }
+                    onClick = { index, item -> selectedItem = Pair(index, item) }
+                ) { _, email ->
+                    Row(Modifier.fillMaxWidth()) {
+                        Image(
+                            Icons.Default.AccountCircle,
+                            contentDescription = "Account icon",
+                            modifier = Modifier
+                                .padding(vertical = 8.dp)
+                                .size(30.dp),
+                            contentScale = ContentScale.FillHeight,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                        )
+                        Text(
+                            email,
+                            modifier = Modifier
+                                .padding(start = 16.dp)
+                                .align(Alignment.CenterVertically),
+                            color = MaterialTheme.colors.onBackground,
+                            style = MaterialTheme.typography.body1
+                        )
                     }
-                )
+                }
             }
         }
     }
