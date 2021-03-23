@@ -76,6 +76,20 @@ fun ColorDialogDemo() {
         defaultButtons()
     }
 
+    DialogAndShowButton(buttonText = "Color Picker Dialog With RGB Selector") {
+        title("Custom RGB")
+        colorChooser(
+            colors = ColorPalette.Primary,
+            subColors = ColorPalette.PrimarySub,
+            allowCustomArgb = true,
+            showAlphaSelector = false,
+            waitForPositiveButton = waitForPositiveButton
+        ) {
+            println(it)
+        }
+        defaultButtons()
+    }
+
     DialogAndShowButton(buttonText = "Color Picker Dialog With ARGB Selector") {
         title("Custom ARGB")
         colorChooser(

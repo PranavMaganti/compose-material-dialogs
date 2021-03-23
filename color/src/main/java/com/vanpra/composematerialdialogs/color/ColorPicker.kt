@@ -84,6 +84,7 @@ fun MaterialDialog.colorChooser(
     subColors: List<List<Color>> = listOf(),
     initialSelection: Int = 0,
     allowCustomArgb: Boolean = false,
+    showAlphaSelector: Boolean = true,
     waitForPositiveButton: Boolean = false,
     onColorSelected: (Color) -> Unit = {}
 ) {
@@ -145,7 +146,7 @@ fun MaterialDialog.colorChooser(
 
                     if (allowCustomArgb) {
                         Box(Modifier.width(this@BoxWithConstraints.maxWidth)) {
-                            CustomARGB(selectedColor)
+                            CustomARGB(selectedColor, showAlphaSelector)
                         }
                     }
                 }
@@ -195,7 +196,7 @@ private fun PageIndicator(swipeState: SwipeableState<ColorPickerScreen>, constra
 }
 
 @Composable
-private fun CustomARGB(selectedColor: MutableState<Color>) {
+private fun CustomARGB(selectedColor: MutableState<Color>, showAlphaSelector: Boolean) {
     Column(Modifier.padding(start = 24.dp, end = 24.dp)) {
         Box(
             Modifier
@@ -212,19 +213,23 @@ private fun CustomARGB(selectedColor: MutableState<Color>) {
                 fontSize = 18.sp
             )
         }
-        SliderLayout(selectedColor)
+        SliderLayout(selectedColor, showAlphaSelector)
     }
 }
 
 @Composable
-private fun SliderLayout(selectedColor: MutableState<Color>) {
-    LabelSlider(
-        modifier = Modifier.padding(top = 16.dp),
-        label = "A",
-        value = selectedColor.value.alpha * 255,
-        sliderColor = Color.DarkGray
-    ) {
-        selectedColor.value = selectedColor.value.copy(alpha = it / 255f)
+private fun SliderLayout(selectedColor: MutableState<Color>, showAlpha: Boolean) {
+    if (showAlpha) {
+        LabelSlider(
+            modifier = Modifier.padding(top = 16.dp),
+            label = "A",
+            value = selectedColor.value.alpha * 255,
+            sliderColor = Color.DarkGray
+        ) {
+            selectedColor.value = selectedColor.value.copy(alpha = it / 255f)
+        }
+    } else {
+        selectedColor.value = selectedColor.value.copy(alpha = 1f)
     }
 
     LabelSlider(
