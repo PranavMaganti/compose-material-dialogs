@@ -327,7 +327,7 @@ private fun LabelSlider(
             ) {
                 Text(
                     value.toInt().toString(),
-                    color = Color.White,
+                    color = MaterialTheme.colors.onBackground,
                     fontSize = 16.sp,
                     style = MaterialTheme.typography.h6
                 )
