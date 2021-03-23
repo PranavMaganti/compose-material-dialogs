@@ -248,8 +248,10 @@ internal class TimePickerState(
  *
  * @param initialTime The time to be shown to the user when the dialog is first shown.
  * Defaults to the current time if this is not set
+ * @param colors see [TimePickerColors]
+ * @param waitForPositiveButton if true the [onComplete] callback will only be called when the
+ * positive button is pressed, otherwise it will be called on every input change
  * @param onComplete callback with a LocalTime object when the user completes their input
- * @param onCancel callback when the user cancels the dialog
  */
 @Composable
 fun MaterialDialog.timepicker(

@@ -14,10 +14,14 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 /**
- * @brief A date time picker dialog
+ * @brief A combined date and time picker dialog
  *
  * @param initialDateTime The date and time to be shown to the user when the dialog is first shown.
  * Defaults to the current date and time if this is not set
+ * @param timePickerColors see [TimePickerColors]
+ * @param yearRange the range of years the user should be allowed to pick from
+ * @param positiveButtonText text used for positive button label
+ * @param negativeButtonText text used for negative button label
  * @param onComplete callback with a LocalDateTime object when the user completes their input
  * @param onCancel callback when the user cancels the dialog
  */

@@ -63,10 +63,12 @@ internal class DatePickerState(val current: LocalDate) {
 /**
  * @brief A date picker body layout
  *
- * @param initialDate The time to be shown to the user when the dialog is first shown.
+ * @param initialDate time to be shown to the user when the dialog is first shown.
  * Defaults to the current date if this is not set
+ * @param yearRange the range of years the user should be allowed to pick from
+ * @param waitForPositiveButton if true the [onComplete] callback will only be called when the
+ * positive button is pressed, otherwise it will be called on every input change
  * @param onComplete callback with a LocalDateTime object when the user completes their input
- * @param onCancel callback when the user cancels the dialog
  */
 @Composable
 fun MaterialDialog.datepicker(
