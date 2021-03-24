@@ -43,7 +43,7 @@ subprojects {
     plugins.apply("com.diffplug.spotless")
     spotless {
         kotlin {
-            target("**/*.kt")
+            target("**/*.kt", "**/*.kts")
             ktlint(Dependencies.Ktlint.version)
         }
     }

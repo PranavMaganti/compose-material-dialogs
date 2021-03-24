@@ -31,7 +31,6 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Dependencies.AndroidX.Compose.version
     }
-
 }
 
 dependencies {
