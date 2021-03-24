@@ -58,7 +58,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           sdcard-path-or-size: 50M
-          profile: Nexus 6P
+          profile: Nexus 6
           script: ./gradlew connectedCheck -Pandroid.testInstrumentationRunnerArguments.filter=com.vanpra.composematerialdialogs.test.util.NotScreenshotTestFilter
 
       - name: Upload functional test results
@@ -79,5 +79,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-results-screenshots
+          name: test-results-screenshots-${{ matrix.api-level }}
           path: "**/build/reports/shot/verification"
