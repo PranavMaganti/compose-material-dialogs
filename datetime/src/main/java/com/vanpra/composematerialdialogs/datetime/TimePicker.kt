@@ -82,8 +82,10 @@ internal class SimpleLocalTime(hour: Int, minute: Int, isAM: Boolean) {
     fun toLocalTime(): LocalTime {
         val fullHour = if (isAM && hour == 12) {
             0
-        } else if (isAM) {
+        } else if (isAM || hour == 12) {
             hour
+        } else if (hour == 12) {
+            12
         } else {
             hour + 12
         }
