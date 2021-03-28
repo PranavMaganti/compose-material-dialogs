@@ -1,7 +1,8 @@
 package com.vanpra.composematerialdialogs
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +14,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.LocalElevationOverlay
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -28,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
@@ -62,6 +66,18 @@ class MaterialDialog(
     var positiveEnabled by mutableStateOf(mutableListOf<Boolean>())
     val positiveEnabledCounter = AtomicInteger(0)
     var positiveButtonEnabledOverride by mutableStateOf(true)
+
+    /**
+     * @brief Dialog background color with elevation overlay
+     *
+     * @see elevation
+     * @see useElevationOverlay
+     */
+    var dialogBackgroundColor by mutableStateOf<Color?>(null)
+        private set
+
+    var elevation by mutableStateOf(24.dp)
+    var useElevationOverlay by mutableStateOf(true)
 
     internal fun setPositiveEnabled(index: Int, value: Boolean) {
         // Have to make temp list in order for state to register change
@@ -123,17 +139,36 @@ class MaterialDialog(
      */
     @Composable
     fun build(
-        backgroundColor: Color = MaterialTheme.colors.background,
+        backgroundColor: Color = MaterialTheme.colors.surface,
+        shape: Shape = MaterialTheme.shapes.medium,
+        border: BorderStroke? = null,
         content: @Composable MaterialDialog.() -> Unit
     ) {
+        val elevationOverlay = LocalElevationOverlay.current
+        dialogBackgroundColor = if (useElevationOverlay && elevationOverlay != null) {
+            elevationOverlay.apply(color = backgroundColor, elevation = elevation)
+        } else {
+            backgroundColor
+        }
+        val animatedBackgroundColor by animateColorAsState(targetValue = dialogBackgroundColor!!)
+
         if (showing.value) {
             ThemedDialog(onCloseRequest = { onCloseRequest(this) }) {
                 DisposableEffect(Unit) {
                     onDispose { resetDialog() }
                 }
 
-                Column(Modifier.fillMaxWidth().background(backgroundColor).clipToBounds()) {
-                    this@MaterialDialog.content()
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clipToBounds(),
+                    shape = shape,
+                    color = animatedBackgroundColor,
+                    border = border,
+                ) {
+                    Column {
+                        this@MaterialDialog.content()
+                    }
                 }
             }
         }
