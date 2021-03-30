@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -62,29 +63,38 @@ internal class DatePickerState(val current: LocalDate) {
 /**
  * @brief A date picker body layout
  *
- * @param initialDate The time to be shown to the user when the dialog is first shown.
+ * @param initialDate time to be shown to the user when the dialog is first shown.
  * Defaults to the current date if this is not set
+ * @param yearRange the range of years the user should be allowed to pick from
+ * @param waitForPositiveButton if true the [onComplete] callback will only be called when the
+ * positive button is pressed, otherwise it will be called on every input change
  * @param onComplete callback with a LocalDateTime object when the user completes their input
- * @param onCancel callback when the user cancels the dialog
  */
 @Composable
 fun MaterialDialog.datepicker(
     initialDate: LocalDate = LocalDate.now(),
     yearRange: IntRange = IntRange(1900, 2100),
-    onCancel: () -> Unit = {},
+    waitForPositiveButton: Boolean = true,
     onComplete: (LocalDate) -> Unit = {}
 ) {
     val datePickerState = remember { DatePickerState(initialDate) }
 
     DatePickerImpl(state = datePickerState, yearRange = yearRange)
 
-    buttons {
-        positiveButton("Ok") {
+    val index = remember {
+        val callbackIndex = callbackCounter.getAndIncrement()
+        callbacks.add(callbackIndex) {}
+        callbackIndex
+    }
+
+    DisposableEffect(datePickerState.selected) {
+        if (waitForPositiveButton) {
+            callbacks[index] = { onComplete(datePickerState.selected) }
+        } else {
             onComplete(datePickerState.selected)
         }
-        negativeButton("Cancel") {
-            onCancel()
-        }
+
+        onDispose { callbacks[index] = {} }
     }
 }
 
@@ -94,7 +104,7 @@ internal fun DatePickerImpl(
     state: DatePickerState,
     yearRange: IntRange
 ) {
-    /* Height doesn't include datePickerData height */
+    /* Height doesn't include datepicker button height */
     Column(modifier.size(328.dp, 460.dp)) {
         CalendarHeader(state)
 

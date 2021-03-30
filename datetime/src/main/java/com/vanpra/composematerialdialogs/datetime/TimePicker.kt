@@ -33,6 +33,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -81,8 +82,10 @@ internal class SimpleLocalTime(hour: Int, minute: Int, isAM: Boolean) {
     fun toLocalTime(): LocalTime {
         val fullHour = if (isAM && hour == 12) {
             0
-        } else if (isAM) {
+        } else if (isAM || hour == 12) {
             hour
+        } else if (hour == 12) {
+            12
         } else {
             hour + 12
         }
@@ -247,27 +250,37 @@ internal class TimePickerState(
  *
  * @param initialTime The time to be shown to the user when the dialog is first shown.
  * Defaults to the current time if this is not set
+ * @param colors see [TimePickerColors]
+ * @param waitForPositiveButton if true the [onComplete] callback will only be called when the
+ * positive button is pressed, otherwise it will be called on every input change
  * @param onComplete callback with a LocalTime object when the user completes their input
- * @param onCancel callback when the user cancels the dialog
  */
 @Composable
 fun MaterialDialog.timepicker(
     initialTime: LocalTime = LocalTime.now(),
     colors: TimePickerColors = TimePickerDefaults.colors(),
-    onCancel: () -> Unit = {},
+    waitForPositiveButton: Boolean = true,
     onComplete: (LocalTime) -> Unit = {}
 ) {
     val timePickerState = remember { TimePickerState(selectedTime = initialTime, colors = colors) }
 
-    TimePickerImpl(state = timePickerState)
-    buttons {
-        positiveButton("Ok") {
+    val index = remember {
+        val callbackIndex = callbackCounter.getAndIncrement()
+        callbacks.add(callbackIndex) {}
+        callbackIndex
+    }
+
+    DisposableEffect(timePickerState.selectedTime) {
+        if (waitForPositiveButton) {
+            callbacks[index] = { onComplete(timePickerState.selectedTime.toLocalTime()) }
+        } else {
             onComplete(timePickerState.selectedTime.toLocalTime())
         }
-        negativeButton("Cancel") {
-            onCancel()
-        }
+
+        onDispose { callbacks[index] = {} }
     }
+
+    TimePickerImpl(state = timePickerState)
 }
 
 @Composable

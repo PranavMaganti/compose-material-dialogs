@@ -1,5 +1,7 @@
 package com.vanpra.composematerialdialogs.color
 
+import android.view.View
+import android.widget.FrameLayout
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -43,7 +46,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
@@ -54,14 +56,35 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.graphics.ColorUtils
 import com.vanpra.composematerialdialogs.MaterialDialog
+import java.util.Locale
+import android.graphics.Color as AndroidColor
 
 private val itemSizeDp = 55.dp
 private val tickSize = 35.dp
 
-enum class ColorPickerScreen {
+private enum class ColorPickerScreen {
     Palette,
     ARGB
+}
+
+/**
+ * Defines the behaviour of ARGB Picker
+ *
+ * @property allowCustomARGB custom ARGB sliders will be shown when true and hidden when false
+ * @property showAlphaSelector alpha slider will be shown when true and hidden when false
+ */
+data class ARGBPickerState internal constructor(
+    val allowCustomARGB: Boolean = true,
+    val showAlphaSelector: Boolean = true
+) {
+    companion object {
+        val None = ARGBPickerState(allowCustomARGB = false)
+        val WithAlphaSelector = ARGBPickerState(showAlphaSelector = true)
+        val WithoutAlphaSelector = ARGBPickerState(showAlphaSelector = false)
+    }
 }
 
 /**
@@ -71,8 +94,7 @@ enum class ColorPickerScreen {
  * @param subColors a list of subsets of [colors] for the user to choose from once a main color from
  * colors has been chosen. See [ColorPalette] for predefined sub-colors colors
  * @param initialSelection the index of the color which is selected initially
- * @param allowCustomArgb if true this will allow the user to choose a custom color using
- * ARGB sliders
+ * @param argbPickerState controls the behaviour of custom argb picker
  * @param waitForPositiveButton if true the [onColorSelected] callback will only be called when the
  * positive button is pressed, otherwise it will be called when the a new color is selected
  * @param onColorSelected a function which is called with a [Color]. The timing of this call is
@@ -83,14 +105,14 @@ fun MaterialDialog.colorChooser(
     colors: List<Color>,
     subColors: List<List<Color>> = listOf(),
     initialSelection: Int = 0,
-    allowCustomArgb: Boolean = false,
-    waitForPositiveButton: Boolean = false,
+    argbPickerState: ARGBPickerState = ARGBPickerState.None,
+    waitForPositiveButton: Boolean = true,
     onColorSelected: (Color) -> Unit = {}
 ) {
     BoxWithConstraints {
         val selectedColor = remember { mutableStateOf(colors[initialSelection]) }
-        val anchors = remember(allowCustomArgb) {
-            if (allowCustomArgb) {
+        val anchors = remember(argbPickerState.allowCustomARGB) {
+            if (argbPickerState.allowCustomARGB) {
                 mapOf(
                     0f to ColorPickerScreen.Palette,
                     constraints.maxWidth.toFloat() to ColorPickerScreen.ARGB
@@ -126,10 +148,10 @@ fun MaterialDialog.colorChooser(
                     orientation = Orientation.Horizontal,
                     reverseDirection = true,
                     resistance = null,
-                    enabled = allowCustomArgb
+                    enabled = argbPickerState.allowCustomARGB
                 )
         ) {
-            if (allowCustomArgb) {
+            if (argbPickerState.allowCustomARGB) {
                 PageIndicator(swipeState, this@BoxWithConstraints.constraints)
             }
 
@@ -143,9 +165,9 @@ fun MaterialDialog.colorChooser(
                         initialSelection = initialSelection
                     )
 
-                    if (allowCustomArgb) {
+                    if (argbPickerState.allowCustomARGB) {
                         Box(Modifier.width(this@BoxWithConstraints.maxWidth)) {
-                            CustomARGB(selectedColor)
+                            CustomARGB(selectedColor, argbPickerState.showAlphaSelector)
                         }
                     }
                 }
@@ -195,36 +217,58 @@ private fun PageIndicator(swipeState: SwipeableState<ColorPickerScreen>, constra
 }
 
 @Composable
-private fun CustomARGB(selectedColor: MutableState<Color>) {
+private fun CustomARGB(selectedColor: MutableState<Color>, showAlphaSelector: Boolean) {
     Column(Modifier.padding(start = 24.dp, end = 24.dp)) {
         Box(
             Modifier
                 .fillMaxWidth()
-                .height(70.dp)
-                .background(selectedColor.value),
+                .height(70.dp),
             contentAlignment = Alignment.Center
         ) {
+            AndroidView(
+                factory = { ctx ->
+                    FrameLayout(ctx).apply {
+                        setBackgroundResource(R.drawable.transparent_rect_repeat)
+                        addView(View(ctx))
+                    }
+                },
+                modifier = Modifier.fillMaxSize(),
+                update = { view ->
+                    view.getChildAt(0).setBackgroundColor(selectedColor.value.toArgb())
+                }
+            )
+
+            val hexString = remember(selectedColor.value) {
+                val rawHex = Integer.toHexString(selectedColor.value.toArgb())
+                    .toUpperCase(Locale.ROOT)
+                    .padStart(8, '0')
+
+                if (!showAlphaSelector) rawHex.substring(2) else rawHex
+            }
+
             Text(
-                "#${Integer.toHexString(selectedColor.value.toArgb())}",
+                text = "#$hexString",
                 color = selectedColor.value.foreground(),
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 textDecoration = TextDecoration.Underline,
                 fontSize = 18.sp
             )
         }
-        SliderLayout(selectedColor)
+        SliderLayout(selectedColor, showAlphaSelector)
     }
 }
 
 @Composable
-private fun SliderLayout(selectedColor: MutableState<Color>) {
-    LabelSlider(
-        modifier = Modifier.padding(top = 16.dp),
-        label = "A",
-        value = selectedColor.value.alpha * 255,
-        sliderColor = Color.DarkGray
-    ) {
-        selectedColor.value = selectedColor.value.copy(alpha = it / 255f)
+private fun SliderLayout(selectedColor: MutableState<Color>, showAlpha: Boolean) {
+    if (showAlpha) {
+        LabelSlider(
+            modifier = Modifier.padding(top = 16.dp),
+            label = "A",
+            value = selectedColor.value.alpha * 255,
+            sliderColor = Color.DarkGray
+        ) {
+            selectedColor.value = selectedColor.value.copy(alpha = it / 255f)
+        }
     }
 
     LabelSlider(
@@ -298,7 +342,7 @@ private fun LabelSlider(
             ) {
                 Text(
                     value.toInt().toString(),
-                    color = Color.White,
+                    color = MaterialTheme.colors.onBackground,
                     fontSize = 16.sp,
                     style = MaterialTheme.typography.h6
                 )
@@ -435,5 +479,10 @@ private fun GridView(
     }
 }
 
-private fun Color.foreground(): Color =
-    if (this.luminance() > 0.5f) Color.Black else Color.White
+private fun Color.foreground(): Color {
+    val bg = ColorUtils.compositeColors(
+        this.toArgb(),
+        AndroidColor.WHITE /* Assume transparent rect white */
+    )
+    return if (ColorUtils.calculateLuminance(bg) > 0.5f) Color.Black else Color.White
+}

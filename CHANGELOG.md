@@ -1,5 +1,13 @@
 # Changelog
 
+### 0.3.2 - 2021-03-24
+
+  - Update compose version to 1.0.0-beta03
+  - Fix callback and selection bugs in color picker
+  - Make alpha slider optional in color picker and add a tiled background to the ARGB hex label box (thanks **[ivaniskandar](https://github.com/ivaniskandar)**)
+  - Remove predefined buttons for date and time picker components
+  - Make custom list items padding be added after clickable to make ripple fill the max width
+
 ### 0.3.1 - 2021-03-10
 
   - Update compose version to 1.0.0-beta02

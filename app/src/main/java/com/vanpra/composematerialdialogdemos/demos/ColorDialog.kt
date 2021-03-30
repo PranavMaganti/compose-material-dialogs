@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
 import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.color.ARGBPickerState
 import com.vanpra.composematerialdialogs.color.ColorPalette
 import com.vanpra.composematerialdialogs.color.colorChooser
 
@@ -76,12 +77,25 @@ fun ColorDialogDemo() {
         defaultButtons()
     }
 
+    DialogAndShowButton(buttonText = "Color Picker Dialog With RGB Selector") {
+        title("Custom RGB")
+        colorChooser(
+            colors = ColorPalette.Primary,
+            subColors = ColorPalette.PrimarySub,
+            argbPickerState = ARGBPickerState.WithoutAlphaSelector,
+            waitForPositiveButton = waitForPositiveButton
+        ) {
+            println(it)
+        }
+        defaultButtons()
+    }
+
     DialogAndShowButton(buttonText = "Color Picker Dialog With ARGB Selector") {
         title("Custom ARGB")
         colorChooser(
             colors = ColorPalette.Primary,
             subColors = ColorPalette.PrimarySub,
-            allowCustomArgb = true,
+            argbPickerState = ARGBPickerState.WithAlphaSelector,
             waitForPositiveButton = waitForPositiveButton
         ) {
             println(it)
