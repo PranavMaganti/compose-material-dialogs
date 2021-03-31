@@ -29,8 +29,11 @@ internal fun DialogWithContent(
     }
 }
 
-internal fun ComposeTestRule.onListItem(index: Int) =
-    this.onAllNodesWithTag("list_$index").onFirst()
+internal fun ComposeTestRule.onDialogListItem(index: Int) =
+    this.onAllNodesWithTag("dialog_list_item_$index", useUnmergedTree = true).onFirst()
+
+internal fun ComposeTestRule.onDialogList() =
+    this.onNodeWithTag("dialog_list")
 
 internal fun ComposeTestRule.onPositiveButton() =
     this.onNodeWithTag(MaterialDialogButtonTypes.Positive.toString())
@@ -46,3 +49,8 @@ internal fun ComposeTestRule.assertDialogExists() =
 
 internal fun ComposeTestRule.assertDialogDoesNotExist() =
     this.onDialog().assertDoesNotExist()
+
+internal fun <T> Collection<T>.powerSet(): Set<Set<T>> = when {
+    isEmpty() -> setOf(setOf())
+    else -> drop(1).powerSet().let { it + it.map { rest -> rest + first() } }
+}
