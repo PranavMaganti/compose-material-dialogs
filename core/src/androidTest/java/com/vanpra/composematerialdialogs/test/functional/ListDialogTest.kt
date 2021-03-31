@@ -16,8 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
@@ -111,15 +109,9 @@ class ListDialog {
                 title(res = R.string.backup_dialog_title)
                 listItems(
                     emails,
-                    onClick = { index, item ->
-                        selectedItem = Pair(index, item)
-                    }
+                    onClick = { index, item -> selectedItem = Pair(index, item) }
                 ) { index, email ->
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .testTag("list_$index")
-                    ) {
+                    Row(Modifier.fillMaxWidth()) {
                         Image(
                             Icons.Default.AccountCircle,
                             contentDescription = "Account icon",
@@ -155,7 +147,7 @@ class ListDialog {
     fun multiSelectionDialogOneItem() {
         val selectedItem = mutableStateOf<List<Int>?>(null)
         val dialog = MaterialDialog()
-        composeTestRule.setupMultiSelectionDialog(dialog, selectedItem)
+        setupMultiSelectionDialog(dialog, selectedItem)
 
         labels.forEachIndexed { index, _ ->
             composeTestRule.onListItem(index).performClick()
@@ -172,7 +164,7 @@ class ListDialog {
     fun multiSelectionDialogMultipleItems() {
         val selectedItem = mutableStateOf<List<Int>?>(null)
         val dialog = MaterialDialog()
-        composeTestRule.setupMultiSelectionDialog(dialog, selectedItem)
+        setupMultiSelectionDialog(dialog, selectedItem)
 
         labels.forEachIndexed { index, _ ->
             composeTestRule.onListItem(index).performClick()
@@ -190,19 +182,19 @@ class ListDialog {
         val selectedItem = mutableStateOf<Int?>(null)
         val dialog = MaterialDialog()
 
-        composeTestRule.setupSingleSelectionDialog(dialog, selectedItem)
+        setupSingleSelectionDialog(dialog, selectedItem)
 
         ringtones.forEachIndexed { index, _ ->
             composeTestRule.onListItem(index).performClick()
             composeTestRule.onPositiveButton().performClick()
             /* Need this line or else tests don't wait for dialog to close */
             composeTestRule.assertDialogDoesNotExist()
-            assertEquals(listOf(index), selectedItem.value)
+            assertEquals(index, selectedItem.value)
             dialog.show()
         }
     }
 
-    private fun ComposeTestRule.setupMultiSelectionDialog(
+    private fun setupMultiSelectionDialog(
         dialog: MaterialDialog,
         selectedItem: MutableState<List<Int>?>
     ) {
@@ -217,7 +209,7 @@ class ListDialog {
         }
     }
 
-    private fun ComposeTestRule.setupSingleSelectionDialog(
+    private fun setupSingleSelectionDialog(
         dialog: MaterialDialog,
         selectedItem: MutableState<Int?>
     ) {
