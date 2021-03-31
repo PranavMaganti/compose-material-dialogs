@@ -109,7 +109,9 @@ fun MultiSelectionDemo() {
 
     DialogAndShowButton(buttonText = "Multi-Selection Dialog") {
         title(res = R.string.labels_dialog_title)
-        listItemsMultiChoice(labels)
+        listItemsMultiChoice(labels) {
+            println(it)
+        }
         defaultListButtons()
     }
 
@@ -117,7 +119,9 @@ fun MultiSelectionDemo() {
         val disabledLabels = listOf(1, 3, 4)
 
         title(res = R.string.labels_dialog_title)
-        listItemsMultiChoice(labels, disabledIndices = disabledLabels)
+        listItemsMultiChoice(labels, disabledIndices = disabledLabels) {
+            println(it)
+        }
         defaultListButtons()
     }
 

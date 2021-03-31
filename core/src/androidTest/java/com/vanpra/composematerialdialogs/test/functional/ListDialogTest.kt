@@ -10,10 +10,14 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
@@ -24,9 +28,12 @@ import com.vanpra.composematerialdialogs.listItemsMultiChoice
 import com.vanpra.composematerialdialogs.listItemsSingleChoice
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.util.DialogWithContent
+import com.vanpra.composematerialdialogs.test.util.assertDialogDoesNotExist
 import com.vanpra.composematerialdialogs.test.util.onListItem
+import com.vanpra.composematerialdialogs.test.util.onPositiveButton
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -73,7 +80,7 @@ class ListDialog {
 
     @Test
     fun simpleListSelectionDialog() {
-        val dialog = MaterialDialog(autoDismiss = true)
+        val dialog = MaterialDialog()
         var selectedItem: Pair<Int, String>? = null
 
         composeTestRule.setContent {
@@ -87,6 +94,8 @@ class ListDialog {
 
         emails.forEachIndexed { index, email ->
             composeTestRule.onListItem(index).performClick()
+            /* Need this line or else tests don't wait for dialog to close */
+            composeTestRule.assertDialogDoesNotExist()
             assertThat(selectedItem, equalTo(Pair(index, email)))
             dialog.show()
         }
@@ -95,15 +104,22 @@ class ListDialog {
     @Test
     fun customListSelectionDialog() {
         var selectedItem: Pair<Int, String>? = null
+        val dialog = MaterialDialog()
 
         composeTestRule.setContent {
-            DialogWithContent {
+            DialogWithContent(dialog = dialog) {
                 title(res = R.string.backup_dialog_title)
                 listItems(
                     emails,
-                    onClick = { index, item -> selectedItem = Pair(index, item) }
-                ) { _, email ->
-                    Row(Modifier.fillMaxWidth()) {
+                    onClick = { index, item ->
+                        selectedItem = Pair(index, item)
+                    }
+                ) { index, email ->
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .testTag("list_$index")
+                    ) {
                         Image(
                             Icons.Default.AccountCircle,
                             contentDescription = "Account icon",
@@ -125,25 +141,92 @@ class ListDialog {
                 }
             }
         }
+
+        emails.forEachIndexed { index, email ->
+            composeTestRule.onListItem(index).performClick()
+            /* Need this line or else tests don't wait for dialog to close */
+            composeTestRule.assertDialogDoesNotExist()
+            assertThat(selectedItem, equalTo(Pair(index, email)))
+            dialog.show()
+        }
     }
 
     @Test
-    fun multiSelectionDialog() {
+    fun multiSelectionDialogOneItem() {
+        val selectedItem = mutableStateOf<List<Int>?>(null)
+        val dialog = MaterialDialog()
+        composeTestRule.setupMultiSelectionDialog(dialog, selectedItem)
+
+        labels.forEachIndexed { index, _ ->
+            composeTestRule.onListItem(index).performClick()
+            composeTestRule.onPositiveButton().performClick()
+            /* Need this line or else tests don't wait for dialog to close */
+            composeTestRule.assertDialogDoesNotExist()
+            assertEquals(listOf(index), selectedItem.value)
+            dialog.show()
+        }
+    }
+
+
+    @Test
+    fun multiSelectionDialogMultipleItems() {
+        val selectedItem = mutableStateOf<List<Int>?>(null)
+        val dialog = MaterialDialog()
+        composeTestRule.setupMultiSelectionDialog(dialog, selectedItem)
+
+        labels.forEachIndexed { index, _ ->
+            composeTestRule.onListItem(index).performClick()
+            composeTestRule.onPositiveButton().performClick()
+            /* Need this line or else tests don't wait for dialog to close */
+            composeTestRule.assertDialogDoesNotExist()
+            assertEquals(listOf(index), selectedItem.value)
+            dialog.show()
+        }
+    }
+
+
+    @Test
+    fun singleSelectionDialog() {
+        val selectedItem = mutableStateOf<Int?>(null)
+        val dialog = MaterialDialog()
+
+        composeTestRule.setupSingleSelectionDialog(dialog, selectedItem)
+
+        ringtones.forEachIndexed { index, _ ->
+            composeTestRule.onListItem(index).performClick()
+            composeTestRule.onPositiveButton().performClick()
+            /* Need this line or else tests don't wait for dialog to close */
+            composeTestRule.assertDialogDoesNotExist()
+            assertEquals(listOf(index), selectedItem.value)
+            dialog.show()
+        }
+    }
+
+    private fun ComposeTestRule.setupMultiSelectionDialog(
+        dialog: MaterialDialog,
+        selectedItem: MutableState<List<Int>?>
+    ) {
         composeTestRule.setContent {
-            DialogWithContent {
+            DialogWithContent(dialog = dialog) {
                 title(res = R.string.labels_dialog_title)
-                listItemsMultiChoice(labels)
+                listItemsMultiChoice(labels) {
+                    selectedItem.value = it
+                }
                 defaultListButtons()
             }
         }
     }
 
-    @Test
-    fun singleSelectionDialog() {
+    private fun ComposeTestRule.setupSingleSelectionDialog(
+        dialog: MaterialDialog,
+        selectedItem: MutableState<Int?>
+    ) {
         composeTestRule.setContent {
-            DialogWithContent {
+            DialogWithContent(dialog = dialog) {
                 title(res = R.string.ringtone_dialog_title)
-                listItemsSingleChoice(ringtones)
+                listItemsSingleChoice(ringtones) {
+                    selectedItem.value = it
+                }
                 defaultListButtons()
             }
         }

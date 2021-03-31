@@ -50,4 +50,10 @@ subprojects {
             ktlint(Dependencies.Ktlint.version)
         }
     }
+
+    tasks.withType<Test> {
+        testLogging {
+            showStandardStreams = true
+        }
+    }
 }

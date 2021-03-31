@@ -2,6 +2,7 @@ import java.util.Date
 
 plugins {
     id("common-library")
+    id("shot")
 }
 
 android {
@@ -11,7 +12,8 @@ android {
         targetSdkVersion(30)
         versionCode = 1
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.karumi.shot.ShotTestRunner"
+        testApplicationId = "com.vanpra.composematerialdialogs.color.test"
     }
 
     buildTypes {

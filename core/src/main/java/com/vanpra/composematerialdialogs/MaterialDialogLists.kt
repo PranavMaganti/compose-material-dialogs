@@ -28,6 +28,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 private const val listRatio = 0.6f
@@ -46,7 +47,11 @@ fun MaterialDialog.listItems(
     onClick: (index: Int, item: String) -> Unit = { _, _ -> }
 ) {
     BoxWithConstraints {
-        LazyColumn(Modifier.heightIn(max = maxHeight * listRatio).then(bottomPadding)) {
+        LazyColumn(
+            Modifier
+                .heightIn(max = maxHeight * listRatio)
+                .then(bottomPadding)
+        ) {
             itemsIndexed(list) { index, it ->
                 Text(
                     it,
@@ -54,6 +59,7 @@ fun MaterialDialog.listItems(
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .testTag("list_$index")
                         .clickable(
                             onClick = {
                                 if (closeOnClick) {
@@ -88,13 +94,16 @@ fun <T> MaterialDialog.listItems(
 ) {
 
     BoxWithConstraints {
-        val modifier = Modifier.heightIn(max = maxHeight * listRatio).then(bottomPadding)
+        val modifier = Modifier
+            .heightIn(max = maxHeight * listRatio)
+            .then(bottomPadding)
 
         LazyColumn(modifier = modifier) {
             itemsIndexed(list) { index, it ->
                 Box(
                     Modifier
                         .fillMaxWidth()
+                        .testTag("list_$index")
                         .clickable(
                             onClick = {
                                 if (closeOnClick) {
@@ -103,7 +112,8 @@ fun <T> MaterialDialog.listItems(
                                 onClick(index, it)
                             },
                             enabled = isEnabled(index)
-                        ).padding(horizontal = 24.dp)
+                        )
+                        .padding(horizontal = 24.dp)
                 ) {
                     item(index, it)
                 }
@@ -130,13 +140,14 @@ fun MaterialDialog.listItemsMultiChoice(
     waitForPositiveButton: Boolean = true,
     onCheckedChange: (indices: List<Int>) -> Unit = {}
 ) {
-    var selectedItems by remember { mutableStateOf(initialSelection.toMutableList()) }
+    var selectedItems by remember { mutableStateOf(initialSelection.toMutableSet()) }
+    val disabledItems = remember(disabledIndices) {  disabledIndices.toMutableSet() }
 
     val callbackIndex = rememberSaveable {
         val index = callbackCounter.getAndIncrement()
 
         if (waitForPositiveButton) {
-            callbacks.add(index) { onCheckedChange(selectedItems) }
+            callbacks.add(index) { onCheckedChange(selectedItems.toMutableList()) }
         } else {
             callbacks.add(index) { }
         }
@@ -152,15 +163,17 @@ fun MaterialDialog.listItemsMultiChoice(
 
     val onChecked = { index: Int ->
         if (index !in disabledIndices) {
-            val newSelectedItems = selectedItems.toMutableList()
+            /* Have to create temp var as mutableState doesn't trigger on adding to set */
+            val newSelectedItems = selectedItems.toMutableSet()
             if (index in selectedItems) {
                 newSelectedItems.remove(index)
             } else {
                 newSelectedItems.add(index)
             }
             selectedItems = newSelectedItems
+
             if (!waitForPositiveButton) {
-                onCheckedChange(selectedItems)
+                onCheckedChange(selectedItems.toMutableList())
             }
         }
     }
@@ -173,8 +186,8 @@ fun MaterialDialog.listItemsMultiChoice(
         isEnabled = isEnabled,
         closeOnClick = false
     ) { index, item ->
-        val enabled = remember(disabledIndices) { index !in disabledIndices }
-        val selected = index in selectedItems
+        val enabled = remember(disabledIndices) { index !in disabledItems }
+        val selected = remember(selectedItems) { index in selectedItems }
 
         Row(
             Modifier
