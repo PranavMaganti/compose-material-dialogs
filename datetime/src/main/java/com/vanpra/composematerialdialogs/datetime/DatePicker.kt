@@ -83,7 +83,7 @@ fun MaterialDialog.datepicker(
     DatePickerImpl(
         state = datePickerState,
         yearRange = yearRange,
-        backgroundColor = dialogBackgroundColor ?: MaterialTheme.colors.surface
+        backgroundColor = dialogBackgroundColor!!
     )
 
     val index = remember {

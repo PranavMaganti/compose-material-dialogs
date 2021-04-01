@@ -16,25 +16,25 @@ import com.vanpra.composematerialdialogs.datetime.timepicker
  */
 @Composable
 fun DateTimeDialogDemo() {
+    val purple = remember { Color(0xFF3700B3) }
+
+    val colors: TimePickerColors = if (isSystemInDarkTheme()) {
+        TimePickerDefaults.colors(
+            activeBackgroundColor = purple.copy(0.3f),
+            activeTextColor = Color.White,
+            selectorColor = purple,
+            inactiveBackgroundColor = Color(0xFF292929),
+        )
+    } else {
+        TimePickerDefaults.colors(
+            inactiveBackgroundColor = Color.LightGray,
+            activeBackgroundColor = purple.copy(0.1f),
+            activeTextColor = purple,
+            selectorColor = purple
+        )
+    }
+
     DialogAndShowButton(buttonText = "Time Picker Dialog") {
-        val purple = remember { Color(0xFF3700B3) }
-
-        val colors: TimePickerColors = if (isSystemInDarkTheme()) {
-            TimePickerDefaults.colors(
-                activeBackgroundColor = purple.copy(0.3f),
-                activeTextColor = Color.White,
-                selectorColor = purple,
-                inactiveBackgroundColor = Color(0xFF292929),
-            )
-        } else {
-            TimePickerDefaults.colors(
-                inactiveBackgroundColor = Color.LightGray,
-                activeBackgroundColor = purple.copy(0.1f),
-                activeTextColor = purple,
-                selectorColor = purple
-            )
-        }
-
         timepicker(colors = colors) {
             println(it.toString())
         }
@@ -57,7 +57,7 @@ fun DateTimeDialogDemo() {
     }
 
     DialogAndShowButton(buttonText = "Date and Time Picker Dialog") {
-        datetimepicker {
+        datetimepicker(timePickerColors = colors) {
             println(it.toString())
         }
     }

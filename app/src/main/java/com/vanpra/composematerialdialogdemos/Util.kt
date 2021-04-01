@@ -17,7 +17,7 @@ import com.vanpra.composematerialdialogs.MaterialDialog
  * @brief Builds a dialog and adds button to the layout which shows the dialog on click
  */
 @Composable
-fun DialogAndShowButton(buttonText: String, content: @Composable() MaterialDialog.() -> Unit) {
+fun DialogAndShowButton(buttonText: String, content: @Composable MaterialDialog.() -> Unit) {
     val dialog = MaterialDialog()
 
     dialog.build {
@@ -41,7 +41,7 @@ fun DialogAndShowButton(buttonText: String, content: @Composable() MaterialDialo
  * @brief Add title to top of layout
  */
 @Composable
-fun DialogSection(title: String, content: @Composable() () -> Unit) {
+fun DialogSection(title: String, content: @Composable () -> Unit) {
     Text(
         title,
         color = MaterialTheme.colors.onSurface,

@@ -3,7 +3,6 @@ package com.vanpra.composematerialdialogs.datetime
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
@@ -46,8 +45,8 @@ fun MaterialDialog.datetimepicker(
     val scrollPos = remember { Animatable(0f) }
     val scrollTo = remember { mutableStateOf(0f) }
 
-    val isDateScreen = remember(scrollPos.value, scrollTo.value) { scrollPos.value < scrollTo.value / 2 }
-    useElevationOverlay = isDateScreen
+    val isDateScreen =
+        remember(scrollPos.value, scrollTo.value) { scrollPos.value < scrollTo.value / 2 }
 
     BoxWithConstraints {
         Column {
@@ -61,7 +60,7 @@ fun MaterialDialog.datetimepicker(
                     DatePickerImpl(
                         state = datePickerState,
                         yearRange = yearRange,
-                        backgroundColor = dialogBackgroundColor ?: MaterialTheme.colors.surface
+                        backgroundColor = dialogBackgroundColor!!
                     )
                     TimePickerImpl(state = timePickerState) {
                         coroutineScope.launch { scrollPos.animateTo(0f) }

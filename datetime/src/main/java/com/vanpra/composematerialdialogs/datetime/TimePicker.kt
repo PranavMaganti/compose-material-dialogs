@@ -262,8 +262,6 @@ fun MaterialDialog.timepicker(
     waitForPositiveButton: Boolean = true,
     onComplete: (LocalTime) -> Unit = {}
 ) {
-    useElevationOverlay = false
-
     val timePickerState = remember { TimePickerState(selectedTime = initialTime, colors = colors) }
 
     val index = remember {
