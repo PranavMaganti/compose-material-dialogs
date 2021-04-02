@@ -45,6 +45,9 @@ fun MaterialDialog.datetimepicker(
     val scrollPos = remember { Animatable(0f) }
     val scrollTo = remember { mutableStateOf(0f) }
 
+    val isDateScreen =
+        remember(scrollPos.value, scrollTo.value) { scrollPos.value < scrollTo.value / 2 }
+
     BoxWithConstraints {
         Column {
             SideEffect {
@@ -54,7 +57,11 @@ fun MaterialDialog.datetimepicker(
 
             Layout(
                 content = {
-                    DatePickerImpl(state = datePickerState, yearRange = yearRange)
+                    DatePickerImpl(
+                        state = datePickerState,
+                        yearRange = yearRange,
+                        backgroundColor = dialogBackgroundColor!!
+                    )
                     TimePickerImpl(state = timePickerState) {
                         coroutineScope.launch { scrollPos.animateTo(0f) }
                     }
@@ -76,8 +83,6 @@ fun MaterialDialog.datetimepicker(
     }
 
     buttons {
-        val isDateScreen = remember(scrollPos.value) { scrollPos.value == 0f }
-
         positiveButton(
             text = if (isDateScreen) {
                 "Next"

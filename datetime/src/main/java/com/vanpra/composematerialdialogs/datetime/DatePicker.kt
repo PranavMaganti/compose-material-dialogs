@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
@@ -79,7 +80,11 @@ fun MaterialDialog.datepicker(
 ) {
     val datePickerState = remember { DatePickerState(initialDate) }
 
-    DatePickerImpl(state = datePickerState, yearRange = yearRange)
+    DatePickerImpl(
+        state = datePickerState,
+        yearRange = yearRange,
+        backgroundColor = dialogBackgroundColor!!
+    )
 
     val index = remember {
         val callbackIndex = callbackCounter.getAndIncrement()
@@ -102,7 +107,8 @@ fun MaterialDialog.datepicker(
 internal fun DatePickerImpl(
     modifier: Modifier = Modifier,
     state: DatePickerState,
-    yearRange: IntRange
+    yearRange: IntRange,
+    backgroundColor: Color
 ) {
     /* Height doesn't include datepicker button height */
     Column(modifier.size(328.dp, 460.dp)) {
@@ -123,7 +129,7 @@ internal fun DatePickerImpl(
                     enter = slideInVertically({ -it }),
                     exit = slideOutVertically({ -it })
                 ) {
-                    YearPicker(yearRange, viewDate, yearPickerShowing)
+                    YearPicker(yearRange, viewDate, yearPickerShowing, backgroundColor)
                 }
 
                 CalendarView(viewDate, state)
@@ -136,14 +142,15 @@ internal fun DatePickerImpl(
 private fun ViewPagerScope.YearPicker(
     yearRange: IntRange,
     viewDate: LocalDate,
-    yearPickerShowing: MutableState<Boolean>
+    yearPickerShowing: MutableState<Boolean>,
+    backgroundColor: Color
 ) {
     val state = rememberLazyListState((viewDate.year - yearRange.first) / 3)
     val coroutineScope = rememberCoroutineScope()
 
     LazyColumn(
         modifier = Modifier
-            .background(MaterialTheme.colors.surface)
+            .background(backgroundColor)
             .padding(start = 24.dp, end = 24.dp),
         state = state
     ) {
@@ -175,7 +182,7 @@ private fun ViewPagerScope.YearPicker(
 @Composable
 private fun YearPickerItem(year: Int, selected: Boolean, onClick: () -> Unit) {
     val backgroundColor =
-        if (selected) MaterialTheme.colors.primary else MaterialTheme.colors.surface
+        if (selected) MaterialTheme.colors.primary else Color.Transparent
     val textColor = if (selected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
 
     Box(Modifier.size(88.dp, 52.dp), contentAlignment = Alignment.Center) {
@@ -211,7 +218,6 @@ private fun ViewPagerScope.CalendarViewHeader(
 
     Box(
         Modifier
-            .background(MaterialTheme.colors.background)
             .padding(top = 16.dp, bottom = 16.dp, start = 24.dp, end = 24.dp)
             .height(24.dp)
             .fillMaxWidth()
@@ -314,7 +320,7 @@ private fun CalendarView(viewDate: LocalDate, datePickerData: DatePickerState) {
 private fun DateSelectionBox(date: Int, selected: Boolean, onClick: () -> Unit) {
     val colors = MaterialTheme.colors
     val backgroundColor = remember(selected) {
-        if (selected) colors.primary else colors.surface
+        if (selected) colors.primary else Color.Transparent
     }
     val textColor = remember(selected) {
         if (selected) colors.onPrimary else colors.onSurface

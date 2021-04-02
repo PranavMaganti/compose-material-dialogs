@@ -1,7 +1,7 @@
 package com.vanpra.composematerialdialogs
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.LocalElevationOverlay
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -28,12 +30,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.util.concurrent.atomic.AtomicInteger
@@ -51,7 +55,7 @@ import java.util.concurrent.atomic.AtomicInteger
  */
 class MaterialDialog(
     private val autoDismiss: Boolean = true,
-    private val onCloseRequest: (MaterialDialog) -> Unit = { it.hide() }
+    private val onCloseRequest: (MaterialDialog) -> Unit = { it.hide() },
 ) {
     private val showing: MutableState<Boolean> = mutableStateOf(false)
 
@@ -63,6 +67,11 @@ class MaterialDialog(
     var positiveEnabled by mutableStateOf(mutableListOf<Boolean>())
     val positiveEnabledCounter = AtomicInteger(0)
     var positiveButtonEnabledOverride by mutableStateOf(true)
+
+    /**
+     * @brief Dialog background color with elevation overlay
+     */
+    var dialogBackgroundColor by mutableStateOf<Color?>(null)
 
     internal fun setPositiveEnabled(index: Int, value: Boolean) {
         // Have to make temp list in order for state to register change
@@ -120,27 +129,43 @@ class MaterialDialog(
 
     /**
      * @brief Builds a dialog with the given content
-     * @param content the body of the dialog
+     * @param backgroundColor background color of the dialog
+     * @param shape shape of the dialog and components used in the dialog
+     * @param border border stoke of the dialog
+     * @param elevation elevation of the dialog
+     * @param content the body content of the dialog
      */
     @Composable
     fun build(
-        backgroundColor: Color = MaterialTheme.colors.background,
+        backgroundColor: Color = MaterialTheme.colors.surface,
+        shape: Shape = MaterialTheme.shapes.medium,
+        border: BorderStroke? = null,
+        elevation: Dp = 24.dp,
         content: @Composable MaterialDialog.() -> Unit
     ) {
+        dialogBackgroundColor = LocalElevationOverlay.current?.apply(
+            color = backgroundColor,
+            elevation = elevation
+        ) ?: MaterialTheme.colors.surface
+
         if (showing.value) {
             ThemedDialog(onCloseRequest = { onCloseRequest(this) }) {
                 DisposableEffect(Unit) {
                     onDispose { resetDialog() }
                 }
-
-                Column(
-                    Modifier
+                Surface(
+                    modifier = Modifier
                         .fillMaxWidth()
-                        .background(backgroundColor)
                         .clipToBounds()
-                        .testTag("dialog")
+                        .testTag("dialog"),
+                    shape = shape,
+                    color = backgroundColor,
+                    border = border,
+                    elevation = elevation
                 ) {
-                    this@MaterialDialog.content()
+                    Column {
+                        this@MaterialDialog.content()
+                    }
                 }
             }
         }
