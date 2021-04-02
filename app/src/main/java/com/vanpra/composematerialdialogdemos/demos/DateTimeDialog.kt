@@ -66,6 +66,18 @@ fun DateTimeDialogDemo() {
         }
     }
 
+    DialogAndShowButton(buttonText = "Time Picker Dialog 24H") {
+        timepicker(colors = colors, is24HourClock = true) {
+            println(it.toString())
+            Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
+        }
+
+        buttons {
+            positiveButton("Ok")
+            negativeButton("Cancel")
+        }
+    }
+
     DialogAndShowButton(buttonText = "Date Picker Dialog") {
         datepicker {
             println(it.toString())
