@@ -82,15 +82,7 @@ internal class SimpleLocalTime(hour: Int, minute: Int, isAM: Boolean) : Comparab
 
     /* Converts a SimpleLocalTime object to a LocalTime object */
     fun toLocalTime(): LocalTime {
-        val fullHour = if (isAM && hour == 12) {
-            0
-        } else if (isAM || hour == 12) {
-            hour
-        } else if (hour == 12) {
-            12
-        } else {
-            hour + 12
-        }
+        val fullHour = hour + if (isAM) 0 else 12
         return LocalTime.of(fullHour, minute)
     }
 
@@ -98,9 +90,7 @@ internal class SimpleLocalTime(hour: Int, minute: Int, isAM: Boolean) : Comparab
         /* Initalises a SimpleLocalTime object from a LocalTime object */
         fun fromLocalTime(time: LocalTime): SimpleLocalTime {
             val isAM = time.hour < 12
-            val hour = if (isAM && time.hour == 0) {
-                12
-            } else if (isAM) {
+            val hour = if (isAM) {
                 time.hour
             } else {
                 time.hour - 12
@@ -273,7 +263,7 @@ internal class TimePickerState(
         return when {
             isAM == maximumTime.isAM -> maximumTime.hour
             isAM -> 12
-            else -> 0
+            else -> -1
         }
     }
 
@@ -371,7 +361,7 @@ internal fun TimePickerImpl(
         Crossfade(state.currentScreen) {
             when (it) {
                 ClockScreen.Hour -> {
-                    val isEnabled: (Int) -> Boolean = remember(state.selectedTime.isAM) {
+                    val isEnabled: (Int) -> Boolean = remember(state.selectedTime, state.selectedTime.isAM) {
                         { index ->
                             index in state.minimumHour(state.selectedTime.isAM)..
                                     state.maximumHour(state.selectedTime.isAM)
@@ -381,7 +371,7 @@ internal fun TimePickerImpl(
                         anchorPoints = 12,
                         label = { index -> if (index == 0) "12" else index.toString() },
                         onAnchorChange = { hours -> state.selectedTime.hour = hours },
-                        startAnchor = if (state.selectedTime.hour == 12) 0 else state.selectedTime.hour,
+                        startAnchor = state.selectedTime.hour,
                         onLift = { state.currentScreen = ClockScreen.Minute },
                         colors = state.colors,
                         isAnchorEnabled = isEnabled
@@ -389,7 +379,7 @@ internal fun TimePickerImpl(
                 }
                 ClockScreen.Minute -> {
                     val isEnabled: (Int) -> Boolean =
-                        remember(state.selectedTime.isAM, state.selectedTime.hour) {
+                        remember(state.selectedTime, state.selectedTime.isAM, state.selectedTime.hour) {
                             { index ->
                                 index in state.minimumMinute(state.selectedTime.isAM, state.selectedTime.hour)..
                                         state.maximumMinute(state.selectedTime.isAM, state.selectedTime.hour
@@ -482,7 +472,7 @@ internal fun TimeLayout(state: TimePickerState) {
     val bottomPeriodShape =
         MaterialTheme.shapes.medium.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp))
     val isAMEnabled = state.minimumHour(true) <= 12
-    val isPMEnabled = state.maximumHour(false) > 0
+    val isPMEnabled = state.maximumHour(false) >= 0
     Row(Modifier.height(80.dp)) {
         ClockLabel(
             text = (if (state.selectedTime.hour == 0) 12 else state.selectedTime.hour).toString(),
@@ -556,8 +546,8 @@ private fun ClockLayout(
 
     val offset = remember { mutableStateOf(Offset.Zero) }
     val center = remember { mutableStateOf(Offset.Zero) }
-    val namedAnchor = remember { mutableStateOf(isNamedAnchor(startAnchor)) }
-    val selectedAnchor = remember { mutableStateOf(startAnchor) }
+    val namedAnchor = remember(isNamedAnchor, startAnchor) { mutableStateOf(isNamedAnchor(startAnchor)) }
+    val selectedAnchor = remember(startAnchor) { mutableStateOf(startAnchor) }
 
 
     val anchors = remember(anchorPoints) {
@@ -577,11 +567,11 @@ private fun ClockLayout(
         anchors
     }
 
-    val anchoredOffset = remember { mutableStateOf(anchors[startAnchor]) }
+    val anchoredOffset = remember(anchors, startAnchor) { mutableStateOf(anchors[startAnchor]) }
 
     val updateAnchor : (Offset) -> Boolean = remember(anchors, isAnchorEnabled) {
         { newOffset ->
-            val absDiff = anchors.mapIndexed { index, it ->
+            val absDiff = anchors.map {
                 val diff = it.selectedOffset - newOffset + center.value
                 diff.x.pow(2) + diff.y.pow(2)
             }
@@ -589,7 +579,7 @@ private fun ClockLayout(
             val minAnchor = absDiff.withIndex().minByOrNull { (_, f) -> f }?.index!!
             if (isAnchorEnabled(minAnchor)) {
                 if (anchoredOffset.value.selectedOffset != anchors[minAnchor].selectedOffset) {
-                    onAnchorChange(label(minAnchor).toInt())
+                    onAnchorChange(minAnchor)
 
                     anchoredOffset.value = anchors[minAnchor]
                     namedAnchor.value = isNamedAnchor(minAnchor)
