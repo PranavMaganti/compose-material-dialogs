@@ -53,6 +53,10 @@ fun MaterialDialog.datetimepicker(
             is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context))
     }
 
+    timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
+    timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
+    timePickerState.is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context)
+
     val scrollPos = remember { Animatable(0f) }
     val scrollTo = remember { mutableStateOf(0f) }
 

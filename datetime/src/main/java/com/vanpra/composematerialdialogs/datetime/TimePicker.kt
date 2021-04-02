@@ -234,9 +234,9 @@ internal class TimePickerState(
     currentScreen: ClockScreen = ClockScreen.Hour,
     clockInput: Boolean = true,
     val colors: TimePickerColors,
-    val minimumTime: SimpleLocalTime,
-    val maximumTime: SimpleLocalTime,
-    val is24Hour : Boolean,
+    minimumTime: SimpleLocalTime,
+    maximumTime: SimpleLocalTime,
+    is24Hour : Boolean,
 ) {
     constructor(
         selectedTime: LocalTime,
@@ -257,6 +257,9 @@ internal class TimePickerState(
     )
 
     var selectedTime by mutableStateOf(selectedTime)
+    var minimumTime by mutableStateOf(minimumTime)
+    var maximumTime by mutableStateOf(maximumTime)
+    var is24Hour by mutableStateOf(is24Hour)
     var currentScreen by mutableStateOf(currentScreen)
     var clockInput by mutableStateOf(clockInput)
 
@@ -334,6 +337,10 @@ fun MaterialDialog.timepicker(
         )
     }
 
+    timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
+    timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
+    timePickerState.is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context)
+
     val index = remember {
         val callbackIndex = callbackCounter.getAndIncrement()
         callbacks.add(callbackIndex) {}
@@ -391,7 +398,7 @@ internal fun TimePickerImpl(
                             isAnchorEnabled = isEnabled
                         )
                     } else {
-                        val isEnabled: (Int) -> Boolean = remember(state.selectedTime, state.selectedTime.isAM) {
+                        val isEnabled: (Int) -> Boolean = remember(state.minimumTime, state.maximumTime, state.selectedTime, state.selectedTime.isAM) {
                                 { index ->
                                     index in state.minimumHour(state.selectedTime.isAM)..
                                             state.maximumHour(state.selectedTime.isAM)
@@ -410,7 +417,7 @@ internal fun TimePickerImpl(
                 }
                 ClockScreen.Minute -> {
                     val isEnabled: (Int) -> Boolean =
-                        remember(state.selectedTime, state.selectedTime.isAM, state.selectedTime.hour) {
+                        remember(state.minimumTime, state.maximumTime, state.selectedTime, state.selectedTime.isAM, state.selectedTime.hour) {
                             { index ->
                                 index in state.minimumMinute(state.selectedTime.isAM, state.selectedTime.hour)..
                                         state.maximumMinute(state.selectedTime.isAM, state.selectedTime.hour
