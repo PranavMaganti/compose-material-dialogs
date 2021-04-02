@@ -6,10 +6,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.ComposeTestRule
-import androidx.compose.ui.test.onAllNodesWithTag
-import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performGesture
+import androidx.compose.ui.test.swipeUp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogButtonTypes
 
@@ -29,8 +31,17 @@ internal fun DialogWithContent(
     }
 }
 
-internal fun ComposeTestRule.onDialogListItem(index: Int) =
-    this.onAllNodesWithTag("dialog_list_item_$index", useUnmergedTree = true).onFirst()
+@ExperimentalTestApi
+internal fun ComposeTestRule.onDialogListItem(index: Int): SemanticsNodeInteraction {
+    try {
+        onNodeWithTag("dialog_list_item_$index").assertExists()
+    } catch (e: AssertionError) {
+        onDialogList().performGesture { swipeUp() }
+        waitForIdle()
+    }
+
+    return onNodeWithTag("dialog_list_item_$index").assertExists()
+}
 
 internal fun ComposeTestRule.onDialogList() =
     this.onNodeWithTag("dialog_list")

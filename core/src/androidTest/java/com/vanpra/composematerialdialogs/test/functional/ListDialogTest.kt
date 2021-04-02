@@ -55,14 +55,11 @@ private val ringtones =
         "Beats",
         "Dance Party",
         "Zen Too",
-        "None",
-        "Callisto",
-        "Ganymede",
-        "Luna",
-        "Rrrring",
-        "Beats",
-        "Dance Party",
-        "Zen Too"
+        "Copycat",
+        "Lollipop",
+        "Crackle",
+        "Mash-Up",
+        "Lost & Found"
     )
 private val labels = listOf("None", "Social", "Updates", "Promotions", "Spam", "Bin")
 private val emails = listOf(
@@ -217,23 +214,23 @@ class ListDialog {
         }
     }
 
-//    @Test
-//    fun singleSelectionDialog() {
-//        val selectedItem = mutableStateOf<Int?>(null)
-//        val dialog = MaterialDialog()
-//
-//        setupSingleSelectionDialog(dialog, selectedItem)
-//
-//        ringtones.forEachIndexed { index, _ ->
-//            composeTestRule.onDialogListItem(index).performScrollTo().performClick()
-//            composeTestRule.onPositiveButton().performClick()
-//
-//            /* Need this line or else tests don't wait for dialog to close */
-//            composeTestRule.assertDialogDoesNotExist()
-//            assertEquals(index, selectedItem.value)
-//            dialog.show()
-//        }
-//    }
+    @Test
+    fun singleSelectionDialog() {
+        val selectedItem = mutableStateOf<Int?>(null)
+        val dialog = MaterialDialog()
+
+        setupSingleSelectionDialog(dialog, selectedItem)
+
+        ringtones.forEachIndexed { index, _ ->
+            composeTestRule.onDialogListItem(index).performClick()
+            composeTestRule.onPositiveButton().performClick()
+
+            /* Need this line or else tests don't wait for dialog to close */
+            composeTestRule.assertDialogDoesNotExist()
+            assertEquals(index, selectedItem.value)
+            dialog.show()
+        }
+    }
 
     private fun setupMultiSelectionDialog(
         dialog: MaterialDialog,

@@ -147,7 +147,9 @@ fun SingleSelectionDemo() {
 
     DialogAndShowButton(buttonText = "Single Selection Dialog") {
         title(res = R.string.ringtone_dialog_title)
-        listItemsSingleChoice(ringtones)
+        listItemsSingleChoice(ringtones) {
+            println(it)
+        }
         defaultListButtons()
     }
 
