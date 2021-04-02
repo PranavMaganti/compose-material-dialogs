@@ -502,9 +502,7 @@ internal fun TimeLayout(state: TimePickerState) {
         )
 
         Box(
-            Modifier
-                .width(24.dp)
-                .fillMaxHeight(),
+            Modifier.width(24.dp).fillMaxHeight(),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -523,37 +521,25 @@ internal fun TimeLayout(state: TimePickerState) {
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        Column(
-            Modifier
-                .fillMaxHeight()
-                .border(state.colors.border, MaterialTheme.shapes.medium)) {
+        Column(Modifier.fillMaxHeight().border(state.colors.border, MaterialTheme.shapes.medium)) {
             Box(
-                modifier = Modifier
-                    .size(height = 40.dp, width = 52.dp)
+                modifier = Modifier.size(height = 40.dp, width = 52.dp)
                     .clip(topPeriodShape)
                     .background(state.colors.periodBackgroundColor(state.selectedTime.isAM).value)
-                    .then(if (isAMEnabled) Modifier.clickable {
-                        state.selectedTime.isAM = true
-                    } else Modifier),
+                    .then(if (isAMEnabled) Modifier.clickable { state.selectedTime.isAM = true } else Modifier),
                 contentAlignment = Alignment.Center
             ) {
                 Text("AM", style = TextStyle(state.colors.textColor(state.selectedTime.isAM).value.copy(alpha = if (isAMEnabled) ContentAlpha.high else ContentAlpha.disabled)))
             }
 
-            Spacer(
-                Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(state.colors.border.brush))
+            Spacer(Modifier.fillMaxWidth().height(1.dp).background(state.colors.border.brush))
 
             Box(
                 modifier = Modifier
                     .size(height = 40.dp, width = 52.dp)
                     .clip(bottomPeriodShape)
                     .background(state.colors.periodBackgroundColor(!state.selectedTime.isAM).value)
-                    .then(if (isPMEnabled) Modifier.clickable {
-                        state.selectedTime.isAM = false
-                    } else Modifier),
+                    .then(if (isPMEnabled) Modifier.clickable { state.selectedTime.isAM = false } else Modifier),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -652,9 +638,7 @@ private fun ClockLayout(
     }
 
     BoxWithConstraints(
-        Modifier
-            .padding(horizontal = 12.dp)
-            .size(256.dp)
+        Modifier.padding(horizontal = 12.dp).size(256.dp)
             .pointerInput(null, dragObserver)
             .pointerInput(null, tapObserver)
     ) {
