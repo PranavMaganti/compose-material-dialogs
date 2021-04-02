@@ -3,11 +3,7 @@ package com.vanpra.composematerialdialogs.datetime
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.layout.Layout
 import com.vanpra.composematerialdialogs.MaterialDialog
 import kotlinx.coroutines.launch
@@ -45,8 +41,14 @@ fun MaterialDialog.datetimepicker(
         TimePickerState(selectedTime = initialDateTime.toLocalTime(), colors = timePickerColors, minimumTime = minimumTime, maximumTime = maximumTime)
     }
 
-    timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
-    timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
+    DisposableEffect(minimumTime) {
+        timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
+        onDispose {  }
+    }
+    DisposableEffect(maximumTime) {
+        timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
+        onDispose {  }
+    }
 
     val scrollPos = remember { Animatable(0f) }
     val scrollTo = remember { mutableStateOf(0f) }

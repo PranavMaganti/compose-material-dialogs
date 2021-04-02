@@ -323,8 +323,14 @@ fun MaterialDialog.timepicker(
             maximumTime = maximumTime
         )
     }
-    timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
-    timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
+    DisposableEffect(minimumTime) {
+        timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
+        onDispose {  }
+    }
+    DisposableEffect(maximumTime) {
+        timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
+        onDispose {  }
+    }
 
     val index = remember {
         val callbackIndex = callbackCounter.getAndIncrement()
@@ -351,11 +357,17 @@ internal fun TimePickerImpl(
     state: TimePickerState,
     onBack: (() -> Unit)? = null
 ) {
-    if (state.selectedTime < state.minimumTime) {
-        state.selectedTime = SimpleLocalTime.fromLocalTime(state.minimumTime.toLocalTime())
+    DisposableEffect(state.selectedTime, state.minimumTime, state.selectedTime.hour, state.selectedTime.isAM, state.selectedTime.minute) {
+        if (state.selectedTime < state.minimumTime) {
+            state.selectedTime = SimpleLocalTime.fromLocalTime(state.minimumTime.toLocalTime())
+        }
+        onDispose {  }
     }
-    if (state.selectedTime > state.maximumTime) {
-        state.selectedTime = SimpleLocalTime.fromLocalTime(state.maximumTime.toLocalTime())
+    DisposableEffect(state.selectedTime, state.maximumTime, state.selectedTime.hour, state.selectedTime.isAM, state.selectedTime.minute) {
+        if (state.selectedTime > state.maximumTime) {
+            state.selectedTime = SimpleLocalTime.fromLocalTime(state.maximumTime.toLocalTime())
+        }
+        onDispose {  }
     }
     Column(modifier.padding(start = 24.dp, end = 24.dp)) {
         TimePickerTitle(onBack)
@@ -412,7 +424,8 @@ internal fun TimePickerTitle(onBack: (() -> Unit)?) {
     if (onBack != null) {
         Row(Modifier.height(52.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(
-                Modifier.clip(CircleShape)
+                Modifier
+                    .clip(CircleShape)
                     .clickable(onClick = onBack),
                 contentAlignment = Alignment.Center
             ) {
@@ -451,7 +464,10 @@ internal fun ClockLabel(
 ) {
 
     Surface(
-        modifier = Modifier.width(96.dp).fillMaxHeight().clickable(onClick = onClick),
+        modifier = Modifier
+            .width(96.dp)
+            .fillMaxHeight()
+            .clickable(onClick = onClick),
         shape = MaterialTheme.shapes.medium,
         color = backgroundColor,
     ) {
@@ -475,8 +491,8 @@ internal fun TimeLayout(state: TimePickerState) {
     )
     val bottomPeriodShape =
         MaterialTheme.shapes.medium.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp))
-    val isAMEnabled = state.minimumHour(true) <= 12
-    val isPMEnabled = state.maximumHour(false) >= 0
+    val isAMEnabled = remember(state.minimumTime) { state.minimumHour(true) <= 12 }
+    val isPMEnabled = remember(state.maximumTime) { state.maximumHour(false) >= 0 }
     Row(Modifier.height(80.dp)) {
         ClockLabel(
             text = (if (state.selectedTime.hour == 0) 12 else state.selectedTime.hour).toString(),
@@ -486,7 +502,9 @@ internal fun TimeLayout(state: TimePickerState) {
         )
 
         Box(
-            Modifier.width(24.dp).fillMaxHeight(),
+            Modifier
+                .width(24.dp)
+                .fillMaxHeight(),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -505,24 +523,37 @@ internal fun TimeLayout(state: TimePickerState) {
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        Column(Modifier.fillMaxHeight().border(state.colors.border, MaterialTheme.shapes.medium)) {
+        Column(
+            Modifier
+                .fillMaxHeight()
+                .border(state.colors.border, MaterialTheme.shapes.medium)) {
             Box(
-                modifier = Modifier.size(height = 40.dp, width = 52.dp)
+                modifier = Modifier
+                    .size(height = 40.dp, width = 52.dp)
                     .clip(topPeriodShape)
                     .background(state.colors.periodBackgroundColor(state.selectedTime.isAM).value)
-                    .then(if (isAMEnabled) Modifier.clickable { state.selectedTime.isAM = true } else Modifier),
+                    .then(if (isAMEnabled) Modifier.clickable {
+                        state.selectedTime.isAM = true
+                    } else Modifier),
                 contentAlignment = Alignment.Center
             ) {
                 Text("AM", style = TextStyle(state.colors.textColor(state.selectedTime.isAM).value.copy(alpha = if (isAMEnabled) ContentAlpha.high else ContentAlpha.disabled)))
             }
 
-            Spacer(Modifier.fillMaxWidth().height(1.dp).background(state.colors.border.brush))
+            Spacer(
+                Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(state.colors.border.brush))
 
             Box(
-                modifier = Modifier.size(height = 40.dp, width = 52.dp)
+                modifier = Modifier
+                    .size(height = 40.dp, width = 52.dp)
                     .clip(bottomPeriodShape)
                     .background(state.colors.periodBackgroundColor(!state.selectedTime.isAM).value)
-                    .then(if (isPMEnabled) Modifier.clickable { state.selectedTime.isAM = false } else Modifier),
+                    .then(if (isPMEnabled) Modifier.clickable {
+                        state.selectedTime.isAM = false
+                    } else Modifier),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -621,7 +652,9 @@ private fun ClockLayout(
     }
 
     BoxWithConstraints(
-        Modifier.padding(horizontal = 12.dp).size(256.dp)
+        Modifier
+            .padding(horizontal = 12.dp)
+            .size(256.dp)
             .pointerInput(null, dragObserver)
             .pointerInput(null, tapObserver)
     ) {
