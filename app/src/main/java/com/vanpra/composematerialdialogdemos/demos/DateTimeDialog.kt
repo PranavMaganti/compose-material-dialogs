@@ -10,6 +10,7 @@ import com.vanpra.composematerialdialogs.datetime.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.datepicker
 import com.vanpra.composematerialdialogs.datetime.datetimepicker
 import com.vanpra.composematerialdialogs.datetime.timepicker
+import java.time.LocalTime
 
 /**
  * @brief Date and Time Picker Demos
@@ -35,7 +36,9 @@ fun DateTimeDialogDemo() {
     }
 
     DialogAndShowButton(buttonText = "Time Picker Dialog") {
-        timepicker(colors = colors) {
+        timepicker(colors = colors,
+            minimumTime = LocalTime.of(9, 35),
+            maximumTime = LocalTime.of(11, 13)) {
             println(it.toString())
         }
 

@@ -12,6 +12,7 @@ import androidx.compose.ui.layout.Layout
 import com.vanpra.composematerialdialogs.MaterialDialog
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 /**
  * @brief A combined date and time picker dialog
@@ -30,6 +31,8 @@ fun MaterialDialog.datetimepicker(
     initialDateTime: LocalDateTime = LocalDateTime.now(),
     timePickerColors: TimePickerColors = TimePickerDefaults.colors(),
     yearRange: IntRange = IntRange(1900, 2100),
+    minimumTime: LocalTime = LocalTime.MIN,
+    maximumTime: LocalTime = LocalTime.MAX,
     positiveButtonText: String = "Ok",
     negativeButtonText: String = "Cancel",
     onCancel: () -> Unit = {},
@@ -39,7 +42,7 @@ fun MaterialDialog.datetimepicker(
 
     val datePickerState = remember { DatePickerState(initialDateTime.toLocalDate()) }
     val timePickerState = remember {
-        TimePickerState(selectedTime = initialDateTime.toLocalTime(), colors = timePickerColors)
+        TimePickerState(selectedTime = initialDateTime.toLocalTime(), colors = timePickerColors, minimumTime = minimumTime, maximumTime = maximumTime)
     }
 
     val scrollPos = remember { Animatable(0f) }
