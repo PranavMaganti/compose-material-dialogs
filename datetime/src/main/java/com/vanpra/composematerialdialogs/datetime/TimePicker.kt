@@ -337,9 +337,18 @@ fun MaterialDialog.timepicker(
         )
     }
 
-    timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
-    timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
-    timePickerState.is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context)
+    DisposableEffect(minimumTime) {
+        timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
+        onDispose {  }
+    }
+    DisposableEffect(maximumTime) {
+        timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
+        onDispose {  }
+    }
+    DisposableEffect(is24HourClock) {
+        timePickerState.is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context)
+        onDispose {  }
+    }
 
     val index = remember {
         val callbackIndex = callbackCounter.getAndIncrement()
@@ -366,11 +375,17 @@ internal fun TimePickerImpl(
     state: TimePickerState,
     onBack: (() -> Unit)? = null
 ) {
-    if (state.selectedTime < state.minimumTime) {
-        state.selectedTime = SimpleLocalTime.fromLocalTime(state.minimumTime.toLocalTime())
+    DisposableEffect(state.selectedTime, state.minimumTime, state.selectedTime.hour, state.selectedTime.isAM, state.selectedTime.minute) {
+        if (state.selectedTime < state.minimumTime) {
+            state.selectedTime = SimpleLocalTime.fromLocalTime(state.minimumTime.toLocalTime())
+        }
+        onDispose {  }
     }
-    if (state.selectedTime > state.maximumTime) {
-        state.selectedTime = SimpleLocalTime.fromLocalTime(state.maximumTime.toLocalTime())
+    DisposableEffect(state.selectedTime, state.maximumTime, state.selectedTime.hour, state.selectedTime.isAM, state.selectedTime.minute) {
+        if (state.selectedTime > state.maximumTime) {
+            state.selectedTime = SimpleLocalTime.fromLocalTime(state.maximumTime.toLocalTime())
+        }
+        onDispose {  }
     }
     Column(modifier.padding(start = 24.dp, end = 24.dp)) {
         TimePickerTitle(onBack)
@@ -509,9 +524,9 @@ internal fun TimeLayout(state: TimePickerState) {
     )
     val bottomPeriodShape =
         MaterialTheme.shapes.medium.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp))
-    val isAMEnabled = state.minimumHour(true) <= 12
-    val isPMEnabled = state.maximumHour(false) >= 0
-    val is24Hour = state.is24Hour
+    val isAMEnabled = remember(state.minimumTime) { state.minimumHour(true) <= 12 }
+    val isPMEnabled = remember(state.maximumTime) { state.maximumHour(false) >= 0 }
+    val is24Hour = remember(state.is24Hour) { state.is24Hour }
 
     Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.height(80.dp).fillMaxWidth()) {
         ClockLabel(

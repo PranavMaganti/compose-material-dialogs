@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -53,9 +54,18 @@ fun MaterialDialog.datetimepicker(
             is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context))
     }
 
-    timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
-    timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
-    timePickerState.is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context)
+    DisposableEffect(minimumTime) {
+        timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
+        onDispose {  }
+    }
+    DisposableEffect(maximumTime) {
+        timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
+        onDispose {  }
+    }
+    DisposableEffect(is24HourClock) {
+        timePickerState.is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context)
+        onDispose {  }
+    }
 
     val scrollPos = remember { Animatable(0f) }
     val scrollTo = remember { mutableStateOf(0f) }
