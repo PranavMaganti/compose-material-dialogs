@@ -45,6 +45,9 @@ fun MaterialDialog.datetimepicker(
         TimePickerState(selectedTime = initialDateTime.toLocalTime(), colors = timePickerColors, minimumTime = minimumTime, maximumTime = maximumTime)
     }
 
+    timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
+    timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
+
     val scrollPos = remember { Animatable(0f) }
     val scrollTo = remember { mutableStateOf(0f) }
 

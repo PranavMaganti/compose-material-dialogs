@@ -228,8 +228,8 @@ internal class TimePickerState(
     currentScreen: ClockScreen = ClockScreen.Hour,
     clockInput: Boolean = true,
     val colors: TimePickerColors,
-    val minimumTime: SimpleLocalTime,
-    val maximumTime: SimpleLocalTime
+    minimumTime: SimpleLocalTime,
+    maximumTime: SimpleLocalTime
 ) {
     constructor(
         selectedTime: LocalTime,
@@ -248,6 +248,8 @@ internal class TimePickerState(
     )
 
     var selectedTime by mutableStateOf(selectedTime)
+    var minimumTime by mutableStateOf(minimumTime)
+    var maximumTime by mutableStateOf(maximumTime)
     var currentScreen by mutableStateOf(currentScreen)
     var clockInput by mutableStateOf(clockInput)
 
@@ -321,6 +323,8 @@ fun MaterialDialog.timepicker(
             maximumTime = maximumTime
         )
     }
+    timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
+    timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
 
     val index = remember {
         val callbackIndex = callbackCounter.getAndIncrement()
@@ -361,7 +365,7 @@ internal fun TimePickerImpl(
         Crossfade(state.currentScreen) {
             when (it) {
                 ClockScreen.Hour -> {
-                    val isEnabled: (Int) -> Boolean = remember(state.selectedTime, state.selectedTime.isAM) {
+                    val isEnabled: (Int) -> Boolean = remember(state.minimumTime, state.maximumTime, state.selectedTime, state.selectedTime.isAM) {
                         { index ->
                             index in state.minimumHour(state.selectedTime.isAM)..
                                     state.maximumHour(state.selectedTime.isAM)
@@ -379,7 +383,7 @@ internal fun TimePickerImpl(
                 }
                 ClockScreen.Minute -> {
                     val isEnabled: (Int) -> Boolean =
-                        remember(state.selectedTime, state.selectedTime.isAM, state.selectedTime.hour) {
+                        remember(state.minimumTime, state.maximumTime, state.selectedTime, state.selectedTime.isAM, state.selectedTime.hour) {
                             { index ->
                                 index in state.minimumMinute(state.selectedTime.isAM, state.selectedTime.hour)..
                                         state.maximumMinute(state.selectedTime.isAM, state.selectedTime.hour
