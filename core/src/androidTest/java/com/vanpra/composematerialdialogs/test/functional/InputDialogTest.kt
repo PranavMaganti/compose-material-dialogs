@@ -171,7 +171,6 @@ class InputDialogTest {
         composeTestRule.onPositiveButton().assertIsEnabled()
     }
 
-
     private fun setupBasicInputDialog(
         dialog: MaterialDialog = MaterialDialog(),
         testInputDialog: @Composable MaterialDialog.() -> Unit = { input(label = "Test") }
@@ -188,4 +187,3 @@ class InputDialogTest {
         }
     }
 }
-

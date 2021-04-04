@@ -278,7 +278,6 @@ class ListDialog {
         assertEquals(2, selectedItem.value)
     }
 
-
     private fun setupMultiSelectionDialog(
         dialog: MaterialDialog,
         selectedItem: MutableState<Set<Int>?>,
