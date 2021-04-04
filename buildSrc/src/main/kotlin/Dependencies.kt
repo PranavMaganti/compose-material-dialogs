@@ -18,6 +18,11 @@ object Dependencies {
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
+    
+    object Shot {
+        private const val version = "5.10.3"
+        const val shot = "com.karumi:shot-android:$version"
+    }
 
     object AndroidX {
         const val appcompat = "androidx.appcompat:appcompat:1.2.0-rc01"

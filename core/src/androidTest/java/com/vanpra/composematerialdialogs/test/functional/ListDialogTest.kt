@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
@@ -25,11 +26,11 @@ import com.vanpra.composematerialdialogs.listItems
 import com.vanpra.composematerialdialogs.listItemsMultiChoice
 import com.vanpra.composematerialdialogs.listItemsSingleChoice
 import com.vanpra.composematerialdialogs.test.R
-import com.vanpra.composematerialdialogs.test.util.DialogWithContent
-import com.vanpra.composematerialdialogs.test.util.assertDialogDoesNotExist
-import com.vanpra.composematerialdialogs.test.util.onDialogListItem
-import com.vanpra.composematerialdialogs.test.util.onPositiveButton
-import com.vanpra.composematerialdialogs.test.util.powerSet
+import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
+import com.vanpra.composematerialdialogs.test.utils.assertDialogDoesNotExist
+import com.vanpra.composematerialdialogs.test.utils.onDialogListItem
+import com.vanpra.composematerialdialogs.test.utils.onPositiveButton
+import com.vanpra.composematerialdialogs.test.utils.powerSet
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertEquals
@@ -147,16 +148,12 @@ class ListDialog {
         val dialog = MaterialDialog()
         setupMultiSelectionDialog(dialog, selectedItem)
 
-        labels.forEachIndexed { index, _ ->
-            composeTestRule.onDialogListItem(index).performClick()
-            assertEquals(null, selectedItem.value)
-            composeTestRule.onPositiveButton().performClick()
-            /* Need this line or else tests don't wait for dialog to close */
-            composeTestRule.assertDialogDoesNotExist()
-            assertEquals(setOf(index), selectedItem.value)
-            selectedItem.value = null
-            dialog.show()
-        }
+        composeTestRule.onDialogListItem(0).performClick()
+        assertEquals(null, selectedItem.value)
+        composeTestRule.onPositiveButton().performClick()
+        /* Need this line or else tests don't wait for dialog to close */
+        composeTestRule.assertDialogDoesNotExist()
+        assertEquals(setOf(0), selectedItem.value)
     }
 
     @Test
@@ -165,16 +162,13 @@ class ListDialog {
         val dialog = MaterialDialog()
         setupMultiSelectionDialog(dialog, selectedItem, waitForPositiveButton = false)
 
-        labels.forEachIndexed { index, _ ->
-            composeTestRule.onDialogListItem(index).performClick()
-            assertEquals(setOf(index), selectedItem.value)
-            selectedItem.value = null
-            composeTestRule.onPositiveButton().performClick()
-            /* Need this line or else tests don't wait for dialog to close */
-            composeTestRule.assertDialogDoesNotExist()
-            assertEquals(null, selectedItem.value)
-            dialog.show()
-        }
+        composeTestRule.onDialogListItem(0).performClick()
+        assertEquals(setOf(0), selectedItem.value)
+        selectedItem.value = null
+        composeTestRule.onPositiveButton().performClick()
+        /* Need this line or else tests don't wait for dialog to close */
+        composeTestRule.assertDialogDoesNotExist()
+        assertEquals(null, selectedItem.value)
     }
 
     /* Exhaustive Stress test of all possible inputs for labels */
@@ -215,7 +209,7 @@ class ListDialog {
     }
 
     @Test
-    fun singleSelectionDialog() {
+    fun singleSelectionDialogAllItems() {
         val selectedItem = mutableStateOf<Int?>(null)
         val dialog = MaterialDialog()
 
@@ -231,6 +225,59 @@ class ListDialog {
             dialog.show()
         }
     }
+
+    @Test
+    fun singleSelectionDialogWaitForPositiveButton() {
+        val selectedItem = mutableStateOf<Int?>(null)
+        val dialog = MaterialDialog()
+
+        setupSingleSelectionDialog(dialog, selectedItem)
+
+        composeTestRule.onDialogListItem(0).performClick()
+        assertEquals(null, selectedItem.value)
+        composeTestRule.onPositiveButton().performClick()
+        /* Need this line or else tests don't wait for dialog to close */
+        composeTestRule.assertDialogDoesNotExist()
+        assertEquals(setOf(0), selectedItem.value)
+    }
+
+    @Test
+    fun singleSelectionDialogDontWaitForPositiveButton() {
+        val selectedItem = mutableStateOf<Int?>(null)
+        val dialog = MaterialDialog()
+
+        setupSingleSelectionDialog(dialog, selectedItem, waitForPositiveButton = false)
+
+        composeTestRule.onDialogListItem(0).performClick()
+        assertEquals(setOf(0), selectedItem.value)
+        selectedItem.value = null
+        composeTestRule.onPositiveButton().performClick()
+        /* Need this line or else tests don't wait for dialog to close */
+        composeTestRule.assertDialogDoesNotExist()
+        assertEquals(null, selectedItem.value)
+    }
+
+    @Test
+    fun singleSelectionDialogPositiveButtonDisabledOnNoSelection() {
+        setupSingleSelectionDialog()
+        composeTestRule.onPositiveButton().assertIsNotEnabled()
+        composeTestRule.onDialogListItem(0).performClick()
+        composeTestRule.onPositiveButton().performClick()
+    }
+
+    @Test
+    fun singleSelectionDialogMultiSelectBeforeSubmit() {
+        val selectedItem = mutableStateOf<Int?>(null)
+        setupSingleSelectionDialog(selectedItem = selectedItem)
+
+        composeTestRule.onDialogListItem(0).performClick()
+        composeTestRule.onDialogListItem(1).performClick()
+        composeTestRule.onDialogListItem(2).performClick()
+        composeTestRule.onPositiveButton().performClick()
+
+        assertEquals(2, selectedItem.value)
+    }
+
 
     private fun setupMultiSelectionDialog(
         dialog: MaterialDialog,
@@ -249,13 +296,14 @@ class ListDialog {
     }
 
     private fun setupSingleSelectionDialog(
-        dialog: MaterialDialog,
-        selectedItem: MutableState<Int?>
+        dialog: MaterialDialog = MaterialDialog(),
+        selectedItem: MutableState<Int?> = mutableStateOf(null),
+        waitForPositiveButton: Boolean = true
     ) {
         composeTestRule.setContent {
             DialogWithContent(dialog = dialog) {
                 title(res = R.string.ringtone_dialog_title)
-                listItemsSingleChoice(ringtones) {
+                listItemsSingleChoice(ringtones, waitForPositiveButton = waitForPositiveButton) {
                     selectedItem.value = it
                 }
                 defaultListButtons()

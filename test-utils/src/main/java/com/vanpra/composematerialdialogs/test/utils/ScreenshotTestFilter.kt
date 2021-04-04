@@ -1,4 +1,4 @@
-package com.vanpra.composematerialdialogs.test.util
+package com.vanpra.composematerialdialogs.test.utils
 
 import com.karumi.shot.ScreenshotTest
 import org.junit.runner.Description

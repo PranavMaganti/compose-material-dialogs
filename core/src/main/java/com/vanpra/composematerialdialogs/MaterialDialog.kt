@@ -391,7 +391,7 @@ class MaterialDialog(
                     }
                 },
                 label = { Text(label, color = MaterialTheme.colors.onBackground.copy(0.8f)) },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag("dialog_input"),
                 placeholder = { Text(hint, color = MaterialTheme.colors.onBackground.copy(0.5f)) },
                 isError = !valid,
                 visualTransformation = visualTransformation,
@@ -404,7 +404,7 @@ class MaterialDialog(
                     errorMessage,
                     fontSize = 14.sp,
                     color = MaterialTheme.colors.error,
-                    modifier = Modifier.align(Alignment.End)
+                    modifier = Modifier.align(Alignment.End).testTag("dialog_input_error")
                 )
             }
         }

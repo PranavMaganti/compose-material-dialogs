@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
-private const val listRatio = 0.6f
+private const val listRatio = 0.7f
 val bottomPadding = Modifier.padding(bottom = 8.dp)
 
 /**

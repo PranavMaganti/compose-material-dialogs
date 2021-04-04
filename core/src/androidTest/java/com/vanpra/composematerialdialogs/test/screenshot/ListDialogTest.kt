@@ -22,8 +22,8 @@ import com.vanpra.composematerialdialogs.listItems
 import com.vanpra.composematerialdialogs.listItemsMultiChoice
 import com.vanpra.composematerialdialogs.listItemsSingleChoice
 import com.vanpra.composematerialdialogs.test.R
-import com.vanpra.composematerialdialogs.test.util.DialogWithContent
-import com.vanpra.composematerialdialogs.test.util.onDialog
+import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
+import com.vanpra.composematerialdialogs.test.utils.onDialog
 import org.junit.Rule
 import org.junit.Test
 

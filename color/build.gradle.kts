@@ -2,7 +2,6 @@ import java.util.Date
 
 plugins {
     id("common-library")
-    id("shot")
 }
 
 android {

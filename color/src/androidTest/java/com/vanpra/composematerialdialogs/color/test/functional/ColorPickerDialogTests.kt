@@ -1,4 +1,4 @@
-package com.vanpra.composematerialdialogs.test.functional
+package com.vanpra.composematerialdialogs.color.test.functional
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -15,7 +15,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class DialogButtonsTest {
+class ColorPickerDialogTests {
     @get:Rule
     val composeTestRule = createComposeRule()
 

@@ -15,7 +15,8 @@ android {
 
         versionCode = 1
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.karumi.shot.ShotTestRunner"
+        testApplicationId = "com.vanpra.composematerialdialogs.test"
     }
 
     buildTypes {

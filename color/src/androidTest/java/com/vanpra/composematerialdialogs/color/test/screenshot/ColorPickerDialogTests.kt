@@ -1,4 +1,4 @@
-package com.vanpra.composematerialdialogs.test.screenshot
+package com.vanpra.composematerialdialogs.color.test.screenshot
 
 import androidx.compose.foundation.Image
 import androidx.compose.material.MaterialTheme
@@ -13,7 +13,7 @@ import com.vanpra.composematerialdialogs.test.utils.onDialog
 import org.junit.Rule
 import org.junit.Test
 
-class BasicDialogTest : ScreenshotTest {
+class ColorPickerDialogTests : ScreenshotTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
