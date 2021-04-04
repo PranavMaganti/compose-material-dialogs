@@ -12,6 +12,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performGesture
 import androidx.compose.ui.test.swipeUp
 import com.vanpra.composematerialdialogs.MaterialDialog
+import java.util.Locale
 
 private const val dialogTag = "dialog"
 
@@ -27,6 +28,13 @@ fun DialogWithContent(
             SideEffect { dialog.show() }
         }
     }
+}
+
+enum class ColorPickerSlider {
+    Alpha,
+    Red,
+    Blue,
+    Green
 }
 
 fun ComposeTestRule.onPositiveButton() =
@@ -63,6 +71,15 @@ fun ComposeTestRule.onDialogInput() =
 
 fun ComposeTestRule.onDialogInputError() =
     this.onNodeWithTag("dialog_input_error")
+
+fun ComposeTestRule.onDialogColorPicker() =
+    this.onNodeWithTag("dialog_color_picker")
+
+fun ComposeTestRule.onDialogColorSelector(index: Int) =
+    this.onNodeWithTag("dialog_color_picker_selector_$index")
+
+fun ComposeTestRule.onDialogColorSlider(slider: ColorPickerSlider) =
+    this.onNodeWithTag("color_picker_${slider.toString().toLowerCase(Locale.ROOT)}_slider")
 
 fun <T> Collection<T>.powerSet(): Set<Set<T>> = when {
     isEmpty() -> setOf(setOf())

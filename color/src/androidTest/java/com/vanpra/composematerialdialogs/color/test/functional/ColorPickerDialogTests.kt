@@ -7,8 +7,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
 import com.vanpra.composematerialdialogs.test.utils.assertDialogDoesNotExist
-import com.vanpra.composematerialdialogs.test.utils.assertDialogExists
-import com.vanpra.composematerialdialogs.test.utils.onNegativeButton
 import com.vanpra.composematerialdialogs.test.utils.onPositiveButton
 import org.junit.Rule
 import org.junit.Test
@@ -32,26 +30,5 @@ class ColorPickerDialogTests {
         composeTestRule.setContent { DialogWithContent { defaultButtons() } }
         composeTestRule.onPositiveButton().performClick()
         composeTestRule.assertDialogDoesNotExist()
-    }
-
-    @Test
-    fun dialogDismissedOnNegativeButton() {
-        composeTestRule.setContent { DialogWithContent { defaultButtons() } }
-        composeTestRule.onNegativeButton().performClick()
-        composeTestRule.assertDialogDoesNotExist()
-    }
-
-    @Test
-    fun dialogNotDismissedOnPositiveButton() {
-        composeTestRule.setContent { DialogWithContent(false) { defaultButtons() } }
-        composeTestRule.onPositiveButton().performClick()
-        composeTestRule.assertDialogExists()
-    }
-
-    @Test
-    fun dialogNotDismissedOnNegativeButton() {
-        composeTestRule.setContent { DialogWithContent(false) { defaultButtons() } }
-        composeTestRule.onNegativeButton().performClick()
-        composeTestRule.assertDialogExists()
     }
 }
