@@ -58,8 +58,8 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           sdcard-path-or-size: 50M
-          profile: Nexus 6
-          script: ./gradlew connectedCheck -Pandroid.testInstrumentationRunnerArguments.filter=com.vanpra.composematerialdialogs.test.util.NotScreenshotTestFilter
+          profile: Nexus 6P
+          script: ./gradlew :core:connectedCheck -Pandroid.testInstrumentationRunnerArguments.filter=com.vanpra.composematerialdialogs.test.utils.NotScreenshotTestFilter
 
       - name: Upload functional test results
         if: always()
@@ -73,7 +73,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           profile: Nexus 6P
-          script: ./gradlew executeScreenshotTests -Pandroid.testInstrumentationRunnerArguments.filter=com.vanpra.composematerialdialogs.test.util.ScreenshotTestFilter
+          script: ./gradlew :core:executeScreenshotTests -Pandroid.testInstrumentationRunnerArguments.filter=com.vanpra.composematerialdialogs.test.utils.ScreenshotTestFilter
 
       - name: Upload screenshot test results
         if: always()

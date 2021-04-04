@@ -238,7 +238,7 @@ class ListDialog {
         composeTestRule.onPositiveButton().performClick()
         /* Need this line or else tests don't wait for dialog to close */
         composeTestRule.assertDialogDoesNotExist()
-        assertEquals(setOf(0), selectedItem.value)
+        assertEquals(0, selectedItem.value)
     }
 
     @Test
@@ -249,7 +249,7 @@ class ListDialog {
         setupSingleSelectionDialog(dialog, selectedItem, waitForPositiveButton = false)
 
         composeTestRule.onDialogListItem(0).performClick()
-        assertEquals(setOf(0), selectedItem.value)
+        assertEquals(0, selectedItem.value)
         selectedItem.value = null
         composeTestRule.onPositiveButton().performClick()
         /* Need this line or else tests don't wait for dialog to close */
