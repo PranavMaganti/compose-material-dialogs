@@ -1,15 +1,18 @@
 package com.vanpra.composematerialdialogs.datetime
 
+import android.text.format.DateFormat
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalContext
 import com.vanpra.composematerialdialogs.MaterialDialog
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -34,6 +37,7 @@ fun MaterialDialog.datetimepicker(
     yearRange: IntRange = IntRange(1900, 2100),
     minimumTime: LocalTime = LocalTime.MIN,
     maximumTime: LocalTime = LocalTime.MAX,
+    is24HourClock : Boolean? = null,
     positiveButtonText: String = "Ok",
     negativeButtonText: String = "Cancel",
     onCancel: () -> Unit = {},
@@ -42,8 +46,26 @@ fun MaterialDialog.datetimepicker(
     val coroutineScope = rememberCoroutineScope()
 
     val datePickerState = remember { DatePickerState(initialDateTime.toLocalDate()) }
+    val context = LocalContext.current
     val timePickerState = remember {
-        TimePickerState(selectedTime = initialDateTime.toLocalTime(), colors = timePickerColors, minimumTime = minimumTime, maximumTime = maximumTime)
+        TimePickerState(selectedTime = initialDateTime.toLocalTime(),
+            colors = timePickerColors,
+            minimumTime = minimumTime,
+            maximumTime = maximumTime,
+            is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context))
+    }
+
+    DisposableEffect(minimumTime) {
+        timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
+        onDispose {  }
+    }
+    DisposableEffect(maximumTime) {
+        timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
+        onDispose {  }
+    }
+    DisposableEffect(is24HourClock) {
+        timePickerState.is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context)
+        onDispose {  }
     }
 
     DisposableEffect(minimumTime) {
