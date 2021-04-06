@@ -538,11 +538,11 @@ internal fun TimeLayout(state: TimePickerState) {
         MaterialTheme.shapes.medium.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp))
     val isAMEnabled = remember(state.minimumTime) { state.minimumHour(true) <= 12 }
     val isPMEnabled = remember(state.maximumTime) { state.maximumHour(false) >= 0 }
-    val is24Hour = remember(state.is24Hour) { state.is24Hour }
+    val clockHour = remember(state.is24Hour, state.selectedTime, state.selectedTime.hour) {if (state.is24Hour) state.selectedTime.hour24.toString().padStart(2, '0') else (if (state.selectedTime.hour == 0) 12 else state.selectedTime.hour).toString()}
 
     Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.height(80.dp).fillMaxWidth()) {
         ClockLabel(
-            text = if (is24Hour) state.selectedTime.hour24.toString().padStart(2, '0') else (if (state.selectedTime.hour == 0) 12 else state.selectedTime.hour).toString(),
+            text = clockHour,
             backgroundColor = state.colors.backgroundColor(state.currentScreen.isHour()).value,
             textColor = state.colors.textColor(state.currentScreen.isHour()).value,
             onClick = { state.currentScreen = ClockScreen.Hour }
@@ -565,7 +565,7 @@ internal fun TimeLayout(state: TimePickerState) {
         onClick = { state.currentScreen = ClockScreen.Minute }
 
         )
-        if (!is24Hour) {
+        if (!state.is24Hour) {
             Spacer(modifier = Modifier.width(12.dp))
 
             Column(Modifier.fillMaxHeight().border(state.colors.border, MaterialTheme.shapes.medium)) {
