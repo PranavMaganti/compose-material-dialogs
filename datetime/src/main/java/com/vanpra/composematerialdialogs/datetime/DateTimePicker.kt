@@ -5,6 +5,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
@@ -64,6 +65,15 @@ fun MaterialDialog.datetimepicker(
     }
     DisposableEffect(is24HourClock) {
         timePickerState.is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context)
+        onDispose {  }
+    }
+
+    DisposableEffect(minimumTime) {
+        timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
+        onDispose {  }
+    }
+    DisposableEffect(maximumTime) {
+        timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
         onDispose {  }
     }
 

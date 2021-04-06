@@ -336,6 +336,14 @@ fun MaterialDialog.timepicker(
             is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context)
         )
     }
+    DisposableEffect(minimumTime) {
+        timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
+        onDispose {  }
+    }
+    DisposableEffect(maximumTime) {
+        timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
+        onDispose {  }
+    }
 
     DisposableEffect(minimumTime) {
         timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
@@ -461,7 +469,8 @@ internal fun TimePickerTitle(onBack: (() -> Unit)?) {
     if (onBack != null) {
         Row(Modifier.height(52.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(
-                Modifier.clip(CircleShape)
+                Modifier
+                    .clip(CircleShape)
                     .clickable(onClick = onBack),
                 contentAlignment = Alignment.Center
             ) {
@@ -500,7 +509,10 @@ internal fun ClockLabel(
 ) {
 
     Surface(
-        modifier = Modifier.width(96.dp).fillMaxHeight().clickable(onClick = onClick),
+        modifier = Modifier
+            .width(96.dp)
+            .fillMaxHeight()
+            .clickable(onClick = onClick),
         shape = MaterialTheme.shapes.medium,
         color = backgroundColor,
     ) {
@@ -566,6 +578,7 @@ internal fun TimeLayout(state: TimePickerState) {
                 ) {
                     Text("AM", style = TextStyle(state.colors.textColor(state.selectedTime.isAM).value.copy(alpha = if (isAMEnabled) ContentAlpha.high else ContentAlpha.disabled)))
                 }
+
 
                 Spacer(Modifier.fillMaxWidth().height(1.dp).background(state.colors.border.brush))
 
