@@ -52,14 +52,15 @@ fun DateTimeDialogDemo() {
     }
 
     DialogAndShowButton(buttonText = "Time Picker Dialog With Min/Max") {
-        timepicker(colors = colors,
+        timepicker(
+            colors = colors,
             minimumTime = LocalTime.of(9, 35),
             maximumTime = LocalTime.of(21, 13),
-            is24HourClock = false) {
+            is24HourClock = false
+        ) {
             println(it.toString())
             Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
         }
-
 
         buttons {
             positiveButton("Ok")
@@ -80,10 +81,12 @@ fun DateTimeDialogDemo() {
     }
 
     DialogAndShowButton(buttonText = "Time Picker Dialog 24H With Min/Max") {
-        timepicker(colors = colors,
+        timepicker(
+            colors = colors,
             minimumTime = LocalTime.of(9, 35),
             maximumTime = LocalTime.of(21, 13),
-            is24HourClock = true) {
+            is24HourClock = true
+        ) {
             println(it.toString())
             Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
         }

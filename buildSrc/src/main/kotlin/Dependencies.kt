@@ -2,7 +2,7 @@ object Dependencies {
     const val material = "com.google.android.material:material:1.4.0-alpha01"
 
     object ComposeMaterialDialogs {
-        const val version = "0.3.2"
+        const val version = "0.3.3"
 
         const val core = "com.vanpra.compose-material-dialogs:core:$version"
         const val datetime = "com.vanpra.compose-material-dialogs:datetime:$version"

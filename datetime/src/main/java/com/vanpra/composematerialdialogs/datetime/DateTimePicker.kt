@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -37,7 +36,7 @@ fun MaterialDialog.datetimepicker(
     yearRange: IntRange = IntRange(1900, 2100),
     minimumTime: LocalTime = LocalTime.MIN,
     maximumTime: LocalTime = LocalTime.MAX,
-    is24HourClock : Boolean? = null,
+    is24HourClock: Boolean? = null,
     positiveButtonText: String = "Ok",
     negativeButtonText: String = "Cancel",
     onCancel: () -> Unit = {},
@@ -48,33 +47,35 @@ fun MaterialDialog.datetimepicker(
     val datePickerState = remember { DatePickerState(initialDateTime.toLocalDate()) }
     val context = LocalContext.current
     val timePickerState = remember {
-        TimePickerState(selectedTime = initialDateTime.toLocalTime(),
+        TimePickerState(
+            selectedTime = initialDateTime.toLocalTime(),
             colors = timePickerColors,
             minimumTime = minimumTime,
             maximumTime = maximumTime,
-            is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context))
+            is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context)
+        )
     }
 
     DisposableEffect(minimumTime) {
         timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
-        onDispose {  }
+        onDispose { }
     }
     DisposableEffect(maximumTime) {
         timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
-        onDispose {  }
+        onDispose { }
     }
     DisposableEffect(is24HourClock) {
         timePickerState.is24Hour = is24HourClock ?: DateFormat.is24HourFormat(context)
-        onDispose {  }
+        onDispose { }
     }
 
     DisposableEffect(minimumTime) {
         timePickerState.minimumTime = SimpleLocalTime.fromLocalTime(minimumTime)
-        onDispose {  }
+        onDispose { }
     }
     DisposableEffect(maximumTime) {
         timePickerState.maximumTime = SimpleLocalTime.fromLocalTime(maximumTime)
-        onDispose {  }
+        onDispose { }
     }
 
     val scrollPos = remember { Animatable(0f) }
