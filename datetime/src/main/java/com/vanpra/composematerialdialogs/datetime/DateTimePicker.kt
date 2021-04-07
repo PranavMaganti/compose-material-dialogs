@@ -10,6 +10,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.layout.Layout
 import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerColors
+import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerDefaults
+import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerImpl
+import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerState
+import com.vanpra.composematerialdialogs.datetime.util.noSeconds
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -44,7 +49,7 @@ fun MaterialDialog.datetimepicker(
     val datePickerState = remember { DatePickerState(initialDateTime.toLocalDate()) }
     val timePickerState = remember {
         TimePickerState(
-            selectedTime = initialDateTime.toLocalTime(),
+            selectedTime = initialDateTime.toLocalTime().noSeconds(),
             colors = timePickerColors,
             minimumTime = minimumTime,
             maximumTime = maximumTime,
@@ -52,10 +57,8 @@ fun MaterialDialog.datetimepicker(
         )
     }
 
-    timePickerState.minimumTime =
-        remember(minimumTime) { SimpleLocalTime.fromLocalTime(minimumTime) }
-    timePickerState.maximumTime =
-        remember(maximumTime) { SimpleLocalTime.fromLocalTime(maximumTime) }
+    timePickerState.minimumTime = remember(minimumTime) { minimumTime }
+    timePickerState.maximumTime = remember(maximumTime) { maximumTime }
     timePickerState.is24Hour = remember { is24HourClock }
 
     val scrollPos = remember { Animatable(0f) }
@@ -115,7 +118,7 @@ fun MaterialDialog.datetimepicker(
                 onComplete(
                     LocalDateTime.of(
                         datePickerState.selected,
-                        timePickerState.selectedTime.toLocalTime()
+                        timePickerState.selectedTime
                     )
                 )
             }

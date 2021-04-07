@@ -59,7 +59,9 @@ fun BasicDialogDemo() {
 
     DialogAndShowButton(buttonText = "Basic Input Dialog") {
         title(res = R.string.input_dialog_title)
-        input(label = "Name", hint = "Jon Smith")
+        input(label = "Name", hint = "Jon Smith") {
+            Log.d("SELECTION:", it)
+        }
         buttons {
             negativeButton("Cancel")
             positiveButton("Ok")
