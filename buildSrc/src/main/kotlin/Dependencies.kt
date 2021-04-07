@@ -22,10 +22,10 @@ object Dependencies {
     object AndroidX {
         const val appcompat = "androidx.appcompat:appcompat:1.2.0-rc01"
         const val coreKtx = "androidx.core:core-ktx:1.5.0-alpha03"
-        const val composeActivity = "androidx.activity:activity-compose:1.3.0-alpha05"
+        const val composeActivity = "androidx.activity:activity-compose:1.3.0-alpha06"
 
         object Compose {
-            const val version = "1.0.0-beta03"
+            const val version = "1.0.0-beta04"
 
             const val ui = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"

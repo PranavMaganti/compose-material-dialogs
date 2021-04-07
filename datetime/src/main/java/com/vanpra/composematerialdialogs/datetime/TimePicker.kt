@@ -56,7 +56,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.consumePositionChange
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -329,7 +328,6 @@ fun MaterialDialog.timepicker(
     is24HourClock: Boolean = false,
     onComplete: (LocalTime) -> Unit = {}
 ) {
-    val context = LocalContext.current
     val timePickerState = remember {
         TimePickerState(
             selectedTime = initialTime,
