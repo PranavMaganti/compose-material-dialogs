@@ -1,5 +1,3 @@
-import java.util.*
-
 plugins {
     id("common-library")
 }
@@ -45,45 +43,29 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 }
 
-val artifactName = "datetime"
-val artifactGroup = "com.vanpra.compose-material-dialogs"
-val artifactVersion = Dependencies.ComposeMaterialDialogs.version
+val VERSION_NAME: String by project
+val mavenCentralRepositoryUsername: String by project
+val mavenCentralRepositoryPassword: String by project
 
-val sourcesJar by tasks.creating(Jar::class) {
-    from(android.sourceSets.getByName("main").java.srcDirs)
-    archiveClassifier.set("sources")
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
-                from(components.getByName("release"))
-                artifact(sourcesJar)
-
-                groupId = artifactGroup
-                artifactId = artifactName
-                version = artifactVersion
+publishing {
+    repositories {
+        withType<MavenArtifactRepository> {
+            if (name == "local") {
+                return@withType
             }
-        }
-    }
 
-    bintray {
-        user = project.findProperty("bintrayUser").toString()
-        key = project.findProperty("bintrayKey").toString()
-        publish = true
-        override = true
+            val releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            val snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 
-        setPublications("release")
+            url = if (VERSION_NAME.endsWith("SNAPSHOT")) {
+                uri(snapshotsRepoUrl)
+            } else {
+                uri(releasesRepoUrl)
+            }
 
-        pkg.apply {
-            repo = "maven"
-            name = "compose-material-dialogs:$artifactName"
-
-            version.apply {
-                name = artifactVersion
-                released = Date().toString()
-                vcsTag = artifactVersion
+            credentials {
+                username = mavenCentralRepositoryUsername
+                password = mavenCentralRepositoryPassword
             }
         }
     }

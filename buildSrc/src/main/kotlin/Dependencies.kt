@@ -4,9 +4,9 @@ object Dependencies {
     object ComposeMaterialDialogs {
         const val version = "0.3.3"
 
-        const val core = "com.vanpra.compose-material-dialogs:core:$version"
-        const val datetime = "com.vanpra.compose-material-dialogs:datetime:$version"
-        const val color = "com.vanpra.compose-material-dialogs:color:$version"
+        const val core = "io.github.vanpra.compose-material-dialogs:core:$version"
+        const val datetime = "io.github.vanpra.compose-material-dialogs:datetime:$version"
+        const val color = "io.github.vanpra.compose-material-dialogs:color:$version"
     }
 
     object Ktlint {

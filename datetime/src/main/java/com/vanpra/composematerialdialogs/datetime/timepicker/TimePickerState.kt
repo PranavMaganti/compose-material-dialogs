@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.vanpra.composematerialdialogs.datetime.util.isAM
-import com.vanpra.composematerialdialogs.datetime.util.simpleHour
 import java.time.LocalTime
 
 internal enum class ClockScreen {

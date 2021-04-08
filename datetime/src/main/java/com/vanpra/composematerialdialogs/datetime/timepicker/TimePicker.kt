@@ -84,6 +84,9 @@ private data class SelectedOffset(
  * @param colors see [TimePickerColors]
  * @param waitForPositiveButton if true the [onComplete] callback will only be called when the
  * positive button is pressed, otherwise it will be called on every input change
+ * @param minimumTime any time between 00:00 and this time will be disabled
+ * @param maximumTime any time between 23:59 and this time will be disabled
+ * @param is24HourClock uses the 24 hour clock face when true
  * @param onComplete callback with a LocalTime object when the user completes their input
  */
 @Composable
