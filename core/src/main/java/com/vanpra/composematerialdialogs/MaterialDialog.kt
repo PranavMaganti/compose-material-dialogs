@@ -345,6 +345,7 @@ class MaterialDialog(
         waitForPositiveButton: Boolean = true,
         visualTransformation: VisualTransformation = VisualTransformation.None,
         keyboardOptions: KeyboardOptions = KeyboardOptions(),
+        keyboardActions: KeyboardActions = KeyboardActions(),
         errorMessage: String = "",
         isTextValid: (String) -> Boolean = { true },
         onInput: (String) -> Unit = {}
@@ -395,6 +396,7 @@ class MaterialDialog(
                 isError = !valid,
                 visualTransformation = visualTransformation,
                 keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
                 textStyle = TextStyle(MaterialTheme.colors.onBackground, fontSize = 16.sp)
             )
 
