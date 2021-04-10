@@ -3,11 +3,14 @@ package com.vanpra.composematerialdialogdemos.demos
 import android.util.Log
 import android.util.Patterns
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.text.input.ImeAction
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
 import com.vanpra.composematerialdialogdemos.R
 
@@ -60,6 +63,23 @@ fun BasicDialogDemo() {
     DialogAndShowButton(buttonText = "Basic Input Dialog") {
         title(res = R.string.input_dialog_title)
         input(label = "Name", hint = "Jon Smith") {
+            Log.d("SELECTION:", it)
+        }
+        buttons {
+            negativeButton("Cancel")
+            positiveButton("Ok")
+        }
+    }
+
+    DialogAndShowButton(buttonText = "Input Dialog with submit on IME Action") {
+        title(res = R.string.input_dialog_title)
+        input(
+            label = "Name", hint = "Jon Smith",
+            keyboardActions = KeyboardActions(
+                onDone = { this@DialogAndShowButton.submit() }
+            ),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
+        ) {
             Log.d("SELECTION:", it)
         }
         buttons {
