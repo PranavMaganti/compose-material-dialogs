@@ -10,8 +10,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.layout.Layout
 import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerColors
+import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerDefaults
+import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerImpl
+import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerState
+import com.vanpra.composematerialdialogs.datetime.util.noSeconds
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 /**
  * @brief A combined date and time picker dialog
@@ -30,6 +36,9 @@ fun MaterialDialog.datetimepicker(
     initialDateTime: LocalDateTime = LocalDateTime.now(),
     timePickerColors: TimePickerColors = TimePickerDefaults.colors(),
     yearRange: IntRange = IntRange(1900, 2100),
+    minimumTime: LocalTime = LocalTime.MIN,
+    maximumTime: LocalTime = LocalTime.MAX,
+    is24HourClock: Boolean = false,
     positiveButtonText: String = "Ok",
     negativeButtonText: String = "Cancel",
     onCancel: () -> Unit = {},
@@ -39,8 +48,18 @@ fun MaterialDialog.datetimepicker(
 
     val datePickerState = remember { DatePickerState(initialDateTime.toLocalDate()) }
     val timePickerState = remember {
-        TimePickerState(selectedTime = initialDateTime.toLocalTime(), colors = timePickerColors)
+        TimePickerState(
+            selectedTime = initialDateTime.toLocalTime().noSeconds(),
+            colors = timePickerColors,
+            minimumTime = minimumTime,
+            maximumTime = maximumTime,
+            is24Hour = is24HourClock
+        )
     }
+
+    timePickerState.minimumTime = remember(minimumTime) { minimumTime }
+    timePickerState.maximumTime = remember(maximumTime) { maximumTime }
+    timePickerState.is24Hour = remember { is24HourClock }
 
     val scrollPos = remember { Animatable(0f) }
     val scrollTo = remember { mutableStateOf(0f) }
@@ -99,7 +118,7 @@ fun MaterialDialog.datetimepicker(
                 onComplete(
                     LocalDateTime.of(
                         datePickerState.selected,
-                        timePickerState.selectedTime.toLocalTime()
+                        timePickerState.selectedTime
                     )
                 )
             }

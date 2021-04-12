@@ -33,6 +33,7 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -47,9 +48,9 @@ dependencies {
     implementation(project(":datetime"))
     implementation(project(":color"))
 
-   // implementation(Dependencies.ComposeMaterialDialogs.core)
-   // implementation(Dependencies.ComposeMaterialDialogs.datetime)
-   // implementation(Dependencies.ComposeMaterialDialogs.color)
+//    implementation(Dependencies.ComposeMaterialDialogs.core)
+//    implementation(Dependencies.ComposeMaterialDialogs.datetime)
+//    implementation(Dependencies.ComposeMaterialDialogs.color)
 
     implementation(Dependencies.Kotlin.stdlib)
 
@@ -66,4 +67,5 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     androidTestImplementation(Dependencies.AndroidX.Compose.testing)
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 }

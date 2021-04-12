@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.LocalElevationOverlay
 import androidx.compose.material.MaterialTheme
@@ -34,7 +35,11 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
+<<<<<<< HEAD
 import androidx.compose.ui.platform.testTag
+=======
+import androidx.compose.ui.platform.LocalFocusManager
+>>>>>>> main
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
@@ -43,7 +48,7 @@ import androidx.compose.ui.unit.sp
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
- * @brief The MaterialDialog class is used to build and display a dialog using both pre-made and
+ *  The MaterialDialog class is used to build and display a dialog using both pre-made and
  * custom views
  *
  * @param autoDismiss when true the dialog will be automatically dismissed when a positive or
@@ -69,7 +74,7 @@ class MaterialDialog(
     var positiveButtonEnabledOverride by mutableStateOf(true)
 
     /**
-     * @brief Dialog background color with elevation overlay
+     *  Dialog background color with elevation overlay
      */
     var dialogBackgroundColor by mutableStateOf<Color?>(null)
 
@@ -83,14 +88,14 @@ class MaterialDialog(
     }
 
     /**
-     * @brief Shows the dialog
+     *  Shows the dialog
      */
     fun show() {
         showing.value = true
     }
 
     /**
-     * @brief Clears focus with a given [FocusManager] and then hides the dialog
+     * Clears focus with a given [FocusManager] and then hides the dialog
      *
      * @param focusManager the focus manager of the dialog view
      */
@@ -100,21 +105,31 @@ class MaterialDialog(
     }
 
     /**
-     * @brief Disables the positive dialog button if present
+     * Hides the dialog and calls any callbacks from components in the dialog
+     */
+    fun submit() {
+        hide()
+        callbacks.forEach {
+            it()
+        }
+    }
+
+    /**
+     *  Disables the positive dialog button if present
      */
     fun disablePositiveButton() {
         positiveButtonEnabledOverride = false
     }
 
     /**
-     * @brief Enables the positive dialog button if present
+     *  Enables the positive dialog button if present
      */
     fun enablePositiveButton() {
         positiveButtonEnabledOverride = true
     }
 
     /**
-     * @brief Checks if autoDismiss is set
+     *  Checks if autoDismiss is set
      * @return true if autoDismiss is set to true and false otherwise
      */
     fun isAutoDismiss() = autoDismiss
@@ -128,7 +143,7 @@ class MaterialDialog(
     }
 
     /**
-     * @brief Builds a dialog with the given content
+     *  Builds a dialog with the given content
      * @param backgroundColor background color of the dialog
      * @param shape shape of the dialog and components used in the dialog
      * @param border border stoke of the dialog
@@ -172,13 +187,13 @@ class MaterialDialog(
     }
 
     /**
-     * @brief Adds a title with the given text to the dialog
+     *  Adds a title with the given text to the dialog
      * @param text title text from a string literal
      * @param res title text from a string resource
      * @param center text is aligned to center when true
      */
     @Composable
-    fun MaterialDialog.title(
+    fun title(
         text: String? = null,
         @StringRes res: Int? = null,
         center: Boolean = false
@@ -209,7 +224,7 @@ class MaterialDialog(
     }
 
     /**
-     * @brief Adds a title with the given text and icon to the dialog
+     *  Adds a title with the given text and icon to the dialog
      * @param text title text from a string literal
      * @param textRes title text from a string resource
      * @param iconRes icon/image from a drawable resource
@@ -217,7 +232,7 @@ class MaterialDialog(
      * @param assetTint the tint which should be applied to the asset if it is not null
      */
     @Composable
-    fun MaterialDialog.iconTitle(
+    fun iconTitle(
         text: String? = null,
         @StringRes textRes: Int? = null,
         icon: @Composable () -> Unit = {},
@@ -240,12 +255,12 @@ class MaterialDialog(
     }
 
     /**
-     * @brief Adds paragraph of text to the dialog
+     *  Adds paragraph of text to the dialog
      * @param text message text from a string literal
      * @param res message text from a string resource
      */
     @Composable
-    fun MaterialDialog.message(text: String? = null, @StringRes res: Int? = null) {
+    fun message(text: String? = null, @StringRes res: Int? = null) {
         val messageText = getString(res, text)
 
         Text(
@@ -258,12 +273,12 @@ class MaterialDialog(
     }
 
     /**
-     * @brief Adds buttons to the bottom of the dialog
+     *  Adds buttons to the bottom of the dialog
      * @param content the buttons which should be displayed in the dialog.
      * See [MaterialDialogButtons] for more information about the content
      */
     @Composable
-    fun MaterialDialog.buttons(content: @Composable MaterialDialogButtons.() -> Unit) {
+    fun buttons(content: @Composable MaterialDialogButtons.() -> Unit) {
         val interButtonPadding = with(LocalDensity.current) { 12.dp.toPx().toInt() }
         val defaultBoxHeight = with(LocalDensity.current) { 36.dp.toPx().toInt() }
         val accessibilityPadding = with(LocalDensity.current) { 12.dp.toPx().toInt() }
@@ -324,7 +339,7 @@ class MaterialDialog(
     }
 
     /**
-     * @brief Adds an input field with the given parameters to the dialog
+     *  Adds an input field with the given parameters to the dialog
      * @param label string to be shown in the input field before selection eg. Username
      * @param hint hint to be shown in the input field when it is selected but empty eg. Joe
      * @param prefill string to be input into the text field by default
@@ -339,19 +354,21 @@ class MaterialDialog(
      * dictated by [waitForPositiveButton]
      */
     @Composable
-    fun MaterialDialog.input(
+    fun input(
         label: String,
         hint: String = "",
         prefill: String = "",
         waitForPositiveButton: Boolean = true,
         visualTransformation: VisualTransformation = VisualTransformation.None,
         keyboardOptions: KeyboardOptions = KeyboardOptions(),
+        keyboardActions: KeyboardActions = KeyboardActions(),
         errorMessage: String = "",
         isTextValid: (String) -> Boolean = { true },
         onInput: (String) -> Unit = {}
     ) {
         var text by remember { mutableStateOf(prefill) }
         val valid = remember(text) { isTextValid(text) }
+        val focusManager = LocalFocusManager.current
 
         val positiveEnabledIndex = remember {
             val index = positiveEnabledCounter.getAndIncrement()
@@ -378,6 +395,7 @@ class MaterialDialog(
             onDispose {
                 callbacks[callbackIndex] = {}
                 setPositiveEnabled(positiveEnabledIndex, true)
+                focusManager.clearFocus()
             }
         }
 
@@ -396,6 +414,7 @@ class MaterialDialog(
                 isError = !valid,
                 visualTransformation = visualTransformation,
                 keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
                 textStyle = TextStyle(MaterialTheme.colors.onBackground, fontSize = 16.sp)
             )
 
@@ -415,7 +434,7 @@ class MaterialDialog(
      * @param content the content of the custom view
      */
     @Composable
-    fun MaterialDialog.customView(content: @Composable () -> Unit) {
+    fun customView(content: @Composable () -> Unit) {
         Box(modifier = Modifier.padding(bottom = 28.dp, start = 24.dp, end = 24.dp)) {
             content()
         }

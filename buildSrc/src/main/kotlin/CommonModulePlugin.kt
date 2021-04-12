@@ -3,8 +3,6 @@ import org.gradle.api.Project
 import org.gradle.api.JavaVersion
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.plugins.ExtensionAware
-import org.gradle.kotlin.dsl.add
-import org.gradle.kotlin.dsl.configure
 
 class CommonModulePlugin: Plugin<Project> {
 //    private val Project.android: BaseExtension
@@ -23,8 +21,7 @@ class CommonModulePlugin: Plugin<Project> {
         plugins.run {
             apply("com.android.library")
             apply("kotlin-android")
-            apply("maven-publish")
-            apply("com.jfrog.bintray")
+            apply("com.vanniktech.maven.publish")
             apply("shot")
         }
     }

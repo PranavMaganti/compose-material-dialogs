@@ -4,7 +4,9 @@
 
 ### [See Releases and Changelog](https://github.com/vanpra/compose-material-dialogs/blob/main/CHANGELOG.md)
 
-**Current Compose Version: 1.0.0-beta03**
+### NOTE: The dependency name of the package has changed due to moving to maven central
+
+**Current Compose Version: 1.0.0-beta04**
 
 ## Credits
 
@@ -16,12 +18,12 @@ This library's design is heavily inspired by https://github.com/afollestad/mater
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/full_core.png)
 
-[ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs%3Acore/images/download.svg) ](https://bintray.com/vanpra/maven/compose-material-dialogs%3Acore/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.vanpra.compose-material-dialogs/core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.vanpra.compose-material-dialogs/core)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:core:0.3.2" 
+  implementation "io.github.vanpra.compose-material-dialogs:core:0.3.3" 
   ...
 }
 ```
@@ -32,12 +34,12 @@ dependencies {
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/date_and_time.png)
 
- [ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs%3Adatetime/images/download.svg) ](https://bintray.com/vanpra/maven/compose-material-dialogs%3Adatetime/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.vanpra.compose-material-dialogs/datetime/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.vanpra.compose-material-dialogs/datetime)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:datetime:0.3.2"
+  implementation "io.github.vanpra.compose-material-dialogs:datetime:0.3.3"
   ...
 }
 ```
@@ -48,12 +50,12 @@ dependencies {
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/color_picker.png)
 
- [ ![Download](https://api.bintray.com/packages/vanpra/maven/compose-material-dialogs%3Acolor/images/download.svg) ](https://bintray.com/vanpra/maven/compose-material-dialogs%3Acolor/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.vanpra.compose-material-dialogs/color/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.vanpra.compose-material-dialogs/color)
 
 ```gradle
 dependencies {
   ...
-  implementation "com.vanpra.compose-material-dialogs:color:0.3.2"
+  implementation "io.github.vanpra.compose-material-dialogs:color:0.3.3"
   ...
 }
 ```
