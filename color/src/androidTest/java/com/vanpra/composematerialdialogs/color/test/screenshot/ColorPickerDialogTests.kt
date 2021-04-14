@@ -1,10 +1,12 @@
 package com.vanpra.composematerialdialogs.color.test.screenshot
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performGesture
 import androidx.compose.ui.test.swipeLeft
 import com.karumi.shot.ScreenshotTest
+import com.vanpra.composematerialdialogs.color.ARGBPickerState
 import com.vanpra.composematerialdialogs.color.ColorPalette
 import com.vanpra.composematerialdialogs.color.colorChooser
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
@@ -29,6 +31,16 @@ class ColorPickerDialogTests : ScreenshotTest {
     }
 
     @Test
+    fun mainColorPickerWithInitialSelection() {
+        composeTestRule.setContent {
+            DialogWithContent {
+                colorChooser(colors = ColorPalette.Primary, initialSelection = 4)
+            }
+        }
+        compareScreenshot(composeTestRule.onDialog())
+    }
+
+    @Test
     fun subColorPicker() {
         composeTestRule.setContent {
             DialogWithContent {
@@ -41,14 +53,38 @@ class ColorPickerDialogTests : ScreenshotTest {
     }
 
     @Test
-    fun argbColorPicker() {
+    fun rgbColorPicker() {
+        /*  Using list with custom color to ensure the box background uses this color */
         composeTestRule.setContent {
             DialogWithContent {
-                colorChooser(colors = ColorPalette.Primary, subColors = ColorPalette.PrimarySub)
+                colorChooser(
+                    colors = listOf(Color(100, 100, 200)),
+                    argbPickerState = ARGBPickerState.WithoutAlphaSelector,
+                    subColors = ColorPalette.PrimarySub
+                )
             }
         }
 
         composeTestRule.onDialogColorPicker().performGesture { swipeLeft() }
+        composeTestRule.waitForIdle()
+        compareScreenshot(composeTestRule.onDialog())
+    }
+
+    @Test
+    fun argbColorPicker() {
+        /* Using color with 0 alpha to test squares background */
+        composeTestRule.setContent {
+            DialogWithContent {
+                colorChooser(
+                    colors = listOf(Color(0, 0, 0, 0)),
+                    argbPickerState = ARGBPickerState.WithAlphaSelector,
+                    subColors = ColorPalette.PrimarySub
+                )
+            }
+        }
+
+        composeTestRule.onDialogColorPicker().performGesture { swipeLeft() }
+        composeTestRule.waitForIdle()
         compareScreenshot(composeTestRule.onDialog())
     }
 }

@@ -2,15 +2,23 @@ package com.vanpra.composematerialdialogs.color.test.functional
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performGesture
+import androidx.compose.ui.test.performSemanticsAction
+import androidx.compose.ui.test.swipeLeft
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.color.ARGBPickerState
 import com.vanpra.composematerialdialogs.color.ColorPalette
 import com.vanpra.composematerialdialogs.color.colorChooser
+import com.vanpra.composematerialdialogs.test.utils.ColorPickerSlider
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
 import com.vanpra.composematerialdialogs.test.utils.assertDialogDoesNotExist
+import com.vanpra.composematerialdialogs.test.utils.onDialogColorPicker
 import com.vanpra.composematerialdialogs.test.utils.onDialogColorSelector
+import com.vanpra.composematerialdialogs.test.utils.onDialogColorSlider
 import com.vanpra.composematerialdialogs.test.utils.onDialogSubColorBackButton
 import com.vanpra.composematerialdialogs.test.utils.onDialogSubColorSelector
 import com.vanpra.composematerialdialogs.test.utils.onPositiveButton
@@ -141,5 +149,49 @@ class ColorPickerDialogTests {
             composeTestRule.onDialogSubColorBackButton().performClick()
             composeTestRule.waitForIdle()
         }
+    }
+
+    @Test
+    fun checkARGBSliders() {
+        val initialColor = Color(0, 0, 0)
+        var selectedColor: Color? = null
+
+        composeTestRule.setContent {
+            DialogWithContent {
+                colorChooser(
+                    colors = listOf(initialColor),
+                    argbPickerState = ARGBPickerState.WithAlphaSelector,
+                    waitForPositiveButton = false
+                ) {
+                    selectedColor = it
+                }
+            }
+        }
+
+        composeTestRule.onDialogColorPicker().performGesture { swipeLeft() }
+        composeTestRule.waitForIdle()
+
+        composeTestRule
+            .onDialogColorSlider(ColorPickerSlider.Alpha)
+            .performSemanticsAction(SemanticsActions.SetProgress) { it(10f) }
+        composeTestRule.waitForIdle()
+        assertEquals(Color(0, 0, 0, 10), selectedColor)
+
+        composeTestRule
+            .onDialogColorSlider(ColorPickerSlider.Red)
+            .performSemanticsAction(SemanticsActions.SetProgress) { it(20f) }
+        composeTestRule.waitForIdle()
+        assertEquals(Color(20, 0, 0, 10), selectedColor)
+
+        composeTestRule
+            .onDialogColorSlider(ColorPickerSlider.Green)
+            .performSemanticsAction(SemanticsActions.SetProgress) { it(30f) }
+        composeTestRule.waitForIdle()
+        assertEquals(Color(20, 30, 0, 10), selectedColor)
+
+        composeTestRule.onDialogColorSlider(ColorPickerSlider.Blue)
+            .performSemanticsAction(SemanticsActions.SetProgress) { it(40f) }
+        composeTestRule.waitForIdle()
+        assertEquals(Color(20, 30, 40, 10), selectedColor)
     }
 }
