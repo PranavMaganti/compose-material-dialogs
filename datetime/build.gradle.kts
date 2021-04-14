@@ -54,8 +54,9 @@ dependencies {
 }
 
 val VERSION_NAME: String by project
-val mavenCentralRepositoryUsername: String by project
-val mavenCentralRepositoryPassword: String by project
+
+val mavenCentralRepositoryUsername: String? by project
+val mavenCentralRepositoryPassword: String? by project
 
 publishing {
     repositories {

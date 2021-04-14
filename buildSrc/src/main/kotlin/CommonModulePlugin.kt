@@ -5,14 +5,9 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.plugins.ExtensionAware
 
 class CommonModulePlugin: Plugin<Project> {
-//    private val Project.android: BaseExtension
-//        get() = extensions.findByName("android") as? BaseExtension
-//            ?: error("Not an Android module $name")
-
     override fun apply(project: Project) {
         with(project) {
             applyPlugins()
-//            androidConf()
             dependenciesConf()
         }
     }
@@ -25,25 +20,6 @@ class CommonModulePlugin: Plugin<Project> {
             apply("shot")
         }
     }
-
-//    private fun Project.androidConf() {
-//        android.run {
-//            lintOptions.isAbortOnError = false
-//
-//            compileSdkVersion(30)
-//
-//            buildFeatures.compose = true
-//
-//            compileOptions {
-//                sourceCompatibility = JavaVersion.VERSION_1_8
-//                targetCompatibility = JavaVersion.VERSION_1_8
-//            }
-//
-//            composeOptions {
-//                kotlinCompilerExtensionVersion = Dependencies.AndroidX.Compose.version
-//            }
-//        }
-//    }
 
     private fun Project.dependenciesConf() {
         dependencies.apply {
