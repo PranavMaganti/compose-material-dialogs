@@ -264,7 +264,9 @@ private fun CustomARGB(selectedColor: MutableState<Color>, showAlphaSelector: Bo
 private fun SliderLayout(selectedColor: MutableState<Color>, showAlpha: Boolean) {
     if (showAlpha) {
         LabelSlider(
-            modifier = Modifier.padding(top = 16.dp).testTag("color_picker_alpha_slider"),
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .testTag("color_picker_alpha_slider"),
             label = "A",
             value = selectedColor.value.alpha * 255,
             sliderColor = Color.DarkGray
@@ -274,7 +276,9 @@ private fun SliderLayout(selectedColor: MutableState<Color>, showAlpha: Boolean)
     }
 
     LabelSlider(
-        modifier = Modifier.padding(top = 16.dp).testTag("color_picker_red_slider"),
+        modifier = Modifier
+            .padding(top = 16.dp)
+            .testTag("color_picker_red_slider"),
         label = "R",
         value = selectedColor.value.red * 255,
         sliderColor = Color.Red
@@ -283,7 +287,9 @@ private fun SliderLayout(selectedColor: MutableState<Color>, showAlpha: Boolean)
     }
 
     LabelSlider(
-        modifier = Modifier.padding(top = 16.dp).testTag("color_picker_green_slider"),
+        modifier = Modifier
+            .padding(top = 16.dp)
+            .testTag("color_picker_green_slider"),
         label = "G",
         value = selectedColor.value.green * 255,
         sliderColor = Color.Green
@@ -292,7 +298,9 @@ private fun SliderLayout(selectedColor: MutableState<Color>, showAlpha: Boolean)
     }
 
     LabelSlider(
-        modifier = Modifier.padding(top = 16.dp).testTag("color_picker_blue_slider"),
+        modifier = Modifier
+            .padding(top = 16.dp)
+            .testTag("color_picker_blue_slider"),
         label = "B",
         value = selectedColor.value.blue * 255,
         sliderColor = Color.Blue
@@ -370,7 +378,7 @@ private fun ColorGridLayout(
         if (!showSubColors) {
             colors.forEachIndexed { index, item ->
                 ColorView(
-                    modifier = Modifier.testTag("dialog_color_picker_selector_$index"),
+                    modifier = Modifier.testTag("dialog_color_selector_$index"),
                     color = item,
                     selected = index == mainSelectedIndex
                 ) {
@@ -387,6 +395,7 @@ private fun ColorGridLayout(
         } else {
             Box(
                 Modifier
+                    .testTag("dialog_sub_color_back_btn")
                     .size(itemSizeDp)
                     .clip(CircleShape)
                     .clickable(
@@ -405,8 +414,12 @@ private fun ColorGridLayout(
                 )
             }
 
-            subColors[mainSelectedIndex].forEachIndexed { _, item ->
-                ColorView(color = item, selected = selectedColor.value == item) {
+            subColors[mainSelectedIndex].forEachIndexed { index, item ->
+                ColorView(
+                    modifier = Modifier.testTag("dialog_sub_color_selector_$index"),
+                    color = item,
+                    selected = selectedColor.value == item
+                ) {
                     selectedColor.value = item
                 }
             }

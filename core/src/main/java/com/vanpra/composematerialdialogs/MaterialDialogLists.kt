@@ -92,7 +92,7 @@ fun MaterialDialog.listItems(
     closeOnClick: Boolean = true,
     onClick: (index: Int, item: String) -> Unit = { _, _ -> }
 ) {
-    listItems(list = list, closeOnClick = closeOnClick, onClick = onClick) { index, item ->
+    listItems(list = list, closeOnClick = closeOnClick, onClick = onClick) { _, item ->
         Text(
             item,
             color = MaterialTheme.colors.onSurface,

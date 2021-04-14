@@ -35,11 +35,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
-<<<<<<< HEAD
-import androidx.compose.ui.platform.testTag
-=======
 import androidx.compose.ui.platform.LocalFocusManager
->>>>>>> main
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp

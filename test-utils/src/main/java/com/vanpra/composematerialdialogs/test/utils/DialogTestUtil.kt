@@ -76,10 +76,16 @@ fun ComposeTestRule.onDialogColorPicker() =
     this.onNodeWithTag("dialog_color_picker")
 
 fun ComposeTestRule.onDialogColorSelector(index: Int) =
-    this.onNodeWithTag("dialog_color_picker_selector_$index")
+    this.onNodeWithTag("dialog_color_selector_$index")
+
+fun ComposeTestRule.onDialogSubColorSelector(index: Int) =
+    this.onNodeWithTag("dialog_sub_color_selector_$index")
+
+fun ComposeTestRule.onDialogSubColorBackButton() =
+    this.onNodeWithTag("dialog_sub_color_back_btn")
 
 fun ComposeTestRule.onDialogColorSlider(slider: ColorPickerSlider) =
-    this.onNodeWithTag("color_picker_${slider.toString().toLowerCase(Locale.ROOT)}_slider")
+    this.onNodeWithTag("dialog_color_picker_${slider.toString().toLowerCase(Locale.ROOT)}_slider")
 
 fun <T> Collection<T>.powerSet(): Set<Set<T>> = when {
     isEmpty() -> setOf(setOf())
