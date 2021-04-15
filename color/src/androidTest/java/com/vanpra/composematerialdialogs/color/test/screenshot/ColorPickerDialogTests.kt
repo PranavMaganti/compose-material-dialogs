@@ -13,6 +13,7 @@ import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
 import com.vanpra.composematerialdialogs.test.utils.onDialog
 import com.vanpra.composematerialdialogs.test.utils.onDialogColorPicker
 import com.vanpra.composematerialdialogs.test.utils.onDialogColorSelector
+import com.vanpra.composematerialdialogs.test.utils.setContentAndWaitForIdle
 import org.junit.Rule
 import org.junit.Test
 
@@ -22,7 +23,7 @@ class ColorPickerDialogTests : ScreenshotTest {
 
     @Test
     fun mainColorPicker() {
-        composeTestRule.setContent {
+        composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 colorChooser(colors = ColorPalette.Primary)
             }
@@ -32,7 +33,7 @@ class ColorPickerDialogTests : ScreenshotTest {
 
     @Test
     fun mainColorPickerWithInitialSelection() {
-        composeTestRule.setContent {
+        composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 colorChooser(colors = ColorPalette.Primary, initialSelection = 4)
             }
@@ -42,7 +43,7 @@ class ColorPickerDialogTests : ScreenshotTest {
 
     @Test
     fun subColorPicker() {
-        composeTestRule.setContent {
+        composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 colorChooser(colors = ColorPalette.Primary, subColors = ColorPalette.PrimarySub)
             }
@@ -55,7 +56,7 @@ class ColorPickerDialogTests : ScreenshotTest {
     @Test
     fun rgbColorPicker() {
         /*  Using list with custom color to ensure the box background uses this color */
-        composeTestRule.setContent {
+        composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 colorChooser(
                     colors = listOf(Color(100, 100, 200)),
@@ -73,7 +74,7 @@ class ColorPickerDialogTests : ScreenshotTest {
     @Test
     fun argbColorPicker() {
         /* Using color with 0 alpha to test squares background */
-        composeTestRule.setContent {
+        composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 colorChooser(
                     colors = listOf(Color(0, 0, 0, 0)),

@@ -10,6 +10,7 @@ import com.karumi.shot.ScreenshotTest
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
 import com.vanpra.composematerialdialogs.test.utils.onDialog
+import com.vanpra.composematerialdialogs.test.utils.setContentAndWaitForIdle
 import org.junit.Rule
 import org.junit.Test
 
@@ -19,7 +20,7 @@ class BasicDialogTest : ScreenshotTest {
 
     @Test
     fun dialogWithoutButtons() {
-        composeTestRule.setContent {
+        composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 title(res = R.string.location_dialog_title)
                 message(res = R.string.location_dialog_message)
@@ -30,7 +31,7 @@ class BasicDialogTest : ScreenshotTest {
 
     @Test
     fun dialogWithButtons() {
-        composeTestRule.setContent {
+        composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 title(res = R.string.location_dialog_title)
                 message(res = R.string.location_dialog_message)
@@ -45,7 +46,7 @@ class BasicDialogTest : ScreenshotTest {
 
     @Test
     fun dialogWithButtonsAndIconTitle() {
-        composeTestRule.setContent {
+        composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 iconTitle(
                     icon = {
@@ -69,7 +70,7 @@ class BasicDialogTest : ScreenshotTest {
 
     @Test
     fun dialogWithStackedButtons() {
-        composeTestRule.setContent {
+        composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 title(res = R.string.location_dialog_title)
                 message(res = R.string.location_dialog_message)
@@ -84,7 +85,7 @@ class BasicDialogTest : ScreenshotTest {
 
     @Test
     fun dialogWithInput() {
-        composeTestRule.setContent {
+        composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 title(res = R.string.input_dialog_title)
                 input(label = "Name", hint = "Jon Smith")

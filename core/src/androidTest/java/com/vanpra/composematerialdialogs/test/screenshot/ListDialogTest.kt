@@ -9,7 +9,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -17,23 +16,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.dp
 import com.karumi.shot.ScreenshotTest
-import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.listItems
 import com.vanpra.composematerialdialogs.listItemsMultiChoice
 import com.vanpra.composematerialdialogs.listItemsSingleChoice
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
+import com.vanpra.composematerialdialogs.test.utils.defaultButtons
 import com.vanpra.composematerialdialogs.test.utils.onDialog
+import com.vanpra.composematerialdialogs.test.utils.setContentAndWaitForIdle
 import org.junit.Rule
 import org.junit.Test
-
-@Composable
-private fun MaterialDialog.defaultListButtons() {
-    buttons {
-        negativeButton("Cancel")
-        positiveButton("Ok")
-    }
-}
 
 private val ringtones =
     listOf(
@@ -68,7 +60,7 @@ class ListDialog : ScreenshotTest {
 
     @Test
     fun simpleListSelectionDialog() {
-        composeTestRule.setContent {
+        composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 title(res = R.string.backup_dialog_title)
                 listItems(emails)
@@ -79,7 +71,7 @@ class ListDialog : ScreenshotTest {
 
     @Test
     fun customListSelectionDialog() {
-        composeTestRule.setContent {
+        composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 title(res = R.string.backup_dialog_title)
                 listItems(
@@ -113,11 +105,11 @@ class ListDialog : ScreenshotTest {
 
     @Test
     fun multiSelectionDialog() {
-        composeTestRule.setContent {
+        composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 title(res = R.string.labels_dialog_title)
                 listItemsMultiChoice(labels)
-                defaultListButtons()
+                defaultButtons()
             }
         }
         compareScreenshot(composeTestRule.onDialog())
@@ -125,11 +117,11 @@ class ListDialog : ScreenshotTest {
 
     @Test
     fun singleSelectionDialog() {
-        composeTestRule.setContent {
+        composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 title(res = R.string.ringtone_dialog_title)
                 listItemsSingleChoice(ringtones)
-                defaultListButtons()
+                defaultButtons()
             }
         }
         compareScreenshot(composeTestRule.onDialog())

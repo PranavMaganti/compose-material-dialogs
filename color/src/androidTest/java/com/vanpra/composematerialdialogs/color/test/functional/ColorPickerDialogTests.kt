@@ -1,6 +1,5 @@
 package com.vanpra.composematerialdialogs.color.test.functional
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -9,13 +8,13 @@ import androidx.compose.ui.test.performGesture
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.swipeLeft
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.color.ARGBPickerState
 import com.vanpra.composematerialdialogs.color.ColorPalette
 import com.vanpra.composematerialdialogs.color.colorChooser
 import com.vanpra.composematerialdialogs.test.utils.ColorPickerSlider
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
 import com.vanpra.composematerialdialogs.test.utils.assertDialogDoesNotExist
+import com.vanpra.composematerialdialogs.test.utils.defaultButtons
 import com.vanpra.composematerialdialogs.test.utils.onDialogColorPicker
 import com.vanpra.composematerialdialogs.test.utils.onDialogColorSelector
 import com.vanpra.composematerialdialogs.test.utils.onDialogColorSlider
@@ -31,14 +30,6 @@ import org.junit.runner.RunWith
 class ColorPickerDialogTests {
     @get:Rule
     val composeTestRule = createComposeRule()
-
-    @Composable
-    private fun MaterialDialog.defaultButtons() {
-        buttons {
-            negativeButton("Disagree")
-            positiveButton("Agree")
-        }
-    }
 
     @Test
     fun colorPickerDialogWaitForPositiveButton() {
