@@ -16,16 +16,21 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - uses: actions/cache@v2
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
         with:
           path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: gradle-${{ hashFiles('checksum.txt') }}
-
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'buildSrc/src/*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - name: Build, lint and spotless
         run: ./gradlew spotlessCheck assemble assembleAndroidTest lintDebug
+      - name: Cleanup Gradle Cache
+        run: |
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties
 
   test:
     runs-on: macOS-latest
@@ -42,13 +47,16 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - uses: actions/cache@v2
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
         with:
           path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: gradle-${{ hashFiles('checksum.txt') }}
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Build tests
         run: ./gradlew assembleDebugAndroidTest
@@ -81,3 +89,9 @@ jobs:
         with:
           name: test-results-screenshots-${{ matrix.api-level }}
           path: "**/build/reports/shot/verification"
+
+      - name: Cleanup Gradle Cache
+        run: |
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties
+
