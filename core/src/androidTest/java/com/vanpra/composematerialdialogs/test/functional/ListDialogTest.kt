@@ -27,9 +27,9 @@ import com.vanpra.composematerialdialogs.listItemsMultiChoice
 import com.vanpra.composematerialdialogs.listItemsSingleChoice
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
-import com.vanpra.composematerialdialogs.test.utils.assertDialogDoesNotExist
-import com.vanpra.composematerialdialogs.test.utils.onDialogListItem
-import com.vanpra.composematerialdialogs.test.utils.onPositiveButton
+import com.vanpra.composematerialdialogs.test.utils.extensions.assertDialogDoesNotExist
+import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogListItem
+import com.vanpra.composematerialdialogs.test.utils.extensions.onPositiveButton
 import com.vanpra.composematerialdialogs.test.utils.powerSet
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat

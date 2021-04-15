@@ -10,10 +10,10 @@ import com.vanpra.composematerialdialogs.color.ARGBPickerState
 import com.vanpra.composematerialdialogs.color.ColorPalette
 import com.vanpra.composematerialdialogs.color.colorChooser
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
-import com.vanpra.composematerialdialogs.test.utils.onDialog
-import com.vanpra.composematerialdialogs.test.utils.onDialogColorPicker
-import com.vanpra.composematerialdialogs.test.utils.onDialogColorSelector
-import com.vanpra.composematerialdialogs.test.utils.setContentAndWaitForIdle
+import com.vanpra.composematerialdialogs.test.utils.extensions.onDialog
+import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogColorPicker
+import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogColorSelector
+import com.vanpra.composematerialdialogs.test.utils.extensions.setContentAndWaitForIdle
 import org.junit.Rule
 import org.junit.Test
 

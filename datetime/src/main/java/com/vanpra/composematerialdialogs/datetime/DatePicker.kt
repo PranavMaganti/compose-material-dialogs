@@ -45,6 +45,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
 import androidx.compose.ui.text.font.FontWeight.Companion.W600
@@ -329,6 +330,7 @@ private fun DateSelectionBox(date: Int, selected: Boolean, onClick: () -> Unit) 
 
     Box(
         Modifier
+            .testTag("dialog_date_selection_$date")
             .size(40.dp)
             .clickable(
                 interactionSource = MutableInteractionSource(),

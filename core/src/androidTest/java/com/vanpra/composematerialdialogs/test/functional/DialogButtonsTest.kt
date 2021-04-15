@@ -6,10 +6,10 @@ import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
-import com.vanpra.composematerialdialogs.test.utils.assertDialogDoesNotExist
-import com.vanpra.composematerialdialogs.test.utils.assertDialogExists
-import com.vanpra.composematerialdialogs.test.utils.onNegativeButton
-import com.vanpra.composematerialdialogs.test.utils.onPositiveButton
+import com.vanpra.composematerialdialogs.test.utils.extensions.assertDialogDoesNotExist
+import com.vanpra.composematerialdialogs.test.utils.extensions.assertDialogExists
+import com.vanpra.composematerialdialogs.test.utils.extensions.onNegativeButton
+import com.vanpra.composematerialdialogs.test.utils.extensions.onPositiveButton
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

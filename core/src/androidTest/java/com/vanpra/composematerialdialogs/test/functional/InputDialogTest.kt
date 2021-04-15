@@ -15,9 +15,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
-import com.vanpra.composematerialdialogs.test.utils.onDialogInput
-import com.vanpra.composematerialdialogs.test.utils.onDialogInputError
-import com.vanpra.composematerialdialogs.test.utils.onPositiveButton
+import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogInput
+import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogInputError
+import com.vanpra.composematerialdialogs.test.utils.extensions.onPositiveButton
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test

@@ -22,8 +22,8 @@ import com.vanpra.composematerialdialogs.listItemsSingleChoice
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
 import com.vanpra.composematerialdialogs.test.utils.defaultButtons
-import com.vanpra.composematerialdialogs.test.utils.onDialog
-import com.vanpra.composematerialdialogs.test.utils.setContentAndWaitForIdle
+import com.vanpra.composematerialdialogs.test.utils.extensions.onDialog
+import com.vanpra.composematerialdialogs.test.utils.extensions.setContentAndWaitForIdle
 import org.junit.Rule
 import org.junit.Test
 

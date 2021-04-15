@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
 /**
@@ -55,7 +56,7 @@ internal class DefaultTimePickerColors(
 
     @Composable
     override fun backgroundColor(active: Boolean): State<Color> {
-        SliderDefaults
+        TextStyle
         return rememberUpdatedState(if (active) activeBackgroundColor else inactiveBackgroundColor)
     }
 
