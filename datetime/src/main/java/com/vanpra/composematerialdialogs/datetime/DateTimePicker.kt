@@ -15,6 +15,7 @@ import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerImpl
 import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerState
 import com.vanpra.composematerialdialogs.datetime.util.noSeconds
+import java.time.LocalDate
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -25,7 +26,7 @@ import java.time.LocalTime
  * @param initialDateTime The date and time to be shown to the user when the dialog is first shown.
  * Defaults to the current date and time if this is not set
  * @param timePickerColors see [TimePickerColors]
- * @param yearRange the range of years the user should be allowed to pick from
+ * @param dateRange the range of dates the user should be allowed to pick from
  * @param positiveButtonText text used for positive button label
  * @param negativeButtonText text used for negative button label
  * @param onComplete callback with a LocalDateTime object when the user completes their input
@@ -35,7 +36,7 @@ import java.time.LocalTime
 fun MaterialDialog.datetimepicker(
     initialDateTime: LocalDateTime = LocalDateTime.now(),
     timePickerColors: TimePickerColors = TimePickerDefaults.colors(),
-    yearRange: IntRange = IntRange(1900, 2100),
+    dateRange : ClosedRange<LocalDate> = LocalDate.of(2000, 1, 1)..LocalDate.of(2100, 12, 31),
     minimumTime: LocalTime = LocalTime.MIN,
     maximumTime: LocalTime = LocalTime.MAX,
     is24HourClock: Boolean = false,
@@ -78,7 +79,7 @@ fun MaterialDialog.datetimepicker(
                 content = {
                     DatePickerImpl(
                         state = datePickerState,
-                        yearRange = yearRange,
+                        dateRange = dateRange,
                         backgroundColor = dialogBackgroundColor!!
                     )
                     TimePickerImpl(state = timePickerState) {
