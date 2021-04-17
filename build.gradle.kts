@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.diffplug.spotless") version "5.9.0"
+    id("org.jetbrains.dokka") version "1.4.30"
 }
 
 buildscript {

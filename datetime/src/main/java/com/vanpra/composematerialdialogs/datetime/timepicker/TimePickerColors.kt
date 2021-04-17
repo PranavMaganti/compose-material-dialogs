@@ -1,7 +1,6 @@
 package com.vanpra.composematerialdialogs.datetime.timepicker
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.material.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberUpdatedState
