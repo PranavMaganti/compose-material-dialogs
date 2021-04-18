@@ -288,11 +288,13 @@ private fun CalendarViewHeader(
                 contentDescription = "Previous Month",
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable(onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                    .clickable(
+                        onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                            }
                         }
-                    }),
+                    ),
                 colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
             )
 
@@ -303,11 +305,13 @@ private fun CalendarViewHeader(
                 contentDescription = "Next Month",
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable(onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    .clickable(
+                        onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                            }
                         }
-                    }),
+                    ),
                 colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
             )
         }
@@ -321,7 +325,7 @@ private fun CalendarView(viewDate: LocalDate, datePickerData: DatePickerState) {
         val month = remember(viewDate) { getDates(viewDate) }
         val possibleSelected = remember(datePickerData.selected, viewDate) {
             viewDate.year == datePickerData.selected.year &&
-                    viewDate.month == datePickerData.selected.month
+                viewDate.month == datePickerData.selected.month
         }
 
         for (y in 0..5) {
