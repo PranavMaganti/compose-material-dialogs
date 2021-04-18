@@ -69,7 +69,7 @@ internal class DatePickerState(val current: LocalDate) {
  *
  * @param initialDate time to be shown to the user when the dialog is first shown.
  * Defaults to the current date if this is not set
- * @param dateRange the range of dates the user should be allowed to pick from
+ * @param closedDateRange the range of dates the user should be allowed to pick from
  * @param waitForPositiveButton if true the [onComplete] callback will only be called when the
  * positive button is pressed, otherwise it will be called on every input change
  * @param onComplete callback with a LocalDateTime object when the user completes their input
@@ -77,10 +77,11 @@ internal class DatePickerState(val current: LocalDate) {
 @Composable
 fun MaterialDialog.datepicker(
     initialDate: LocalDate = LocalDate.now(),
-    dateRange: ClosedRange<LocalDate> = LocalDate.of(2000, 1, 1)..LocalDate.of(2100, 12, 31),
+    closedDateRange: ClosedRange<LocalDate>? = null,
     waitForPositiveButton: Boolean = true,
     onComplete: (LocalDate) -> Unit = {}
 ) {
+    val dateRange = closedDateRange ?: initialDate.plusYears(-75).with(TemporalAdjusters.firstDayOfYear())..initialDate.plusYears(75).with(TemporalAdjusters.lastDayOfYear())
     if (initialDate !in dateRange) {
         throw IllegalArgumentException("The initial Date supplied is not in the given Date Range")
     }
