@@ -87,20 +87,8 @@ fun MaterialDialog.datepicker(
         backgroundColor = dialogBackgroundColor!!
     )
 
-    val index = remember {
-        val callbackIndex = callbackCounter.getAndIncrement()
-        callbacks.add(callbackIndex) {}
-        callbackIndex
-    }
-
-    DisposableEffect(datePickerState.selected) {
-        if (waitForPositiveButton) {
-            callbacks[index] = { onComplete(datePickerState.selected) }
-        } else {
-            onComplete(datePickerState.selected)
-        }
-
-        onDispose { callbacks[index] = {} }
+    DialogCallback(waitForPositiveButton = waitForPositiveButton) {
+        onComplete(datePickerState.selected)
     }
 }
 

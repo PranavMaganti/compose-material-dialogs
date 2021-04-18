@@ -23,8 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,10 +64,10 @@ class MaterialDialog(
 
     val buttons = MaterialDialogButtons(this)
 
-    val callbacks = mutableListOf<() -> Unit>()
-    val callbackCounter = AtomicInteger(0)
+    val callbacks = mutableMapOf<Int, () -> Unit>()
+    private val callbackCounter = AtomicInteger(0)
 
-    var positiveEnabled by mutableStateOf(mutableListOf<Boolean>())
+    var positiveEnabled = mutableStateMapOf<Int, Boolean>()
     val positiveEnabledCounter = AtomicInteger(0)
     var positiveButtonEnabledOverride by mutableStateOf(true)
 
@@ -76,11 +78,7 @@ class MaterialDialog(
 
     internal fun setPositiveEnabled(index: Int, value: Boolean) {
         // Have to make temp list in order for state to register change
-        synchronized(positiveEnabled) {
-            val tempList = positiveEnabled.toMutableList()
-            tempList[index] = value
-            positiveEnabled = tempList
-        }
+        positiveEnabled[index] = value
     }
 
     /**
@@ -105,7 +103,7 @@ class MaterialDialog(
      */
     fun submit() {
         hide()
-        callbacks.forEach {
+        callbacks.values.forEach {
             it()
         }
     }
@@ -122,6 +120,35 @@ class MaterialDialog(
      */
     fun enablePositiveButton() {
         positiveButtonEnabledOverride = true
+    }
+
+    /**
+     * Adds a callback to the dialog
+     */
+    @Composable
+    fun DialogCallback(waitForPositiveButton: Boolean, callback: () -> Unit) {
+        val callbackIndex = rememberSaveable { callbackCounter.getAndIncrement() }
+
+        DisposableEffect(Unit) {
+            callbacks[callbackIndex] = if (waitForPositiveButton) callback else emptyCallback
+            onDispose { callbacks[callbackIndex] = {} }
+        }
+    }
+
+    @Composable
+    fun addPositiveButtonEnabled(valid: Boolean, onDispose: () -> Unit = {}): Int {
+        val positiveEnabledIndex = remember { positiveEnabledCounter.getAndIncrement() }
+
+        DisposableEffect(Unit) {
+            positiveEnabled[positiveEnabledIndex] = valid
+
+            onDispose {
+                setPositiveEnabled(positiveEnabledIndex, true)
+                onDispose()
+            }
+        }
+
+        return positiveEnabledIndex
     }
 
     /**
@@ -223,9 +250,7 @@ class MaterialDialog(
      *  Adds a title with the given text and icon to the dialog
      * @param text title text from a string literal
      * @param textRes title text from a string resource
-     * @param iconRes icon/image from a drawable resource
-     * @param iconAsset an icon/image from a VectorAsset
-     * @param assetTint the tint which should be applied to the asset if it is not null
+     * @param icon optional icon displayed at the start of the title
      */
     @Composable
     fun iconTitle(
@@ -366,20 +391,8 @@ class MaterialDialog(
         val valid = remember(text) { isTextValid(text) }
         val focusManager = LocalFocusManager.current
 
-        val positiveEnabledIndex = remember {
-            val index = positiveEnabledCounter.getAndIncrement()
-            positiveEnabled.add(index, valid)
-            index
-        }
-
-        val callbackIndex = remember {
-            val index = callbackCounter.getAndIncrement()
-            if (waitForPositiveButton) {
-                callbacks.add(index) { onInput(text) }
-            } else {
-                callbacks.add(index) { }
-            }
-            index
+        val positiveEnabledIndex = addPositiveButtonEnabled(valid = valid) {
+            focusManager.clearFocus()
         }
 
         DisposableEffect(valid) {
@@ -387,13 +400,7 @@ class MaterialDialog(
             onDispose { }
         }
 
-        DisposableEffect(Unit) {
-            onDispose {
-                callbacks[callbackIndex] = {}
-                setPositiveEnabled(positiveEnabledIndex, true)
-                focusManager.clearFocus()
-            }
-        }
+        DialogCallback(waitForPositiveButton = waitForPositiveButton) { onInput(text) }
 
         Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)) {
             TextField(

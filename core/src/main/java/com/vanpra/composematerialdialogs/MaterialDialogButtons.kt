@@ -73,7 +73,9 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         onClick: () -> Unit = {}
     ) {
         val buttonText = getString(res, text).toUpperCase(Locale.ROOT)
-        val buttonEnabled = remember(dialog.positiveEnabled) { dialog.positiveEnabled.all { it } }
+        val buttonEnabled = remember(dialog.positiveEnabled) {
+            dialog.positiveEnabled.values.all { it }
+        }
         val focusManager = LocalFocusManager.current
 
         TextButton(
@@ -82,7 +84,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
                     dialog.hide(focusManager)
                 }
 
-                dialog.callbacks.forEach {
+                dialog.callbacks.values.forEach {
                     it()
                 }
 
