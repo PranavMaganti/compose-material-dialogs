@@ -2,6 +2,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.JavaVersion
 import org.gradle.api.plugins.ExtensionAware
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 
 class CommonModulePlugin: Plugin<Project> {
@@ -21,8 +22,7 @@ class CommonModulePlugin: Plugin<Project> {
         plugins.run {
             apply("com.android.library")
             apply("kotlin-android")
-            apply("maven-publish")
-            apply("com.jfrog.bintray")
+            apply("com.vanniktech.maven.publish")
         }
     }
 

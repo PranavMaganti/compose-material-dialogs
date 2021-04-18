@@ -1,5 +1,6 @@
 package com.vanpra.composematerialdialogs.datetime
 
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
@@ -31,6 +32,7 @@ import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
@@ -50,9 +53,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerDefaults
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.util.shortLocalName
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.TextStyle.FULL
@@ -65,29 +70,42 @@ internal class DatePickerState(val initialDate: LocalDate) {
 /**
  * @brief A date picker body layout
  *
- * @param initialDate The time to be shown to the user when the dialog is first shown.
+ * @param initialDate time to be shown to the user when the dialog is first shown.
  * Defaults to the current date if this is not set
+ * @param yearRange the range of years the user should be allowed to pick from
+ * @param waitForPositiveButton if true the [onComplete] callback will only be called when the
+ * positive button is pressed, otherwise it will be called on every input change
  * @param onComplete callback with a LocalDateTime object when the user completes their input
- * @param onCancel callback when the user cancels the dialog
  */
 @Composable
 fun MaterialDialog.datepicker(
     initialDate: LocalDate = LocalDate.now(),
     yearRange: IntRange = IntRange(1900, 2100),
-    onCancel: () -> Unit = {},
+    waitForPositiveButton: Boolean = true,
     onComplete: (LocalDate) -> Unit = {}
 ) {
     val datePickerState = remember { DatePickerState(initialDate) }
 
-    DatePickerImpl(state = datePickerState, yearRange = yearRange)
+    DatePickerImpl(
+        state = datePickerState,
+        yearRange = yearRange,
+        backgroundColor = dialogBackgroundColor!!
+    )
 
-    buttons {
-        positiveButton("Ok") {
+    val index = remember {
+        val callbackIndex = callbackCounter.getAndIncrement()
+        callbacks.add(callbackIndex) {}
+        callbackIndex
+    }
+
+    DisposableEffect(datePickerState.selected) {
+        if (waitForPositiveButton) {
+            callbacks[index] = { onComplete(datePickerState.selected) }
+        } else {
             onComplete(datePickerState.selected)
         }
-        negativeButton("Cancel") {
-            onCancel()
-        }
+
+        onDispose { callbacks[index] = {} }
     }
 }
 
@@ -95,23 +113,28 @@ fun MaterialDialog.datepicker(
 internal fun DatePickerImpl(
     modifier: Modifier = Modifier,
     state: DatePickerState,
-    yearRange: IntRange
+    yearRange: IntRange,
+    backgroundColor: Color
 ) {
     val pagerState = rememberPagerState(
         pageCount = (yearRange.last - yearRange.first) * 12,
         initialPage = (state.initialDate.year - yearRange.first) * 12 + state.initialDate.monthValue - 1
     )
 
-    /* Height doesn't include datePickerData height */
     Column(modifier.size(328.dp, 460.dp)) {
         CalendarHeader(state)
         val yearPickerShowing = remember { mutableStateOf(false) }
-
-        HorizontalPager(state = pagerState) { page ->
+        HorizontalPager(
+            state = pagerState,
+            offscreenLimit = 2,
+            flingBehavior = PagerDefaults.defaultPagerFlingConfig(
+                state = pagerState,
+                snapAnimationSpec = spring(stiffness = 1000f)
+            )
+        ) { page ->
             Column {
-                val viewDate = remember(this@HorizontalPager) {
-                    LocalDate.of(yearRange.first, 1, 1)
-                        .plusMonths(page.toLong())
+                val viewDate = remember(page) {
+                    LocalDate.of(yearRange.first, 1, 1).plusMonths(page.toLong())
                 }
                 CalendarViewHeader(viewDate, yearPickerShowing, pagerState)
 
@@ -125,7 +148,13 @@ internal fun DatePickerImpl(
                         enter = slideInVertically({ -it }),
                         exit = slideOutVertically({ -it })
                     ) {
-                        YearPicker(yearRange, viewDate, yearPickerShowing, pagerState)
+                        YearPicker(
+                            yearRange,
+                            viewDate,
+                            yearPickerShowing,
+                            pagerState,
+                            backgroundColor
+                        )
                     }
 
                     CalendarView(viewDate, state)
@@ -140,14 +169,15 @@ private fun YearPicker(
     yearRange: IntRange,
     viewDate: LocalDate,
     yearPickerShowing: MutableState<Boolean>,
-    pagerState: PagerState
+    pagerState: PagerState,
+    backgroundColor: Color
 ) {
     val state = rememberLazyListState((viewDate.year - yearRange.first) / 3)
     val coroutineScope = rememberCoroutineScope()
 
     LazyColumn(
         modifier = Modifier
-            .background(MaterialTheme.colors.surface)
+            .background(backgroundColor)
             .padding(start = 24.dp, end = 24.dp),
         state = state
     ) {
@@ -181,7 +211,7 @@ private fun YearPicker(
 @Composable
 private fun YearPickerItem(year: Int, selected: Boolean, onClick: () -> Unit) {
     val backgroundColor =
-        if (selected) MaterialTheme.colors.primary else MaterialTheme.colors.surface
+        if (selected) MaterialTheme.colors.primary else Color.Transparent
     val textColor = if (selected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
 
     Box(Modifier.size(88.dp, 52.dp), contentAlignment = Alignment.Center) {
@@ -218,7 +248,6 @@ private fun CalendarViewHeader(
 
     Box(
         Modifier
-            .background(MaterialTheme.colors.background)
             .padding(top = 16.dp, bottom = 16.dp, start = 24.dp, end = 24.dp)
             .height(24.dp)
             .fillMaxWidth()
@@ -329,7 +358,7 @@ private fun CalendarView(viewDate: LocalDate, datePickerData: DatePickerState) {
 private fun DateSelectionBox(date: Int, selected: Boolean, onClick: () -> Unit) {
     val colors = MaterialTheme.colors
     val backgroundColor = remember(selected) {
-        if (selected) colors.primary else colors.surface
+        if (selected) colors.primary else Color.Transparent
     }
     val textColor = remember(selected) {
         if (selected) colors.onPrimary else colors.onSurface

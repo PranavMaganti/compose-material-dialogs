@@ -10,14 +10,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.layout.Layout
 import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerColors
+import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerDefaults
+import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerImpl
+import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerState
+import com.vanpra.composematerialdialogs.datetime.util.noSeconds
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 /**
- * @brief A date time picker dialog
+ * @brief A combined date and time picker dialog
  *
  * @param initialDateTime The date and time to be shown to the user when the dialog is first shown.
  * Defaults to the current date and time if this is not set
+ * @param timePickerColors see [TimePickerColors]
+ * @param yearRange the range of years the user should be allowed to pick from
+ * @param positiveButtonText text used for positive button label
+ * @param negativeButtonText text used for negative button label
  * @param onComplete callback with a LocalDateTime object when the user completes their input
  * @param onCancel callback when the user cancels the dialog
  */
@@ -26,6 +36,11 @@ fun MaterialDialog.datetimepicker(
     initialDateTime: LocalDateTime = LocalDateTime.now(),
     timePickerColors: TimePickerColors = TimePickerDefaults.colors(),
     yearRange: IntRange = IntRange(1900, 2100),
+    minimumTime: LocalTime = LocalTime.MIN,
+    maximumTime: LocalTime = LocalTime.MAX,
+    is24HourClock: Boolean = false,
+    positiveButtonText: String = "Ok",
+    negativeButtonText: String = "Cancel",
     onCancel: () -> Unit = {},
     onComplete: (LocalDateTime) -> Unit = {}
 ) {
@@ -33,11 +48,24 @@ fun MaterialDialog.datetimepicker(
 
     val datePickerState = remember { DatePickerState(initialDateTime.toLocalDate()) }
     val timePickerState = remember {
-        TimePickerState(selectedTime = initialDateTime.toLocalTime(), colors = timePickerColors)
+        TimePickerState(
+            selectedTime = initialDateTime.toLocalTime().noSeconds(),
+            colors = timePickerColors,
+            minimumTime = minimumTime,
+            maximumTime = maximumTime,
+            is24Hour = is24HourClock
+        )
     }
+
+    timePickerState.minimumTime = remember(minimumTime) { minimumTime }
+    timePickerState.maximumTime = remember(maximumTime) { maximumTime }
+    timePickerState.is24Hour = remember { is24HourClock }
 
     val scrollPos = remember { Animatable(0f) }
     val scrollTo = remember { mutableStateOf(0f) }
+
+    val isDateScreen =
+        remember(scrollPos.value, scrollTo.value) { scrollPos.value < scrollTo.value / 2 }
 
     BoxWithConstraints {
         Column {
@@ -48,7 +76,11 @@ fun MaterialDialog.datetimepicker(
 
             Layout(
                 content = {
-                    DatePickerImpl(state = datePickerState, yearRange = yearRange)
+                    DatePickerImpl(
+                        state = datePickerState,
+                        yearRange = yearRange,
+                        backgroundColor = dialogBackgroundColor!!
+                    )
                     TimePickerImpl(state = timePickerState) {
                         coroutineScope.launch { scrollPos.animateTo(0f) }
                     }
@@ -70,13 +102,11 @@ fun MaterialDialog.datetimepicker(
     }
 
     buttons {
-        val isDateScreen = remember(scrollPos.value) { scrollPos.value == 0f }
-
         positiveButton(
             text = if (isDateScreen) {
                 "Next"
             } else {
-                "Ok"
+                positiveButtonText
             },
             disableDismiss = isDateScreen
         ) {
@@ -88,13 +118,13 @@ fun MaterialDialog.datetimepicker(
                 onComplete(
                     LocalDateTime.of(
                         datePickerState.selected,
-                        timePickerState.selectedTime.toLocalTime()
+                        timePickerState.selectedTime
                     )
                 )
             }
         }
 
-        negativeButton("Cancel") {
+        negativeButton(negativeButtonText) {
             onCancel()
         }
     }

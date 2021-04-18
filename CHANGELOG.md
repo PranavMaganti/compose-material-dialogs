@@ -1,5 +1,23 @@
 # Changelog
 
+### 0.3.3 - 2021-04-08
+
+  - Update compose version to 1.0.0-beta04
+  - Modify dialog styling (elevation, shape, etc) to better match material spec (thanks **[ivaniskandar](https://github.com/ivaniskandar)**)
+  - Fix issues when selection the hour 12 in the time picker
+  - New time picker features (thanks **[Jahor](https://github.com/Jahor)** )
+      - Add min and max time range/limit
+      - Add optional 24 hour time selector
+- Switch to publishing to maven central due to sun-setting of bintray 
+
+### 0.3.2 - 2021-03-24
+
+  - Update compose version to 1.0.0-beta03
+  - Fix callback and selection bugs in color picker
+  - Make alpha slider optional in color picker and add a tiled background to the ARGB hex label box (thanks **[ivaniskandar](https://github.com/ivaniskandar)**)
+  - Remove predefined buttons for date and time picker components
+  - Make custom list items padding be added after clickable to make ripple fill the max width
+
 ### 0.3.1 - 2021-03-10
 
   - Update compose version to 1.0.0-beta02
