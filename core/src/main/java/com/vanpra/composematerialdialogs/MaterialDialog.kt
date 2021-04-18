@@ -76,7 +76,9 @@ class MaterialDialog(
      */
     var dialogBackgroundColor by mutableStateOf<Color?>(null)
 
-    internal fun setPositiveEnabled(index: Int, value: Boolean) = positiveEnabled[index] = value
+    internal fun setPositiveEnabled(index: Int, value: Boolean) {
+        positiveEnabled[index] = value
+    }
 
     /**
      *  Shows the dialog
