@@ -15,8 +15,8 @@ import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerImpl
 import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerState
 import com.vanpra.composematerialdialogs.datetime.util.noSeconds
-import java.time.LocalDate
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
@@ -36,7 +36,7 @@ import java.time.LocalTime
 fun MaterialDialog.datetimepicker(
     initialDateTime: LocalDateTime = LocalDateTime.now(),
     timePickerColors: TimePickerColors = TimePickerDefaults.colors(),
-    dateRange : ClosedRange<LocalDate> = LocalDate.of(2000, 1, 1)..LocalDate.of(2100, 12, 31),
+    dateRange: ClosedRange<LocalDate> = LocalDate.of(2000, 1, 1)..LocalDate.of(2100, 12, 31),
     minimumTime: LocalTime = LocalTime.MIN,
     maximumTime: LocalTime = LocalTime.MAX,
     is24HourClock: Boolean = false,

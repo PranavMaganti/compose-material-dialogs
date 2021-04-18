@@ -81,7 +81,7 @@ fun MaterialDialog.datepicker(
     waitForPositiveButton: Boolean = true,
     onComplete: (LocalDate) -> Unit = {}
 ) {
-    if(initialDate !in dateRange){
+    if (initialDate !in dateRange) {
         throw IllegalArgumentException("The initial Date supplied is not in the given Date Range")
     }
     val datePickerState = remember { DatePickerState(initialDate) }
@@ -306,7 +306,7 @@ private fun CalendarView(
         val month = remember(viewDate) { getDates(viewDate) }
         val possibleSelected = remember(datePickerData.selected, viewDate) {
             viewDate.year == datePickerData.selected.year &&
-                    viewDate.month == datePickerData.selected.month
+                viewDate.month == datePickerData.selected.month
         }
 
         for (y in 0..5) {
@@ -320,11 +320,9 @@ private fun CalendarView(
                     val day = month[y * 7 + x]
                     val isValid: Boolean = if (viewDate.month == dateRange.endInclusive.month && viewDate.year == dateRange.endInclusive.year) {
                         day <= dateRange.endInclusive.dayOfMonth
-                    }
-                    else if (viewDate.month == dateRange.start.month && viewDate.year == dateRange.start.year) {
+                    } else if (viewDate.month == dateRange.start.month && viewDate.year == dateRange.start.year) {
                         day >= dateRange.start.dayOfMonth
-                    }
-                    else {
+                    } else {
                         true
                     }
                     if (day != -1) {

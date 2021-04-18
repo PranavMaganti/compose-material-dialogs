@@ -167,9 +167,10 @@ fun ViewPager(
                             .width(this@BoxWithConstraints.maxWidth)
                             .layoutId(x)
                     ) {
-                        if(index.value in indexRange){
-                        val viewPagerImpl = ViewPagerImpl(index.value + x, increment, moveBy)
-                        content(viewPagerImpl)}
+                        if (index.value in indexRange) {
+                            val viewPagerImpl = ViewPagerImpl(index.value + x, increment, moveBy)
+                            content(viewPagerImpl)
+                        }
                     }
                 }
             },
