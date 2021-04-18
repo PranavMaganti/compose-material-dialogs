@@ -68,7 +68,7 @@ class MaterialDialog(
     private val callbackCounter = AtomicInteger(0)
 
     var positiveEnabled = mutableStateMapOf<Int, Boolean>()
-    val positiveEnabledCounter = AtomicInteger(0)
+    private val positiveEnabledCounter = AtomicInteger(0)
     var positiveButtonEnabledOverride by mutableStateOf(true)
 
     /**
@@ -76,10 +76,7 @@ class MaterialDialog(
      */
     var dialogBackgroundColor by mutableStateOf<Color?>(null)
 
-    internal fun setPositiveEnabled(index: Int, value: Boolean) {
-        // Have to make temp list in order for state to register change
-        positiveEnabled[index] = value
-    }
+    internal fun setPositiveEnabled(index: Int, value: Boolean) = positiveEnabled[index] = value
 
     /**
      *  Shows the dialog
