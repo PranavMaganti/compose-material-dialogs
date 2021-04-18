@@ -81,6 +81,9 @@ fun MaterialDialog.datepicker(
     waitForPositiveButton: Boolean = true,
     onComplete: (LocalDate) -> Unit = {}
 ) {
+    if(initialDate !in dateRange){
+        throw IllegalArgumentException("The initial Date supplied is not in the given Date Range")
+    }
     val datePickerState = remember { DatePickerState(initialDate) }
 
     DatePickerImpl(
