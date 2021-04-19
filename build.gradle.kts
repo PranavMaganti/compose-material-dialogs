@@ -38,6 +38,7 @@ allprojects {
             freeCompilerArgs = freeCompilerArgs + listOf(
                 "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
                 "-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi",
+                "-Xopt-in=androidx.compose.foundation.ExperimentalFoundationApi",
                 "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi"
             )
         }
