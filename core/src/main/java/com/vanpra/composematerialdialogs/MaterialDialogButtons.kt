@@ -9,7 +9,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -73,9 +72,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         onClick: () -> Unit = {}
     ) {
         val buttonText = getString(res, text).toUpperCase(Locale.ROOT)
-        val buttonEnabled = remember(dialog.positiveEnabled) {
-            dialog.positiveEnabled.values.all { it }
-        }
+        val buttonEnabled = dialog.positiveEnabled.values.all { it }
         val focusManager = LocalFocusManager.current
 
         TextButton(

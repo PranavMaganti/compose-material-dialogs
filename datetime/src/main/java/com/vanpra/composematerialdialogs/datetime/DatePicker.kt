@@ -86,9 +86,7 @@ fun MaterialDialog.datepicker(
         backgroundColor = dialogBackgroundColor!!
     )
 
-    DialogCallback(waitForPositiveButton = waitForPositiveButton) {
-        onComplete(datePickerState.selected)
-    }
+    if (waitForPositiveButton) DialogCallback { onComplete(datePickerState.selected) }
 }
 
 @Composable

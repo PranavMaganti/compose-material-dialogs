@@ -122,9 +122,7 @@ fun MaterialDialog.colorChooser(
         }
         val swipeState = rememberSwipeableState(ColorPickerScreen.Palette)
 
-        DialogCallback(waitForPositiveButton = waitForPositiveButton) {
-            onColorSelected(selectedColor.value)
-        }
+        if (waitForPositiveButton) DialogCallback { onColorSelected(selectedColor.value) }
 
         Column(
             Modifier

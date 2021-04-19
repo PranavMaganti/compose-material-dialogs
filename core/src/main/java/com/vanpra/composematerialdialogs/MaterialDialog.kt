@@ -122,18 +122,26 @@ class MaterialDialog(
     }
 
     /**
-     * Adds a callback to the dialog
+     * Adds a callback to the dialog which is called on positive button press
+     *
+     * @param callback called when positive button is pressed
      */
     @Composable
-    fun DialogCallback(waitForPositiveButton: Boolean, callback: () -> Unit) {
+    fun DialogCallback(callback: () -> Unit) {
         val callbackIndex = rememberSaveable { callbackCounter.getAndIncrement() }
 
         DisposableEffect(Unit) {
-            callbacks[callbackIndex] = if (waitForPositiveButton) callback else emptyCallback
+            callbacks[callbackIndex] = callback
             onDispose { callbacks[callbackIndex] = {} }
         }
     }
 
+    /**
+     * Adds a value to the [positiveEnabled] list and returns the index used to store the boolean
+     *
+     * @param valid boolean value to initialise the index in the list
+     * @param onDispose cleanup callback when component calling this gets destroyed
+     */
     @Composable
     fun addPositiveButtonEnabled(valid: Boolean, onDispose: () -> Unit = {}): Int {
         val positiveEnabledIndex = remember { positiveEnabledCounter.getAndIncrement() }
@@ -152,6 +160,7 @@ class MaterialDialog(
 
     /**
      *  Checks if autoDismiss is set
+     *
      * @return true if autoDismiss is set to true and false otherwise
      */
     fun isAutoDismiss() = autoDismiss
@@ -399,7 +408,7 @@ class MaterialDialog(
             onDispose { }
         }
 
-        DialogCallback(waitForPositiveButton = waitForPositiveButton) { onInput(text) }
+        if (waitForPositiveButton) DialogCallback { onInput(text) }
 
         Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)) {
             TextField(

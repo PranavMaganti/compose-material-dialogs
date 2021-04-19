@@ -136,9 +136,8 @@ fun MaterialDialog.listItemsMultiChoice(
     onCheckedChange: (indices: List<Int>) -> Unit = {}
 ) {
     var selectedItems by remember { mutableStateOf(initialSelection.toMutableList()) }
-    DialogCallback(waitForPositiveButton = waitForPositiveButton) {
-        onCheckedChange(selectedItems)
-    }
+
+    if (waitForPositiveButton) DialogCallback { onCheckedChange(selectedItems) }
 
     val onChecked = { index: Int ->
         if (index !in disabledIndices) {
@@ -213,9 +212,7 @@ fun MaterialDialog.listItemsSingleChoice(
 
     val positiveEnabledIndex = addPositiveButtonEnabled(valid = selected != null)
 
-    DialogCallback(waitForPositiveButton = waitForPositiveButton) {
-        onChoiceChange(selected!!)
-    }
+    if (waitForPositiveButton) DialogCallback { onChoiceChange(selected!!) }
 
     val onSelect = { index: Int ->
         if (index !in disabledIndices) {
