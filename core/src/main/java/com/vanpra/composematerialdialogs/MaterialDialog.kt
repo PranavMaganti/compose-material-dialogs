@@ -189,12 +189,12 @@ class MaterialDialog(
         elevation: Dp = 24.dp,
         content: @Composable MaterialDialog.() -> Unit
     ) {
-        dialogBackgroundColor = LocalElevationOverlay.current?.apply(
-            color = backgroundColor,
-            elevation = elevation
-        ) ?: MaterialTheme.colors.surface
-
         if (showing.value) {
+            dialogBackgroundColor = LocalElevationOverlay.current?.apply(
+                color = backgroundColor,
+                elevation = elevation
+            ) ?: MaterialTheme.colors.surface
+
             ThemedDialog(onCloseRequest = { onCloseRequest(this) }) {
                 DisposableEffect(Unit) {
                     onDispose { resetDialog() }
