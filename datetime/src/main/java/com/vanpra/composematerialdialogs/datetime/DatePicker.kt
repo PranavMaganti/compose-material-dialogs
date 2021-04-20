@@ -31,7 +31,6 @@ import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -87,21 +86,7 @@ fun MaterialDialog.datepicker(
         backgroundColor = dialogBackgroundColor!!
     )
 
-    val index = remember {
-        val callbackIndex = callbackCounter.getAndIncrement()
-        callbacks.add(callbackIndex) {}
-        callbackIndex
-    }
-
-    DisposableEffect(datePickerState.selected) {
-        if (waitForPositiveButton) {
-            callbacks[index] = { onComplete(datePickerState.selected) }
-        } else {
-            onComplete(datePickerState.selected)
-        }
-
-        onDispose { callbacks[index] = {} }
-    }
+    if (waitForPositiveButton) DialogCallback { onComplete(datePickerState.selected) }
 }
 
 @Composable
