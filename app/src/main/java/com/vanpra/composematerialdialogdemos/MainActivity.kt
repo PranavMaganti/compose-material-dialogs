@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import com.vanpra.composematerialdialogdemos.demos.BasicDialogDemo
 import com.vanpra.composematerialdialogdemos.demos.BasicListDialogDemo
 import com.vanpra.composematerialdialogdemos.demos.ColorDialogDemo
@@ -35,14 +36,16 @@ data class DialogSectionData(val title: String, val content: @Composable () -> U
  */
 @Composable
 fun DialogDemos() {
-    val sections = listOf(
-        DialogSectionData("Basic Dialogs") { BasicDialogDemo() },
-        DialogSectionData("Basic List Dialogs") { BasicListDialogDemo() },
-        DialogSectionData("Single Selection List Dialogs") { SingleSelectionDemo() },
-        DialogSectionData("Multi-Selection List Dialogs") { MultiSelectionDemo() },
-        DialogSectionData("Date and Time Picker Dialogs") { DateTimeDialogDemo() },
-        DialogSectionData("Color Picker Dialogs") { ColorDialogDemo() }
-    )
+    val sections = remember {
+        listOf(
+            DialogSectionData("Basic Dialogs") { BasicDialogDemo() },
+            DialogSectionData("Basic List Dialogs") { BasicListDialogDemo() },
+            DialogSectionData("Single Selection List Dialogs") { SingleSelectionDemo() },
+            DialogSectionData("Multi-Selection List Dialogs") { MultiSelectionDemo() },
+            DialogSectionData("Date and Time Picker Dialogs") { DateTimeDialogDemo() },
+            DialogSectionData("Color Picker Dialogs") { ColorDialogDemo() }
+        )
+    }
 
     LazyColumn {
         items(sections) {
