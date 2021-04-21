@@ -20,6 +20,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -137,7 +138,14 @@ fun MaterialDialog.listItemsMultiChoice(
 ) {
     var selectedItems by remember { mutableStateOf(initialSelection.toMutableList()) }
 
-    if (waitForPositiveButton) DialogCallback { onCheckedChange(selectedItems) }
+    if (waitForPositiveButton) {
+        DialogCallback { onCheckedChange(selectedItems) }
+    } else {
+        DisposableEffect(selectedItems) {
+            onCheckedChange(selectedItems)
+            onDispose { }
+        }
+    }
 
     val onChecked = { index: Int ->
         if (index !in disabledIndices) {
@@ -212,7 +220,14 @@ fun MaterialDialog.listItemsSingleChoice(
 
     val positiveEnabledIndex = addPositiveButtonEnabled(valid = selected != null)
 
-    if (waitForPositiveButton) DialogCallback { onChoiceChange(selected!!) }
+    if (waitForPositiveButton) {
+        DialogCallback { onChoiceChange(selected!!) }
+    } else {
+        DisposableEffect(selected) {
+            onChoiceChange(selected!!)
+            onDispose {  }
+        }
+    }
 
     val onSelect = { index: Int ->
         if (index !in disabledIndices) {

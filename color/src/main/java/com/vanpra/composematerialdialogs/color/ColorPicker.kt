@@ -34,6 +34,7 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -122,7 +123,14 @@ fun MaterialDialog.colorChooser(
         }
         val swipeState = rememberSwipeableState(ColorPickerScreen.Palette)
 
-        if (waitForPositiveButton) DialogCallback { onColorSelected(selectedColor.value) }
+        if (waitForPositiveButton) {
+            DialogCallback { onColorSelected(selectedColor.value) }
+        } else {
+            DisposableEffect(selectedColor.value) {
+                onColorSelected(selectedColor.value)
+                onDispose {  }
+            }
+        }
 
         Column(
             Modifier
