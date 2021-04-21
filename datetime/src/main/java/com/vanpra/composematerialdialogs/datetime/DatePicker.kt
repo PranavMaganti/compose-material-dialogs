@@ -114,7 +114,6 @@ internal fun DatePickerImpl(
         CalendarHeader(state)
         HorizontalPager(
             state = pagerState,
-            offscreenLimit = 2,
             verticalAlignment = Alignment.Top,
             flingBehavior = PagerDefaults.defaultPagerFlingConfig(
                 state = pagerState,
@@ -122,7 +121,11 @@ internal fun DatePickerImpl(
             )
         ) { page ->
             val viewDate = remember(page) {
-                LocalDate.of(yearRange.first, 1, 1).plusMonths(page.toLong())
+                LocalDate.of(
+                    yearRange.first + (page.toLong() / 12).toInt(),
+                    (page.toLong() % 12).toInt() + 1,
+                    1
+                )
             }
 
             Column {
@@ -188,15 +191,13 @@ private fun YearPicker(
 @Composable
 private fun YearPickerItem(year: Int, selected: Boolean, onClick: () -> Unit) {
     val colors = MaterialTheme.colors
-    val backgroundColor = remember(selected) { if (selected) colors.primary else Color.Transparent }
-    val textColor = remember(selected) { if (selected) colors.onPrimary else colors.onSurface }
 
     Box(Modifier.size(88.dp, 52.dp), contentAlignment = Alignment.Center) {
         Box(
             Modifier
                 .size(72.dp, 36.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .background(backgroundColor)
+                .background(if (selected) colors.primary else Color.Transparent)
                 .clickable(
                     onClick = onClick,
                     interactionSource = MutableInteractionSource(),
@@ -204,7 +205,13 @@ private fun YearPickerItem(year: Int, selected: Boolean, onClick: () -> Unit) {
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Text(year.toString(), style = TextStyle(color = textColor, fontSize = 18.sp))
+            Text(
+                year.toString(),
+                style = TextStyle(
+                    color = if (selected) colors.onPrimary else colors.onSurface,
+                    fontSize = 18.sp
+                )
+            )
         }
     }
 }
@@ -219,7 +226,6 @@ private fun CalendarViewHeader(
     val month = remember(viewDate.month) {
         viewDate.month.getDisplayName(FULL, Locale.getDefault())
     }
-    val year = remember(viewDate.year) { viewDate.year }
     val yearDropdownIcon = remember(yearPickerShowing.value) {
         if (yearPickerShowing.value) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown
     }
@@ -238,7 +244,7 @@ private fun CalendarViewHeader(
                 .clickable(onClick = { yearPickerShowing.value = !yearPickerShowing.value })
         ) {
             Text(
-                "$month $year",
+                "$month ${viewDate.year}",
                 modifier = Modifier
                     .paddingFromBaseline(top = 16.dp)
                     .wrapContentSize(Alignment.Center),
@@ -300,23 +306,24 @@ private fun CalendarViewHeader(
 private fun CalendarView(viewDate: LocalDate, datePickerData: DatePickerState) {
     Column(Modifier.padding(start = 12.dp, end = 12.dp)) {
         DayOfWeekHeader()
-        val month = remember(viewDate) { getDates(viewDate) }
-        val possibleSelected = remember(datePickerData.selected, viewDate) {
+        val calendarDatesData = remember(viewDate) { getDates(viewDate) }
+        val possibleSelected = remember(viewDate) {
             viewDate.year == datePickerData.selected.year &&
-                    viewDate.month == datePickerData.selected.month
+                viewDate.month == datePickerData.selected.month
         }
 
         LazyVerticalGrid(cells = GridCells.Fixed(7)) {
-            items(month) {
-                if (it != -1) {
-                    val selected = remember(possibleSelected) {
-                        possibleSelected && it == datePickerData.selected.dayOfMonth
-                    }
-                    DateSelectionBox(it, selected) {
-                        datePickerData.selected = LocalDate.of(viewDate.year, viewDate.month, it)
-                    }
-                } else {
-                    Box(Modifier.size(40.dp))
+            for (x in 0 until calendarDatesData.first) {
+                item { Box(Modifier.size(40.dp)) }
+            }
+
+            items(calendarDatesData.second) {
+                val selected = remember(possibleSelected, datePickerData.selected) {
+                    possibleSelected && it == datePickerData.selected.dayOfMonth
+                }
+
+                DateSelectionBox(it, selected) {
+                    datePickerData.selected = LocalDate.of(viewDate.year, viewDate.month, it)
                 }
             }
         }
@@ -326,13 +333,6 @@ private fun CalendarView(viewDate: LocalDate, datePickerData: DatePickerState) {
 @Composable
 private fun DateSelectionBox(date: Int, selected: Boolean, onClick: () -> Unit) {
     val colors = MaterialTheme.colors
-    val backgroundColor = remember(selected) {
-        if (selected) colors.primary else Color.Transparent
-    }
-    val textColor = remember(selected) {
-        if (selected) colors.onPrimary else colors.onSurface
-    }
-
     Box(
         Modifier
             .size(40.dp)
@@ -348,9 +348,12 @@ private fun DateSelectionBox(date: Int, selected: Boolean, onClick: () -> Unit) 
             modifier = Modifier
                 .size(32.dp)
                 .clip(CircleShape)
-                .background(backgroundColor)
+                .background(if (selected) colors.primary else Color.Transparent)
                 .wrapContentSize(Alignment.Center),
-            style = TextStyle(color = textColor, fontSize = 12.sp)
+            style = TextStyle(
+                color = if (selected) colors.onPrimary else colors.onSurface,
+                fontSize = 12.sp
+            )
         )
     }
 }
@@ -421,13 +424,12 @@ private fun CalendarHeader(datePickerData: DatePickerState) {
     }
 }
 
-private fun getDates(date: LocalDate): List<Int> {
+private fun getDates(date: LocalDate): Pair<Int, List<Int>> {
     val numDays = date.month.length(date.isLeapYear)
     val firstDate = date.withDayOfMonth(1)
     val firstDay = firstDate.dayOfWeek.value % 7
 
     val dateRange = IntRange(1, numDays).toList()
-    val startRangePadding = List(firstDay) { -1 }
 
-    return startRangePadding + dateRange
+    return Pair(firstDay, dateRange)
 }
