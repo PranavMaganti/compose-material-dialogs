@@ -128,7 +128,7 @@ fun MaterialDialog.colorChooser(
         } else {
             DisposableEffect(selectedColor.value) {
                 onColorSelected(selectedColor.value)
-                onDispose {  }
+                onDispose { }
             }
         }
 

@@ -225,7 +225,7 @@ fun MaterialDialog.listItemsSingleChoice(
     } else {
         DisposableEffect(selected) {
             onChoiceChange(selected!!)
-            onDispose {  }
+            onDispose { }
         }
     }
 

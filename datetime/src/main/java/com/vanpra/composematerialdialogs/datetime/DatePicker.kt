@@ -100,7 +100,7 @@ fun MaterialDialog.datepicker(
     } else {
         DisposableEffect(datePickerState.selected) {
             onComplete(datePickerState.selected)
-            onDispose {  }
+            onDispose { }
         }
     }
 }

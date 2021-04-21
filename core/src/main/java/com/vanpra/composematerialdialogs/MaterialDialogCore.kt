@@ -160,7 +160,7 @@ fun MaterialDialog.input(
     } else {
         DisposableEffect(text) {
             onInput(text)
-            onDispose {  }
+            onDispose { }
         }
     }
 
