@@ -1,4 +1,4 @@
-package com.vanpra.composematerialdialogs.datetime
+package com.vanpra.composematerialdialogs.datetime.util
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationEndReason
