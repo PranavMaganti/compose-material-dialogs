@@ -6,7 +6,7 @@
 
 ### NOTE: The dependency name of the package has changed due to moving to maven central
 
-**Current Compose Version: 1.0.0-beta04**
+**Current Compose Version: 1.0.0-beta05**
 
 ## Credits
 
