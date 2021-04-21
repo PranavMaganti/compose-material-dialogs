@@ -113,7 +113,14 @@ fun MaterialDialog.timepicker(
     timePickerState.maximumTime = remember(maximumTime) { maximumTime }
     timePickerState.is24Hour = remember(is24HourClock) { is24HourClock }
 
-    if (waitForPositiveButton) DialogCallback { onComplete(timePickerState.selectedTime) }
+    if (waitForPositiveButton) {
+        DialogCallback { onComplete(timePickerState.selectedTime) }
+    } else {
+        DisposableEffect(timePickerState.selectedTime) {
+            onComplete(timePickerState.selectedTime)
+            onDispose { }
+        }
+    }
 
     TimePickerImpl(state = timePickerState)
 }

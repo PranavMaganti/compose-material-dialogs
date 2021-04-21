@@ -155,7 +155,14 @@ fun MaterialDialog.input(
         onDispose { }
     }
 
-    if (waitForPositiveButton) DialogCallback { onInput(text) }
+    if (waitForPositiveButton) {
+        DialogCallback { onInput(text) }
+    } else {
+        DisposableEffect(text) {
+            onInput(text)
+            onDispose { }
+        }
+    }
 
     Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)) {
         TextField(
