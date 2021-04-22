@@ -14,7 +14,7 @@ This library's design is heavily inspired by https://github.com/afollestad/mater
 
 ## Core
 
-#### [Core Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/documentation/Core.md)
+#### [Core Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/docs/Core.md)
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/full_core.png)
 
@@ -30,7 +30,7 @@ dependencies {
 
 ## Date and Time Picker
 
-#### [Date and Time Picker Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/documentation/DateTimePicker.md)
+#### [Date and Time Picker Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/docs/DateTimePicker.md)
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/date_and_time.png)
 
@@ -46,7 +46,7 @@ dependencies {
 
 ## Color Picker
 
-#### [Color Picker Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/documentation/ColorPicker.md)
+#### [Color Picker Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/docs/ColorPicker.md)
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/color_picker.png)
 
