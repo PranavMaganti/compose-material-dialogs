@@ -39,6 +39,10 @@ dialog.build {
     datepicker { date ->
         // Do stuff with java.time.LocalDate object which is passed in
     }
+    buttons {
+        positiveButton("Ok")
+        negativeButton("Cancel")
+    }
 }
 
 /* This should be called in an onClick or an Effect */ 
@@ -54,6 +58,10 @@ dialog.build {
     ...
     timepicker { time ->
         // Do stuff with java.time.LocalTime object which is passed in
+    }
+    buttons {
+        positiveButton("Ok")
+        negativeButton("Cancel")
     }
     ...
 }
