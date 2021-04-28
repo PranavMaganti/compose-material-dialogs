@@ -219,7 +219,7 @@ private fun YearPickerItem(year: Int, selected: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-private fun CalendarViewHeader(
+private inline fun CalendarViewHeader(
     viewDate: LocalDate,
     state: DatePickerState,
     pagerState: PagerState
@@ -387,7 +387,6 @@ private fun DayOfWeekHeader() {
     }
 }
 
-// Input: Selected Date
 @Composable
 private fun CalendarHeader(state: DatePickerState) {
     val month = remember(state.selected) { state.selected.month.shortLocalName }

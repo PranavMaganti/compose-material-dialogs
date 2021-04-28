@@ -56,11 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.util.getOffset
-import com.vanpra.composematerialdialogs.datetime.util.isAM
 import com.vanpra.composematerialdialogs.datetime.util.noSeconds
-import com.vanpra.composematerialdialogs.datetime.util.simpleHour
-import com.vanpra.composematerialdialogs.datetime.util.toAM
-import com.vanpra.composematerialdialogs.datetime.util.toPM
 import java.time.LocalTime
 import kotlin.math.PI
 import kotlin.math.abs
@@ -84,8 +80,7 @@ private data class SelectedOffset(
  * @param colors see [TimePickerColors]
  * @param waitForPositiveButton if true the [onComplete] callback will only be called when the
  * positive button is pressed, otherwise it will be called on every input change
- * @param minimumTime any time between 00:00 and this time will be disabled
- * @param maximumTime any time between 23:59 and this time will be disabled
+ * @param timeRange any time outside this range will be disabled
  * @param is24HourClock uses the 24 hour clock face when true
  * @param onComplete callback with a LocalTime object when the user completes their input
  */
@@ -94,24 +89,18 @@ fun MaterialDialog.timepicker(
     initialTime: LocalTime = LocalTime.now().noSeconds(),
     colors: TimePickerColors = TimePickerDefaults.colors(),
     waitForPositiveButton: Boolean = true,
-    minimumTime: LocalTime = LocalTime.MIN,
-    maximumTime: LocalTime = LocalTime.MAX,
+    timeRange: ClosedRange<LocalTime> = LocalTime.MIN..LocalTime.MAX,
     is24HourClock: Boolean = false,
     onComplete: (LocalTime) -> Unit = {}
 ) {
     val timePickerState = remember {
         TimePickerState(
-            selectedTime = initialTime,
+            selectedTime = initialTime.coerceIn(timeRange),
             colors = colors,
-            minimumTime = minimumTime,
-            maximumTime = maximumTime,
+            timeRange = timeRange,
             is24Hour = is24HourClock
         )
     }
-
-    timePickerState.minimumTime = remember(minimumTime) { minimumTime }
-    timePickerState.maximumTime = remember(maximumTime) { maximumTime }
-    timePickerState.is24Hour = remember(is24HourClock) { is24HourClock }
 
     if (waitForPositiveButton) {
         DialogCallback { onComplete(timePickerState.selectedTime) }
@@ -131,16 +120,6 @@ internal fun TimePickerImpl(
     state: TimePickerState,
     onBack: (() -> Unit)? = null
 ) {
-    DisposableEffect(state.selectedTime, state.minimumTime, state.maximumTime) {
-        if (state.selectedTime < state.minimumTime) {
-            state.selectedTime = state.minimumTime
-        }
-        if (state.selectedTime > state.maximumTime) {
-            state.selectedTime = state.maximumTime
-        }
-        onDispose { }
-    }
-
     Column(modifier.padding(start = 24.dp, end = 24.dp)) {
         TimePickerTitle(onBack)
         TimeLayout(state)
@@ -169,7 +148,7 @@ private fun ExtendedClockHourLayout(state: TimePickerState) {
         else -> anchor
     }
 
-    val isEnabled: (Int) -> Boolean = remember(state.minimumTime, state.maximumTime) {
+    val isEnabled: (Int) -> Boolean = remember(state.timeRange) {
         { index -> adjustAnchor(index) in state.hourRange() }
     }
 
@@ -186,7 +165,8 @@ private fun ExtendedClockHourLayout(state: TimePickerState) {
         },
         onAnchorChange = { anchor ->
             /* Swapping 12 and 00 as this is the standard layout */
-            state.selectedTime = state.selectedTime.withHour(adjustAnchor(anchor))
+            state.selectedTime =
+                state.selectedTime.withHour(adjustAnchor(anchor)).coerceIn(state.timeRange)
         },
         startAnchor = adjustAnchor(state.selectedTime.hour),
         onLift = { state.currentScreen = ClockScreen.Minute },
@@ -201,11 +181,7 @@ private fun ClockHourLayout(state: TimePickerState) {
         return if (state.selectedTime.isAM || hour == 12) hour else hour + 12
     }
 
-    val isEnabled: (Int) -> Boolean = remember(
-        state.minimumTime,
-        state.maximumTime,
-        state.selectedTime,
-    ) {
+    val isEnabled: (Int) -> Boolean = remember(state.timeRange, state.selectedTime) {
         { index -> adjustedHour(index) in state.hourRange() }
     }
 
@@ -217,7 +193,7 @@ private fun ClockHourLayout(state: TimePickerState) {
                 12 -> if (state.selectedTime.isAM) 0 else 12
                 else -> if (state.selectedTime.isAM) hours else hours + 12
             }
-            state.selectedTime = state.selectedTime.withHour(adjustedHour)
+            state.selectedTime = state.selectedTime.withHour(adjustedHour).coerceIn(state.timeRange)
         },
         startAnchor = state.selectedTime.simpleHour % 12,
         onLift = { state.currentScreen = ClockScreen.Minute },
@@ -229,12 +205,7 @@ private fun ClockHourLayout(state: TimePickerState) {
 @Composable
 private fun ClockMinuteLayout(state: TimePickerState) {
     val isEnabled: (Int) -> Boolean =
-        remember(
-            state.minimumTime,
-            state.maximumTime,
-            state.selectedTime,
-            state.selectedTime.isAM,
-        ) {
+        remember(state.timeRange, state.selectedTime, state.selectedTime.isAM) {
             { index ->
                 index in state.minuteRange(state.selectedTime.isAM, state.selectedTime.hour)
             }
@@ -315,7 +286,7 @@ internal fun ClockLabel(
 
 @Composable
 internal fun TimeLayout(state: TimePickerState) {
-    val clockHour = remember(
+    val clockHour: String = remember(
         state.is24Hour,
         state.selectedTime,
         state.selectedTime.hour
@@ -374,8 +345,8 @@ private fun PeriodPicker(state: TimePickerState) {
     )
     val bottomPeriodShape =
         MaterialTheme.shapes.medium.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp))
-    val isAMEnabled = remember(state.minimumTime) { state.minimumTime.hour <= 12 }
-    val isPMEnabled = remember(state.maximumTime) { state.maximumTime.hour >= 0 }
+    val isAMEnabled = remember(state.timeRange) { state.timeRange.start.hour <= 12 }
+    val isPMEnabled = remember(state.timeRange) { state.timeRange.endInclusive.hour >= 0 }
 
     Spacer(modifier = Modifier.width(12.dp))
 
@@ -391,7 +362,9 @@ private fun PeriodPicker(state: TimePickerState) {
                 .background(state.colors.periodBackgroundColor(state.selectedTime.isAM).value)
                 .then(
                     if (isAMEnabled) Modifier.clickable {
-                        state.selectedTime = state.selectedTime.toAM()
+                        state.selectedTime = state.selectedTime
+                            .toAM()
+                            .coerceIn(state.timeRange)
                     } else Modifier
                 ),
             contentAlignment = Alignment.Center
@@ -420,7 +393,9 @@ private fun PeriodPicker(state: TimePickerState) {
                 .background(state.colors.periodBackgroundColor(!state.selectedTime.isAM).value)
                 .then(
                     if (isPMEnabled) Modifier.clickable {
-                        state.selectedTime = state.selectedTime.toPM()
+                        state.selectedTime = state.selectedTime
+                            .toPM()
+                            .coerceIn(state.timeRange)
                     } else Modifier
                 ),
             contentAlignment = Alignment.Center

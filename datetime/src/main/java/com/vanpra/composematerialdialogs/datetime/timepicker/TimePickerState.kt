@@ -19,22 +19,20 @@ internal class TimePickerState(
     selectedTime: LocalTime,
     currentScreen: ClockScreen = ClockScreen.Hour,
     clockInput: Boolean = true,
-    minimumTime: LocalTime,
-    maximumTime: LocalTime,
+    timeRange: ClosedRange<LocalTime>,
     is24Hour: Boolean,
 ) {
-    var selectedTime by mutableStateOf(selectedTime)
-    var minimumTime by mutableStateOf(minimumTime)
-    var maximumTime by mutableStateOf(maximumTime)
+    var selectedTime by mutableStateOf(selectedTime).
+    var timeRange by mutableStateOf(timeRange)
     var is24Hour by mutableStateOf(is24Hour)
     var currentScreen by mutableStateOf(currentScreen)
     var clockInput by mutableStateOf(clockInput)
 
     private fun minimumMinute(isAM: Boolean, hour: Int): Int {
         return when {
-            isAM == minimumTime.isAM ->
-                if (minimumTime.hour == hour) {
-                    minimumTime.minute
+            isAM == timeRange.start.isAM ->
+                if (timeRange.start.hour == hour) {
+                    timeRange.start.minute
                 } else {
                     0
                 }
@@ -45,9 +43,9 @@ internal class TimePickerState(
 
     private fun maximumMinute(isAM: Boolean, hour: Int): Int {
         return when {
-            isAM == maximumTime.isAM ->
-                if (maximumTime.hour == hour) {
-                    maximumTime.minute
+            isAM == timeRange.endInclusive.isAM ->
+                if (timeRange.endInclusive.hour == hour) {
+                    timeRange.endInclusive.minute
                 } else {
                     60
                 }
@@ -56,7 +54,7 @@ internal class TimePickerState(
         }
     }
 
-    fun hourRange() = minimumTime.hour..maximumTime.hour
+    fun hourRange() = timeRange.start.hour..timeRange.endInclusive.hour
 
     fun minuteRange(isAM: Boolean, hour: Int) = minimumMinute(isAM, hour)..maximumMinute(isAM, hour)
 }
