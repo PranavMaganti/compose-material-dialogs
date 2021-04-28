@@ -56,7 +56,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.util.getOffset
+import com.vanpra.composematerialdialogs.datetime.util.isAM
 import com.vanpra.composematerialdialogs.datetime.util.noSeconds
+import com.vanpra.composematerialdialogs.datetime.util.simpleHour
+import com.vanpra.composematerialdialogs.datetime.util.toAM
+import com.vanpra.composematerialdialogs.datetime.util.toPM
 import java.time.LocalTime
 import kotlin.math.PI
 import kotlin.math.abs

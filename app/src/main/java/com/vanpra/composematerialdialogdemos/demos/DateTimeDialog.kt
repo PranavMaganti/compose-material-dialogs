@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
 import com.vanpra.composematerialdialogs.buttons
-import com.vanpra.composematerialdialogs.datetime.datepicker
+import com.vanpra.composematerialdialogs.datetime.datepicker.datepicker
 import com.vanpra.composematerialdialogs.datetime.datetimepicker
 import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerColors
 import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerDefaults

@@ -1,4 +1,4 @@
-package com.vanpra.composematerialdialogs.datetime
+package com.vanpra.composematerialdialogs.datetime.datepicker
 
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically

@@ -22,7 +22,7 @@ internal class TimePickerState(
     timeRange: ClosedRange<LocalTime>,
     is24Hour: Boolean,
 ) {
-    var selectedTime by mutableStateOf(selectedTime).
+    var selectedTime by mutableStateOf(selectedTime)
     var timeRange by mutableStateOf(timeRange)
     var is24Hour by mutableStateOf(is24Hour)
     var currentScreen by mutableStateOf(currentScreen)
