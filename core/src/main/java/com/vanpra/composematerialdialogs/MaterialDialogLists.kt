@@ -24,7 +24,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +34,50 @@ private const val listRatio = 0.7f
 val bottomPadding = Modifier.padding(bottom = 8.dp)
 
 /**
+<<<<<<< HEAD
+=======
+ * Adds a selectable plain text list to the dialog
+ *
+ * @param list the strings to be displayed in the list
+ * @param onClick callback with the index and string of an item when it is clicked
+ */
+@Composable
+fun MaterialDialog.listItems(
+    list: List<String>,
+    closeOnClick: Boolean = true,
+    onClick: (index: Int, item: String) -> Unit = { _, _ -> }
+) {
+    BoxWithConstraints {
+        val modifier = Modifier
+            .heightIn(max = maxHeight * listRatio)
+            .then(bottomPadding)
+
+        LazyColumn(modifier = modifier) {
+            itemsIndexed(list) { index, it ->
+                Text(
+                    it,
+                    color = MaterialTheme.colors.onSurface,
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(
+                            onClick = {
+                                if (closeOnClick) {
+                                    hide()
+                                }
+                                onClick(index, it)
+                            }
+                        )
+                        .padding(top = 12.dp, bottom = 12.dp, start = 24.dp, end = 24.dp)
+                        .wrapContentWidth(Alignment.Start)
+                )
+            }
+        }
+    }
+}
+
+/**
+>>>>>>> main
  * Adds a selectable list with custom items to the dialog
  *
  * @param list list of given generic type
@@ -51,12 +94,20 @@ fun <T> MaterialDialog.listItems(
     item: @Composable (index: Int, T) -> Unit
 ) {
     BoxWithConstraints {
+<<<<<<< HEAD
         LazyColumn(
             modifier = Modifier
                 .heightIn(max = maxHeight * listRatio)
                 .then(bottomPadding)
                 .testTag("dialog_list")
         ) {
+=======
+        val modifier = Modifier
+            .heightIn(max = maxHeight * listRatio)
+            .then(bottomPadding)
+
+        LazyColumn(modifier = modifier) {
+>>>>>>> main
             itemsIndexed(list) { index, it ->
                 Box(
                     Modifier
@@ -125,21 +176,12 @@ fun MaterialDialog.listItemsMultiChoice(
 ) {
     var selectedItems by remember { mutableStateOf(initialSelection.toMutableSet()) }
 
-    val callbackIndex = rememberSaveable {
-        val index = callbackCounter.getAndIncrement()
-
-        if (waitForPositiveButton) {
-            callbacks.add(index) { onCheckedChange(selectedItems) }
-        } else {
-            callbacks.add(index) { }
-        }
-
-        index
-    }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            callbacks[callbackIndex] = {}
+    if (waitForPositiveButton) {
+        DialogCallback { onCheckedChange(selectedItems) }
+    } else {
+        DisposableEffect(selectedItems) {
+            onCheckedChange(selectedItems)
+            onDispose { }
         }
     }
 
@@ -201,6 +243,7 @@ fun MaterialDialog.listItemsSingleChoice(
 ) {
     var selectedItem by remember { mutableStateOf(initialSelection) }
 
+<<<<<<< HEAD
     val positiveEnabledIndex = rememberSaveable {
         val index = positiveEnabledCounter.getAndIncrement()
         positiveEnabled.add(index, selectedItem != null)
@@ -223,6 +266,16 @@ fun MaterialDialog.listItemsSingleChoice(
         onDispose {
             callbacks[callbackIndex] = {}
             setPositiveEnabled(positiveEnabledIndex, true)
+=======
+    val positiveEnabledIndex = addPositiveButtonEnabled(valid = selected != null)
+
+    if (waitForPositiveButton) {
+        DialogCallback { onChoiceChange(selected!!) }
+    } else {
+        DisposableEffect(selected) {
+            onChoiceChange(selected!!)
+            onDispose { }
+>>>>>>> main
         }
     }
 

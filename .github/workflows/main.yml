@@ -23,8 +23,6 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'buildSrc/src/*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - name: Build, lint and spotless
         run: ./gradlew spotlessCheck assemble assembleAndroidTest lintDebug
       - name: Cleanup Gradle Cache
@@ -40,7 +38,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [28]
+        api-level: [ 28 ]
     steps:
       - uses: actions/checkout@v2
       - name: set up JDK
@@ -55,8 +53,6 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
 
       - name: Build tests
         run: ./gradlew assembleDebugAndroidTest
@@ -80,6 +76,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          sdcard-path-or-size: 50M
           profile: Nexus 6P
           script: ./gradlew :core:executeScreenshotTests -Pandroid.testInstrumentationRunnerArguments.filter=com.vanpra.composematerialdialogs.test.utils.ScreenshotTestFilter
 
@@ -94,4 +91,3 @@ jobs:
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
           rm -f ~/.gradle/caches/modules-2/gc.properties
-
