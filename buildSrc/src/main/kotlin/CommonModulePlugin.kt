@@ -31,8 +31,8 @@ class CommonModulePlugin: Plugin<Project> {
             implementation(Dependencies.AndroidX.Compose.ui)
             implementation(Dependencies.AndroidX.Compose.material)
             implementation(Dependencies.AndroidX.Compose.materialIconsExtended)
-            implementation(Dependencies.AndroidX.composeActivity)
 
+            androidTestImplementation(Dependencies.AndroidX.composeActivity)
             androidTestImplementation(Dependencies.AndroidX.Compose.testing)
             add("androidTestImplementation", project(":test-utils"))
         }

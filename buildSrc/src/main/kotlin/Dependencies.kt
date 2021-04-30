@@ -14,7 +14,7 @@ object Dependencies {
     }
 
     object Accompanist {
-        private const val version = "0.8.0"
+        private const val version = "0.8.1"
         const val pager = "com.google.accompanist:accompanist-pager:$version"
     }
 
@@ -25,12 +25,12 @@ object Dependencies {
     }
     
     object Shot {
-        private const val version = "5.10.3"
+        private const val version = "5.10.4"
         const val shot = "com.karumi:shot-android:$version"
     }
 
     object AndroidX {
-        const val appcompat = "androidx.appcompat:appcompat:1.2.0-rc01"
+        const val appcompat = "androidx.appcompat:appcompat:1.3.0-rc01"
         const val coreKtx = "androidx.core:core-ktx:1.5.0-alpha03"
         const val composeActivity = "androidx.activity:activity-compose:1.3.0-alpha07"
         const val composeNav = "androidx.navigation:navigation-compose:1.0.0-alpha10"
