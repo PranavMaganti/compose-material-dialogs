@@ -51,6 +51,10 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 }
 
+shot {
+    tolerance = 0.6 // Tolerance needed for CI
+}
+
 val VERSION_NAME: String by project
 val mavenCentralRepositoryUsername: String? by project
 val mavenCentralRepositoryPassword: String? by project

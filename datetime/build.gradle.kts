@@ -54,13 +54,8 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 }
 
-val artifactName = "datetime"
-val artifactGroup = "com.vanpra.compose-material-dialogs"
-val artifactVersion = Dependencies.ComposeMaterialDialogs.version
-
-val sourcesJar by tasks.creating(Jar::class) {
-    from(android.sourceSets.getByName("main").java.srcDirs)
-    archiveClassifier.set("sources")
+shot {
+    tolerance = 0.6 // Tolerance needed for CI
 }
 
 val VERSION_NAME: String by project
