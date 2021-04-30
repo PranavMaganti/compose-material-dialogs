@@ -24,6 +24,7 @@ import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
 import com.vanpra.composematerialdialogs.test.utils.defaultButtons
 import com.vanpra.composematerialdialogs.test.utils.extensions.onDialog
 import com.vanpra.composematerialdialogs.test.utils.extensions.setContentAndWaitForIdle
+import com.vanpra.composematerialdialogs.title
 import org.junit.Rule
 import org.junit.Test
 

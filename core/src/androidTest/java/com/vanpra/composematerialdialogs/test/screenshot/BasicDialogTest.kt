@@ -7,10 +7,15 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.karumi.shot.ScreenshotTest
+import com.vanpra.composematerialdialogs.buttons
+import com.vanpra.composematerialdialogs.iconTitle
+import com.vanpra.composematerialdialogs.input
+import com.vanpra.composematerialdialogs.message
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
 import com.vanpra.composematerialdialogs.test.utils.extensions.onDialog
 import com.vanpra.composematerialdialogs.test.utils.extensions.setContentAndWaitForIdle
+import com.vanpra.composematerialdialogs.title
 import org.junit.Rule
 import org.junit.Test
 
