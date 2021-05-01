@@ -11,6 +11,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.layout.Layout
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.buttons
+import com.vanpra.composematerialdialogs.datetime.datepicker.DatePickerColors
+import com.vanpra.composematerialdialogs.datetime.datepicker.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.datepicker.DatePickerImpl
 import com.vanpra.composematerialdialogs.datetime.datepicker.DatePickerState
 import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerColors
@@ -37,8 +39,11 @@ import java.time.LocalTime
 @Composable
 fun MaterialDialog.datetimepicker(
     initialDateTime: LocalDateTime = LocalDateTime.now(),
+    datePickerColors: DatePickerColors = DatePickerDefaults.colors(),
     timePickerColors: TimePickerColors = TimePickerDefaults.colors(),
-    yearRange: IntRange = IntRange(1900, 2100),
+    datePickerTitle: String = "SELECT DATE",
+    timePickerTitle: String = "SELECT TIME",
+    yearRange: IntRange = 1900..2100,
     timeRange: ClosedRange<LocalTime> = LocalTime.MIN..LocalTime.MAX,
     is24HourClock: Boolean = false,
     positiveButtonText: String = "Ok",
@@ -51,6 +56,7 @@ fun MaterialDialog.datetimepicker(
     val datePickerState = remember {
         DatePickerState(
             initialDateTime.toLocalDate(),
+            datePickerColors,
             yearRange,
             dialogBackgroundColor!!
         )
@@ -79,8 +85,8 @@ fun MaterialDialog.datetimepicker(
 
             Layout(
                 content = {
-                    DatePickerImpl(state = datePickerState)
-                    TimePickerImpl(state = timePickerState) {
+                    DatePickerImpl(state = datePickerState, title = datePickerTitle)
+                    TimePickerImpl(state = timePickerState, title = timePickerTitle) {
                         coroutineScope.launch { scrollPos.animateTo(0f) }
                     }
                 }

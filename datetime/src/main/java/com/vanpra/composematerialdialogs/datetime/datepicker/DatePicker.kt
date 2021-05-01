@@ -3,7 +3,6 @@ package com.vanpra.composematerialdialogs.datetime.datepicker
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -27,6 +26,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -36,18 +36,13 @@ import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
 import androidx.compose.ui.text.font.FontWeight.Companion.W600
@@ -65,19 +60,6 @@ import java.time.LocalDate
 import java.time.format.TextStyle.FULL
 import java.util.Locale
 
-internal class DatePickerState(
-    initialDate: LocalDate,
-    val yearRange: IntRange,
-    val dialogBackground: Color
-) {
-    var selected by mutableStateOf(initialDate)
-    var yearPickerShowing by mutableStateOf(false)
-
-    companion object {
-        val dayHeaders = listOf("S", "M", "T", "W", "T", "F", "S")
-    }
-}
-
 /**
  * @brief A date picker body layout
  *
@@ -91,15 +73,17 @@ internal class DatePickerState(
 @Composable
 fun MaterialDialog.datepicker(
     initialDate: LocalDate = LocalDate.now(),
+    title: String = "SELECT DATE",
+    colors: DatePickerColors = DatePickerDefaults.colors(),
     yearRange: IntRange = IntRange(1900, 2100),
     waitForPositiveButton: Boolean = true,
     onComplete: (LocalDate) -> Unit = {}
 ) {
     val datePickerState = remember {
-        DatePickerState(initialDate, yearRange, dialogBackgroundColor!!)
+        DatePickerState(initialDate, colors, yearRange, dialogBackgroundColor!!)
     }
 
-    DatePickerImpl(state = datePickerState)
+    DatePickerImpl(title = title, state = datePickerState)
 
     if (waitForPositiveButton) {
         DialogCallback { onComplete(datePickerState.selected) }
@@ -112,14 +96,14 @@ fun MaterialDialog.datepicker(
 }
 
 @Composable
-internal fun DatePickerImpl(state: DatePickerState) {
+internal fun DatePickerImpl(title: String, state: DatePickerState) {
     val pagerState = rememberPagerState(
         pageCount = (state.yearRange.last - state.yearRange.first) * 12,
         initialPage = (state.selected.year - state.yearRange.first) * 12 + state.selected.monthValue - 1
     )
 
     Column(Modifier.size(328.dp, 460.dp)) {
-        CalendarHeader(state)
+        CalendarHeader(title, state)
         HorizontalPager(
             state = pagerState,
             verticalAlignment = Alignment.Top,
@@ -174,7 +158,7 @@ private fun YearPicker(
     ) {
         itemsIndexed(state.yearRange.toList()) { _, item ->
             val selected = remember { item == viewDate.year }
-            YearPickerItem(year = item, selected = selected) {
+            YearPickerItem(year = item, selected = selected, colors = state.colors) {
                 if (!selected) {
                     coroutineScope.launch {
                         pagerState.scrollToPage(
@@ -189,13 +173,18 @@ private fun YearPicker(
 }
 
 @Composable
-private fun YearPickerItem(year: Int, selected: Boolean, onClick: () -> Unit) {
+private fun YearPickerItem(
+    year: Int,
+    selected: Boolean,
+    colors: DatePickerColors,
+    onClick: () -> Unit
+) {
     Box(Modifier.size(88.dp, 52.dp), contentAlignment = Alignment.Center) {
         Box(
             Modifier
                 .size(72.dp, 36.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .background(if (selected) MaterialTheme.colors.primary else Color.Transparent)
+                .background(colors.backgroundColor(selected).value)
                 .clickable(
                     onClick = onClick,
                     interactionSource = MutableInteractionSource(),
@@ -206,11 +195,7 @@ private fun YearPickerItem(year: Int, selected: Boolean, onClick: () -> Unit) {
             Text(
                 year.toString(),
                 style = TextStyle(
-                    color = if (selected) {
-                        MaterialTheme.colors.onPrimary
-                    } else {
-                        MaterialTheme.colors.onSurface
-                    },
+                    color = colors.textColor(selected).value,
                     fontSize = 18.sp
                 )
             )
@@ -219,7 +204,7 @@ private fun YearPickerItem(year: Int, selected: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-private inline fun CalendarViewHeader(
+private fun CalendarViewHeader(
     viewDate: LocalDate,
     state: DatePickerState,
     pagerState: PagerState
@@ -253,10 +238,10 @@ private inline fun CalendarViewHeader(
 
             Spacer(Modifier.width(4.dp))
             Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
-                Image(
+                Icon(
                     yearDropdownIcon,
                     contentDescription = "Year Selector",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                    tint = MaterialTheme.colors.onBackground
                 )
             }
         }
@@ -266,7 +251,7 @@ private inline fun CalendarViewHeader(
                 .fillMaxHeight()
                 .align(Alignment.CenterEnd)
         ) {
-            Image(
+            Icon(
                 Icons.Default.KeyboardArrowLeft,
                 contentDescription = "Previous Month",
                 modifier = Modifier
@@ -278,12 +263,12 @@ private inline fun CalendarViewHeader(
                             }
                         }
                     ),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                tint = MaterialTheme.colors.onBackground
             )
 
             Spacer(modifier = Modifier.width(24.dp))
 
-            Image(
+            Icon(
                 Icons.Default.KeyboardArrowRight,
                 contentDescription = "Next Month",
                 modifier = Modifier
@@ -295,7 +280,7 @@ private inline fun CalendarViewHeader(
                             }
                         }
                     ),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                tint = MaterialTheme.colors.onBackground
             )
         }
     }
@@ -321,7 +306,7 @@ private fun CalendarView(viewDate: LocalDate, state: DatePickerState) {
                     possibleSelected && it == state.selected.dayOfMonth
                 }
 
-                DateSelectionBox(it, selected) {
+                DateSelectionBox(it, selected, state.colors) {
                     state.selected = viewDate.withDayOfMonth(it)
                 }
             }
@@ -330,7 +315,7 @@ private fun CalendarView(viewDate: LocalDate, state: DatePickerState) {
 }
 
 @Composable
-private fun DateSelectionBox(date: Int, selected: Boolean, onClick: () -> Unit) {
+private fun DateSelectionBox(date: Int, selected: Boolean, colors: DatePickerColors, onClick: () -> Unit) {
     Box(
         Modifier
             .size(40.dp)
@@ -346,14 +331,10 @@ private fun DateSelectionBox(date: Int, selected: Boolean, onClick: () -> Unit) 
             modifier = Modifier
                 .size(32.dp)
                 .clip(CircleShape)
-                .background(if (selected) MaterialTheme.colors.primary else Color.Transparent)
+                .background(colors.backgroundColor(selected).value)
                 .wrapContentSize(Alignment.Center),
             style = TextStyle(
-                color = if (selected) {
-                    MaterialTheme.colors.onPrimary
-                } else {
-                    MaterialTheme.colors.onSurface
-                },
+                color = colors.textColor(selected).value,
                 fontSize = 12.sp
             )
         )
@@ -388,21 +369,21 @@ private fun DayOfWeekHeader() {
 }
 
 @Composable
-private fun CalendarHeader(state: DatePickerState) {
+private fun CalendarHeader(title: String, state: DatePickerState) {
     val month = remember(state.selected) { state.selected.month.shortLocalName }
     val day = remember(state.selected) { state.selected.dayOfWeek.shortLocalName }
 
     Box(
         Modifier
-            .background(MaterialTheme.colors.primaryVariant)
+            .background(state.colors.headerBackgroundColor)
             .fillMaxWidth()
             .height(120.dp)
     ) {
         Column(Modifier.padding(start = 24.dp, end = 24.dp)) {
             Text(
-                text = "SELECT DATE",
+                text = title,
                 modifier = Modifier.paddingFromBaseline(top = 32.dp),
-                color = MaterialTheme.colors.onPrimary,
+                color = state.colors.headerTextColor,
                 style = TextStyle(fontSize = 12.sp)
             )
             Box(
@@ -413,7 +394,7 @@ private fun CalendarHeader(state: DatePickerState) {
                 Text(
                     text = "$day, $month ${state.selected.dayOfMonth}",
                     modifier = Modifier.align(Alignment.CenterStart),
-                    color = MaterialTheme.colors.onPrimary,
+                    color = state.colors.headerTextColor,
                     style = TextStyle(fontSize = 30.sp, fontWeight = W400)
                 )
             }

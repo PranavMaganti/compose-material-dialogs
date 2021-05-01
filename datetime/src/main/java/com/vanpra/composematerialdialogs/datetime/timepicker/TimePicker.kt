@@ -91,6 +91,7 @@ private data class SelectedOffset(
 @Composable
 fun MaterialDialog.timepicker(
     initialTime: LocalTime = LocalTime.now().noSeconds(),
+    title: String = "SELECT TIME",
     colors: TimePickerColors = TimePickerDefaults.colors(),
     waitForPositiveButton: Boolean = true,
     timeRange: ClosedRange<LocalTime> = LocalTime.MIN..LocalTime.MAX,
@@ -115,17 +116,18 @@ fun MaterialDialog.timepicker(
         }
     }
 
-    TimePickerImpl(state = timePickerState)
+    TimePickerImpl(state = timePickerState, title = title)
 }
 
 @Composable
 internal fun TimePickerImpl(
     modifier: Modifier = Modifier,
+    title: String,
     state: TimePickerState,
     onBack: (() -> Unit)? = null
 ) {
     Column(modifier.padding(start = 24.dp, end = 24.dp)) {
-        TimePickerTitle(onBack)
+        TimePickerTitle(title, onBack)
         TimeLayout(state)
 
         Spacer(modifier = Modifier.height(36.dp))
@@ -226,7 +228,7 @@ private fun ClockMinuteLayout(state: TimePickerState) {
 }
 
 @Composable
-internal fun TimePickerTitle(onBack: (() -> Unit)?) {
+internal fun TimePickerTitle(text: String, onBack: (() -> Unit)?) {
     if (onBack != null) {
         Row(Modifier.height(52.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(
