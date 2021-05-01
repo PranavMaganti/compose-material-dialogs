@@ -32,8 +32,7 @@ object Dependencies {
     object AndroidX {
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-rc01"
         const val coreKtx = "androidx.core:core-ktx:1.5.0-alpha03"
-        const val composeActivity = "androidx.activity:activity-compose:1.3.0-alpha07"
-        const val composeNav = "androidx.navigation:navigation-compose:1.0.0-alpha10"
+        const val testRules = "androidx.test:rules:1.4.0-alpha05"
 
         object Compose {
             const val version = "1.0.0-beta05"
@@ -42,6 +41,9 @@ object Dependencies {
             const val material = "androidx.compose.material:material:$version"
             const val materialIconsExtended = "androidx.compose.material:material-icons-extended:$version"
             const val testing = "androidx.compose.ui:ui-test-junit4:$version"
+
+            const val activity = "androidx.activity:activity-compose:1.3.0-alpha07"
+            const val navigation = "androidx.navigation:navigation-compose:1.0.0-alpha10"
         }
     }
 }

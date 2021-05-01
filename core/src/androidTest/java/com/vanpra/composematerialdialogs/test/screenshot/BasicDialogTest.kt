@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.karumi.shot.ScreenshotTest
 import com.vanpra.composematerialdialogs.buttons
 import com.vanpra.composematerialdialogs.iconTitle
@@ -18,7 +19,9 @@ import com.vanpra.composematerialdialogs.test.utils.extensions.setContentAndWait
 import com.vanpra.composematerialdialogs.title
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class BasicDialogTest : ScreenshotTest {
     @get:Rule
     val composeTestRule = createComposeRule()

@@ -58,7 +58,7 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.ui)
     implementation(Dependencies.AndroidX.Compose.material)
     implementation(Dependencies.AndroidX.Compose.materialIconsExtended)
-    implementation(Dependencies.AndroidX.composeActivity)
+    implementation(Dependencies.AndroidX.Compose.activity)
 
     implementation(Dependencies.AndroidX.Compose.testing)
     implementation(Dependencies.Shot.shot)

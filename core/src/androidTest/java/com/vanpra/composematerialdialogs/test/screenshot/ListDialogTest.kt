@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.dp
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.karumi.shot.ScreenshotTest
 import com.vanpra.composematerialdialogs.listItems
 import com.vanpra.composematerialdialogs.listItemsMultiChoice
@@ -27,6 +28,7 @@ import com.vanpra.composematerialdialogs.test.utils.extensions.setContentAndWait
 import com.vanpra.composematerialdialogs.title
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
 private val ringtones =
     listOf(
@@ -55,6 +57,7 @@ private val emails = listOf(
     "karen@material-dialog.com"
 )
 
+@RunWith(AndroidJUnit4::class)
 class ListDialog : ScreenshotTest {
     @get:Rule
     val composeTestRule = createComposeRule()
