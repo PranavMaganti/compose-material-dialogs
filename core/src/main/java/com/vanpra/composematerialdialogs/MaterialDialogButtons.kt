@@ -19,6 +19,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import java.util.Locale
 
@@ -111,6 +112,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
     @Composable
     fun button(
         text: String? = null,
+        textStyle: TextStyle = MaterialTheme.typography.button,
         @StringRes res: Int? = null,
         onClick: () -> Unit = {}
     ) {
@@ -121,7 +123,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
             },
             modifier = Modifier.layoutId(MaterialDialogButtonTypes.Text),
         ) {
-            Text(text = buttonText, style = MaterialTheme.typography.button)
+            Text(text = buttonText, style = textStyle)
         }
     }
 
@@ -137,6 +139,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
     @Composable
     fun positiveButton(
         text: String? = null,
+        textStyle: TextStyle = MaterialTheme.typography.button,
         @StringRes res: Int? = null,
         disableDismiss: Boolean = false,
         onClick: () -> Unit = {}
@@ -160,7 +163,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
             modifier = Modifier.layoutId(MaterialDialogButtonTypes.Positive),
             enabled = buttonEnabled && dialog.positiveButtonEnabledOverride
         ) {
-            Text(text = buttonText, style = MaterialTheme.typography.button)
+            Text(text = buttonText, style = textStyle)
         }
     }
 
@@ -175,6 +178,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
     @Composable
     fun negativeButton(
         text: String? = null,
+        textStyle: TextStyle = MaterialTheme.typography.button,
         @StringRes res: Int? = null,
         onClick: () -> Unit = {}
     ) {
@@ -190,7 +194,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
             },
             modifier = Modifier.layoutId(MaterialDialogButtonTypes.Negative)
         ) {
-            Text(text = buttonText, style = MaterialTheme.typography.button)
+            Text(text = buttonText, style = textStyle)
         }
     }
 
@@ -201,7 +205,11 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
      * @param onClick a callback which is called when the button is pressed
      */
     @Composable
-    fun accessibilityButton(icon: ImageVector, onClick: () -> Unit) {
+    fun accessibilityButton(
+        icon: ImageVector,
+        colorFilter: ColorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
+        onClick: () -> Unit
+    ) {
         Box(
             Modifier
                 .size(48.dp)
@@ -213,7 +221,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
                 icon,
                 contentDescription = null,
                 modifier = Modifier.size(24.dp),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                colorFilter = colorFilter
             )
         }
     }

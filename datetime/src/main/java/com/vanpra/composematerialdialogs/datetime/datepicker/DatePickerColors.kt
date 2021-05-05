@@ -1,19 +1,18 @@
-package com.vanpra.composematerialdialogs.datetime.timepicker
+package com.vanpra.composematerialdialogs.datetime.datepicker
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 
 /**
  * Represents the colors used by a [timepicker] and its parts in different states
  *
- * See [TimePickerDefaults.colors] for the default implementation
+ * See [DatePickerDefaults.colors] for the default implementation
  */
-interface TimePickerColors {
-    val border: BorderStroke
+interface DatePickerColors {
+    val headerBackgroundColor: Color
+    val headerTextColor: Color
 
     /**
      * Gets the background color dependant on if the item is active or not
@@ -32,26 +31,16 @@ interface TimePickerColors {
      */
     @Composable
     fun textColor(active: Boolean): State<Color>
-
-    fun selectorColor(): Color
-    fun selectorTextColor(): Color
-
-    @Composable
-    fun periodBackgroundColor(active: Boolean): State<Color>
 }
 
-internal class DefaultTimePickerColors(
+internal class DefaultDatePickerColors(
+    override val headerBackgroundColor: Color,
+    override val headerTextColor: Color,
     private val activeBackgroundColor: Color,
     private val inactiveBackgroundColor: Color,
     private val activeTextColor: Color,
-    private val inactiveTextColor: Color,
-    private val inactivePeriodBackground: Color,
-    private val selectorColor: Color,
-    private val selectorTextColor: Color,
-    borderColor: Color
-) : TimePickerColors {
-    override val border = BorderStroke(1.dp, borderColor)
-
+    private val inactiveTextColor: Color
+) : DatePickerColors {
     @Composable
     override fun backgroundColor(active: Boolean): State<Color> {
         return rememberUpdatedState(if (active) activeBackgroundColor else inactiveBackgroundColor)
@@ -60,18 +49,5 @@ internal class DefaultTimePickerColors(
     @Composable
     override fun textColor(active: Boolean): State<Color> {
         return rememberUpdatedState(if (active) activeTextColor else inactiveTextColor)
-    }
-
-    override fun selectorColor(): Color {
-        return selectorColor
-    }
-
-    override fun selectorTextColor(): Color {
-        return selectorTextColor
-    }
-
-    @Composable
-    override fun periodBackgroundColor(active: Boolean): State<Color> {
-        return rememberUpdatedState(if (active) activeBackgroundColor else inactivePeriodBackground)
     }
 }
