@@ -66,9 +66,9 @@ import java.util.Locale
  * @param initialDate time to be shown to the user when the dialog is first shown.
  * Defaults to the current date if this is not set
  * @param yearRange the range of years the user should be allowed to pick from
- * @param waitForPositiveButton if true the [onComplete] callback will only be called when the
+ * @param waitForPositiveButton if true the [onDateChange] callback will only be called when the
  * positive button is pressed, otherwise it will be called on every input change
- * @param onComplete callback with a LocalDateTime object when the user completes their input
+ * @param onDateChange callback with a LocalDateTime object when the user completes their input
  */
 @Composable
 fun MaterialDialog.datepicker(
@@ -77,7 +77,7 @@ fun MaterialDialog.datepicker(
     colors: DatePickerColors = DatePickerDefaults.colors(),
     yearRange: IntRange = IntRange(1900, 2100),
     waitForPositiveButton: Boolean = true,
-    onComplete: (LocalDate) -> Unit = {}
+    onDateChange: (LocalDate) -> Unit = {}
 ) {
     val datePickerState = remember {
         DatePickerState(initialDate, colors, yearRange, dialogBackgroundColor!!)
@@ -86,10 +86,10 @@ fun MaterialDialog.datepicker(
     DatePickerImpl(title = title, state = datePickerState)
 
     if (waitForPositiveButton) {
-        DialogCallback { onComplete(datePickerState.selected) }
+        DialogCallback { onDateChange(datePickerState.selected) }
     } else {
         DisposableEffect(datePickerState.selected) {
-            onComplete(datePickerState.selected)
+            onDateChange(datePickerState.selected)
             onDispose { }
         }
     }

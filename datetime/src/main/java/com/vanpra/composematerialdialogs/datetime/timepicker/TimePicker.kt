@@ -82,11 +82,11 @@ private data class SelectedOffset(
  * @param initialTime The time to be shown to the user when the dialog is first shown.
  * Defaults to the current time if this is not set
  * @param colors see [TimePickerColors]
- * @param waitForPositiveButton if true the [onComplete] callback will only be called when the
+ * @param waitForPositiveButton if true the [onTimeChange] callback will only be called when the
  * positive button is pressed, otherwise it will be called on every input change
  * @param timeRange any time outside this range will be disabled
  * @param is24HourClock uses the 24 hour clock face when true
- * @param onComplete callback with a LocalTime object when the user completes their input
+ * @param onTimeChange callback with a LocalTime object when the user completes their input
  */
 @Composable
 fun MaterialDialog.timepicker(
@@ -96,7 +96,7 @@ fun MaterialDialog.timepicker(
     waitForPositiveButton: Boolean = true,
     timeRange: ClosedRange<LocalTime> = LocalTime.MIN..LocalTime.MAX,
     is24HourClock: Boolean = false,
-    onComplete: (LocalTime) -> Unit = {}
+    onTimeChange: (LocalTime) -> Unit = {}
 ) {
     val timePickerState = remember {
         TimePickerState(
@@ -108,10 +108,10 @@ fun MaterialDialog.timepicker(
     }
 
     if (waitForPositiveButton) {
-        DialogCallback { onComplete(timePickerState.selectedTime) }
+        DialogCallback { onTimeChange(timePickerState.selectedTime) }
     } else {
         DisposableEffect(timePickerState.selectedTime) {
-            onComplete(timePickerState.selectedTime)
+            onTimeChange(timePickerState.selectedTime)
             onDispose { }
         }
     }

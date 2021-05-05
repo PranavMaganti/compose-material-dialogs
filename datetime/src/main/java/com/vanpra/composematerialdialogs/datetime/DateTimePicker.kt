@@ -33,7 +33,7 @@ import java.time.LocalTime
  * @param yearRange the range of years the user should be allowed to pick from
  * @param positiveButtonText text used for positive button label
  * @param negativeButtonText text used for negative button label
- * @param onComplete callback with a LocalDateTime object when the user completes their input
+ * @param onDateTimeChange callback with a LocalDateTime object when the user completes their input
  * @param onCancel callback when the user cancels the dialog
  */
 @Composable
@@ -49,7 +49,7 @@ fun MaterialDialog.datetimepicker(
     positiveButtonText: String = "Ok",
     negativeButtonText: String = "Cancel",
     onCancel: () -> Unit = {},
-    onComplete: (LocalDateTime) -> Unit = {}
+    onDateTimeChange: (LocalDateTime) -> Unit = {}
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -120,7 +120,7 @@ fun MaterialDialog.datetimepicker(
                     scrollPos.animateTo(scrollTo.value)
                 }
             } else {
-                onComplete(
+                onDateTimeChange(
                     LocalDateTime.of(
                         datePickerState.selected,
                         timePickerState.selectedTime
