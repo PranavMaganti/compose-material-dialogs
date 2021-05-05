@@ -7,11 +7,9 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
     defaultConfig {
-        minSdkVersion(21)
-        targetSdkVersion(30)
-        compileSdkVersion(30)
-
-        versionCode = 1
+        minSdk = 21
+        targetSdk = 30
+        compileSdk = 30
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -47,11 +45,6 @@ dependencies {
 val artifactName = "datetime"
 val artifactGroup = "com.vanpra.compose-material-dialogs"
 val artifactVersion = Dependencies.ComposeMaterialDialogs.version
-
-val sourcesJar by tasks.creating(Jar::class) {
-    from(android.sourceSets.getByName("main").java.srcDirs)
-    archiveClassifier.set("sources")
-}
 
 val VERSION_NAME: String by project
 val mavenCentralRepositoryUsername: String? by project
