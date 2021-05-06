@@ -1,11 +1,10 @@
-package com.vanpra.composematerialdialogs.datetime.timepicker
+package com.vanpra.composematerialdialogs.datetime.time
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
 /**
@@ -55,7 +54,6 @@ internal class DefaultTimePickerColors(
 
     @Composable
     override fun backgroundColor(active: Boolean): State<Color> {
-        TextStyle
         return rememberUpdatedState(if (active) activeBackgroundColor else inactiveBackgroundColor)
     }
 

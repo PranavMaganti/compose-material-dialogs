@@ -1,6 +1,13 @@
 # Changelog
 
-### 0.3.3 - 2021-04-08
+### 0.4.0 - 2021-05-06
+
+  - Update compose version to 1.0.0-beta06
+  - Add more style customisation's to date and time pickers
+- Fix date picker selection bug
+- Make performance optimisations to the date picker
+
+### 0.3.4 - 2021-04-22
 
   - Update compose version to 1.0.0-beta05
   - Switch to using `HorizontalPager` from the Accompanist library for date picker

@@ -7,11 +7,9 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
     defaultConfig {
-        minSdkVersion(21)
-        targetSdkVersion(30)
-        compileSdkVersion(30)
-
-        versionCode = 1
+        minSdk = 21
+        targetSdk = 30
+        compileSdk = 30
 
         testInstrumentationRunner = "com.karumi.shot.ShotTestRunner"
         testApplicationId = "com.vanpra.composematerialdialogs.test"
@@ -57,6 +55,10 @@ dependencies {
 shot {
     tolerance = 0.6 // Tolerance needed for CI
 }
+
+val artifactName = "datetime"
+val artifactGroup = "com.vanpra.compose-material-dialogs"
+val artifactVersion = Dependencies.ComposeMaterialDialogs.version
 
 val VERSION_NAME: String by project
 val mavenCentralRepositoryUsername: String? by project

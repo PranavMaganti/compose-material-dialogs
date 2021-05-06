@@ -4,10 +4,9 @@ plugins {
 
 android {
     defaultConfig {
-        minSdkVersion(21)
-        compileSdkVersion(30)
-        targetSdkVersion(30)
-        versionCode = 1
+        minSdk = 21
+        compileSdk = 30
+        targetSdk = 30
 
         testInstrumentationRunner = "com.karumi.shot.ShotTestRunner"
         testApplicationId = "com.vanpra.composematerialdialogs.color.test"

@@ -1,4 +1,4 @@
-package com.vanpra.composematerialdialogs.datetime.timepicker
+package com.vanpra.composematerialdialogs.datetime.time
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable

@@ -8,11 +8,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
 import com.vanpra.composematerialdialogs.buttons
-import com.vanpra.composematerialdialogs.datetime.datepicker
+import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.datetimepicker
-import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerColors
-import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerDefaults
-import com.vanpra.composematerialdialogs.datetime.timepicker.timepicker
+import com.vanpra.composematerialdialogs.datetime.time.TimePickerColors
+import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
+import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import java.time.LocalTime
 
 /**
@@ -55,8 +55,7 @@ fun DateTimeDialogDemo() {
     DialogAndShowButton(buttonText = "Time Picker Dialog With Min/Max") {
         timepicker(
             colors = colors,
-            minimumTime = LocalTime.of(9, 35),
-            maximumTime = LocalTime.of(21, 13),
+            timeRange = LocalTime.of(9, 35)..LocalTime.of(21, 13),
             is24HourClock = false
         ) {
             println(it.toString())
@@ -84,8 +83,7 @@ fun DateTimeDialogDemo() {
     DialogAndShowButton(buttonText = "Time Picker Dialog 24H With Min/Max") {
         timepicker(
             colors = colors,
-            minimumTime = LocalTime.of(9, 35),
-            maximumTime = LocalTime.of(21, 13),
+            timeRange = LocalTime.of(9, 35)..LocalTime.of(21, 13),
             is24HourClock = true
         ) {
             println(it.toString())
