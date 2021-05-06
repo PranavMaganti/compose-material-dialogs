@@ -11,6 +11,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.layout.Layout
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.buttons
+import com.vanpra.composematerialdialogs.datetime.datepicker.DatePickerColors
+import com.vanpra.composematerialdialogs.datetime.datepicker.DatePickerDefaults
+import com.vanpra.composematerialdialogs.datetime.datepicker.DatePickerImpl
+import com.vanpra.composematerialdialogs.datetime.datepicker.DatePickerState
 import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerColors
 import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerImpl
@@ -29,38 +33,42 @@ import java.time.LocalTime
  * @param yearRange the range of years the user should be allowed to pick from
  * @param positiveButtonText text used for positive button label
  * @param negativeButtonText text used for negative button label
- * @param onComplete callback with a LocalDateTime object when the user completes their input
+ * @param onDateTimeChange callback with a LocalDateTime object when the user completes their input
  * @param onCancel callback when the user cancels the dialog
  */
 @Composable
 fun MaterialDialog.datetimepicker(
     initialDateTime: LocalDateTime = LocalDateTime.now(),
+    datePickerColors: DatePickerColors = DatePickerDefaults.colors(),
     timePickerColors: TimePickerColors = TimePickerDefaults.colors(),
-    yearRange: IntRange = IntRange(1900, 2100),
-    minimumTime: LocalTime = LocalTime.MIN,
-    maximumTime: LocalTime = LocalTime.MAX,
+    datePickerTitle: String = "SELECT DATE",
+    timePickerTitle: String = "SELECT TIME",
+    yearRange: IntRange = 1900..2100,
+    timeRange: ClosedRange<LocalTime> = LocalTime.MIN..LocalTime.MAX,
     is24HourClock: Boolean = false,
     positiveButtonText: String = "Ok",
     negativeButtonText: String = "Cancel",
     onCancel: () -> Unit = {},
-    onComplete: (LocalDateTime) -> Unit = {}
+    onDateTimeChange: (LocalDateTime) -> Unit = {}
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val datePickerState = remember { DatePickerState(initialDateTime.toLocalDate()) }
+    val datePickerState = remember {
+        DatePickerState(
+            initialDateTime.toLocalDate(),
+            datePickerColors,
+            yearRange,
+            dialogBackgroundColor!!
+        )
+    }
     val timePickerState = remember {
         TimePickerState(
             selectedTime = initialDateTime.toLocalTime().noSeconds(),
             colors = timePickerColors,
-            minimumTime = minimumTime,
-            maximumTime = maximumTime,
+            timeRange = timeRange,
             is24Hour = is24HourClock
         )
     }
-
-    timePickerState.minimumTime = remember(minimumTime) { minimumTime }
-    timePickerState.maximumTime = remember(maximumTime) { maximumTime }
-    timePickerState.is24Hour = remember { is24HourClock }
 
     val scrollPos = remember { Animatable(0f) }
     val scrollTo = remember { mutableStateOf(0f) }
@@ -77,12 +85,8 @@ fun MaterialDialog.datetimepicker(
 
             Layout(
                 content = {
-                    DatePickerImpl(
-                        state = datePickerState,
-                        yearRange = yearRange,
-                        backgroundColor = dialogBackgroundColor!!
-                    )
-                    TimePickerImpl(state = timePickerState) {
+                    DatePickerImpl(state = datePickerState, title = datePickerTitle)
+                    TimePickerImpl(state = timePickerState, title = timePickerTitle) {
                         coroutineScope.launch { scrollPos.animateTo(0f) }
                     }
                 }
@@ -116,7 +120,7 @@ fun MaterialDialog.datetimepicker(
                     scrollPos.animateTo(scrollTo.value)
                 }
             } else {
-                onComplete(
+                onDateTimeChange(
                     LocalDateTime.of(
                         datePickerState.selected,
                         timePickerState.selectedTime
