@@ -2,7 +2,7 @@ object Dependencies {
     const val material = "com.google.android.material:material:1.4.0-alpha02"
 
     object ComposeMaterialDialogs {
-        const val version = "0.3.5"
+        const val version = "0.4.0"
 
         const val core = "io.github.vanpra.compose-material-dialogs:core:$version"
         const val datetime = "io.github.vanpra.compose-material-dialogs:datetime:$version"
@@ -14,7 +14,7 @@ object Dependencies {
     }
 
     object Accompanist {
-        private const val version = "0.9.0"
+        private const val version = "0.10.0"
         const val pager = "com.google.accompanist:accompanist-pager:$version"
     }
 
@@ -31,7 +31,7 @@ object Dependencies {
         const val composeNav = "androidx.navigation:navigation-compose:1.0.0-alpha10"
 
         object Compose {
-            const val version = "1.0.0-beta06"
+            const val version = "1.0.0-beta07"
 
             const val ui = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"
