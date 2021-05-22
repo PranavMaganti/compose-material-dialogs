@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigate
 import androidx.navigation.compose.rememberNavController
 import com.vanpra.composematerialdialogdemos.demos.BasicDialogDemo
 import com.vanpra.composematerialdialogdemos.demos.BasicListDialogDemo
