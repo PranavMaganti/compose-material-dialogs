@@ -248,14 +248,14 @@ internal fun TimePickerTitle(text: String, onBack: (() -> Unit)?) {
             Spacer(modifier = Modifier.width(16.dp))
 
             Text(
-                "SELECT TIME",
+                text,
                 style = TextStyle(color = MaterialTheme.colors.onBackground)
             )
         }
     } else {
         Box(Modifier.height(52.dp)) {
             Text(
-                "SELECT TIME",
+                text,
                 modifier = Modifier.paddingFromBaseline(top = 28.dp),
                 style = TextStyle(color = MaterialTheme.colors.onBackground)
             )

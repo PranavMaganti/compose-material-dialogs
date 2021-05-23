@@ -21,6 +21,8 @@ class DateTimePickerTest : ScreenshotTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
+    val testTitle = "Custom Title"
+
     @Test
     fun datePickerBasic() {
         composeTestRule.setContentAndWaitForIdle {
@@ -78,6 +80,28 @@ class DateTimePickerTest : ScreenshotTest {
 
         composeTestRule.onDialogDateNextMonth().performClick()
         composeTestRule.onDialogDateSelector(3).performClick()
+        compareScreenshot(composeTestRule.onDialog())
+    }
+
+    @Test
+    fun datePickerWithCustomTitle() {
+        composeTestRule.setContentAndWaitForIdle {
+            DialogWithContent {
+                datepicker(title = testTitle)
+            }
+        }
+
+        compareScreenshot(composeTestRule.onDialog())
+    }
+
+    @Test
+    fun timePickerWithCustomTitle() {
+        composeTestRule.setContentAndWaitForIdle {
+            DialogWithContent {
+                timepicker(title = testTitle)
+            }
+        }
+
         compareScreenshot(composeTestRule.onDialog())
     }
 }

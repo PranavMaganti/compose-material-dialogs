@@ -1,6 +1,7 @@
 package com.vanpra.composematerialdialogs.datetime.test.functional
 
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
@@ -9,6 +10,7 @@ import com.vanpra.composematerialdialogs.test.utils.defaultButtons
 import com.vanpra.composematerialdialogs.test.utils.extensions.assertDialogDoesNotExist
 import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogDateSelector
 import com.vanpra.composematerialdialogs.test.utils.extensions.onPositiveButton
+import com.vanpra.composematerialdialogs.title
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -64,5 +66,18 @@ class DatePickerTest {
         /* Need this line or else tests don't wait for dialog to close */
         composeTestRule.assertDialogDoesNotExist()
         assertEquals(null, selectedDate)
+    }
+
+    @Test
+    fun datePickerCustomTitle() {
+        val title = "Custom Title"
+        composeTestRule.setContent {
+            DialogWithContent {
+                datepicker(title = title)
+                defaultButtons()
+            }
+        }
+
+        composeTestRule.onNodeWithText(title).assertExists()
     }
 }
