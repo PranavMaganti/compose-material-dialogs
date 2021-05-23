@@ -98,7 +98,7 @@ fun MaterialDialog.datepicker(
 @Composable
 internal fun DatePickerImpl(title: String, state: DatePickerState) {
     val pagerState = rememberPagerState(
-        pageCount = (state.yearRange.last - state.yearRange.first) * 12,
+        pageCount = ((state.yearRange.last - state.yearRange.first) + 1) * 12,
         initialPage = (state.selected.year - state.yearRange.first) * 12 + state.selected.monthValue - 1
     )
 
@@ -259,7 +259,8 @@ private fun CalendarViewHeader(
                     .clickable(
                         onClick = {
                             coroutineScope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                                if (pagerState.currentPage - 1 >= 0)
+                                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
                             }
                         }
                     ),
@@ -276,7 +277,8 @@ private fun CalendarViewHeader(
                     .clickable(
                         onClick = {
                             coroutineScope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                if (pagerState.currentPage + 1 < pagerState.pageCount)
+                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
                             }
                         }
                     ),
