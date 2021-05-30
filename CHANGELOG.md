@@ -1,5 +1,11 @@
 # Changelog
 
+### 0.4.1 - 2021-05-23
+
+  - Update compose version to 1.0.0-beta07
+  - Fix date picker bounds bug
+- Fix time picker custom titles
+
 ### 0.4.0 - 2021-05-06
 
   - Update compose version to 1.0.0-beta06
