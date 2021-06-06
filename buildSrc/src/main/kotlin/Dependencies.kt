@@ -1,5 +1,6 @@
 object Dependencies {
     const val material = "com.google.android.material:material:1.4.0-beta01"
+    const val desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
 
     object ComposeMaterialDialogs {
         const val version = "0.4.1"

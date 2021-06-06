@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -32,6 +33,7 @@ import com.vanpra.composematerialdialogdemos.ui.ComposeMaterialDialogsTheme
  * @brief MainActivity with material dialog samples
  */
 class MainActivity : AppCompatActivity() {
+    @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -44,6 +46,7 @@ class MainActivity : AppCompatActivity() {
 
 data class DialogSectionData(val title: String, val content: @Composable () -> Unit)
 
+@ExperimentalComposeUiApi
 val sections = listOf(
     DialogSectionData("Basic Dialogs") { BasicDialogDemo() },
     DialogSectionData("Basic List Dialogs") { BasicListDialogDemo() },
@@ -56,6 +59,7 @@ val sections = listOf(
 /**
  * @brief Collection of Material Dialog Demos
  */
+@ExperimentalComposeUiApi
 @Composable
 fun DialogDemos() {
     val navController = rememberNavController()

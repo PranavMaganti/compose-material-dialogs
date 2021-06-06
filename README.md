@@ -4,9 +4,7 @@
 
 ### [See Releases and Changelog](https://github.com/vanpra/compose-material-dialogs/blob/main/CHANGELOG.md)
 
-### NOTE: The dependency name of the package has changed due to moving to maven central
-
-**Current Compose Version: 1.0.0-beta07**
+**Current Compose Version: 1.0.0-beta08**
 
 ## Credits
 
@@ -23,7 +21,7 @@ This library's design is heavily inspired by https://github.com/afollestad/mater
 ```gradle
 dependencies {
   ...
-  implementation "io.github.vanpra.compose-material-dialogs:core:0.4.1" 
+  implementation "io.github.vanpra.compose-material-dialogs:core:0.4.2" 
   ...
 }
 ```
@@ -39,7 +37,7 @@ dependencies {
 ```gradle
 dependencies {
   ...
-  implementation "io.github.vanpra.compose-material-dialogs:datetime:0.4.1"
+  implementation "io.github.vanpra.compose-material-dialogs:datetime:0.4.2"
   ...
 }
 ```
@@ -55,7 +53,7 @@ dependencies {
 ```gradle
 dependencies {
   ...
-  implementation "io.github.vanpra.compose-material-dialogs:color:0.4.1"
+  implementation "io.github.vanpra.compose-material-dialogs:color:0.4.2"
   ...
 }
 ```
