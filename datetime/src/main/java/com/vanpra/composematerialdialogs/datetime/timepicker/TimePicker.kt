@@ -159,7 +159,6 @@ internal fun TimePickerExpandedImpl(
                     ClockScreen.Minute -> ClockMinuteLayout(state = state)
                 }
             }
-
         }
     }
 }

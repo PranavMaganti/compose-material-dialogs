@@ -23,7 +23,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
@@ -129,6 +132,7 @@ fun MaterialDialog.message(text: String? = null, @StringRes res: Int? = null) {
  * @param onInput a function which is called with the user input. The timing of this call is
  * dictated by [waitForPositiveButton]
  */
+@ExperimentalComposeUiApi
 @Composable
 fun MaterialDialog.input(
     label: String,
@@ -139,6 +143,8 @@ fun MaterialDialog.input(
     keyboardOptions: KeyboardOptions = KeyboardOptions(),
     keyboardActions: KeyboardActions = KeyboardActions(),
     errorMessage: String = "",
+    focusRequester: FocusRequester = FocusRequester.Default,
+    focusOnShow: Boolean = false,
     isTextValid: (String) -> Boolean = { true },
     onInput: (String) -> Unit = {}
 ) {
@@ -174,7 +180,7 @@ fun MaterialDialog.input(
                 }
             },
             label = { Text(label, color = MaterialTheme.colors.onBackground.copy(0.8f)) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.focusRequester(focusRequester).fillMaxWidth(),
             placeholder = { Text(hint, color = MaterialTheme.colors.onBackground.copy(0.5f)) },
             isError = !valid,
             visualTransformation = visualTransformation,
@@ -190,6 +196,13 @@ fun MaterialDialog.input(
                 color = MaterialTheme.colors.error,
                 modifier = Modifier.align(Alignment.End)
             )
+        }
+    }
+
+    if (focusOnShow) {
+        DisposableEffect(Unit) {
+            focusRequester.requestFocus()
+            onDispose { }
         }
     }
 }

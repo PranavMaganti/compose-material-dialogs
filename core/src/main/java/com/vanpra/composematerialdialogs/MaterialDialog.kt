@@ -184,9 +184,9 @@ class MaterialDialog(
                 /* Only using 40.dp padding as 8.dp is already provided */
                 Surface(
                     modifier = Modifier
-                        .padding(horizontal = 40.dp, vertical = 40.dp)
-                        .sizeIn(maxWidth = 560.dp, maxHeight = 560.dp)
                         .fillMaxWidth()
+                        .padding(vertical = 40.dp)
+                        .sizeIn(maxWidth = 560.dp, maxHeight = 560.dp)
                         .clipToBounds(),
                     shape = shape,
                     color = backgroundColor,

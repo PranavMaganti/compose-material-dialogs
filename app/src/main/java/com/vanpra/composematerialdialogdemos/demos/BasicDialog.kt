@@ -9,6 +9,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.input.ImeAction
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
@@ -22,6 +25,7 @@ import com.vanpra.composematerialdialogs.title
 /**
  * @brief Basic Dialog Demos
  */
+@ExperimentalComposeUiApi
 @Composable
 fun BasicDialogDemo() {
     DialogAndShowButton(buttonText = "Basic Dialog") {
@@ -70,6 +74,26 @@ fun BasicDialogDemo() {
         input(label = "Name", hint = "Jon Smith") {
             Log.d("SELECTION:", it)
         }
+        buttons {
+            negativeButton("Cancel")
+            positiveButton("Ok")
+        }
+    }
+
+    DialogAndShowButton(
+        buttonText = "Basic Input Dialog With Immediate Focus",
+    ) {
+        val focusRequester = remember { FocusRequester() }
+        title(res = R.string.input_dialog_title)
+        input(
+            label = "Name",
+            hint = "Jon Smith",
+            focusRequester = focusRequester,
+            focusOnShow = true
+        ) {
+            Log.d("SELECTION:", it)
+        }
+
         buttons {
             negativeButton("Cancel")
             positiveButton("Ok")
