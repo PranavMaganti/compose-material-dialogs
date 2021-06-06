@@ -117,7 +117,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         @StringRes res: Int? = null,
         onClick: () -> Unit = {}
     ) {
-        val buttonText = getString(res, text).toUpperCase(Locale.ROOT)
+        val buttonText = getString(res, text).uppercase(Locale.ROOT)
         TextButton(
             onClick = {
                 onClick()
@@ -147,7 +147,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         disableDismiss: Boolean = false,
         onClick: () -> Unit = {}
     ) {
-        val buttonText = getString(res, text).toUpperCase(Locale.ROOT)
+        val buttonText = getString(res, text).uppercase(Locale.ROOT)
         val buttonEnabled = dialog.positiveEnabled.values.all { it }
         val focusManager = LocalFocusManager.current
 
@@ -186,7 +186,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         @StringRes res: Int? = null,
         onClick: () -> Unit = {}
     ) {
-        val buttonText = getString(res, text).toUpperCase(Locale.ROOT)
+        val buttonText = getString(res, text).uppercase(Locale.ROOT)
         val focusManager = LocalFocusManager.current
 
         TextButton(

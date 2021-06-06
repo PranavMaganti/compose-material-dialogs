@@ -49,7 +49,7 @@ android {
 dependencies {
     api(project(":core"))
     implementation(Dependencies.Accompanist.pager)
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    coreLibraryDesugaring(Dependencies.desugar)
 }
 
 shot {

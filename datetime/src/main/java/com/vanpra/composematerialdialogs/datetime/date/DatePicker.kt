@@ -6,6 +6,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -103,7 +104,7 @@ internal fun DatePickerImpl(title: String, state: DatePickerState) {
         initialPage = (state.selected.year - state.yearRange.first) * 12 + state.selected.monthValue - 1
     )
 
-    Column(Modifier.size(328.dp, 460.dp)) {
+    Column(Modifier.fillMaxWidth()) {
         CalendarHeader(title, state)
         HorizontalPager(
             state = pagerState,
@@ -353,22 +354,24 @@ private fun DayOfWeekHeader() {
         modifier = Modifier
             .height(40.dp)
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        DatePickerState.dayHeaders.forEachIndexed { index, it ->
-            Box(Modifier.size(40.dp)) {
-                Text(
-                    it,
-                    modifier = Modifier
-                        .alpha(0.8f)
-                        .fillMaxSize()
-                        .wrapContentSize(Alignment.Center),
-                    style = TextStyle(fontSize = 14.sp, fontWeight = W600),
-                    color = MaterialTheme.colors.onBackground
-                )
-            }
-            if (index != 6) {
-                Spacer(modifier = Modifier.width(4.dp))
+        LazyVerticalGrid(cells = GridCells.Fixed(7)) {
+            DatePickerState.dayHeaders.forEach { it ->
+                item {
+                    Box(Modifier.size(40.dp)) {
+                        Text(
+                            it,
+                            modifier = Modifier
+                                .alpha(0.8f)
+                                .fillMaxSize()
+                                .wrapContentSize(Alignment.Center),
+                            style = TextStyle(fontSize = 14.sp, fontWeight = W600),
+                            color = MaterialTheme.colors.onBackground
+                        )
+                    }
+                }
             }
         }
     }

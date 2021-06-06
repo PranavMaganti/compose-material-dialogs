@@ -18,7 +18,7 @@ import com.vanpra.composematerialdialogs.MaterialDialog
  * @brief Builds a dialog and adds button to the layout which shows the dialog on click
  */
 @Composable
-fun DialogAndShowButton(buttonText: String, content: @Composable MaterialDialog.() -> Unit) {
+fun DialogAndShowButton(buttonText: String, onShow: () -> Unit = {}, content: @Composable MaterialDialog.() -> Unit) {
     val dialog = remember { MaterialDialog() }
 
     dialog.build(content = content)

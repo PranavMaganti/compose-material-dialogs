@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.diffplug.spotless") version "5.9.0"
-    id("org.jetbrains.dokka") version "1.4.30"
+    id("org.jetbrains.dokka") version "1.4.32"
 }
 
 buildscript {
@@ -18,7 +18,7 @@ buildscript {
         classpath("com.android.tools.build:gradle:7.1.0-alpha01")
         classpath("com.vanniktech:gradle-maven-publish-plugin:0.14.2")
         classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
-        classpath("com.karumi:shot:5.10.4")
+        classpath("com.karumi:shot:5.10.5")
     }
 }
 
@@ -36,7 +36,6 @@ allprojects {
     tasks.withType<KotlinCompile>().all {
         kotlinOptions {
             jvmTarget = "1.8"
-            useIR = true
             freeCompilerArgs = freeCompilerArgs + listOf(
                 "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
                 "-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi",
