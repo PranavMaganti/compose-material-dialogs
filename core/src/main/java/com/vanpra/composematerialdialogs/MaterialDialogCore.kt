@@ -128,6 +128,10 @@ fun MaterialDialog.message(text: String? = null, @StringRes res: Int? = null) {
  * @param keyboardOptions software keyboard options which can be used to customize parts
  * of the keyboard
  * @param errorMessage a message to be shown to the user when the input is not valid
+ * @param focusRequester a [FocusRequester] which can be used to control the focus state of the
+ * text field
+ * @param focusOnShow if set to true this will auto focus the text field when the input
+ * field is shown
  * @param isTextValid a function which is called to check if the user input is valid
  * @param onInput a function which is called with the user input. The timing of this call is
  * dictated by [waitForPositiveButton]
@@ -180,7 +184,9 @@ fun MaterialDialog.input(
                 }
             },
             label = { Text(label, color = MaterialTheme.colors.onBackground.copy(0.8f)) },
-            modifier = Modifier.focusRequester(focusRequester).fillMaxWidth(),
+            modifier = Modifier
+                .focusRequester(focusRequester)
+                .fillMaxWidth(),
             placeholder = { Text(hint, color = MaterialTheme.colors.onBackground.copy(0.5f)) },
             isError = !valid,
             visualTransformation = visualTransformation,
