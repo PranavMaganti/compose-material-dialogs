@@ -3,6 +3,8 @@ package com.vanpra.composematerialdialogs
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.LocalElevationOverlay
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -179,8 +181,11 @@ class MaterialDialog(
                     onDispose { resetDialog() }
                 }
 
+                /* Only using 40.dp padding as 8.dp is already provided */
                 Surface(
                     modifier = Modifier
+                        .padding(horizontal = 40.dp, vertical = 40.dp)
+                        .sizeIn(maxWidth = 560.dp, maxHeight = 560.dp)
                         .fillMaxWidth()
                         .clipToBounds(),
                     shape = shape,
