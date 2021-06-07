@@ -25,7 +25,6 @@ import com.vanpra.composematerialdialogs.title
 /**
  * @brief Basic Dialog Demos
  */
-@ExperimentalComposeUiApi
 @Composable
 fun BasicDialogDemo() {
     DialogAndShowButton(buttonText = "Basic Dialog") {

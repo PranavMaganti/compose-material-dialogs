@@ -32,7 +32,9 @@ class CommonModulePlugin: Plugin<Project> {
 
             androidTestImplementation(Dependencies.AndroidX.Compose.activity)
             androidTestImplementation(Dependencies.AndroidX.Compose.testing)
-            androidTestImplementation(Dependencies.AndroidX.testRules)
+            androidTestImplementation(Dependencies.AndroidX.Testing.core)
+            androidTestImplementation(Dependencies.AndroidX.Testing.rules)
+            androidTestImplementation(Dependencies.AndroidX.Testing.runner)
             add("androidTestImplementation", project(":test-utils"))
         }
     }

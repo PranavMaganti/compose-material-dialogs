@@ -235,7 +235,7 @@ private fun CustomARGB(selectedColor: MutableState<Color>, showAlphaSelector: Bo
 
             val hexString = remember(selectedColor.value) {
                 val rawHex = Integer.toHexString(selectedColor.value.toArgb())
-                    .toUpperCase(Locale.ROOT)
+                    .uppercase(Locale.ROOT)
                     .padStart(8, '0')
 
                 if (!showAlphaSelector) rawHex.substring(2) else rawHex

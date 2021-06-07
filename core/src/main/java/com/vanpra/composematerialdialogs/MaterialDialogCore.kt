@@ -137,7 +137,6 @@ fun MaterialDialog.message(text: String? = null, @StringRes res: Int? = null) {
  * @param onInput a function which is called with the user input. The timing of this call is
  * dictated by [waitForPositiveButton]
  */
-@ExperimentalComposeUiApi
 @Composable
 fun MaterialDialog.input(
     label: String,

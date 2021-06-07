@@ -24,4 +24,4 @@ fun ComposeTestRule.onDialogSubColorBackButton() =
     this.onNodeWithTag("dialog_sub_color_back_btn")
 
 fun ComposeTestRule.onDialogColorSlider(slider: ColorPickerSlider) =
-    this.onNodeWithTag("dialog_color_picker_${slider.toString().toLowerCase(Locale.ROOT)}_slider")
+    this.onNodeWithTag("dialog_color_picker_${slider.toString().lowercase(Locale.ROOT)}_slider")

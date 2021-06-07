@@ -17,8 +17,8 @@ buildscript {
         classpath(Dependencies.Kotlin.gradlePlugin)
         classpath("com.android.tools.build:gradle:7.1.0-alpha01")
         classpath("com.vanniktech:gradle-maven-publish-plugin:0.14.2")
-        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
         classpath("com.karumi:shot:5.10.5")
+        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.4.32")
     }
 }
 
@@ -41,8 +41,8 @@ allprojects {
                 "-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi",
                 "-Xopt-in=androidx.compose.ui.test.ExperimentalTestApi",
                 "-Xopt-in=androidx.compose.foundation.ExperimentalFoundationApi",
-                "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi"
-            )
+                "-Xopt-in=androidx.compose.ui.ExperimentalComposeUiApi",
+                )
         }
     }
 }

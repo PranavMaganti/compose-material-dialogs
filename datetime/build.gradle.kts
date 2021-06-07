@@ -56,6 +56,16 @@ shot {
     tolerance = 0.6 // Tolerance needed for CI
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = freeCompilerArgs + listOf(
+            "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi"
+        )
+    }
+}
+
+
 val artifactName = "datetime"
 val artifactGroup = "com.vanpra.compose-material-dialogs"
 val artifactVersion = Dependencies.ComposeMaterialDialogs.version
