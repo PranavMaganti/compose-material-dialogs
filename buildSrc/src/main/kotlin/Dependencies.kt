@@ -37,8 +37,8 @@ object Dependencies {
             const val materialIconsExtended =
                 "androidx.compose.material:material-icons-extended:$version"
 
-            const val activity = "androidx.activity:activity-compose:1.3.0-beta01"
-            const val navigation = "androidx.navigation:navigation-compose:2.4.0-alpha02"
+            const val activity = "androidx.activity:activity-compose:1.3.0-beta02"
+            const val navigation = "androidx.navigation:navigation-compose:2.4.0-alpha03"
         }
     }
 }
