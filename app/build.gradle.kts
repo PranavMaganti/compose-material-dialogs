@@ -48,8 +48,8 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.ui)
     implementation(Dependencies.AndroidX.Compose.material)
     implementation(Dependencies.AndroidX.Compose.materialIconsExtended)
-    implementation(Dependencies.AndroidX.composeActivity)
-    implementation(Dependencies.AndroidX.composeNav)
+    implementation(Dependencies.AndroidX.Compose.activity)
+    implementation(Dependencies.AndroidX.Compose.navigation)
 
     implementation(Dependencies.AndroidX.coreKtx)
     implementation(Dependencies.AndroidX.appcompat)
