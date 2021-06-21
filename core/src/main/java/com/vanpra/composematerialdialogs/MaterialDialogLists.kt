@@ -224,7 +224,9 @@ fun MaterialDialog.listItemsSingleChoice(
         DialogCallback { onChoiceChange(selected!!) }
     } else {
         DisposableEffect(selected) {
-            onChoiceChange(selected!!)
+            if (selected != null) {
+                onChoiceChange(selected!!)
+            }
             onDispose { }
         }
     }

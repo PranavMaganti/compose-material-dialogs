@@ -174,9 +174,12 @@ internal fun TimePickerImpl(
         modifier.padding(start = 24.dp, end = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(Modifier.align(Alignment.Start)) {
-            TimePickerTitle(title, height = 52.dp, onBack)
+        if (title != "") {
+            Box(Modifier.align(Alignment.Start)) {
+                TimePickerTitle(title, height = 52.dp, onBack)
+            }
         }
+
         TimeLayout(state = state)
 
         Spacer(modifier = Modifier.height(36.dp))
