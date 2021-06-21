@@ -13,6 +13,7 @@ import com.vanpra.composematerialdialogs.datetime.datetimepicker
 import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerColors
 import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.timepicker.timepicker
+import com.vanpra.composematerialdialogs.title
 import java.time.LocalTime
 
 /**
@@ -41,7 +42,8 @@ fun DateTimeDialogDemo() {
     val context = LocalContext.current
 
     DialogAndShowButton(buttonText = "Time Picker Dialog") {
-        timepicker(colors = colors) {
+        title("Hello")
+        timepicker(colors = colors, title = "") {
             println(it.toString())
             Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
         }
