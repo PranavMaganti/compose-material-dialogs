@@ -134,6 +134,7 @@ internal fun TimePickerExpandedImpl(
         Box(Modifier.align(Alignment.Start)) {
             TimePickerTitle(title, height = 36.dp, onBack)
         }
+
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             Column(
                 Modifier

@@ -20,6 +20,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -188,6 +189,13 @@ fun MaterialDialog.listItemsSingleChoice(
 
     if (waitForPositiveButton) {
         DialogCallback { onChoiceChange(selectedItem!!) }
+    } else {
+        DisposableEffect(selectedItem) {
+            if (selectedItem != null) {
+                onChoiceChange(selectedItem!!)
+            }
+            onDispose { }
+        }
     }
 
     val onSelect = { index: Int ->

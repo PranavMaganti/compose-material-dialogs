@@ -53,7 +53,7 @@ dependencies {
 }
 
 shot {
-    tolerance = 0.6 // Tolerance needed for CI
+    tolerance = 1.0 // Tolerance needed for CI
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {

@@ -2,7 +2,7 @@
 
 ### 0.4.2 - 2021-06-06
 
-  -  Update compose to 1.0.0-alpha08 ([#76](https://github.com/vanpra/compose-material-dialogs/issues/76) and [#73](https://github.com/vanpra/compose-material-dialogs/issues/73))
+  -  Update compose to 1.0.0-beta08 ([#76](https://github.com/vanpra/compose-material-dialogs/issues/76) and [#73](https://github.com/vanpra/compose-material-dialogs/issues/73))
 -  Update kotlin version to 1.5.10
 -  Fix layout of date and time pickers for wider screens ([#74](https://github.com/vanpra/compose-material-dialogs/issues/74))
 -  Fix dialog padding to conform with material design spec at the extremes
