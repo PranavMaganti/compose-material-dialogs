@@ -42,8 +42,7 @@ fun DateTimeDialogDemo() {
     val context = LocalContext.current
 
     DialogAndShowButton(buttonText = "Time Picker Dialog") {
-        title("Hello")
-        timepicker(colors = colors, title = "") {
+        timepicker(colors = colors) {
             println(it.toString())
             Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
         }
