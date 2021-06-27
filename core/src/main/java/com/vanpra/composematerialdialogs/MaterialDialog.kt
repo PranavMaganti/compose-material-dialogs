@@ -3,8 +3,8 @@ package com.vanpra.composematerialdialogs
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.LocalElevationOverlay
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import java.util.concurrent.atomic.AtomicInteger
@@ -170,6 +171,10 @@ class MaterialDialog(
         elevation: Dp = 24.dp,
         content: @Composable MaterialDialog.() -> Unit
     ) {
+        val configuration = LocalConfiguration.current
+        val height = configuration.screenHeightDp.dp - 90.dp
+        val padding = if (configuration.screenWidthDp <= 360) 16.dp else 0.dp
+
         if (showing.value) {
             dialogBackgroundColor = LocalElevationOverlay.current?.apply(
                 color = backgroundColor,
@@ -181,12 +186,11 @@ class MaterialDialog(
                     onDispose { resetDialog() }
                 }
 
-                /* Only using 40.dp padding as 8.dp is already provided */
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 40.dp)
-                        .sizeIn(maxWidth = 560.dp, maxHeight = 560.dp)
+                        .heightIn(max = height)
+                        .padding(horizontal = padding)
                         .clipToBounds(),
                     shape = shape,
                     color = backgroundColor,

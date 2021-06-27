@@ -12,7 +12,7 @@ buildscript {
     dependencies {
         classpath(Dependencies.Kotlin.gradlePlugin)
         classpath("com.android.tools.build:gradle:7.1.0-alpha02")
-        classpath("com.vanniktech:gradle-maven-publish-plugin:0.14.2")
+        classpath("com.vanniktech:gradle-maven-publish-plugin:0.16.0")
         classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.4.32")
     }
 }
