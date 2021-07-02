@@ -198,7 +198,7 @@ class MaterialDialog(
                     elevation = elevation
                 ) {
                     Column {
-                        this@MaterialDialog.content()
+                        content()
                     }
                 }
             }
