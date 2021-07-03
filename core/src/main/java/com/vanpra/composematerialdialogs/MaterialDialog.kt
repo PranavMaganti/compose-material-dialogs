@@ -22,10 +22,14 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.math.min
 
 /**
  *  The MaterialDialog class is used to build and display a dialog using both pre-made and
@@ -44,7 +48,7 @@ class MaterialDialog(
 ) {
     private val showing: MutableState<Boolean> = mutableStateOf(false)
 
-    val buttons = MaterialDialogButtons(this)
+    val dialogButtons = MaterialDialogButtons(this)
 
     val callbacks = mutableMapOf<Int, () -> Unit>()
     private val callbackCounter = AtomicInteger(0)
@@ -169,10 +173,12 @@ class MaterialDialog(
         shape: Shape = MaterialTheme.shapes.medium,
         border: BorderStroke? = null,
         elevation: Dp = 24.dp,
+        buttons: @Composable MaterialDialogButtons.() -> Unit = {},
         content: @Composable MaterialDialog.() -> Unit
     ) {
         val configuration = LocalConfiguration.current
-        val height = configuration.screenHeightDp.dp - 90.dp
+        val maxHeight = configuration.screenHeightDp.dp - 90.dp
+        val maxHeightPx = with(LocalDensity.current) { maxHeight.toPx().toInt() }
         val padding = if (configuration.screenWidthDp <= 360) 16.dp else 0.dp
 
         if (showing.value) {
@@ -189,7 +195,7 @@ class MaterialDialog(
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(max = height)
+                        .heightIn(max = maxHeight)
                         .padding(horizontal = padding)
                         .clipToBounds(),
                     shape = shape,
@@ -197,8 +203,30 @@ class MaterialDialog(
                     border = border,
                     elevation = elevation
                 ) {
-                    Column {
-                        content()
+                    Layout(
+                        content = {
+                            DialogButtons(
+                                modifier = Modifier.layoutId("buttons"),
+                                dialogButtons = dialogButtons,
+                                dialog = this,
+                                content = buttons
+                            )
+                            Column(Modifier.layoutId("content"), content = { content() })
+                        },
+                        modifier = Modifier.fillMaxWidth().clipToBounds()
+                    ) { measurables, constraints ->
+                        val buttonsPlaceable = measurables[0].measure(constraints)
+                        val contentPlaceable = measurables[1].measure(
+                            constraints.copy(maxHeight = maxHeightPx - buttonsPlaceable.height)
+                        )
+
+                        val height =
+                            min(maxHeightPx, buttonsPlaceable.height + contentPlaceable.height)
+
+                        return@Layout layout(constraints.maxWidth, height) {
+                            contentPlaceable.place(0, 0)
+                            buttonsPlaceable.place(0, height - buttonsPlaceable.height)
+                        }
                     }
                 }
             }

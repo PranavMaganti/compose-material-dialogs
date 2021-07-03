@@ -13,24 +13,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.MaterialDialogButtons
 
 /**
  * @brief Builds a dialog and adds button to the layout which shows the dialog on click
  */
 @Composable
-fun DialogAndShowButton(buttonText: String, content: @Composable MaterialDialog.() -> Unit) {
+fun DialogAndShowButton(
+    buttonText: String,
+    buttons: @Composable MaterialDialogButtons.() -> Unit = {},
+    content: @Composable MaterialDialog.() -> Unit
+) {
     val dialog = remember { MaterialDialog() }
 
-    dialog.build(content = content)
+    dialog.build(content = content, buttons = buttons)
 
     TextButton(
         onClick = { dialog.show() },
-        modifier = Modifier.fillMaxWidth()
-            .padding(8.dp).background(MaterialTheme.colors.primaryVariant),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .background(MaterialTheme.colors.primaryVariant),
     ) {
         Text(
             buttonText,
-            modifier = Modifier.fillMaxWidth().wrapContentSize(Alignment.Center),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentSize(Alignment.Center),
             color = MaterialTheme.colors.onPrimary
         )
     }
