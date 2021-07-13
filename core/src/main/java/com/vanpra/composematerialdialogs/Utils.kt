@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 
 @Composable
 internal fun getString(@StringRes res: Int? = null, default: String? = null): String {
@@ -20,7 +21,7 @@ internal fun ThemedDialog(onCloseRequest: () -> Unit, children: @Composable () -
     val colors = MaterialTheme.colors
     val typography = MaterialTheme.typography
 
-    Dialog(onDismissRequest = onCloseRequest) {
+    Dialog(onDismissRequest = onCloseRequest, properties = DialogProperties(usePlatformDefaultWidth = true)) {
         MaterialTheme(colors = colors, typography = typography) {
             children()
         }
