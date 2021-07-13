@@ -93,7 +93,7 @@ fun DialogButtons(
                         currY += button.height + interButtonPadding
                     } else {
                         currX -= button.width
-                        button.place(currX, 0)
+                        button.place(currX, currY)
                     }
                 }
 
