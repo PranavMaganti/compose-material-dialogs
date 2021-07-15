@@ -179,7 +179,6 @@ class MaterialDialog(
         val configuration = LocalConfiguration.current
         val maxHeight = configuration.screenHeightDp.dp - 90.dp
         val maxHeightPx = with(LocalDensity.current) { maxHeight.toPx().toInt() }
-        val padding = if (configuration.screenWidthDp <= 360) 16.dp else 0.dp
 
         if (showing.value) {
             dialogBackgroundColor = LocalElevationOverlay.current?.apply(
@@ -196,7 +195,6 @@ class MaterialDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(max = maxHeight)
-                        .padding(horizontal = padding)
                         .clipToBounds(),
                     shape = shape,
                     color = backgroundColor,
