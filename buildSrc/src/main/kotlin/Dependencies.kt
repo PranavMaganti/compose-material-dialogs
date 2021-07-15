@@ -15,7 +15,7 @@ object Dependencies {
     }
 
     object Accompanist {
-        private const val version = "0.12.0"
+        private const val version = "0.14.0"
         const val pager = "com.google.accompanist:accompanist-pager:$version"
     }
 
@@ -37,7 +37,7 @@ object Dependencies {
             const val materialIconsExtended =
                 "androidx.compose.material:material-icons-extended:$version"
 
-            const val activity = "androidx.activity:activity-compose:1.3.0-rc01"
+            const val activity = "androidx.activity:activity-compose:1.3.0-rc02"
             const val navigation = "androidx.navigation:navigation-compose:2.4.0-alpha04"
         }
     }
