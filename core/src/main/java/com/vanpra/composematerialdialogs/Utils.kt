@@ -16,19 +16,5 @@ internal fun getString(@StringRes res: Int? = null, default: String? = null): St
         ?: throw IllegalArgumentException("Function must receive one non null string parameter")
 }
 
-@Composable
-internal fun ThemedDialog(onCloseRequest: () -> Unit, children: @Composable () -> Unit) {
-    val colors = MaterialTheme.colors
-    val typography = MaterialTheme.typography
-
-    Dialog(onDismissRequest = onCloseRequest, properties = DialogProperties(usePlatformDefaultWidth = true)) {
-        MaterialTheme(colors = colors, typography = typography) {
-            children()
-        }
-    }
-}
-
 internal fun List<Pair<MaterialDialogButtonTypes, Placeable>>.buttons(type: MaterialDialogButtonTypes) =
     this.filter { it.first == type }.map { it.second }
-
-internal val emptyCallback = {}

@@ -1,7 +1,9 @@
 package com.vanpra.composematerialdialogs
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -28,6 +30,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.min
 
@@ -179,6 +182,7 @@ class MaterialDialog(
         val configuration = LocalConfiguration.current
         val maxHeight = configuration.screenHeightDp.dp - 90.dp
         val maxHeightPx = with(LocalDensity.current) { maxHeight.toPx().toInt() }
+        val padding = if (configuration.screenWidthDp <= 360) 16.dp else 0.dp
 
         if (showing.value) {
             dialogBackgroundColor = LocalElevationOverlay.current?.apply(
@@ -186,7 +190,7 @@ class MaterialDialog(
                 elevation = elevation
             ) ?: MaterialTheme.colors.surface
 
-            ThemedDialog(onCloseRequest = { onCloseRequest(this) }) {
+            Dialog(onDismissRequest = { onCloseRequest(this) }) {
                 DisposableEffect(Unit) {
                     onDispose { resetDialog() }
                 }
@@ -194,7 +198,8 @@ class MaterialDialog(
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(max = maxHeight)
+                        .heightIn(max = maxHeight, min = 0.dp)
+                        .padding(horizontal = padding)
                         .clipToBounds(),
                     shape = shape,
                     color = backgroundColor,
@@ -210,12 +215,15 @@ class MaterialDialog(
                                 content = buttons
                             )
                             Column(Modifier.layoutId("content"), content = { content() })
-                        },
-                        modifier = Modifier.fillMaxWidth().clipToBounds()
+                        }
                     ) { measurables, constraints ->
-                        val buttonsPlaceable = measurables[0].measure(constraints)
+                        val buttonsHeight = measurables[0].minIntrinsicHeight(constraints.maxWidth)
+                        val buttonsPlaceable = measurables[0].measure(
+                            constraints.copy(maxHeight = buttonsHeight, minHeight = 0)
+                        )
+
                         val contentPlaceable = measurables[1].measure(
-                            constraints.copy(maxHeight = maxHeightPx - buttonsPlaceable.height)
+                            constraints.copy(maxHeight = maxHeightPx - buttonsPlaceable.height, minHeight = 0)
                         )
 
                         val height =
