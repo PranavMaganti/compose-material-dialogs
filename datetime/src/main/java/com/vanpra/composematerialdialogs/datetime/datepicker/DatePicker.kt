@@ -55,6 +55,7 @@ import com.google.accompanist.pager.PagerDefaults
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.util.isSmallDevice
 import com.vanpra.composematerialdialogs.datetime.util.shortLocalName
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -382,19 +383,19 @@ private fun CalendarHeader(title: String, state: DatePickerState) {
         Modifier
             .background(state.colors.headerBackgroundColor)
             .fillMaxWidth()
-            .height(120.dp)
     ) {
         Column(Modifier.padding(start = 24.dp, end = 24.dp)) {
             Text(
                 text = title,
-                modifier = Modifier.paddingFromBaseline(top = 32.dp),
+                modifier = Modifier.paddingFromBaseline(top = if (isSmallDevice()) 24.dp else 32.dp),
                 color = state.colors.headerTextColor,
                 style = TextStyle(fontSize = 12.sp)
             )
+
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .paddingFromBaseline(top = 64.dp)
+                    .paddingFromBaseline(top = if (isSmallDevice()) 0.dp else 64.dp)
             ) {
                 Text(
                     text = "$day, $month ${state.selected.dayOfMonth}",
@@ -403,6 +404,8 @@ private fun CalendarHeader(title: String, state: DatePickerState) {
                     style = TextStyle(fontSize = 30.sp, fontWeight = W400)
                 )
             }
+
+            Spacer(Modifier.height(if (isSmallDevice()) 8.dp else 16.dp))
         }
     }
 }

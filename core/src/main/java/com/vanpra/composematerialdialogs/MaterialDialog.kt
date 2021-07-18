@@ -1,12 +1,10 @@
 package com.vanpra.composematerialdialogs
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.LocalElevationOverlay
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -179,10 +177,14 @@ class MaterialDialog(
         buttons: @Composable MaterialDialogButtons.() -> Unit = {},
         content: @Composable MaterialDialog.() -> Unit
     ) {
-        val configuration = LocalConfiguration.current
-        val maxHeight = configuration.screenHeightDp.dp - 90.dp
+        val maxHeight = if (isLargeDevice()) {
+            LocalConfiguration.current.screenHeightDp.dp - 90.dp
+        } else {
+            560.dp
+        }
+
         val maxHeightPx = with(LocalDensity.current) { maxHeight.toPx().toInt() }
-        val padding = if (configuration.screenWidthDp <= 360) 16.dp else 0.dp
+        val padding = if (isSmallDevice()) 16.dp else 0.dp
 
         if (showing.value) {
             dialogBackgroundColor = LocalElevationOverlay.current?.apply(
@@ -198,7 +200,7 @@ class MaterialDialog(
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(max = maxHeight, min = 0.dp)
+                        .sizeIn(maxHeight = maxHeight, maxWidth = 560.dp)
                         .padding(horizontal = padding)
                         .clipToBounds(),
                     shape = shape,

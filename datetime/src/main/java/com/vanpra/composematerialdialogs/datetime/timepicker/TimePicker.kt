@@ -117,10 +117,7 @@ fun MaterialDialog.timepicker(
         }
     }
 
-    // BoxWithConstraints {
-    // TimePickerExpandedImpl(title = title, state = timePickerState)
     TimePickerImpl(title = title, state = timePickerState)
-    // }
 }
 
 @Composable
@@ -128,11 +125,10 @@ internal fun TimePickerExpandedImpl(
     modifier: Modifier = Modifier,
     title: String,
     state: TimePickerState,
-    onBack: (() -> Unit)? = null
 ) {
     Column(modifier.padding(start = 24.dp, end = 24.dp)) {
         Box(Modifier.align(Alignment.Start)) {
-            TimePickerTitle(title, height = 36.dp, onBack)
+            TimePickerTitle(Modifier.height(36.dp), title)
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             Column(
@@ -167,8 +163,7 @@ internal fun TimePickerExpandedImpl(
 internal fun TimePickerImpl(
     modifier: Modifier = Modifier,
     title: String,
-    state: TimePickerState,
-    onBack: (() -> Unit)? = null
+    state: TimePickerState
 ) {
     Column(
         modifier.padding(start = 24.dp, end = 24.dp),
@@ -176,7 +171,7 @@ internal fun TimePickerImpl(
     ) {
         if (title != "") {
             Box(Modifier.align(Alignment.Start)) {
-                TimePickerTitle(title, height = 52.dp, onBack)
+                TimePickerTitle(Modifier.height(52.dp), title)
             }
         }
 
@@ -280,38 +275,13 @@ private fun ClockMinuteLayout(state: TimePickerState) {
 }
 
 @Composable
-internal fun TimePickerTitle(text: String, height: Dp, onBack: (() -> Unit)?) {
-    if (onBack != null) {
-        Row(Modifier.height(height), verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                Modifier
-                    .clip(CircleShape)
-                    .clickable(onClick = onBack),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    Icons.Default.ArrowBack,
-                    contentDescription = "Go back to date selection",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
-                    modifier = Modifier
-                )
-            }
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Text(
-                text,
-                style = TextStyle(color = MaterialTheme.colors.onBackground)
-            )
-        }
-    } else {
-        Box(Modifier.height(height)) {
-            Text(
-                text,
-                modifier = Modifier.paddingFromBaseline(top = 28.dp),
-                style = TextStyle(color = MaterialTheme.colors.onBackground)
-            )
-        }
+internal fun TimePickerTitle(modifier: Modifier, text: String) {
+    Box(modifier) {
+        Text(
+            text,
+            modifier = Modifier.paddingFromBaseline(top = 28.dp),
+            style = TextStyle(color = MaterialTheme.colors.onBackground)
+        )
     }
 }
 
@@ -381,7 +351,7 @@ internal fun TimeLayout(modifier: Modifier = Modifier, state: TimePickerState) {
         ) {
             Text(
                 text = ":",
-                style = TextStyle(fontSize = 60.sp, color = MaterialTheme.colors.onBackground)
+                style = TextStyle(fontSize = 50.sp, color = MaterialTheme.colors.onBackground)
             )
         }
 

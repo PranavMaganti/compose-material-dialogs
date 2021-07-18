@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.layout.Placeable
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -18,3 +19,13 @@ internal fun getString(@StringRes res: Int? = null, default: String? = null): St
 
 internal fun List<Pair<MaterialDialogButtonTypes, Placeable>>.buttons(type: MaterialDialogButtonTypes) =
     this.filter { it.first == type }.map { it.second }
+
+@Composable
+internal fun isSmallDevice(): Boolean {
+    return LocalConfiguration.current.screenWidthDp <= 320
+}
+
+@Composable
+internal fun isLargeDevice(): Boolean {
+    return LocalConfiguration.current.screenWidthDp <= 600
+}
