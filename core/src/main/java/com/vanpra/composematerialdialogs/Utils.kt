@@ -22,7 +22,7 @@ internal fun List<Pair<MaterialDialogButtonTypes, Placeable>>.buttons(type: Mate
 
 @Composable
 internal fun isSmallDevice(): Boolean {
-    return LocalConfiguration.current.screenWidthDp <= 320
+    return LocalConfiguration.current.screenWidthDp <= 360
 }
 
 @Composable

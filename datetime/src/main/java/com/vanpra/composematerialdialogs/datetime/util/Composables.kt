@@ -27,7 +27,7 @@ internal fun DialogTitle(text: String, modifier: Modifier = Modifier) {
 
 @Composable
 internal fun isSmallDevice(): Boolean {
-    return LocalConfiguration.current.screenWidthDp <= 320
+    return LocalConfiguration.current.screenWidthDp <= 360
 }
 
 @Composable
