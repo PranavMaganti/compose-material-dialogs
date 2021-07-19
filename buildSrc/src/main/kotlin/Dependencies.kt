@@ -15,7 +15,7 @@ object Dependencies {
     }
 
     object Accompanist {
-        private const val version = "0.12.0"
+        private const val version = "0.14.0"
         const val pager = "com.google.accompanist:accompanist-pager:$version"
     }
 
@@ -42,7 +42,7 @@ object Dependencies {
         }
 
         object Compose {
-            const val version = "1.0.0-beta09"
+            const val version = "1.0.0-rc02"
 
             const val ui = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"
@@ -50,8 +50,8 @@ object Dependencies {
                 "androidx.compose.material:material-icons-extended:$version"
 
             const val testing = "androidx.compose.ui:ui-test-junit4:$version"
-            const val activity = "androidx.activity:activity-compose:1.3.0-beta02"
-            const val navigation = "androidx.navigation:navigation-compose:2.4.0-alpha03"
+            const val activity = "androidx.activity:activity-compose:1.3.0-rc02"
+            const val navigation = "androidx.navigation:navigation-compose:2.4.0-alpha04"
         }
     }
 }

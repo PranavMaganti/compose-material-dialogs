@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -30,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
-private const val listRatio = 0.7f
 val bottomPadding = Modifier.padding(bottom = 8.dp)
 
 /**
@@ -50,12 +48,7 @@ fun <T> MaterialDialog.listItems(
     item: @Composable (index: Int, T) -> Unit
 ) {
     BoxWithConstraints {
-        LazyColumn(
-            modifier = Modifier
-                .heightIn(max = maxHeight * listRatio)
-                .then(bottomPadding)
-                .testTag("dialog_list")
-        ) {
+        LazyColumn(Modifier.then(bottomPadding).testTag("dialog_list")) {
             itemsIndexed(list) { index, it ->
                 Box(
                     Modifier

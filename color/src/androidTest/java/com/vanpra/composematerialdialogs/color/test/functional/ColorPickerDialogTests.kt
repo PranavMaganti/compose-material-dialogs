@@ -36,11 +36,10 @@ class ColorPickerDialogTests {
         var selectedColor: Color? = null
 
         composeTestRule.setContent {
-            DialogWithContent {
+            DialogWithContent(buttons = { defaultButtons() }) {
                 colorChooser(colors = ColorPalette.Primary, waitForPositiveButton = true) {
                     selectedColor = it
                 }
-                defaultButtons()
             }
         }
 
@@ -57,11 +56,10 @@ class ColorPickerDialogTests {
         var selectedColor: Color? = null
 
         composeTestRule.setContent {
-            DialogWithContent {
+            DialogWithContent(buttons = { defaultButtons() }) {
                 colorChooser(colors = ColorPalette.Primary, waitForPositiveButton = false) {
                     selectedColor = it
                 }
-                defaultButtons()
             }
         }
 

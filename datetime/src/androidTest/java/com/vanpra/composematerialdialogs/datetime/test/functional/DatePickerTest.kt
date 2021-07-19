@@ -29,11 +29,10 @@ class DatePickerTest {
         var selectedDate: LocalDate? = null
 
         composeTestRule.setContent {
-            DialogWithContent {
+            DialogWithContent(buttons = { defaultButtons() }) {
                 datepicker(initialDate = testDate, waitForPositiveButton = true) {
                     selectedDate = it
                 }
-                defaultButtons()
             }
         }
 
@@ -50,11 +49,10 @@ class DatePickerTest {
         var selectedDate: LocalDate? = null
 
         composeTestRule.setContent {
-            DialogWithContent {
+            DialogWithContent(buttons = { defaultButtons() }) {
                 datepicker(initialDate = testDate, waitForPositiveButton = false) {
                     selectedDate = it
                 }
-                defaultButtons()
             }
         }
 
@@ -72,9 +70,8 @@ class DatePickerTest {
     fun datePickerCustomTitle() {
         val title = "Custom Title"
         composeTestRule.setContent {
-            DialogWithContent {
+            DialogWithContent(buttons = { defaultButtons() }) {
                 datepicker(title = title)
-                defaultButtons()
             }
         }
 

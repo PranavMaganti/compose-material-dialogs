@@ -40,13 +40,14 @@ class BasicDialogTest : ScreenshotTest {
     @Test
     fun dialogWithButtons() {
         composeTestRule.setContentAndWaitForIdle {
-            DialogWithContent {
-                title(res = R.string.location_dialog_title)
-                message(res = R.string.location_dialog_message)
-                buttons {
+            DialogWithContent(
+                buttons = {
                     negativeButton("Disagree")
                     positiveButton("Agree")
                 }
+            ) {
+                title(res = R.string.location_dialog_title)
+                message(res = R.string.location_dialog_message)
             }
         }
         compareScreenshot(composeTestRule.onDialog())
@@ -55,7 +56,12 @@ class BasicDialogTest : ScreenshotTest {
     @Test
     fun dialogWithButtonsAndIconTitle() {
         composeTestRule.setContentAndWaitForIdle {
-            DialogWithContent {
+            DialogWithContent(
+                buttons = {
+                    negativeButton("Disagree")
+                    positiveButton("Agree")
+                }
+            ) {
                 iconTitle(
                     icon = {
                         Image(
@@ -67,10 +73,6 @@ class BasicDialogTest : ScreenshotTest {
                     textRes = R.string.location_dialog_title
                 )
                 message(res = R.string.location_dialog_message)
-                buttons {
-                    negativeButton("Disagree")
-                    positiveButton("Agree")
-                }
             }
         }
         compareScreenshot(composeTestRule.onDialog())
@@ -79,13 +81,14 @@ class BasicDialogTest : ScreenshotTest {
     @Test
     fun dialogWithStackedButtons() {
         composeTestRule.setContentAndWaitForIdle {
-            DialogWithContent {
-                title(res = R.string.location_dialog_title)
-                message(res = R.string.location_dialog_message)
-                buttons {
+            DialogWithContent(
+                buttons = {
                     negativeButton("No Thanks")
                     positiveButton("Turn On Speed Boost")
                 }
+            ) {
+                title(res = R.string.location_dialog_title)
+                message(res = R.string.location_dialog_message)
             }
         }
         compareScreenshot(composeTestRule.onDialog())
@@ -94,13 +97,14 @@ class BasicDialogTest : ScreenshotTest {
     @Test
     fun dialogWithInput() {
         composeTestRule.setContentAndWaitForIdle {
-            DialogWithContent {
-                title(res = R.string.input_dialog_title)
-                input(label = "Name", hint = "Jon Smith")
-                buttons {
+            DialogWithContent(
+                buttons = {
                     negativeButton("Cancel")
                     positiveButton("Ok")
                 }
+            ) {
+                title(res = R.string.input_dialog_title)
+                input(label = "Name", hint = "Jon Smith")
             }
         }
         compareScreenshot(composeTestRule.onDialog())

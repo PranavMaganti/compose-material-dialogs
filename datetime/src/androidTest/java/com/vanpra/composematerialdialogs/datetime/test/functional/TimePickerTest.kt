@@ -16,9 +16,8 @@ class TimePickerTest {
     fun timePickerCustomTitle() {
         val title = "Custom Title"
         composeTestRule.setContent {
-            DialogWithContent {
+            DialogWithContent(buttons = { defaultButtons() }) {
                 timepicker(title = title)
-                defaultButtons()
             }
         }
 

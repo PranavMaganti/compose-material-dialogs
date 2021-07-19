@@ -16,6 +16,7 @@ import com.vanpra.composematerialdialogs.buttons
 import com.vanpra.composematerialdialogs.input
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
+import com.vanpra.composematerialdialogs.test.utils.defaultButtons
 import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogInput
 import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogInputError
 import com.vanpra.composematerialdialogs.test.utils.extensions.onPositiveButton
@@ -180,13 +181,9 @@ class InputDialogTest {
         testInputDialog: @Composable MaterialDialog.() -> Unit = { input(label = "Test") }
     ) {
         composeTestRule.setContent {
-            DialogWithContent(dialog = dialog) {
+            DialogWithContent(dialog = dialog, buttons = { defaultButtons() }) {
                 title(res = R.string.input_dialog_title)
                 testInputDialog()
-                buttons {
-                    negativeButton("Cancel")
-                    positiveButton("Ok")
-                }
             }
         }
     }

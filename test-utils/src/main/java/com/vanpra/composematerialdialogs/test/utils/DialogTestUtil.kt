@@ -7,28 +7,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.buttons
+import com.vanpra.composematerialdialogs.MaterialDialogButtons
 
 @Composable
 fun DialogWithContent(
     autoDismiss: Boolean = true,
     dialog: MaterialDialog = MaterialDialog(autoDismiss),
-    content: @Composable MaterialDialog.() -> Unit
+    buttons: @Composable MaterialDialogButtons.() -> Unit = {},
+    content: @Composable MaterialDialog.() -> Unit = {}
 ) {
     MaterialTheme {
         Box(Modifier.fillMaxSize()) {
-            dialog.build { content() }
+            dialog.build(buttons = buttons) { content() }
             SideEffect { dialog.show() }
         }
     }
 }
 
 @Composable
-fun MaterialDialog.defaultButtons() {
-    buttons {
-        negativeButton("Cancel")
-        positiveButton("Ok")
-    }
+fun MaterialDialogButtons.defaultButtons() {
+    negativeButton("Cancel")
+    positiveButton("Ok")
 }
 
 fun <T> Collection<T>.powerSet(): Set<Set<T>> = when {

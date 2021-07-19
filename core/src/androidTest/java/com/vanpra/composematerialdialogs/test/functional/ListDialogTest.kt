@@ -9,7 +9,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
@@ -28,6 +27,7 @@ import com.vanpra.composematerialdialogs.listItemsMultiChoice
 import com.vanpra.composematerialdialogs.listItemsSingleChoice
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
+import com.vanpra.composematerialdialogs.test.utils.defaultButtons
 import com.vanpra.composematerialdialogs.test.utils.extensions.assertDialogDoesNotExist
 import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogListItem
 import com.vanpra.composematerialdialogs.test.utils.extensions.onPositiveButton
@@ -39,14 +39,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-
-@Composable
-private fun MaterialDialog.defaultListButtons() {
-    buttons {
-        negativeButton("Cancel")
-        positiveButton("Ok")
-    }
-}
 
 private val ringtones =
     listOf(
@@ -286,12 +278,11 @@ class ListDialog {
         waitForPositiveButton: Boolean = true
     ) {
         composeTestRule.setContent {
-            DialogWithContent(dialog = dialog) {
+            DialogWithContent(dialog = dialog, buttons = { defaultButtons() }) {
                 title(res = R.string.labels_dialog_title)
                 listItemsMultiChoice(labels, waitForPositiveButton = waitForPositiveButton) {
                     selectedItem.value = it
                 }
-                defaultListButtons()
             }
         }
     }
@@ -302,12 +293,11 @@ class ListDialog {
         waitForPositiveButton: Boolean = true
     ) {
         composeTestRule.setContent {
-            DialogWithContent(dialog = dialog) {
+            DialogWithContent(dialog = dialog, buttons = { defaultButtons() }) {
                 title(res = R.string.ringtone_dialog_title)
                 listItemsSingleChoice(ringtones, waitForPositiveButton = waitForPositiveButton) {
                     selectedItem.value = it
                 }
-                defaultListButtons()
             }
         }
     }

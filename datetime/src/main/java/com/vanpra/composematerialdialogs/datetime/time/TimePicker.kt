@@ -4,7 +4,6 @@ import android.graphics.Paint
 import android.graphics.Rect
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,17 +23,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -43,7 +38,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
@@ -52,12 +46,12 @@ import androidx.compose.ui.input.pointer.consumePositionChange
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.util.getOffset
 import com.vanpra.composematerialdialogs.datetime.util.isAM
+import com.vanpra.composematerialdialogs.datetime.util.isSmallDevice
 import com.vanpra.composematerialdialogs.datetime.util.noSeconds
 import com.vanpra.composematerialdialogs.datetime.util.simpleHour
 import com.vanpra.composematerialdialogs.datetime.util.toAM
@@ -66,6 +60,7 @@ import java.time.LocalTime
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
+import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -117,10 +112,7 @@ fun MaterialDialog.timepicker(
         }
     }
 
-    // BoxWithConstraints {
-    // TimePickerExpandedImpl(title = title, state = timePickerState)
     TimePickerImpl(title = title, state = timePickerState)
-    // }
 }
 
 @Composable
@@ -128,11 +120,10 @@ internal fun TimePickerExpandedImpl(
     modifier: Modifier = Modifier,
     title: String,
     state: TimePickerState,
-    onBack: (() -> Unit)? = null
 ) {
     Column(modifier.padding(start = 24.dp, end = 24.dp)) {
         Box(Modifier.align(Alignment.Start)) {
-            TimePickerTitle(title, height = 36.dp, onBack)
+            TimePickerTitle(Modifier.height(36.dp), title)
         }
 
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
@@ -168,19 +159,21 @@ internal fun TimePickerExpandedImpl(
 internal fun TimePickerImpl(
     modifier: Modifier = Modifier,
     title: String,
-    state: TimePickerState,
-    onBack: (() -> Unit)? = null
+    state: TimePickerState
 ) {
     Column(
         modifier.padding(start = 24.dp, end = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(Modifier.align(Alignment.Start)) {
-            TimePickerTitle(title, height = 52.dp, onBack)
+        if (title != "") {
+            Box(Modifier.align(Alignment.Start)) {
+                TimePickerTitle(Modifier.height(52.dp), title)
+            }
         }
+
         TimeLayout(state = state)
 
-        Spacer(modifier = Modifier.height(36.dp))
+        Spacer(modifier = Modifier.height(if (isSmallDevice()) 24.dp else 36.dp))
         Crossfade(state.currentScreen) {
             when (it) {
                 ClockScreen.Hour -> if (state.is24Hour) {
@@ -278,38 +271,13 @@ private fun ClockMinuteLayout(state: TimePickerState) {
 }
 
 @Composable
-internal fun TimePickerTitle(text: String, height: Dp, onBack: (() -> Unit)?) {
-    if (onBack != null) {
-        Row(Modifier.height(height), verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                Modifier
-                    .clip(CircleShape)
-                    .clickable(onClick = onBack),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    Icons.Default.ArrowBack,
-                    contentDescription = "Go back to date selection",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
-                    modifier = Modifier
-                )
-            }
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Text(
-                text,
-                style = TextStyle(color = MaterialTheme.colors.onBackground)
-            )
-        }
-    } else {
-        Box(Modifier.height(height)) {
-            Text(
-                text,
-                modifier = Modifier.paddingFromBaseline(top = 28.dp),
-                style = TextStyle(color = MaterialTheme.colors.onBackground)
-            )
-        }
+internal fun TimePickerTitle(modifier: Modifier, text: String) {
+    Box(modifier) {
+        Text(
+            text,
+            modifier = Modifier.paddingFromBaseline(top = 28.dp),
+            style = TextStyle(color = MaterialTheme.colors.onBackground)
+        )
     }
 }
 
@@ -322,7 +290,7 @@ internal fun ClockLabel(
 ) {
     Surface(
         modifier = Modifier
-            .width(96.dp)
+            .width(if (isSmallDevice()) 80.dp else 96.dp)
             .fillMaxHeight(),
         shape = MaterialTheme.shapes.medium,
         color = backgroundColor,
@@ -379,7 +347,7 @@ internal fun TimeLayout(modifier: Modifier = Modifier, state: TimePickerState) {
         ) {
             Text(
                 text = ":",
-                style = TextStyle(fontSize = 60.sp, color = MaterialTheme.colors.onBackground)
+                style = TextStyle(fontSize = 50.sp, color = MaterialTheme.colors.onBackground)
             )
         }
 
@@ -564,138 +532,139 @@ private fun ClockLayout(
     onAnchorChange: (Int) -> Unit = {},
     onLift: () -> Unit = {}
 ) {
-    val outerRadiusPx = with(LocalDensity.current) { 100.dp.toPx() }
-    val innerRadiusPx = remember(outerRadiusPx) { outerRadiusPx * 0.6f }
+    BoxWithConstraints {
+        val faceDiameter = min(maxHeight.value, maxWidth.value).coerceAtMost(256f).dp
+        val faceDiameterPx = with(LocalDensity.current) { faceDiameter.toPx() }
 
-    val textSizePx = with(LocalDensity.current) { 18.sp.toPx() }
-    val innerTextSizePx = remember(textSizePx) { textSizePx * 0.8f }
+        val faceRadiusPx = faceDiameterPx / 2f
 
-    val selectedRadius = remember(outerRadiusPx) { outerRadiusPx * 0.2f }
-    val innerSelectedRadius = remember(innerRadiusPx) { innerRadiusPx * 0.3f }
+        val outerRadiusPx = faceRadiusPx * 0.8f
+        val innerRadiusPx = remember(outerRadiusPx) { outerRadiusPx * 0.6f }
 
-    val offset = remember { mutableStateOf(Offset.Zero) }
-    val center = remember { mutableStateOf(Offset.Zero) }
-    val namedAnchor = remember(isNamedAnchor) { mutableStateOf(isNamedAnchor(startAnchor)) }
-    val selectedAnchor = remember { mutableStateOf(startAnchor) }
+        val textSizePx = with(LocalDensity.current) { 18.sp.toPx() }
+        val innerTextSizePx = remember(textSizePx) { textSizePx * 0.8f }
 
-    val anchors = remember(anchorPoints, innerAnchorPoints) {
-        val anchors = mutableListOf<SelectedOffset>()
-        for (x in 0 until anchorPoints) {
-            val angle = (2 * PI / anchorPoints) * (x - 15)
-            val selectedOuterOffset = outerRadiusPx.getOffset(angle)
-            val lineOuterOffset = (outerRadiusPx - selectedRadius).getOffset(angle)
+        val selectedRadius = remember(outerRadiusPx) { outerRadiusPx * 0.2f }
+        val selectedInnerDotRadius = remember(selectedRadius) { selectedRadius * 0.2f }
+        val innerSelectedRadius = remember(innerRadiusPx) { innerRadiusPx * 0.3f }
 
-            anchors.add(
-                SelectedOffset(
-                    lineOuterOffset,
-                    selectedOuterOffset,
-                    selectedRadius
+        val centerCircleRadius = remember(selectedRadius) { selectedRadius * 0.4f }
+        val selectedLineWidth = remember(centerCircleRadius) { centerCircleRadius * 0.5f }
+
+        val center = remember { Offset(faceRadiusPx, faceRadiusPx) }
+
+        val namedAnchor = remember(isNamedAnchor) { mutableStateOf(isNamedAnchor(startAnchor)) }
+        val selectedAnchor = remember { mutableStateOf(startAnchor) }
+
+        val anchors = remember(anchorPoints, innerAnchorPoints) {
+            val anchors = mutableListOf<SelectedOffset>()
+            for (x in 0 until anchorPoints) {
+                val angle = (2 * PI / anchorPoints) * (x - 15)
+                val selectedOuterOffset = outerRadiusPx.getOffset(angle)
+                val lineOuterOffset = (outerRadiusPx - selectedRadius).getOffset(angle)
+
+                anchors.add(
+                    SelectedOffset(
+                        lineOuterOffset,
+                        selectedOuterOffset,
+                        selectedRadius
+                    )
                 )
-            )
-        }
-        for (x in 0 until innerAnchorPoints) {
-            val angle = (2 * PI / innerAnchorPoints) * (x - 15)
-            val selectedOuterOffset = innerRadiusPx.getOffset(angle)
-            val lineOuterOffset = (innerRadiusPx - innerSelectedRadius).getOffset(angle)
-
-            anchors.add(
-                SelectedOffset(
-                    lineOuterOffset,
-                    selectedOuterOffset,
-                    innerSelectedRadius
-                )
-            )
-        }
-        anchors
-    }
-
-    val anchoredOffset = remember(anchors, startAnchor) { mutableStateOf(anchors[startAnchor]) }
-
-    val updateAnchor: (Offset) -> Boolean = remember(anchors, isAnchorEnabled) {
-        { newOffset ->
-            val absDiff = anchors.map {
-                val diff = it.selectedOffset - newOffset + center.value
-                diff.x.pow(2) + diff.y.pow(2)
             }
+            for (x in 0 until innerAnchorPoints) {
+                val angle = (2 * PI / innerAnchorPoints) * (x - 15)
+                val selectedOuterOffset = innerRadiusPx.getOffset(angle)
+                val lineOuterOffset = (innerRadiusPx - innerSelectedRadius).getOffset(angle)
 
-            val minAnchor = absDiff.withIndex().minByOrNull { (_, f) -> f }!!.index
-            if (isAnchorEnabled(minAnchor)) {
-                if (anchoredOffset.value.selectedOffset != anchors[minAnchor].selectedOffset) {
-                    onAnchorChange(minAnchor)
+                anchors.add(
+                    SelectedOffset(
+                        lineOuterOffset,
+                        selectedOuterOffset,
+                        innerSelectedRadius
+                    )
+                )
+            }
+            anchors
+        }
 
-                    anchoredOffset.value = anchors[minAnchor]
-                    namedAnchor.value = isNamedAnchor(minAnchor)
-                    selectedAnchor.value = minAnchor
+        val anchoredOffset = remember(anchors, startAnchor) { mutableStateOf(anchors[startAnchor]) }
+
+        val updateAnchor: (Offset) -> Boolean = remember(anchors, isAnchorEnabled) {
+            { newOffset ->
+                val absDiff = anchors.map {
+                    val diff = it.selectedOffset - newOffset + center
+                    diff.x.pow(2) + diff.y.pow(2)
                 }
-                true
-            } else {
-                false
-            }
-        }
-    }
 
-    val dragSuccess = remember { mutableStateOf(false) }
+                val minAnchor = absDiff.withIndex().minByOrNull { (_, f) -> f }!!.index
+                if (isAnchorEnabled(minAnchor)) {
+                    if (anchoredOffset.value.selectedOffset != anchors[minAnchor].selectedOffset) {
+                        onAnchorChange(minAnchor)
 
-    val dragObserver: suspend PointerInputScope.() -> Unit = {
-        detectDragGestures(
-            onDragStart = { dragSuccess.value = true },
-            onDragCancel = { dragSuccess.value = false },
-            onDragEnd = { if (dragSuccess.value) onLift() },
-        ) { change, _ ->
-            dragSuccess.value = updateAnchor(change.position)
-            change.consumePositionChange()
-        }
-    }
-
-    val tapObserver: suspend PointerInputScope.() -> Unit = {
-        detectTapGestures(
-            onPress = {
-                val anchorsChanged = updateAnchor(it)
-                val success = tryAwaitRelease()
-
-                if ((success || !dragSuccess.value) && anchorsChanged) {
-                    onLift()
+                        anchoredOffset.value = anchors[minAnchor]
+                        namedAnchor.value = isNamedAnchor(minAnchor)
+                        selectedAnchor.value = minAnchor
+                    }
+                    true
+                } else {
+                    false
                 }
             }
-        )
-    }
+        }
 
-    BoxWithConstraints(
-        Modifier
-            .padding(horizontal = 12.dp)
-            .size(256.dp)
-            .pointerInput(null, dragObserver)
-            .pointerInput(null, tapObserver)
-    ) {
-        SideEffect {
-            center.value =
-                Offset(constraints.maxWidth.toFloat() / 2f, constraints.maxWidth.toFloat() / 2f)
-            offset.value = center.value
+        val dragSuccess = remember { mutableStateOf(false) }
+
+        val dragObserver: suspend PointerInputScope.() -> Unit = {
+            detectDragGestures(
+                onDragStart = { dragSuccess.value = true },
+                onDragCancel = { dragSuccess.value = false },
+                onDragEnd = { if (dragSuccess.value) onLift() },
+            ) { change, _ ->
+                dragSuccess.value = updateAnchor(change.position)
+                change.consumePositionChange()
+            }
+        }
+
+        val tapObserver: suspend PointerInputScope.() -> Unit = {
+            detectTapGestures(
+                onPress = {
+                    val anchorsChanged = updateAnchor(it)
+                    val success = tryAwaitRelease()
+
+                    if ((success || !dragSuccess.value) && anchorsChanged) {
+                        onLift()
+                    }
+                }
+            )
         }
 
         val inactiveTextColor = colors.textColor(false).value.toArgb()
         val clockBackgroundColor = colors.backgroundColor(false).value
         val selectorColor = remember { colors.selectorColor() }
         val selectorTextColor = remember { colors.selectorTextColor().toArgb() }
-        val clockSurfaceDiameter = with(LocalDensity.current) { 256.dp.toPx() / 2f }
 
         val enabledAlpha = ContentAlpha.high
         val disabledAlpha = ContentAlpha.disabled
 
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            drawCircle(clockBackgroundColor, radius = clockSurfaceDiameter, center = center.value)
-            drawCircle(selectorColor, radius = 16f, center = center.value)
+        Canvas(
+            modifier = Modifier
+                .size(faceDiameter)
+                .pointerInput(null, dragObserver)
+                .pointerInput(null, tapObserver)
+        ) {
+            drawCircle(clockBackgroundColor, radius = faceRadiusPx, center = center)
+            drawCircle(selectorColor, radius = centerCircleRadius, center = center)
             drawLine(
                 color = selectorColor,
-                start = center.value,
-                end = center.value + anchoredOffset.value.lineOffset,
-                strokeWidth = 10f,
+                start = center,
+                end = center + anchoredOffset.value.lineOffset,
+                strokeWidth = selectedLineWidth,
                 alpha = 0.8f
             )
 
             drawCircle(
                 selectorColor,
-                center = center.value + anchoredOffset.value.selectedOffset,
+                center = center + anchoredOffset.value.selectedOffset,
                 radius = anchoredOffset.value.selectedRadius,
                 alpha = 0.7f
             )
@@ -703,8 +672,8 @@ private fun ClockLayout(
             if (!namedAnchor.value) {
                 drawCircle(
                     Color.White,
-                    center = center.value + anchoredOffset.value.selectedOffset,
-                    radius = 10f,
+                    center = center + anchoredOffset.value.selectedOffset,
+                    radius = selectedInnerDotRadius,
                     alpha = 0.8f
                 )
             }
@@ -729,7 +698,7 @@ private fun ClockLayout(
                     drawText(
                         textSize,
                         textOuter,
-                        center.value,
+                        center,
                         angle.toFloat(),
                         canvas,
                         radius,
