@@ -34,3 +34,4 @@ internal fun isSmallDevice(): Boolean {
 internal fun isLargeDevice(): Boolean {
     return LocalConfiguration.current.screenWidthDp <= 600
 }
+

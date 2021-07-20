@@ -290,7 +290,7 @@ internal fun ClockLabel(
 ) {
     Surface(
         modifier = Modifier
-            .width(if (isSmallDevice()) 80.dp else 96.dp)
+            .width(if (isSmallDevice()) 80.dp else  96.dp)
             .fillMaxHeight(),
         shape = MaterialTheme.shapes.medium,
         color = backgroundColor,

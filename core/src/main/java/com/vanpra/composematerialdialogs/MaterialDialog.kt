@@ -1,8 +1,6 @@
 package com.vanpra.composematerialdialogs
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -192,6 +190,7 @@ class MaterialDialog(
             val maxHeightPx = with(LocalDensity.current) { maxHeight.toPx().toInt() }
             val isDialogFullWidth = LocalConfiguration.current.screenWidthDp.dp == maxWidth
             val padding = if (isDialogFullWidth) 16.dp else 0.dp
+
 
             if (showing.value) {
                 dialogBackgroundColor = LocalElevationOverlay.current?.apply(
