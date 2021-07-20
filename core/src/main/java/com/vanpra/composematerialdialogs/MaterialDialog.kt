@@ -1,11 +1,14 @@
 package com.vanpra.composematerialdialogs
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.LocalElevationOverlay
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -207,6 +210,7 @@ class MaterialDialog(
                             .sizeIn(maxHeight = maxHeight, maxWidth = 560.dp)
                             .padding(horizontal = padding)
                             .clipToBounds()
+                            .wrapContentHeight()
                             .testTag("dialog"),
                         shape = shape,
                         color = backgroundColor,
@@ -221,7 +225,7 @@ class MaterialDialog(
                                     dialog = this@MaterialDialog,
                                     content = buttons
                                 )
-                                Column(Modifier.layoutId("content"), content = { content() })
+                                Column(Modifier.layoutId("content")) { content() }
                             }
                         ) { measurables, constraints ->
                             val buttonsHeight =
