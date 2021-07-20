@@ -61,5 +61,4 @@ subprojects {
             showStandardStreams = true
         }
     }
-
 }

@@ -191,7 +191,6 @@ class MaterialDialog(
             val isDialogFullWidth = LocalConfiguration.current.screenWidthDp.dp == maxWidth
             val padding = if (isDialogFullWidth) 16.dp else 0.dp
 
-
             if (showing.value) {
                 dialogBackgroundColor = LocalElevationOverlay.current?.apply(
                     color = backgroundColor,
