@@ -24,25 +24,23 @@ If the `autoDismiss` parameter of a `MaterialDialog`  is set to false then the d
 
 The `MaterialDialog` class also has a `onCancelRequest` parameter which is a callback which is used when the user clicks outside the dialog area. By default this parameter is set to hide the dialog.
 
-Buttons can be added to the dialog by adding the following:
+Buttons can be added to the dialog by adding the `buttons` parameter:
 
 ```kotlin
-dialog.build {
+dialog.build(buttons = {
+    positiveButton("Ok", onClick = { 
+        //Do Something
+    })
+
+    button("Later", onClick = {
+        //Do Something
+    })
+
+    negativeButton("Cancel", onClick = { 
+        //Do Something
+    })
+}) {
     ...
-    
-    buttons {
-        positiveButton("Ok", onClick = { 
-            //Do Something
-        })
-        
-        button("Later", onClick = {
-            //Do Something
-        })
-        
-        negativeButton("Cancel", onClick = { 
-            //Do Something
-        })
-    }
 }
 ```
 
@@ -53,13 +51,10 @@ If the text of the buttons is too long to fit in one row the buttons will be aut
 <img src="https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/input.jpg" width="300" height="600"  />
 
 ```kotlin
-dialog.build {
+dialog.build(buttons = { ... }) {
     ...
    	input(label = "Name", hint = "Jon Smith") { inputString ->
         /* Do something */
-    }
-    buttons {
-        ...
     }
 	...
 }

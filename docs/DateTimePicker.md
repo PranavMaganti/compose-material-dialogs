@@ -34,14 +34,13 @@ Note, this only has to be done if you intend to target an Android API level < 26
 
 ```kotlin
 val dialog = remember { MaterialDialog() }
-dialog.build {
+dialog.build(buttons = {
+    positiveButton("Ok")
+    negativeButton("Cancel")
+}) {
     ...
     datepicker { date ->
         // Do stuff with java.time.LocalDate object which is passed in
-    }
-    buttons {
-        positiveButton("Ok")
-        negativeButton("Cancel")
     }
 }
 
@@ -54,14 +53,13 @@ dialog.show()
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/time.png)
 
 ```kotlin
-dialog.build {
+dialog.build(buttons = {
+    positiveButton("Ok")
+    negativeButton("Cancel")
+}) {
     ...
     timepicker { time ->
         // Do stuff with java.time.LocalTime object which is passed in
-    }
-    buttons {
-        positiveButton("Ok")
-        negativeButton("Cancel")
     }
     ...
 }
