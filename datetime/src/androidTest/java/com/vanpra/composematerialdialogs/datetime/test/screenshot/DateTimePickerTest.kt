@@ -66,7 +66,7 @@ class DateTimePickerTest : ScreenshotTest {
     fun timePickerWithCustomTitle() {
         composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
-                timepicker(title = testTitle)
+                timepicker(title = testTitle, initialTime = LocalTime.of(19, 0))
             }
         }
 
