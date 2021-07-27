@@ -9,3 +9,6 @@ build
 .externalNativeBuild
 .cxx
 local.properties
+secret.properties
+debug.keystore
+/docs/api

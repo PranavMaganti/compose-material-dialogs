@@ -10,13 +10,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.input.ImeAction
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
 import com.vanpra.composematerialdialogdemos.R
-import com.vanpra.composematerialdialogs.buttons
 import com.vanpra.composematerialdialogs.iconTitle
 import com.vanpra.composematerialdialogs.input
 import com.vanpra.composematerialdialogs.message
@@ -25,7 +23,6 @@ import com.vanpra.composematerialdialogs.title
 /**
  * @brief Basic Dialog Demos
  */
-@ExperimentalComposeUiApi
 @Composable
 fun BasicDialogDemo() {
     DialogAndShowButton(buttonText = "Basic Dialog") {
@@ -33,16 +30,24 @@ fun BasicDialogDemo() {
         message(res = R.string.location_dialog_message)
     }
 
-    DialogAndShowButton(buttonText = "Basic Dialog With Buttons") {
-        title(res = R.string.location_dialog_title)
-        message(res = R.string.location_dialog_message)
-        buttons {
+    DialogAndShowButton(
+        buttonText = "Basic Dialog With Buttons",
+        buttons = {
             negativeButton("Disagree")
             positiveButton("Agree")
         }
+    ) {
+        title(res = R.string.location_dialog_title)
+        message(res = R.string.location_dialog_message)
     }
 
-    DialogAndShowButton(buttonText = "Basic Dialog With Buttons and Icon Title") {
+    DialogAndShowButton(
+        buttonText = "Basic Dialog With Buttons and Icon Title",
+        buttons = {
+            negativeButton("Disagree")
+            positiveButton("Agree")
+        }
+    ) {
         iconTitle(
             icon = {
                 Image(
@@ -54,34 +59,38 @@ fun BasicDialogDemo() {
             textRes = R.string.location_dialog_title
         )
         message(res = R.string.location_dialog_message)
-        buttons {
-            negativeButton("Disagree")
-            positiveButton("Agree")
-        }
     }
 
-    DialogAndShowButton(buttonText = "Basic Dialog With Stacked Buttons") {
-        title(res = R.string.location_dialog_title)
-        message(res = R.string.location_dialog_message)
-        buttons {
+    DialogAndShowButton(
+        buttonText = "Basic Dialog With Stacked Buttons",
+        buttons = {
             negativeButton("No Thanks")
             positiveButton("Turn On Speed Boost")
         }
+    ) {
+        title(res = R.string.location_dialog_title)
+        message(res = R.string.location_dialog_message)
     }
 
-    DialogAndShowButton(buttonText = "Basic Input Dialog") {
+    DialogAndShowButton(
+        buttonText = "Basic Input Dialog",
+        buttons = {
+            negativeButton("Cancel")
+            positiveButton("Ok")
+        }
+    ) {
         title(res = R.string.input_dialog_title)
         input(label = "Name", hint = "Jon Smith") {
             Log.d("SELECTION:", it)
-        }
-        buttons {
-            negativeButton("Cancel")
-            positiveButton("Ok")
         }
     }
 
     DialogAndShowButton(
         buttonText = "Basic Input Dialog With Immediate Focus",
+        buttons = {
+            negativeButton("Cancel")
+            positiveButton("Ok")
+        }
     ) {
         val focusRequester = remember { FocusRequester() }
         title(res = R.string.input_dialog_title)
@@ -93,14 +102,15 @@ fun BasicDialogDemo() {
         ) {
             Log.d("SELECTION:", it)
         }
+    }
 
-        buttons {
+    DialogAndShowButton(
+        buttonText = "Input Dialog with submit on IME Action",
+        buttons = {
             negativeButton("Cancel")
             positiveButton("Ok")
         }
-    }
-
-    DialogAndShowButton(buttonText = "Input Dialog with submit on IME Action") {
+    ) {
         title(res = R.string.input_dialog_title)
         input(
             label = "Name", hint = "Jon Smith",
@@ -111,13 +121,15 @@ fun BasicDialogDemo() {
         ) {
             Log.d("SELECTION:", it)
         }
-        buttons {
+    }
+
+    DialogAndShowButton(
+        buttonText = "Input Dialog with input validation",
+        buttons = {
             negativeButton("Cancel")
             positiveButton("Ok")
         }
-    }
-
-    DialogAndShowButton(buttonText = "Input Dialog with input validation") {
+    ) {
         title("Please enter your email")
         input(
             label = "Email",
@@ -128,11 +140,6 @@ fun BasicDialogDemo() {
             }
         ) {
             Log.d("SELECTION:", it)
-        }
-
-        buttons {
-            negativeButton("Cancel")
-            positiveButton("Ok")
         }
     }
 }

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -50,6 +49,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -163,7 +163,8 @@ fun MaterialDialog.colorChooser(
                             CustomARGB(selectedColor, argbPickerState.showAlphaSelector)
                         }
                     }
-                }
+                },
+                modifier = Modifier.testTag("dialog_color_picker")
             ) { measurables, constraints ->
                 val placeables = measurables.map { it.measure(constraints) }
                 val height = placeables.maxByOrNull { it.height }?.height ?: 0
@@ -183,71 +184,76 @@ fun MaterialDialog.colorChooser(
 
 @Composable
 private fun PageIndicator(swipeState: SwipeableState<ColorPickerScreen>, constraints: Constraints) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .wrapContentWidth(Alignment.CenterHorizontally)
-            .padding(top = 8.dp, bottom = 16.dp)
-    ) {
-        val ratio = remember(constraints.maxWidth, swipeState.offset.value) {
-            swipeState.offset.value / constraints.maxWidth.toFloat()
-        }
-        val color = MaterialTheme.colors.onBackground
-        Canvas(modifier = Modifier) {
-            val offset = Offset(30f, 0f)
-            drawCircle(
-                color.copy(0.7f + 0.3f * (1 - ratio)),
-                radius = 8f + 7f * (1 - ratio),
-                center = center - offset
-            )
-            drawCircle(
-                color.copy(0.7f + 0.3f * ratio),
-                radius = 8f + 7f * ratio,
-                center = center + offset
-            )
+    BoxWithConstraints {
+        val indicatorRadius = remember { constraints.maxWidth * 0.01f }
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .wrapContentWidth(Alignment.CenterHorizontally)
+                .padding(top = 8.dp, bottom = 16.dp)
+        ) {
+            val ratio = remember(constraints.maxWidth, swipeState.offset.value) {
+                swipeState.offset.value / constraints.maxWidth.toFloat()
+            }
+            val color = MaterialTheme.colors.onBackground
+            Canvas(modifier = Modifier) {
+                val offset = Offset(3 * indicatorRadius, 0f)
+                drawCircle(
+                    color.copy(0.7f + 0.3f * (1 - ratio)),
+                    radius = (indicatorRadius + indicatorRadius * (1 - ratio)).coerceAtMost(15f),
+                    center = center - offset
+                )
+                drawCircle(
+                    color.copy(0.7f + 0.3f * ratio),
+                    radius = (indicatorRadius + indicatorRadius * ratio).coerceAtMost(15f),
+                    center = center + offset
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun CustomARGB(selectedColor: MutableState<Color>, showAlphaSelector: Boolean) {
-    Column(Modifier.padding(start = 24.dp, end = 24.dp)) {
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .height(70.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            AndroidView(
-                factory = { ctx ->
-                    FrameLayout(ctx).apply {
-                        setBackgroundResource(R.drawable.transparent_rect_repeat)
-                        addView(View(ctx))
+    LazyColumn(Modifier.padding(start = 24.dp, end = 24.dp)) {
+        item {
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(70.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                AndroidView(
+                    factory = { ctx ->
+                        FrameLayout(ctx).apply {
+                            setBackgroundResource(R.drawable.transparent_rect_repeat)
+                            addView(View(ctx))
+                        }
+                    },
+                    modifier = Modifier.fillMaxSize(),
+                    update = { view ->
+                        view.getChildAt(0).setBackgroundColor(selectedColor.value.toArgb())
                     }
-                },
-                modifier = Modifier.fillMaxSize(),
-                update = { view ->
-                    view.getChildAt(0).setBackgroundColor(selectedColor.value.toArgb())
+                )
+
+                val hexString = remember(selectedColor.value) {
+                    val rawHex = Integer.toHexString(selectedColor.value.toArgb())
+                        .uppercase(Locale.ROOT)
+                        .padStart(8, '0')
+
+                    if (!showAlphaSelector) rawHex.substring(2) else rawHex
                 }
-            )
 
-            val hexString = remember(selectedColor.value) {
-                val rawHex = Integer.toHexString(selectedColor.value.toArgb())
-                    .uppercase(Locale.ROOT)
-                    .padStart(8, '0')
-
-                if (!showAlphaSelector) rawHex.substring(2) else rawHex
+                Text(
+                    text = "#$hexString",
+                    color = selectedColor.value.foreground(),
+                    style = TextStyle(fontWeight = FontWeight.Bold),
+                    textDecoration = TextDecoration.Underline,
+                    fontSize = 18.sp
+                )
             }
-
-            Text(
-                text = "#$hexString",
-                color = selectedColor.value.foreground(),
-                style = TextStyle(fontWeight = FontWeight.Bold),
-                textDecoration = TextDecoration.Underline,
-                fontSize = 18.sp
-            )
+            SliderLayout(selectedColor, showAlphaSelector)
         }
-        SliderLayout(selectedColor, showAlphaSelector)
     }
 }
 
@@ -256,6 +262,7 @@ private fun SliderLayout(selectedColor: MutableState<Color>, showAlpha: Boolean)
     if (showAlpha) {
         LabelSlider(
             modifier = Modifier.padding(top = 16.dp),
+            sliderTestTag = "dialog_color_picker_alpha_slider",
             label = "A",
             value = selectedColor.value.alpha * 255,
             sliderColor = Color.DarkGray
@@ -266,6 +273,7 @@ private fun SliderLayout(selectedColor: MutableState<Color>, showAlpha: Boolean)
 
     LabelSlider(
         modifier = Modifier.padding(top = 16.dp),
+        sliderTestTag = "dialog_color_picker_red_slider",
         label = "R",
         value = selectedColor.value.red * 255,
         sliderColor = Color.Red
@@ -275,6 +283,7 @@ private fun SliderLayout(selectedColor: MutableState<Color>, showAlpha: Boolean)
 
     LabelSlider(
         modifier = Modifier.padding(top = 16.dp),
+        sliderTestTag = "dialog_color_picker_green_slider",
         label = "G",
         value = selectedColor.value.green * 255,
         sliderColor = Color.Green
@@ -284,6 +293,7 @@ private fun SliderLayout(selectedColor: MutableState<Color>, showAlpha: Boolean)
 
     LabelSlider(
         modifier = Modifier.padding(top = 16.dp),
+        sliderTestTag = "dialog_color_picker_blue_slider",
         label = "B",
         value = selectedColor.value.blue * 255,
         sliderColor = Color.Blue
@@ -298,6 +308,7 @@ private fun LabelSlider(
     label: String,
     value: Float,
     sliderColor: Color,
+    sliderTestTag: String,
     onSliderChange: (Float) -> Unit
 ) {
     BoxWithConstraints {
@@ -317,7 +328,9 @@ private fun LabelSlider(
                 onValueChange = onSliderChange,
                 valueRange = 0f..255f,
                 steps = 255,
-                modifier = Modifier.width(this@BoxWithConstraints.maxWidth - 56.dp),
+                modifier = Modifier
+                    .width(this@BoxWithConstraints.maxWidth - 56.dp)
+                    .testTag(sliderTestTag),
                 colors = SliderDefaults.colors(
                     activeTickColor = Color.Unspecified,
                     activeTrackColor = sliderColor,
@@ -330,7 +343,7 @@ private fun LabelSlider(
 
             Box(
                 Modifier
-                    .width(30.dp)
+                    .width(40.dp)
                     .align(Alignment.CenterVertically)
             ) {
                 Text(
@@ -360,7 +373,11 @@ private fun ColorGridLayout(
     GridView(modifier, itemSize = itemSize) {
         if (!showSubColors) {
             colors.forEachIndexed { index, item ->
-                ColorView(color = item, selected = index == mainSelectedIndex) {
+                ColorView(
+                    modifier = Modifier.testTag("dialog_color_selector_$index"),
+                    color = item,
+                    selected = index == mainSelectedIndex
+                ) {
                     if (mainSelectedIndex != index) {
                         mainSelectedIndex = index
                         selectedColor.value = item
@@ -374,6 +391,7 @@ private fun ColorGridLayout(
         } else {
             Box(
                 Modifier
+                    .testTag("dialog_sub_color_back_btn")
                     .size(itemSizeDp)
                     .clip(CircleShape)
                     .clickable(
@@ -392,8 +410,12 @@ private fun ColorGridLayout(
                 )
             }
 
-            subColors[mainSelectedIndex].forEachIndexed { _, item ->
-                ColorView(color = item, selected = selectedColor.value == item) {
+            subColors[mainSelectedIndex].forEachIndexed { index, item ->
+                ColorView(
+                    modifier = Modifier.testTag("dialog_sub_color_selector_$index"),
+                    color = item,
+                    selected = selectedColor.value == item
+                ) {
                     selectedColor.value = item
                 }
             }
@@ -402,9 +424,14 @@ private fun ColorGridLayout(
 }
 
 @Composable
-private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
+private fun ColorView(
+    modifier: Modifier = Modifier,
+    color: Color,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
     Box(
-        Modifier
+        modifier
             .size(itemSizeDp)
             .clip(CircleShape)
             .background(color)
@@ -434,7 +461,7 @@ private fun GridView(
     content: @Composable () -> Unit
 ) {
     BoxWithConstraints(modifier) {
-        LazyColumn(modifier = Modifier.heightIn(max = (maxHeight * 0.7f))) {
+        LazyColumn {
             item {
                 Layout(
                     { content() },

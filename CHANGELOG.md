@@ -1,5 +1,13 @@
 # Changelog
 
+### 0.5.0 - 2021-07-27
+
+  -  Update compose to 1.0.0-beta09
+-  Modify dialog `build` function to take buttons as a parameter
+-  Fix font sizes in time picker and color picker ([#75](https://github.com/vanpra/compose-material-dialogs/issues/75))
+-  Make time picker and date picker adapt to smaller screen sizes
+-  Fix horizontal padding on dialog for smaller screen sizes
+
 ### 0.4.2 - 2021-06-06
 
   -  Update compose to 1.0.0-beta08 ([#76](https://github.com/vanpra/compose-material-dialogs/issues/76) and [#73](https://github.com/vanpra/compose-material-dialogs/issues/73))
@@ -18,8 +26,9 @@
 
   - Update compose version to 1.0.0-beta06
   - Add more style customisation's to date and time pickers
-- Fix date picker selection bug
-- Make performance improvements to date picker
+  - Fix date picker selection bug
+  - Make performance optimisations to the date picker
+
 
 ### 0.3.4 - 2021-04-22
 

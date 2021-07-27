@@ -9,14 +9,23 @@ android {
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
+
         applicationId = "com.vanpra.composematerialdialogs"
         minSdk = 23
         targetSdk = 30
-        versionCode = 1
-        versionName = "1.0"
 
+        versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    packagingOptions.excludes.addAll(
+        listOf(
+            "META-INF/LICENSE",
+            "META-INF/AL2.0",
+            "META-INF/**",
+            "META-INF/*.kotlin_module"
+        )
+    )
 
     buildFeatures {
         viewBinding = true
@@ -57,5 +66,7 @@ dependencies {
     implementation(Dependencies.material)
 
     implementation(kotlin("stdlib-jdk8"))
+
+    androidTestImplementation(Dependencies.AndroidX.Compose.testing)
     coreLibraryDesugaring(Dependencies.desugar)
 }

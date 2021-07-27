@@ -8,7 +8,8 @@ android {
         compileSdk = 30
         targetSdk = 30
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.karumi.shot.ShotTestRunner"
+        testApplicationId = "com.vanpra.composematerialdialogs.color.test"
     }
 
     buildTypes {
@@ -22,6 +23,15 @@ android {
     }
 
     buildFeatures.compose = true
+
+    packagingOptions.excludes.addAll(
+        listOf(
+            "META-INF/LICENSE",
+            "META-INF/AL2.0",
+            "META-INF/**",
+            "META-INF/*.kotlin_module"
+        )
+    )
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -37,30 +47,10 @@ dependencies {
     api(project(":core"))
 }
 
-val VERSION_NAME: String by project
-val mavenCentralRepositoryUsername: String? by project
-val mavenCentralRepositoryPassword: String? by project
+shot {
+    tolerance = 1.0 // Tolerance needed for CI
+}
 
-publishing {
-    repositories {
-        withType<MavenArtifactRepository> {
-            if (name == "local") {
-                return@withType
-            }
-
-            val releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            val snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-
-            url = if (VERSION_NAME.endsWith("SNAPSHOT")) {
-                uri(snapshotsRepoUrl)
-            } else {
-                uri(releasesRepoUrl)
-            }
-
-            credentials {
-                username = mavenCentralRepositoryUsername
-                password = mavenCentralRepositoryPassword
-            }
-        }
-    }
+mavenPublish {
+    sonatypeHost = com.vanniktech.maven.publish.SonatypeHost.S01
 }
