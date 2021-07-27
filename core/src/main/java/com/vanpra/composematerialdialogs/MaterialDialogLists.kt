@@ -28,7 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
-val bottomPadding = Modifier.padding(bottom = 8.dp)
+private val bottomPadding = Modifier.padding(bottom = 8.dp)
 
 /**
  * Adds a selectable list with custom items to the dialog

@@ -38,7 +38,7 @@ internal enum class MaterialDialogButtonTypes(val testTag: String) {
  * See [MaterialDialogButtons] for more information about the content
  */
 @Composable
-fun DialogButtons(
+internal fun DialogButtons(
     modifier: Modifier = Modifier,
     dialogButtons: MaterialDialogButtons,
     dialog: MaterialDialog,
