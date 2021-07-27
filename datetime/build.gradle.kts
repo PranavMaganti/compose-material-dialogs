@@ -11,7 +11,8 @@ android {
         targetSdk = 30
         compileSdk = 30
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.karumi.shot.ShotTestRunner"
+        testApplicationId = "com.vanpra.composematerialdialogs.test"
     }
 
     buildTypes {
@@ -25,6 +26,15 @@ android {
     }
 
     buildFeatures.compose = true
+
+    packagingOptions.excludes.addAll(
+        listOf(
+            "META-INF/LICENSE",
+            "META-INF/AL2.0",
+            "META-INF/**",
+            "META-INF/*.kotlin_module"
+        )
+    )
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -42,6 +52,10 @@ dependencies {
     coreLibraryDesugaring(Dependencies.desugar)
 }
 
+shot {
+    tolerance = 1.0 // Tolerance needed for CI
+}
+
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
     kotlinOptions {
         jvmTarget = "1.8"
@@ -51,34 +65,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
     }
 }
 
-val artifactName = "datetime"
-val artifactGroup = "com.vanpra.compose-material-dialogs"
-val artifactVersion = Dependencies.ComposeMaterialDialogs.version
-
-val VERSION_NAME: String by project
-val mavenCentralRepositoryUsername: String? by project
-val mavenCentralRepositoryPassword: String? by project
-
-publishing {
-    repositories {
-        withType<MavenArtifactRepository> {
-            if (name == "local") {
-                return@withType
-            }
-
-            val releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            val snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-
-            url = if (VERSION_NAME.endsWith("SNAPSHOT")) {
-                uri(snapshotsRepoUrl)
-            } else {
-                uri(releasesRepoUrl)
-            }
-
-            credentials {
-                username = mavenCentralRepositoryUsername
-                password = mavenCentralRepositoryPassword
-            }
-        }
-    }
+mavenPublish {
+    sonatypeHost = com.vanniktech.maven.publish.SonatypeHost.S01
 }

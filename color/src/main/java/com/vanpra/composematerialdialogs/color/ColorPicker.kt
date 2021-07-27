@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -162,7 +163,8 @@ fun MaterialDialog.colorChooser(
                             CustomARGB(selectedColor, argbPickerState.showAlphaSelector)
                         }
                     }
-                }
+                },
+                modifier = Modifier.testTag("dialog_color_picker")
             ) { measurables, constraints ->
                 val placeables = measurables.map { it.measure(constraints) }
                 val height = placeables.maxByOrNull { it.height }?.height ?: 0
@@ -198,7 +200,7 @@ private fun PageIndicator(swipeState: SwipeableState<ColorPickerScreen>, constra
                 val offset = Offset(3 * indicatorRadius, 0f)
                 drawCircle(
                     color.copy(0.7f + 0.3f * (1 - ratio)),
-                    radius = (indicatorRadius  + indicatorRadius * (1 - ratio)).coerceAtMost(15f),
+                    radius = (indicatorRadius + indicatorRadius * (1 - ratio)).coerceAtMost(15f),
                     center = center - offset
                 )
                 drawCircle(
@@ -260,6 +262,7 @@ private fun SliderLayout(selectedColor: MutableState<Color>, showAlpha: Boolean)
     if (showAlpha) {
         LabelSlider(
             modifier = Modifier.padding(top = 16.dp),
+            sliderTestTag = "dialog_color_picker_alpha_slider",
             label = "A",
             value = selectedColor.value.alpha * 255,
             sliderColor = Color.DarkGray
@@ -270,6 +273,7 @@ private fun SliderLayout(selectedColor: MutableState<Color>, showAlpha: Boolean)
 
     LabelSlider(
         modifier = Modifier.padding(top = 16.dp),
+        sliderTestTag = "dialog_color_picker_red_slider",
         label = "R",
         value = selectedColor.value.red * 255,
         sliderColor = Color.Red
@@ -279,6 +283,7 @@ private fun SliderLayout(selectedColor: MutableState<Color>, showAlpha: Boolean)
 
     LabelSlider(
         modifier = Modifier.padding(top = 16.dp),
+        sliderTestTag = "dialog_color_picker_green_slider",
         label = "G",
         value = selectedColor.value.green * 255,
         sliderColor = Color.Green
@@ -288,6 +293,7 @@ private fun SliderLayout(selectedColor: MutableState<Color>, showAlpha: Boolean)
 
     LabelSlider(
         modifier = Modifier.padding(top = 16.dp),
+        sliderTestTag = "dialog_color_picker_blue_slider",
         label = "B",
         value = selectedColor.value.blue * 255,
         sliderColor = Color.Blue
@@ -302,6 +308,7 @@ private fun LabelSlider(
     label: String,
     value: Float,
     sliderColor: Color,
+    sliderTestTag: String,
     onSliderChange: (Float) -> Unit
 ) {
     BoxWithConstraints {
@@ -321,7 +328,9 @@ private fun LabelSlider(
                 onValueChange = onSliderChange,
                 valueRange = 0f..255f,
                 steps = 255,
-                modifier = Modifier.width(this@BoxWithConstraints.maxWidth - 56.dp),
+                modifier = Modifier
+                    .width(this@BoxWithConstraints.maxWidth - 56.dp)
+                    .testTag(sliderTestTag),
                 colors = SliderDefaults.colors(
                     activeTickColor = Color.Unspecified,
                     activeTrackColor = sliderColor,
@@ -364,7 +373,11 @@ private fun ColorGridLayout(
     GridView(modifier, itemSize = itemSize) {
         if (!showSubColors) {
             colors.forEachIndexed { index, item ->
-                ColorView(color = item, selected = index == mainSelectedIndex) {
+                ColorView(
+                    modifier = Modifier.testTag("dialog_color_selector_$index"),
+                    color = item,
+                    selected = index == mainSelectedIndex
+                ) {
                     if (mainSelectedIndex != index) {
                         mainSelectedIndex = index
                         selectedColor.value = item
@@ -378,6 +391,7 @@ private fun ColorGridLayout(
         } else {
             Box(
                 Modifier
+                    .testTag("dialog_sub_color_back_btn")
                     .size(itemSizeDp)
                     .clip(CircleShape)
                     .clickable(
@@ -396,8 +410,12 @@ private fun ColorGridLayout(
                 )
             }
 
-            subColors[mainSelectedIndex].forEachIndexed { _, item ->
-                ColorView(color = item, selected = selectedColor.value == item) {
+            subColors[mainSelectedIndex].forEachIndexed { index, item ->
+                ColorView(
+                    modifier = Modifier.testTag("dialog_sub_color_selector_$index"),
+                    color = item,
+                    selected = selectedColor.value == item
+                ) {
                     selectedColor.value = item
                 }
             }
@@ -406,9 +424,14 @@ private fun ColorGridLayout(
 }
 
 @Composable
-private fun ColorView(color: Color, selected: Boolean, onClick: () -> Unit) {
+private fun ColorView(
+    modifier: Modifier = Modifier,
+    color: Color,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
     Box(
-        Modifier
+        modifier
             .size(itemSizeDp)
             .clip(CircleShape)
             .background(color)

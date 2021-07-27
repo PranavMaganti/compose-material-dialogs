@@ -20,15 +20,16 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import java.util.Locale
 
-internal enum class MaterialDialogButtonTypes {
-    Text,
-    Positive,
-    Negative,
-    Accessibility
+internal enum class MaterialDialogButtonTypes(val testTag: String) {
+    Text("text"),
+    Positive("positive"),
+    Negative("negative"),
+    Accessibility("accessibility")
 }
 
 /**
@@ -37,7 +38,7 @@ internal enum class MaterialDialogButtonTypes {
  * See [MaterialDialogButtons] for more information about the content
  */
 @Composable
-fun DialogButtons(
+internal fun DialogButtons(
     modifier: Modifier = Modifier,
     dialogButtons: MaterialDialogButtons,
     dialog: MaterialDialog,
@@ -132,7 +133,9 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
             onClick = {
                 onClick()
             },
-            modifier = Modifier.layoutId(MaterialDialogButtonTypes.Text),
+            modifier = Modifier
+                .layoutId(MaterialDialogButtonTypes.Text)
+                .testTag(MaterialDialogButtonTypes.Text.testTag),
         ) {
             Text(text = buttonText, style = textStyle)
         }
@@ -171,7 +174,8 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
 
                 onClick()
             },
-            modifier = Modifier.layoutId(MaterialDialogButtonTypes.Positive),
+            modifier = Modifier.layoutId(MaterialDialogButtonTypes.Positive)
+                .testTag(MaterialDialogButtonTypes.Positive.testTag),
             enabled = buttonEnabled && dialog.positiveButtonEnabledOverride
         ) {
             Text(text = buttonText, style = textStyle)
@@ -204,6 +208,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
                 onClick()
             },
             modifier = Modifier.layoutId(MaterialDialogButtonTypes.Negative)
+                .testTag(MaterialDialogButtonTypes.Negative.testTag),
         ) {
             Text(text = buttonText, style = textStyle)
         }
@@ -225,6 +230,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
             Modifier
                 .size(48.dp)
                 .layoutId(MaterialDialogButtonTypes.Accessibility)
+                .testTag(MaterialDialogButtonTypes.Accessibility.testTag)
                 .clickable(onClick = onClick),
             contentAlignment = Alignment.Center
         ) {

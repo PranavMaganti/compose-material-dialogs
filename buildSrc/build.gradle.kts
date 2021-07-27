@@ -8,10 +8,6 @@ plugins {
     `kotlin-dsl`
 }
 
-kotlinDslPluginOptions {
-    experimentalWarning.set(false)
-}
-
 dependencies {
     modules {
         module("org.jetbrains.trove4j:trove4j") {
