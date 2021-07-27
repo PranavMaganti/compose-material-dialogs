@@ -65,35 +65,6 @@ dialog.build(buttons = {
 }
 ```
 
-
-
-### Date and Time Picker
-
-```kotlin
-dialog.build {
-    datetimepicker { dateTime ->
-        // Do stuff with java.time.LocalDateTime object which is passed in
-    }
-}
-```
-
-This combines both the time and date picker dialogs into one so that the user can input both values without switching between dialogs. 
-
-### Change initial date
-
-To use the date last inputted by the user as the starting point you can make use of the `initialDateTime` parameter along with a mutable state object to keep track of the last selected date. Here is an example of such usage with the DateTime picker.
-
-```kotlin
-val selectedDateTime = state { LocalDateTime.now() }
-
-dialog.build {
-    datetimepicker(initalDateTime = selectedDateTime.value) { dateTime ->
-        selectedDateTime.value = dateTime
-        ...
-    }
-}
-```
-
 ## To Do
 
 1. Limit date selection range (ie. min/max date)

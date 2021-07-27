@@ -1,14 +1,12 @@
 # Compose Material Dialogs
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/042d629ab7dc4c40b6dcb595f286319e)](https://www.codacy.com/gh/vanpra/compose-material-dialogs/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vanpra/compose-material-dialogs&amp;utm_campaign=Badge_Grade)
+:rocket:  Easy to use library to help you build complex dialogs using Jetpack Compose :rocket:
+
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/042d629ab7dc4c40b6dcb595f286319e)](https://www.codacy.com/gh/vanpra/compose-material-dialogs/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vanpra/compose-material-dialogs&amp;utm_campaign=Badge_Grade)![Build & Test](https://github.com/vanpra/compose-material-dialogs/actions/workflows/main.yml/badge.svg)
+
+**Current Library Compose Version: 1.0.0-rc02**
 
 ### [See Releases and Changelog](https://github.com/vanpra/compose-material-dialogs/blob/main/CHANGELOG.md)
-
-**Current Compose Version: 1.0.0-rc02**
-
-## Credits
-
-This library's design is heavily inspired by https://github.com/afollestad/material-dialogs
 
 ## Core
 
@@ -57,3 +55,7 @@ dependencies {
   ...
 }
 ```
+
+## Credits
+
+This library's design is heavily inspired by https://github.com/afollestad/material-dialogs

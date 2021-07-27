@@ -12,16 +12,14 @@ repo_url: 'https://github.com/vanpra/compose-material-dialogs'
 nav:
   - 'Overview': index.md
   - 'Core':
-    - 'Guide': core.md
+    - 'Guide': Core.md
     - 'API': api/core/index.html
   - 'Color':
-    - 'Guide': color.md
+    - 'Guide': ColorPicker.md
     - 'API': api/color/index.html
   - 'DateTime':
-    - 'Guide': datetime.md
+    - 'Guide': DateTimePicker.md
     - 'API': api/datetime/index.html
-  - 'Custom':
-    - 'Guide': custom.md
 
 theme:
   name: material
