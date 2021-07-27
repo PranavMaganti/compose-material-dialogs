@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -183,71 +182,76 @@ fun MaterialDialog.colorChooser(
 
 @Composable
 private fun PageIndicator(swipeState: SwipeableState<ColorPickerScreen>, constraints: Constraints) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .wrapContentWidth(Alignment.CenterHorizontally)
-            .padding(top = 8.dp, bottom = 16.dp)
-    ) {
-        val ratio = remember(constraints.maxWidth, swipeState.offset.value) {
-            swipeState.offset.value / constraints.maxWidth.toFloat()
-        }
-        val color = MaterialTheme.colors.onBackground
-        Canvas(modifier = Modifier) {
-            val offset = Offset(30f, 0f)
-            drawCircle(
-                color.copy(0.7f + 0.3f * (1 - ratio)),
-                radius = 8f + 7f * (1 - ratio),
-                center = center - offset
-            )
-            drawCircle(
-                color.copy(0.7f + 0.3f * ratio),
-                radius = 8f + 7f * ratio,
-                center = center + offset
-            )
+    BoxWithConstraints {
+        val indicatorRadius = remember { constraints.maxWidth * 0.01f }
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .wrapContentWidth(Alignment.CenterHorizontally)
+                .padding(top = 8.dp, bottom = 16.dp)
+        ) {
+            val ratio = remember(constraints.maxWidth, swipeState.offset.value) {
+                swipeState.offset.value / constraints.maxWidth.toFloat()
+            }
+            val color = MaterialTheme.colors.onBackground
+            Canvas(modifier = Modifier) {
+                val offset = Offset(3 * indicatorRadius, 0f)
+                drawCircle(
+                    color.copy(0.7f + 0.3f * (1 - ratio)),
+                    radius = (indicatorRadius  + indicatorRadius * (1 - ratio)).coerceAtMost(15f),
+                    center = center - offset
+                )
+                drawCircle(
+                    color.copy(0.7f + 0.3f * ratio),
+                    radius = (indicatorRadius + indicatorRadius * ratio).coerceAtMost(15f),
+                    center = center + offset
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun CustomARGB(selectedColor: MutableState<Color>, showAlphaSelector: Boolean) {
-    Column(Modifier.padding(start = 24.dp, end = 24.dp)) {
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .height(70.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            AndroidView(
-                factory = { ctx ->
-                    FrameLayout(ctx).apply {
-                        setBackgroundResource(R.drawable.transparent_rect_repeat)
-                        addView(View(ctx))
+    LazyColumn(Modifier.padding(start = 24.dp, end = 24.dp)) {
+        item {
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(70.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                AndroidView(
+                    factory = { ctx ->
+                        FrameLayout(ctx).apply {
+                            setBackgroundResource(R.drawable.transparent_rect_repeat)
+                            addView(View(ctx))
+                        }
+                    },
+                    modifier = Modifier.fillMaxSize(),
+                    update = { view ->
+                        view.getChildAt(0).setBackgroundColor(selectedColor.value.toArgb())
                     }
-                },
-                modifier = Modifier.fillMaxSize(),
-                update = { view ->
-                    view.getChildAt(0).setBackgroundColor(selectedColor.value.toArgb())
+                )
+
+                val hexString = remember(selectedColor.value) {
+                    val rawHex = Integer.toHexString(selectedColor.value.toArgb())
+                        .uppercase(Locale.ROOT)
+                        .padStart(8, '0')
+
+                    if (!showAlphaSelector) rawHex.substring(2) else rawHex
                 }
-            )
 
-            val hexString = remember(selectedColor.value) {
-                val rawHex = Integer.toHexString(selectedColor.value.toArgb())
-                    .toUpperCase(Locale.ROOT)
-                    .padStart(8, '0')
-
-                if (!showAlphaSelector) rawHex.substring(2) else rawHex
+                Text(
+                    text = "#$hexString",
+                    color = selectedColor.value.foreground(),
+                    style = TextStyle(fontWeight = FontWeight.Bold),
+                    textDecoration = TextDecoration.Underline,
+                    fontSize = 18.sp
+                )
             }
-
-            Text(
-                text = "#$hexString",
-                color = selectedColor.value.foreground(),
-                style = TextStyle(fontWeight = FontWeight.Bold),
-                textDecoration = TextDecoration.Underline,
-                fontSize = 18.sp
-            )
+            SliderLayout(selectedColor, showAlphaSelector)
         }
-        SliderLayout(selectedColor, showAlphaSelector)
     }
 }
 
@@ -330,7 +334,7 @@ private fun LabelSlider(
 
             Box(
                 Modifier
-                    .width(30.dp)
+                    .width(40.dp)
                     .align(Alignment.CenterVertically)
             ) {
                 Text(
@@ -434,7 +438,7 @@ private fun GridView(
     content: @Composable () -> Unit
 ) {
     BoxWithConstraints(modifier) {
-        LazyColumn(modifier = Modifier.heightIn(max = (maxHeight * 0.7f))) {
+        LazyColumn {
             item {
                 Layout(
                     { content() },

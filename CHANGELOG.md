@@ -1,6 +1,27 @@
 # Changelog
 
-### 0.3.3 - 2021-04-08
+### 0.4.2 - 2021-06-06
+
+  -  Update compose to 1.0.0-beta08 ([#76](https://github.com/vanpra/compose-material-dialogs/issues/76) and [#73](https://github.com/vanpra/compose-material-dialogs/issues/73))
+-  Update kotlin version to 1.5.10
+-  Fix layout of date and time pickers for wider screens ([#74](https://github.com/vanpra/compose-material-dialogs/issues/74))
+-  Fix dialog padding to conform with material design spec at the extremes
+-  Add auto text field focusing on dialog open ([#67](https://github.com/vanpra/compose-material-dialogs/issues/67))
+
+### 0.4.1 - 2021-05-23
+
+  - Update compose version to 1.0.0-beta07
+  - Fix date picker bounds bug
+- Fix time picker custom titles
+
+### 0.4.0 - 2021-05-06
+
+  - Update compose version to 1.0.0-beta06
+  - Add more style customisation's to date and time pickers
+- Fix date picker selection bug
+- Make performance improvements to date picker
+
+### 0.3.4 - 2021-04-22
 
   - Update compose version to 1.0.0-beta05
   - Switch to using `HorizontalPager` from the Accompanist library for date picker

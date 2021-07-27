@@ -7,6 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -22,4 +23,14 @@ internal fun DialogTitle(text: String, modifier: Modifier = Modifier) {
         fontSize = 20.sp,
         style = TextStyle(fontWeight = FontWeight.W600)
     )
+}
+
+@Composable
+internal fun isSmallDevice(): Boolean {
+    return LocalConfiguration.current.screenWidthDp <= 360
+}
+
+@Composable
+internal fun isLargeDevice(): Boolean {
+    return LocalConfiguration.current.screenWidthDp <= 600
 }

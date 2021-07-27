@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -29,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-private const val listRatio = 0.6f
 val bottomPadding = Modifier.padding(bottom = 8.dp)
 
 /**
@@ -45,11 +43,7 @@ fun MaterialDialog.listItems(
     onClick: (index: Int, item: String) -> Unit = { _, _ -> }
 ) {
     BoxWithConstraints {
-        val modifier = Modifier
-            .heightIn(max = maxHeight * listRatio)
-            .then(bottomPadding)
-
-        LazyColumn(modifier = modifier) {
+        LazyColumn(Modifier.then(bottomPadding)) {
             itemsIndexed(list) { index, it ->
                 Text(
                     it,
@@ -91,11 +85,7 @@ fun <T> MaterialDialog.listItems(
 ) {
 
     BoxWithConstraints {
-        val modifier = Modifier
-            .heightIn(max = maxHeight * listRatio)
-            .then(bottomPadding)
-
-        LazyColumn(modifier = modifier) {
+        LazyColumn(Modifier.then(bottomPadding)) {
             itemsIndexed(list) { index, it ->
                 Box(
                     Modifier
@@ -224,7 +214,9 @@ fun MaterialDialog.listItemsSingleChoice(
         DialogCallback { onChoiceChange(selected!!) }
     } else {
         DisposableEffect(selected) {
-            onChoiceChange(selected!!)
+            if (selected != null) {
+                onChoiceChange(selected!!)
+            }
             onDispose { }
         }
     }

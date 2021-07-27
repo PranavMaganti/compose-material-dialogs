@@ -7,11 +7,9 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
     defaultConfig {
-        minSdkVersion(21)
-        targetSdkVersion(30)
-        compileSdkVersion(30)
-
-        versionCode = 1
+        minSdk = 21
+        targetSdk = 30
+        compileSdk = 30
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,17 +39,21 @@ android {
 dependencies {
     api(project(":core"))
     implementation(Dependencies.Accompanist.pager)
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    coreLibraryDesugaring(Dependencies.desugar)
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = freeCompilerArgs + listOf(
+            "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi"
+        )
+    }
 }
 
 val artifactName = "datetime"
 val artifactGroup = "com.vanpra.compose-material-dialogs"
 val artifactVersion = Dependencies.ComposeMaterialDialogs.version
-
-val sourcesJar by tasks.creating(Jar::class) {
-    from(android.sourceSets.getByName("main").java.srcDirs)
-    archiveClassifier.set("sources")
-}
 
 val VERSION_NAME: String by project
 val mavenCentralRepositoryUsername: String? by project

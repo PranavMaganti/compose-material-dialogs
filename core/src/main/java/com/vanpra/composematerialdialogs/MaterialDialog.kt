@@ -3,6 +3,8 @@ package com.vanpra.composematerialdialogs
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.LocalElevationOverlay
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -20,9 +22,15 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.math.min
 
 /**
  *  The MaterialDialog class is used to build and display a dialog using both pre-made and
@@ -41,7 +49,7 @@ class MaterialDialog(
 ) {
     private val showing: MutableState<Boolean> = mutableStateOf(false)
 
-    val buttons = MaterialDialogButtons(this)
+    val dialogButtons = MaterialDialogButtons(this)
 
     val callbacks = mutableMapOf<Int, () -> Unit>()
     private val callbackCounter = AtomicInteger(0)
@@ -166,15 +174,25 @@ class MaterialDialog(
         shape: Shape = MaterialTheme.shapes.medium,
         border: BorderStroke? = null,
         elevation: Dp = 24.dp,
+        buttons: @Composable MaterialDialogButtons.() -> Unit = {},
         content: @Composable MaterialDialog.() -> Unit
     ) {
+        val maxHeight = if (isLargeDevice()) {
+            LocalConfiguration.current.screenHeightDp.dp - 90.dp
+        } else {
+            560.dp
+        }
+
+        val maxHeightPx = with(LocalDensity.current) { maxHeight.toPx().toInt() }
+        val padding = if (isSmallDevice()) 16.dp else 0.dp
+
         if (showing.value) {
             dialogBackgroundColor = LocalElevationOverlay.current?.apply(
                 color = backgroundColor,
                 elevation = elevation
             ) ?: MaterialTheme.colors.surface
 
-            ThemedDialog(onCloseRequest = { onCloseRequest(this) }) {
+            Dialog(onDismissRequest = { onCloseRequest(this) }) {
                 DisposableEffect(Unit) {
                     onDispose { resetDialog() }
                 }
@@ -182,14 +200,41 @@ class MaterialDialog(
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .sizeIn(maxHeight = maxHeight, maxWidth = 560.dp)
+                        .padding(horizontal = padding)
                         .clipToBounds(),
                     shape = shape,
                     color = backgroundColor,
                     border = border,
                     elevation = elevation
                 ) {
-                    Column {
-                        this@MaterialDialog.content()
+                    Layout(
+                        content = {
+                            DialogButtons(
+                                modifier = Modifier.layoutId("buttons"),
+                                dialogButtons = dialogButtons,
+                                dialog = this,
+                                content = buttons
+                            )
+                            Column(Modifier.layoutId("content"), content = { content() })
+                        }
+                    ) { measurables, constraints ->
+                        val buttonsHeight = measurables[0].minIntrinsicHeight(constraints.maxWidth)
+                        val buttonsPlaceable = measurables[0].measure(
+                            constraints.copy(maxHeight = buttonsHeight, minHeight = 0)
+                        )
+
+                        val contentPlaceable = measurables[1].measure(
+                            constraints.copy(maxHeight = maxHeightPx - buttonsPlaceable.height, minHeight = 0)
+                        )
+
+                        val height =
+                            min(maxHeightPx, buttonsPlaceable.height + contentPlaceable.height)
+
+                        return@Layout layout(constraints.maxWidth, height) {
+                            contentPlaceable.place(0, 0)
+                            buttonsPlaceable.place(0, height - buttonsPlaceable.height)
+                        }
                     }
                 }
             }

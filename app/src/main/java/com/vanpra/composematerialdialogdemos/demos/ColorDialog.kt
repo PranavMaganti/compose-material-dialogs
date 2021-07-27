@@ -15,8 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.buttons
+import com.vanpra.composematerialdialogs.MaterialDialogButtons
 import com.vanpra.composematerialdialogs.color.ARGBPickerState
 import com.vanpra.composematerialdialogs.color.ColorPalette
 import com.vanpra.composematerialdialogs.color.colorChooser
@@ -44,16 +43,20 @@ fun ColorDialogDemo() {
         )
     }
 
-    DialogAndShowButton(buttonText = "Color Picker Dialog") {
+    DialogAndShowButton(
+        buttonText = "Color Picker Dialog",
+        buttons = { defaultColorDialogButtons() }
+    ) {
         title("Select a Color")
         colorChooser(colors = ColorPalette.Primary, waitForPositiveButton = waitForPositiveButton) {
             println(it)
         }
-
-        defaultButtons()
     }
 
-    DialogAndShowButton(buttonText = "Color Picker Dialog With Sub Colors") {
+    DialogAndShowButton(
+        buttonText = "Color Picker Dialog With Sub Colors",
+        buttons = { defaultColorDialogButtons() }
+    ) {
         title("Select a Sub Color")
         colorChooser(
             colors = ColorPalette.Primary,
@@ -62,11 +65,12 @@ fun ColorDialogDemo() {
         ) {
             println(it)
         }
-
-        defaultButtons()
     }
 
-    DialogAndShowButton(buttonText = "Color Picker Dialog With Initial Selection") {
+    DialogAndShowButton(
+        buttonText = "Color Picker Dialog With Initial Selection",
+        buttons = { defaultColorDialogButtons() }
+    ) {
         title("Select a Sub Color")
         colorChooser(
             colors = ColorPalette.Primary,
@@ -76,10 +80,12 @@ fun ColorDialogDemo() {
         ) {
             println(it)
         }
-        defaultButtons()
     }
 
-    DialogAndShowButton(buttonText = "Color Picker Dialog With RGB Selector") {
+    DialogAndShowButton(
+        buttonText = "Color Picker Dialog With RGB Selector",
+        buttons = { defaultColorDialogButtons() }
+    ) {
         title("Custom RGB")
         colorChooser(
             colors = ColorPalette.Primary,
@@ -89,10 +95,12 @@ fun ColorDialogDemo() {
         ) {
             println(it)
         }
-        defaultButtons()
     }
 
-    DialogAndShowButton(buttonText = "Color Picker Dialog With ARGB Selector") {
+    DialogAndShowButton(
+        buttonText = "Color Picker Dialog With ARGB Selector",
+        buttons = { defaultColorDialogButtons() }
+    ) {
         title("Custom ARGB")
         colorChooser(
             colors = ColorPalette.Primary,
@@ -102,14 +110,11 @@ fun ColorDialogDemo() {
         ) {
             println(it)
         }
-        defaultButtons()
     }
 }
 
 @Composable
-private fun MaterialDialog.defaultButtons() {
-    buttons {
-        positiveButton("Select")
-        negativeButton("Cancel")
-    }
+private fun MaterialDialogButtons.defaultColorDialogButtons() {
+    positiveButton("Select")
+    negativeButton("Cancel")
 }

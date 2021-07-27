@@ -7,9 +7,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
-import com.vanpra.composematerialdialogs.buttons
-import com.vanpra.composematerialdialogs.datetime.datepicker
-import com.vanpra.composematerialdialogs.datetime.datetimepicker
+import com.vanpra.composematerialdialogs.MaterialDialogButtons
+import com.vanpra.composematerialdialogs.datetime.datepicker.datepicker
 import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerColors
 import com.vanpra.composematerialdialogs.datetime.timepicker.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.timepicker.timepicker
@@ -40,78 +39,66 @@ fun DateTimeDialogDemo() {
 
     val context = LocalContext.current
 
-    DialogAndShowButton(buttonText = "Time Picker Dialog") {
+    DialogAndShowButton(
+        buttonText = "Time Picker Dialog",
+        buttons = { defaultDateTimeDialogButtons() }
+    ) {
         timepicker(colors = colors) {
             println(it.toString())
             Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
         }
-
-        buttons {
-            positiveButton("Ok")
-            negativeButton("Cancel")
-        }
     }
 
-    DialogAndShowButton(buttonText = "Time Picker Dialog With Min/Max") {
+    DialogAndShowButton(
+        buttonText = "Time Picker Dialog With Min/Max",
+        buttons = { defaultDateTimeDialogButtons() }
+    ) {
         timepicker(
             colors = colors,
-            minimumTime = LocalTime.of(9, 35),
-            maximumTime = LocalTime.of(21, 13),
+            timeRange = LocalTime.of(9, 35)..LocalTime.of(21, 13),
             is24HourClock = false
         ) {
             println(it.toString())
             Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
         }
-
-        buttons {
-            positiveButton("Ok")
-            negativeButton("Cancel")
-        }
     }
 
-    DialogAndShowButton(buttonText = "Time Picker Dialog 24H") {
+    DialogAndShowButton(
+        buttonText = "Time Picker Dialog 24H",
+        buttons = { defaultDateTimeDialogButtons() }
+    ) {
         timepicker(colors = colors, is24HourClock = true) {
             println(it.toString())
             Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
         }
-
-        buttons {
-            positiveButton("Ok")
-            negativeButton("Cancel")
-        }
     }
 
-    DialogAndShowButton(buttonText = "Time Picker Dialog 24H With Min/Max") {
+    DialogAndShowButton(
+        buttonText = "Time Picker Dialog 24H With Min/Max",
+        buttons = { defaultDateTimeDialogButtons() }
+    ) {
         timepicker(
             colors = colors,
-            minimumTime = LocalTime.of(9, 35),
-            maximumTime = LocalTime.of(21, 13),
+            timeRange = LocalTime.of(9, 35)..LocalTime.of(21, 13),
             is24HourClock = true
         ) {
             println(it.toString())
             Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
         }
-
-        buttons {
-            positiveButton("Ok")
-            negativeButton("Cancel")
-        }
     }
 
-    DialogAndShowButton(buttonText = "Date Picker Dialog") {
+    DialogAndShowButton(
+        buttonText = "Date Picker Dialog",
+        buttons = { defaultDateTimeDialogButtons() }
+    ) {
         datepicker {
             println(it.toString())
         }
-
-        buttons {
-            positiveButton("Ok")
-            negativeButton("Cancel")
-        }
     }
+}
 
-    DialogAndShowButton(buttonText = "Date and Time Picker Dialog") {
-        datetimepicker(timePickerColors = colors) {
-            println(it.toString())
-        }
-    }
+@Composable
+private fun MaterialDialogButtons.defaultDateTimeDialogButtons() {
+    positiveButton("Ok")
+    negativeButton("Cancel")
 }
