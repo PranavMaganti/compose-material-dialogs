@@ -19,53 +19,16 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 val bottomPadding = Modifier.padding(bottom = 8.dp)
-
-/**
- * Adds a selectable plain text list to the dialog
- *
- * @param list the strings to be displayed in the list
- * @param onClick callback with the index and string of an item when it is clicked
- */
-@Composable
-fun MaterialDialog.listItems(
-    list: List<String>,
-    closeOnClick: Boolean = true,
-    onClick: (index: Int, item: String) -> Unit = { _, _ -> }
-) {
-    BoxWithConstraints {
-        LazyColumn(Modifier.then(bottomPadding)) {
-            itemsIndexed(list) { index, it ->
-                Text(
-                    it,
-                    color = MaterialTheme.colors.onSurface,
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(
-                            onClick = {
-                                if (closeOnClick) {
-                                    hide()
-                                }
-                                onClick(index, it)
-                            }
-                        )
-                        .padding(top = 12.dp, bottom = 12.dp, start = 24.dp, end = 24.dp)
-                        .wrapContentWidth(Alignment.Start)
-                )
-            }
-        }
-    }
-}
 
 /**
  * Adds a selectable list with custom items to the dialog
@@ -83,13 +46,13 @@ fun <T> MaterialDialog.listItems(
     isEnabled: (index: Int) -> Boolean = { _ -> true },
     item: @Composable (index: Int, T) -> Unit
 ) {
-
     BoxWithConstraints {
-        LazyColumn(Modifier.then(bottomPadding)) {
+        LazyColumn(Modifier.then(bottomPadding).testTag("dialog_list")) {
             itemsIndexed(list) { index, it ->
                 Box(
                     Modifier
                         .fillMaxWidth()
+                        .testTag("dialog_list_item_$index")
                         .clickable(
                             onClick = {
                                 if (closeOnClick) {
@@ -109,6 +72,31 @@ fun <T> MaterialDialog.listItems(
 }
 
 /**
+ * Adds a selectable plain text list to the dialog
+ *
+ * @param list the strings to be displayed in the list
+ * @param onClick callback with the index and string of an item when it is clicked
+ */
+@Composable
+fun MaterialDialog.listItems(
+    list: List<String>,
+    closeOnClick: Boolean = true,
+    onClick: (index: Int, item: String) -> Unit = { _, _ -> }
+) {
+    listItems(list = list, closeOnClick = closeOnClick, onClick = onClick) { _, item ->
+        Text(
+            item,
+            color = MaterialTheme.colors.onSurface,
+            style = MaterialTheme.typography.body1,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp)
+                .wrapContentWidth(Alignment.Start)
+        )
+    }
+}
+
+/**
  * Adds a multi-choice list view to the dialog
  * @param list a list of string labels for the multi-choice items
  * @param disabledIndices a list of indices which should be disabled/unselectable
@@ -121,38 +109,35 @@ fun <T> MaterialDialog.listItems(
 @Composable
 fun MaterialDialog.listItemsMultiChoice(
     list: List<String>,
-    disabledIndices: List<Int> = listOf(),
-    initialSelection: List<Int> = listOf(),
+    disabledIndices: Set<Int> = setOf(),
+    initialSelection: Set<Int> = setOf(),
     waitForPositiveButton: Boolean = true,
-    onCheckedChange: (indices: List<Int>) -> Unit = {}
+    onCheckedChange: (indices: Set<Int>) -> Unit = {}
 ) {
-    var selectedItems by remember { mutableStateOf(initialSelection.toMutableList()) }
+    var selectedItems by remember { mutableStateOf(initialSelection.toMutableSet()) }
 
     if (waitForPositiveButton) {
         DialogCallback { onCheckedChange(selectedItems) }
-    } else {
-        DisposableEffect(selectedItems) {
-            onCheckedChange(selectedItems)
-            onDispose { }
-        }
     }
 
     val onChecked = { index: Int ->
         if (index !in disabledIndices) {
-            val newSelectedItems = selectedItems.toMutableList()
+            /* Have to create temp var as mutableState doesn't trigger on adding to set */
+            val newSelectedItems = selectedItems.toMutableSet()
             if (index in selectedItems) {
                 newSelectedItems.remove(index)
             } else {
                 newSelectedItems.add(index)
             }
             selectedItems = newSelectedItems
+
             if (!waitForPositiveButton) {
                 onCheckedChange(selectedItems)
             }
         }
     }
 
-    val isEnabled = { index: Int -> index !in disabledIndices }
+    val isEnabled = remember(disabledIndices) { { index: Int -> index !in disabledIndices } }
 
     listItems(
         list = list,
@@ -161,30 +146,15 @@ fun MaterialDialog.listItemsMultiChoice(
         closeOnClick = false
     ) { index, item ->
         val enabled = remember(disabledIndices) { index !in disabledIndices }
-        val selected = index in selectedItems
+        val selected = remember(selectedItems) { index in selectedItems }
 
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(checked = selected, onCheckedChange = { onChecked(index) }, enabled = enabled)
-            Spacer(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(32.dp)
-            )
-            Text(
-                item,
-                color = if (enabled) {
-                    MaterialTheme.colors.onSurface
-                } else {
-                    MaterialTheme.colors.onSurface.copy(ContentAlpha.disabled)
-                },
-                style = MaterialTheme.typography.body1
-            )
-        }
+        MultiChoiceItem(
+            item = item,
+            index = index,
+            selected = selected,
+            enabled = enabled,
+            onChecked = onChecked
+        )
     }
 }
 
@@ -201,53 +171,77 @@ fun MaterialDialog.listItemsMultiChoice(
 @Composable
 fun MaterialDialog.listItemsSingleChoice(
     list: List<String>,
-    disabledIndices: List<Int> = listOf(),
+    disabledIndices: Set<Int> = setOf(),
     initialSelection: Int? = null,
     waitForPositiveButton: Boolean = true,
     onChoiceChange: (selected: Int) -> Unit = {}
 ) {
-    var selected by remember { mutableStateOf(initialSelection) }
-
-    val positiveEnabledIndex = addPositiveButtonEnabled(valid = selected != null)
+    var selectedItem by remember { mutableStateOf(initialSelection) }
+    val positiveEnabledIndex = addPositiveButtonEnabled(valid = selectedItem != null)
 
     if (waitForPositiveButton) {
-        DialogCallback { onChoiceChange(selected!!) }
-    } else {
-        DisposableEffect(selected) {
-            if (selected != null) {
-                onChoiceChange(selected!!)
-            }
-            onDispose { }
-        }
+        DialogCallback { onChoiceChange(selectedItem!!) }
     }
 
     val onSelect = { index: Int ->
         if (index !in disabledIndices) {
             setPositiveEnabled(positiveEnabledIndex, true)
+            selectedItem = index
 
-            selected = index
             if (!waitForPositiveButton) {
-                onChoiceChange(selected!!)
+                onChoiceChange(selectedItem!!)
             }
         }
     }
 
-    val isEnabled = { index: Int -> index !in disabledIndices }
+    val isEnabled = remember(disabledIndices) { { index: Int -> index !in disabledIndices } }
     listItems(
         list = list,
         closeOnClick = false,
-        onClick = { index, _ ->
-            onSelect(index)
-        },
+        onClick = { index, _ -> onSelect(index) },
         isEnabled = isEnabled
     ) { index, item ->
+        val enabled = remember(disabledIndices) { index !in disabledIndices }
+        val selected = remember(selectedItem) { index == selectedItem }
+
         SingleChoiceItem(
             item = item,
             index = index,
-            disabledIndices = disabledIndices,
             selected = selected,
-            isEnabled = isEnabled,
+            enabled = enabled,
             onSelect = onSelect
+        )
+    }
+}
+
+@Composable
+private fun MultiChoiceItem(
+    item: String,
+    index: Int,
+    selected: Boolean,
+    enabled: Boolean,
+    onChecked: (index: Int) -> Unit
+) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(checked = selected, onCheckedChange = { onChecked(index) }, enabled = enabled)
+        Spacer(
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(32.dp)
+        )
+        Text(
+            item,
+            color = if (enabled) {
+                MaterialTheme.colors.onSurface
+            } else {
+                MaterialTheme.colors.onSurface.copy(ContentAlpha.disabled)
+            },
+            style = MaterialTheme.typography.body1
         )
     }
 }
@@ -256,13 +250,10 @@ fun MaterialDialog.listItemsSingleChoice(
 private fun SingleChoiceItem(
     item: String,
     index: Int,
-    disabledIndices: List<Int>,
-    selected: Int?,
-    isEnabled: (index: Int) -> Boolean,
+    selected: Boolean,
+    enabled: Boolean,
     onSelect: (index: Int) -> Unit
 ) {
-    val enabled = remember(disabledIndices) { index !in disabledIndices }
-
     Row(
         Modifier
             .fillMaxWidth()
@@ -270,13 +261,13 @@ private fun SingleChoiceItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
-            selected = selected == index,
+            selected = selected,
             onClick = {
-                if (isEnabled(index)) {
+                if (enabled) {
                     onSelect(index)
                 }
             },
-            enabled = isEnabled(index)
+            enabled = enabled
         )
         Spacer(
             modifier = Modifier

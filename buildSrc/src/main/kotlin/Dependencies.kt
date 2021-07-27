@@ -25,9 +25,21 @@ object Dependencies {
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
 
+    object Shot {
+        private const val version = "5.10.5"
+        const val shot = "com.karumi:shot-android:$version"
+    }
+
     object AndroidX {
         const val appcompat = "androidx.appcompat:appcompat:1.4.0-alpha02"
         const val coreKtx = "androidx.core:core-ktx:1.6.0-rc01"
+
+        object Testing {
+            const val version = "1.4.0-alpha06"
+            const val core = "androidx.test:core:$version"
+            const val rules = "androidx.test:rules:$version"
+            const val runner = "androidx.test:runner:$version"
+        }
 
         object Compose {
             const val version = "1.0.0-rc02"
@@ -37,6 +49,7 @@ object Dependencies {
             const val materialIconsExtended =
                 "androidx.compose.material:material-icons-extended:$version"
 
+            const val testing = "androidx.compose.ui:ui-test-junit4:$version"
             const val activity = "androidx.activity:activity-compose:1.3.0-rc02"
             const val navigation = "androidx.navigation:navigation-compose:2.4.0-alpha04"
         }
