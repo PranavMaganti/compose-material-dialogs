@@ -2,7 +2,7 @@
 
 :rocket:  Easy to use library to help you build complex dialogs using Jetpack Compose :rocket:
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/042d629ab7dc4c40b6dcb595f286319e)](https://www.codacy.com/gh/vanpra/compose-material-dialogs/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vanpra/compose-material-dialogs&amp;utm_campaign=Badge_Grade)![Build & Test](https://github.com/vanpra/compose-material-dialogs/actions/workflows/main.yml/badge.svg)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ae8d455118164f43a24732761a970cc8)](https://www.codacy.com/gh/vanpra/compose-material-dialogs/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vanpra/compose-material-dialogs&amp;utm_campaign=Badge_Grade)![Build & Test](https://github.com/vanpra/compose-material-dialogs/actions/workflows/main.yml/badge.svg)
 
 **Current Library Compose Version: 1.0.0-rc02**
 
@@ -10,7 +10,7 @@
 
 ## Core
 
-#### [Core Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/docs/Core.md)
+#### [Core Documentation](https://vanpra.github.io/compose-material-dialogs/Core)
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/full_core.png)
 
@@ -26,7 +26,7 @@ dependencies {
 
 ## Date and Time Picker
 
-#### [Date and Time Picker Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/docs/DateTimePicker.md)
+#### [Date and Time Picker Documentation](https://vanpra.github.io/compose-material-dialogs/DateTimePicker)
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/date_and_time.png)
 
@@ -42,7 +42,7 @@ dependencies {
 
 ## Color Picker
 
-#### [Color Picker Documentation](https://github.com/vanpra/compose-material-dialogs/blob/main/docs/ColorPicker.md)
+#### [Color Picker Documentation](https://vanpra.github.io/compose-material-dialogs/ColorPicker)
 
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/color_picker.png)
 
