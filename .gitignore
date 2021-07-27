@@ -11,3 +11,4 @@ build
 local.properties
 secret.properties
 debug.keystore
+/docs/api

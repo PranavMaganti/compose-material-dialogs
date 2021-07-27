@@ -47,6 +47,10 @@ allprojects {
     }
 }
 
+tasks.dokkaHtmlMultiModule.configure {
+    outputDirectory.set(projectDir.resolve("docs/api"))
+}
+
 subprojects {
     plugins.apply("com.diffplug.spotless")
     spotless {
