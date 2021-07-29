@@ -107,11 +107,11 @@ fun MultiSelectionDemo() {
     var initialSelection by remember { mutableStateOf(setOf(3, 5)) }
 
     DialogAndShowButton(buttonText = "Multi-Selection Dialog", buttons = { defaultListDialogButtons() }) {
-        title(res = R.string.labels_dialog_title)
-        listItemsMultiChoice(labels) {
-            println(it)
-        }
+    title(res = R.string.labels_dialog_title)
+    listItemsMultiChoice(labels) {
+        println(it)
     }
+}
 
     DialogAndShowButton(
         buttonText = "Multi-Selection Dialog with disabled items",

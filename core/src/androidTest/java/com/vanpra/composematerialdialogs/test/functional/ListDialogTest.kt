@@ -279,11 +279,11 @@ class ListDialog {
     ) {
         composeTestRule.setContent {
             DialogWithContent(dialog = dialog, buttons = { defaultButtons() }) {
-                title(res = R.string.labels_dialog_title)
-                listItemsMultiChoice(labels, waitForPositiveButton = waitForPositiveButton) {
-                    selectedItem.value = it
-                }
+            title(res = R.string.labels_dialog_title)
+            listItemsMultiChoice(labels, waitForPositiveButton = waitForPositiveButton) {
+                selectedItem.value = it
             }
+        }
         }
     }
 
@@ -294,11 +294,11 @@ class ListDialog {
     ) {
         composeTestRule.setContent {
             DialogWithContent(dialog = dialog, buttons = { defaultButtons() }) {
-                title(res = R.string.ringtone_dialog_title)
-                listItemsSingleChoice(ringtones, waitForPositiveButton = waitForPositiveButton) {
-                    selectedItem.value = it
-                }
+            title(res = R.string.ringtone_dialog_title)
+            listItemsSingleChoice(ringtones, waitForPositiveButton = waitForPositiveButton) {
+                selectedItem.value = it
             }
+        }
         }
     }
 }

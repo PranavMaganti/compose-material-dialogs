@@ -182,9 +182,9 @@ class InputDialogTest {
     ) {
         composeTestRule.setContent {
             DialogWithContent(dialog = dialog, buttons = { defaultButtons() }) {
-                title(res = R.string.input_dialog_title)
-                testInputDialog()
-            }
+            title(res = R.string.input_dialog_title)
+            testInputDialog()
+        }
         }
     }
 }
