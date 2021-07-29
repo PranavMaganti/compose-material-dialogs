@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.5.1 - 2021-07-29
+
+  -  Update compose to 1.0.0
+
 ### 0.5.0 - 2021-07-27
 
   -  Update compose to 1.0.0-beta09
