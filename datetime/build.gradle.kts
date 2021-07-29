@@ -56,15 +56,6 @@ shot {
     tolerance = 1.0 // Tolerance needed for CI
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs = freeCompilerArgs + listOf(
-            "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi"
-        )
-    }
-}
-
 mavenPublish {
     sonatypeHost = com.vanniktech.maven.publish.SonatypeHost.S01
 }
