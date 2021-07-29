@@ -33,7 +33,9 @@ android {
             "META-INF/LICENSE",
             "META-INF/LICENSE.txt",
             "META-INF/NOTICE",
-            "META-INF/NOTICE.txt"
+            "META-INF/NOTICE.txt",
+            "META-INF/AL2.0",
+            "META-INF/LGPL2.1"
         )
     )
 
