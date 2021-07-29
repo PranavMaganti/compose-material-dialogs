@@ -55,29 +55,6 @@ shot {
     tolerance = 1.0 // Tolerance needed for CI
 }
 
-val mavenCentralRepositoryUsername: String? by project
-val mavenCentralRepositoryPassword: String? by project
-
-publishing {
-    repositories {
-        withType<MavenArtifactRepository> {
-            if (name == "local") {
-                return@withType
-            }
-
-            val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            val snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-
-            url = if((version as String).endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
-
-            credentials {
-                username = mavenCentralRepositoryUsername
-                password = mavenCentralRepositoryPassword
-            }
-        }
-    }
-}
-
-mavenPublishing {
-    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.S01)
+mavenPublish {
+    sonatypeHost = com.vanniktech.maven.publish.SonatypeHost.S01
 }
