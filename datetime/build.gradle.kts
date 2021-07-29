@@ -57,9 +57,6 @@ shot {
     tolerance = 1.0 // Tolerance needed for CI
 }
 
-val mavenCentralRepositoryUsername: String? by project
-val mavenCentralRepositoryPassword: String? by project
-
 mavenPublish {
     sonatypeHost = com.vanniktech.maven.publish.SonatypeHost.S01
 }
