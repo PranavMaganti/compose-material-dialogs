@@ -17,8 +17,8 @@ class TimePickerTest {
         val title = "Custom Title"
         composeTestRule.setContent {
             DialogWithContent(buttons = { defaultButtons() }) {
-                timepicker(title = title)
-            }
+            timepicker(title = title)
+        }
         }
 
         composeTestRule.onNodeWithText(title).assertExists()

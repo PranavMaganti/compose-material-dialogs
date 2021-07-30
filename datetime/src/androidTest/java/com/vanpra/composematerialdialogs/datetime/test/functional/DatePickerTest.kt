@@ -30,10 +30,10 @@ class DatePickerTest {
 
         composeTestRule.setContent {
             DialogWithContent(buttons = { defaultButtons() }) {
-                datepicker(initialDate = testDate, waitForPositiveButton = true) {
-                    selectedDate = it
-                }
+            datepicker(initialDate = testDate, waitForPositiveButton = true) {
+                selectedDate = it
             }
+        }
         }
 
         composeTestRule.onDialogDateSelector(20).performClick()
@@ -50,10 +50,10 @@ class DatePickerTest {
 
         composeTestRule.setContent {
             DialogWithContent(buttons = { defaultButtons() }) {
-                datepicker(initialDate = testDate, waitForPositiveButton = false) {
-                    selectedDate = it
-                }
+            datepicker(initialDate = testDate, waitForPositiveButton = false) {
+                selectedDate = it
             }
+        }
         }
 
         composeTestRule.onDialogDateSelector(20).performClick()
@@ -71,8 +71,8 @@ class DatePickerTest {
         val title = "Custom Title"
         composeTestRule.setContent {
             DialogWithContent(buttons = { defaultButtons() }) {
-                datepicker(title = title)
-            }
+            datepicker(title = title)
+        }
         }
 
         composeTestRule.onNodeWithText(title).assertExists()

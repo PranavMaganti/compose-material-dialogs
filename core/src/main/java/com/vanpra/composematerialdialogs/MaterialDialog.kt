@@ -198,57 +198,57 @@ class MaterialDialog(
                 ) ?: MaterialTheme.colors.surface
 
                 Dialog(onDismissRequest = { onCloseRequest(this@MaterialDialog) }) {
-                    DisposableEffect(Unit) {
-                        onDispose { resetDialog() }
-                    }
+                DisposableEffect(Unit) {
+                    onDispose { resetDialog() }
+                }
 
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .sizeIn(maxHeight = maxHeight, maxWidth = 560.dp)
-                            .padding(horizontal = padding)
-                            .clipToBounds()
-                            .wrapContentHeight()
-                            .testTag("dialog"),
-                        shape = shape,
-                        color = backgroundColor,
-                        border = border,
-                        elevation = elevation
-                    ) {
-                        Layout(
-                            content = {
-                                DialogButtons(
-                                    modifier = Modifier.layoutId("buttons"),
-                                    dialogButtons = dialogButtons,
-                                    dialog = this@MaterialDialog,
-                                    content = buttons
-                                )
-                                Column(Modifier.layoutId("content")) { content() }
-                            }
-                        ) { measurables, constraints ->
-                            val buttonsHeight =
-                                measurables[0].minIntrinsicHeight(constraints.maxWidth)
-                            val buttonsPlaceable = measurables[0].measure(
-                                constraints.copy(maxHeight = buttonsHeight, minHeight = 0)
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .sizeIn(maxHeight = maxHeight, maxWidth = 560.dp)
+                        .padding(horizontal = padding)
+                        .clipToBounds()
+                        .wrapContentHeight()
+                        .testTag("dialog"),
+                    shape = shape,
+                    color = backgroundColor,
+                    border = border,
+                    elevation = elevation
+                ) {
+                    Layout(
+                        content = {
+                            DialogButtons(
+                                modifier = Modifier.layoutId("buttons"),
+                                dialogButtons = dialogButtons,
+                                dialog = this@MaterialDialog,
+                                content = buttons
                             )
+                            Column(Modifier.layoutId("content")) { content() }
+                        }
+                    ) { measurables, constraints ->
+                        val buttonsHeight =
+                            measurables[0].minIntrinsicHeight(constraints.maxWidth)
+                        val buttonsPlaceable = measurables[0].measure(
+                            constraints.copy(maxHeight = buttonsHeight, minHeight = 0)
+                        )
 
-                            val contentPlaceable = measurables[1].measure(
-                                constraints.copy(
-                                    maxHeight = maxHeightPx - buttonsPlaceable.height,
-                                    minHeight = 0
-                                )
+                        val contentPlaceable = measurables[1].measure(
+                            constraints.copy(
+                                maxHeight = maxHeightPx - buttonsPlaceable.height,
+                                minHeight = 0
                             )
+                        )
 
-                            val height =
-                                min(maxHeightPx, buttonsPlaceable.height + contentPlaceable.height)
+                        val height =
+                            min(maxHeightPx, buttonsPlaceable.height + contentPlaceable.height)
 
-                            return@Layout layout(constraints.maxWidth, height) {
-                                contentPlaceable.place(0, 0)
-                                buttonsPlaceable.place(0, height - buttonsPlaceable.height)
-                            }
+                        return@Layout layout(constraints.maxWidth, height) {
+                            contentPlaceable.place(0, 0)
+                            buttonsPlaceable.place(0, height - buttonsPlaceable.height)
                         }
                     }
                 }
+            }
             }
         }
     }

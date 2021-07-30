@@ -29,10 +29,13 @@ android {
 
     packagingOptions.excludes.addAll(
         listOf(
+            "META-INF/DEPENDENCIES.txt",
             "META-INF/LICENSE",
+            "META-INF/LICENSE.txt",
+            "META-INF/NOTICE",
+            "META-INF/NOTICE.txt",
             "META-INF/AL2.0",
-            "META-INF/**",
-            "META-INF/*.kotlin_module"
+            "META-INF/LGPL2.1"
         )
     )
 
@@ -54,15 +57,6 @@ dependencies {
 
 shot {
     tolerance = 1.0 // Tolerance needed for CI
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs = freeCompilerArgs + listOf(
-            "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi"
-        )
-    }
 }
 
 mavenPublish {

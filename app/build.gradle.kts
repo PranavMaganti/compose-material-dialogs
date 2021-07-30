@@ -23,7 +23,6 @@ android {
             "META-INF/LICENSE",
             "META-INF/AL2.0",
             "META-INF/**",
-            "META-INF/*.kotlin_module"
         )
     )
 

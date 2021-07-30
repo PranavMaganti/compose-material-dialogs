@@ -4,7 +4,7 @@
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ae8d455118164f43a24732761a970cc8)](https://www.codacy.com/gh/vanpra/compose-material-dialogs/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vanpra/compose-material-dialogs&amp;utm_campaign=Badge_Grade)![Build & Test](https://github.com/vanpra/compose-material-dialogs/actions/workflows/main.yml/badge.svg)
 
-**Current Library Compose Version: 1.0.0-rc02**
+**Current Library Compose Version: 1.0.0**
 
 ### [See Releases and Changelog](https://github.com/vanpra/compose-material-dialogs/blob/main/CHANGELOG.md)
 
@@ -19,7 +19,7 @@
 ```gradle
 dependencies {
   ...
-  implementation "io.github.vanpra.compose-material-dialogs:core:0.5.0" 
+  implementation "io.github.vanpra.compose-material-dialogs:core:0.5.1" 
   ...
 }
 ```
@@ -35,7 +35,7 @@ dependencies {
 ```gradle
 dependencies {
   ...
-  implementation "io.github.vanpra.compose-material-dialogs:datetime:0.5.0"
+  implementation "io.github.vanpra.compose-material-dialogs:datetime:0.5.1"
   ...
 }
 ```
@@ -51,7 +51,7 @@ dependencies {
 ```gradle
 dependencies {
   ...
-  implementation "io.github.vanpra.compose-material-dialogs:color:0.5.0"
+  implementation "io.github.vanpra.compose-material-dialogs:color:0.5.1"
   ...
 }
 ```

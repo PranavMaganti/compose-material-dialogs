@@ -111,9 +111,9 @@ class ListDialog : ScreenshotTest {
     fun multiSelectionDialog() {
         composeTestRule.setContentAndWaitForIdle {
             DialogWithContent(buttons = { defaultButtons() }) {
-                title(res = R.string.labels_dialog_title)
-                listItemsMultiChoice(labels)
-            }
+            title(res = R.string.labels_dialog_title)
+            listItemsMultiChoice(labels)
+        }
         }
         compareScreenshot(composeTestRule.onDialog())
     }
@@ -122,9 +122,9 @@ class ListDialog : ScreenshotTest {
     fun singleSelectionDialog() {
         composeTestRule.setContentAndWaitForIdle {
             DialogWithContent(buttons = { defaultButtons() }) {
-                title(res = R.string.ringtone_dialog_title)
-                listItemsSingleChoice(ringtones)
-            }
+            title(res = R.string.ringtone_dialog_title)
+            listItemsSingleChoice(ringtones)
+        }
         }
         compareScreenshot(composeTestRule.onDialog())
     }
