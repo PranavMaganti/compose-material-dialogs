@@ -6,9 +6,9 @@
   -  Fix resolution of extension function imports 
 
 ### 0.5.0 - 2021-07-27
-
-  -  Update compose to 1.0.0-beta09
--  Modify dialog `build` function to take buttons as a parameter
+-  Update compose to 1.0.0-rc02
+-  [BREAKING CHANGE] Remove `buttons` extension function in favour of passing buttons in as a parameter to the `build` function
+-  [BREAKING CHANGE] Remove `dateTimePicker` from library due to unmaintainable hacky code (may come back in the future if better implementation found)
 -  Fix font sizes in time picker and color picker ([#75](https://github.com/vanpra/compose-material-dialogs/issues/75))
 -  Make time picker and date picker adapt to smaller screen sizes
 -  Fix horizontal padding on dialog for smaller screen sizes
