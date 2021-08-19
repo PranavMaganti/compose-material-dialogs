@@ -255,7 +255,25 @@ class MaterialDialog(
 }
 
 /**
- *  Builds a dialog with the given content
+ * Builds and remembers a dialog with the given content.
+ *
+ * Example:
+ *
+ * ```
+ * @Composable
+ * fun MyComposable() {
+ *     val myDialog = rememberMaterialDialog {
+ *         listItems(list = listOf("My item"))
+ *     }
+ *
+ *     Button(onClick = { myDialog.show() }) {
+ *         Text("Sample")
+ *     }
+ *
+ *     myDialog.show()
+ * }
+ * ```
+ *
  * @param backgroundColor background color of the dialog
  * @param shape shape of the dialog and components used in the dialog
  * @param border border stoke of the dialog
