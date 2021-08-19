@@ -15,10 +15,10 @@ buildscript {
 
     dependencies {
         classpath(Dependencies.Kotlin.gradlePlugin)
-        classpath("com.android.tools.build:gradle:7.1.0-alpha05")
+        classpath("com.android.tools.build:gradle:7.1.0-alpha08")
         classpath("com.vanniktech:gradle-maven-publish-plugin:0.17.0")
         classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.5.0")
-        classpath("com.karumi:shot:5.10.6")
+        classpath(Dependencies.Shot.core)
     }
 }
 
