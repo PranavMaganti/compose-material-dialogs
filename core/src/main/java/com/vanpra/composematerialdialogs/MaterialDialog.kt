@@ -164,12 +164,7 @@ class MaterialDialog(
     }
 
     /**
-     *  Builds a dialog with the given content
-     * @param backgroundColor background color of the dialog
-     * @param shape shape of the dialog and components used in the dialog
-     * @param border border stoke of the dialog
-     * @param elevation elevation of the dialog
-     * @param content the body content of the dialog
+     * @see rememberMaterialDialog
      */
     @Deprecated(
         "Use instead the rememberMaterialDialog function.",
@@ -259,6 +254,14 @@ class MaterialDialog(
     }
 }
 
+/**
+ *  Builds a dialog with the given content
+ * @param backgroundColor background color of the dialog
+ * @param shape shape of the dialog and components used in the dialog
+ * @param border border stoke of the dialog
+ * @param elevation elevation of the dialog
+ * @param content the body content of the dialog
+ */
 @Composable
 fun rememberMaterialDialog(
     backgroundColor: Color = MaterialTheme.colors.surface,
