@@ -171,6 +171,11 @@ class MaterialDialog(
      * @param elevation elevation of the dialog
      * @param content the body content of the dialog
      */
+    @Deprecated(
+        "Use instead the rememberMaterialDialog function.",
+        replaceWith = ReplaceWith("rememberMaterialDialog(backgroundColor, shape, " +
+                "border, elevation, buttons, content)")
+    )
     @Composable
     fun build(
         backgroundColor: Color = MaterialTheme.colors.surface,
@@ -252,4 +257,16 @@ class MaterialDialog(
             }
         }
     }
+}
+
+@Composable
+fun rememberMaterialDialog(
+    backgroundColor: Color = MaterialTheme.colors.surface,
+    shape: Shape = MaterialTheme.shapes.medium,
+    border: BorderStroke? = null,
+    elevation: Dp = 24.dp,
+    buttons: @Composable MaterialDialogButtons.() -> Unit = {},
+    content: @Composable MaterialDialog.() -> Unit,
+) = remember { MaterialDialog() }.apply {
+    build(backgroundColor, shape, border, elevation, buttons, content)
 }
