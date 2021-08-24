@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -142,6 +143,7 @@ fun MaterialDialog.input(
     hint: String = "",
     prefill: String = "",
     waitForPositiveButton: Boolean = true,
+    useOutlinedStyle: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions(),
     keyboardActions: KeyboardActions = KeyboardActions(),
@@ -169,26 +171,49 @@ fun MaterialDialog.input(
     }
 
     Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)) {
-        TextField(
-            value = text,
-            onValueChange = {
-                text = it
-                if (!waitForPositiveButton) {
-                    onInput(text)
-                }
-            },
-            label = { Text(label, color = MaterialTheme.colors.onBackground.copy(0.8f)) },
-            modifier = Modifier
-                .focusRequester(focusRequester)
-                .fillMaxWidth()
-                .testTag("dialog_input"),
-            placeholder = { Text(hint, color = MaterialTheme.colors.onBackground.copy(0.5f)) },
-            isError = !valid,
-            visualTransformation = visualTransformation,
-            keyboardOptions = keyboardOptions,
-            keyboardActions = keyboardActions,
-            textStyle = TextStyle(MaterialTheme.colors.onBackground, fontSize = 16.sp)
-        )
+        if (useOutlinedStyle) {
+            OutlinedTextField(
+                value = text,
+                onValueChange = {
+                    text = it
+                    if (!waitForPositiveButton) {
+                        onInput(text)
+                    }
+                },
+                label = { Text(label, color = MaterialTheme.colors.onBackground.copy(0.8f)) },
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .fillMaxWidth()
+                    .testTag("dialog_input"),
+                placeholder = { Text(hint, color = MaterialTheme.colors.onBackground.copy(0.5f)) },
+                isError = !valid,
+                visualTransformation = visualTransformation,
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
+                textStyle = TextStyle(MaterialTheme.colors.onBackground, fontSize = 16.sp)
+            )
+        } else {
+            TextField(
+                value = text,
+                onValueChange = {
+                    text = it
+                    if (!waitForPositiveButton) {
+                        onInput(text)
+                    }
+                },
+                label = { Text(label, color = MaterialTheme.colors.onBackground.copy(0.8f)) },
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .fillMaxWidth()
+                    .testTag("dialog_input"),
+                placeholder = { Text(hint, color = MaterialTheme.colors.onBackground.copy(0.5f)) },
+                isError = !valid,
+                visualTransformation = visualTransformation,
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
+                textStyle = TextStyle(MaterialTheme.colors.onBackground, fontSize = 16.sp)
+            )
+        }
 
         if (!valid) {
             Text(
