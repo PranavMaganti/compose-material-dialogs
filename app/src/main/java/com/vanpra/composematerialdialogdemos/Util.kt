@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogButtons
+import com.vanpra.composematerialdialogs.MaterialDialogScope
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 
 /**
  * @brief Builds a dialog and adds button to the layout which shows the dialog on click
@@ -22,14 +24,16 @@ import com.vanpra.composematerialdialogs.MaterialDialogButtons
 fun DialogAndShowButton(
     buttonText: String,
     buttons: @Composable MaterialDialogButtons.() -> Unit = {},
-    content: @Composable MaterialDialog.() -> Unit
+    content: @Composable MaterialDialogScope.() -> Unit
 ) {
-    val dialog = remember { MaterialDialog() }
-
-    dialog.build(content = content, buttons = buttons)
+    val dialogState = rememberMaterialDialogState()
+    
+    MaterialDialog(dialogState = dialogState, buttons = buttons) {
+        content()
+    }
 
     TextButton(
-        onClick = { dialog.show() },
+        onClick = { dialogState.show() },
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)

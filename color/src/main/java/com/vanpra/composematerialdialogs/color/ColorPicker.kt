@@ -59,6 +59,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.ColorUtils
 import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.MaterialDialogScope
 import java.util.Locale
 import android.graphics.Color as AndroidColor
 
@@ -101,7 +102,7 @@ data class ARGBPickerState internal constructor(
  * dictated by [waitForPositiveButton]
  */
 @Composable
-fun MaterialDialog.colorChooser(
+fun MaterialDialogScope.colorChooser(
     colors: List<Color>,
     subColors: List<List<Color>> = listOf(),
     initialSelection: Int = 0,

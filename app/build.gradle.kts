@@ -5,14 +5,14 @@ plugins {
 }
 
 android {
-    compileSdk = 30
+    compileSdk = 31
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
 
         applicationId = "com.vanpra.composematerialdialogs"
         minSdk = 23
-        targetSdk = 30
+        targetSdk = 31
 
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -52,6 +52,7 @@ dependencies {
 //    implementation(Dependencies.ComposeMaterialDialogs.color)
 
     implementation(Dependencies.Kotlin.stdlib)
+    implementation(Dependencies.Google.material)
 
     implementation(Dependencies.AndroidX.Compose.ui)
     implementation(Dependencies.AndroidX.Compose.material)

@@ -39,7 +39,7 @@ private val bottomPadding = Modifier.padding(bottom = 8.dp)
  * @param item a composable function which takes an object of given generic type
  */
 @Composable
-fun <T> MaterialDialog.listItems(
+fun <T> MaterialDialogScope.listItems(
     list: List<T>,
     closeOnClick: Boolean = true,
     onClick: (index: Int, item: T) -> Unit = { _, _ -> },
@@ -56,7 +56,7 @@ fun <T> MaterialDialog.listItems(
                         .clickable(
                             onClick = {
                                 if (closeOnClick) {
-                                    hide()
+                                    dialogState.hide()
                                 }
                                 onClick(index, it)
                             },
@@ -78,7 +78,7 @@ fun <T> MaterialDialog.listItems(
  * @param onClick callback with the index and string of an item when it is clicked
  */
 @Composable
-fun MaterialDialog.listItems(
+fun MaterialDialogScope.listItems(
     list: List<String>,
     closeOnClick: Boolean = true,
     onClick: (index: Int, item: String) -> Unit = { _, _ -> }
@@ -107,7 +107,7 @@ fun MaterialDialog.listItems(
  * this call is dictated by [waitForPositiveButton]
  */
 @Composable
-fun MaterialDialog.listItemsMultiChoice(
+fun MaterialDialogScope.listItemsMultiChoice(
     list: List<String>,
     disabledIndices: Set<Int> = setOf(),
     initialSelection: Set<Int> = setOf(),
@@ -169,7 +169,7 @@ fun MaterialDialog.listItemsMultiChoice(
  * The timing of this call is dictated by [waitForPositiveButton]
  */
 @Composable
-fun MaterialDialog.listItemsSingleChoice(
+fun MaterialDialogScope.listItemsSingleChoice(
     list: List<String>,
     disabledIndices: Set<Int> = setOf(),
     initialSelection: Int? = null,
@@ -177,7 +177,7 @@ fun MaterialDialog.listItemsSingleChoice(
     onChoiceChange: (selected: Int) -> Unit = {}
 ) {
     var selectedItem by remember { mutableStateOf(initialSelection) }
-    val positiveEnabledIndex = addPositiveButtonEnabled(valid = selectedItem != null)
+    PositiveButtonEnabled(valid = selectedItem != null) {}
 
     if (waitForPositiveButton) {
         DialogCallback { onChoiceChange(selectedItem!!) }
@@ -185,7 +185,6 @@ fun MaterialDialog.listItemsSingleChoice(
 
     val onSelect = { index: Int ->
         if (index !in disabledIndices) {
-            setPositiveEnabled(positiveEnabledIndex, true)
             selectedItem = index
 
             if (!waitForPositiveButton) {

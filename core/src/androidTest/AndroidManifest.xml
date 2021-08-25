@@ -3,8 +3,6 @@
     package="com.vanpra.composematerialdialogs.test"
     android:sharedUserId="com.vanpra.composematerialdialogs.uid">
     <application>
-        <activity
-            android:name="androidx.activity.ComponentActivity"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+        <activity android:name="androidx.activity.ComponentActivity" />
     </application>
 </manifest>

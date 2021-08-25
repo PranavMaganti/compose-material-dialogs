@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.sp
  * @param center text is aligned to center when true
  */
 @Composable
-fun MaterialDialog.title(
+fun MaterialDialogScope.title(
     text: String? = null,
     @StringRes res: Int? = null,
     center: Boolean = false
@@ -77,7 +77,7 @@ fun MaterialDialog.title(
  * @param icon optional icon displayed at the start of the title
  */
 @Composable
-fun MaterialDialog.iconTitle(
+fun MaterialDialogScope.iconTitle(
     text: String? = null,
     @StringRes textRes: Int? = null,
     icon: @Composable () -> Unit = {},
@@ -105,7 +105,7 @@ fun MaterialDialog.iconTitle(
  * @param res message text from a string resource
  */
 @Composable
-fun MaterialDialog.message(text: String? = null, @StringRes res: Int? = null) {
+fun MaterialDialogScope.message(text: String? = null, @StringRes res: Int? = null) {
     val messageText = getString(res, text)
 
     Text(
@@ -137,7 +137,7 @@ fun MaterialDialog.message(text: String? = null, @StringRes res: Int? = null) {
  * dictated by [waitForPositiveButton]
  */
 @Composable
-fun MaterialDialog.input(
+fun MaterialDialogScope.input(
     label: String,
     hint: String = "",
     prefill: String = "",
@@ -155,13 +155,8 @@ fun MaterialDialog.input(
     val valid = remember(text) { isTextValid(text) }
     val focusManager = LocalFocusManager.current
 
-    val positiveEnabledIndex = addPositiveButtonEnabled(valid = valid) {
+    PositiveButtonEnabled(valid = valid) {
         focusManager.clearFocus()
-    }
-
-    DisposableEffect(valid) {
-        setPositiveEnabled(positiveEnabledIndex, valid)
-        onDispose { }
     }
 
     if (waitForPositiveButton) {
@@ -213,7 +208,7 @@ fun MaterialDialog.input(
  * @param content the content of the custom view
  */
 @Composable
-fun MaterialDialog.customView(content: @Composable () -> Unit) {
+fun MaterialDialogScope.customView(content: @Composable () -> Unit) {
     Box(modifier = Modifier.padding(bottom = 28.dp, start = 24.dp, end = 24.dp)) {
         content()
     }

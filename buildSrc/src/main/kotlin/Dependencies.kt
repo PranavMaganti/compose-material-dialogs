@@ -20,7 +20,7 @@ object Dependencies {
     }
 
     object Kotlin {
-        private const val version = "1.5.30-RC"
+        private const val version = "1.5.21"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
@@ -30,7 +30,13 @@ object Dependencies {
         const val core = "com.karumi:shot:$version"
     }
 
+    object Google {
+        const val material =  "com.google.android.material:material:1.5.0-alpha02"
+    }
+
     object AndroidX {
+        const val coreKtx = "androidx.core:core-ktx:1.7.0-alpha01"
+
         object Testing {
             const val version = "1.4.0"
             const val core = "androidx.test:core:$version"
