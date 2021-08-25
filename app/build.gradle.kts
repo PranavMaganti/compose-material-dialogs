@@ -59,11 +59,6 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.activity)
     implementation(Dependencies.AndroidX.Compose.navigation)
 
-    implementation(Dependencies.AndroidX.coreKtx)
-    implementation(Dependencies.AndroidX.appcompat)
-
-    implementation(Dependencies.material)
-
     implementation(kotlin("stdlib-jdk8"))
 
     androidTestImplementation(Dependencies.AndroidX.Compose.testing)
