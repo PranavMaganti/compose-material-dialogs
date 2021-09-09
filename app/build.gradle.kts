@@ -61,7 +61,5 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.navigation)
 
     implementation(kotlin("stdlib-jdk8"))
-
-    androidTestImplementation(Dependencies.AndroidX.Compose.testing)
     coreLibraryDesugaring(Dependencies.desugar)
 }

@@ -122,7 +122,7 @@ internal class MaterialDialogScopeImpl(
  * this callback hides the dialog.
  */
 
-class MaterialDialogState(initialState: Boolean) {
+class MaterialDialogState(initialState: Boolean = false) {
     var showing by mutableStateOf(initialState)
 
     /**

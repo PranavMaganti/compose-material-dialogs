@@ -28,6 +28,7 @@ object Dependencies {
     object Shot {
         private const val version = "5.11.2"
         const val core = "com.karumi:shot:$version"
+        const val android = "com.karumi:shot-android:$version"
     }
 
     object Google {

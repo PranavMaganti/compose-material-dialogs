@@ -58,5 +58,5 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.activity)
 
     implementation(Dependencies.AndroidX.Compose.testing)
-    implementation(Dependencies.Shot.core)
+    implementation(Dependencies.Shot.android)
 }

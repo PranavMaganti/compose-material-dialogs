@@ -1,6 +1,7 @@
 package com.vanpra.composematerialdialogs.test.functional
 
 import android.util.Patterns
+import androidx.compose.material.BottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsEnabled
@@ -11,16 +12,13 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.buttons
-import com.vanpra.composematerialdialogs.input
+import com.vanpra.composematerialdialogs.*
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
 import com.vanpra.composematerialdialogs.test.utils.defaultButtons
 import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogInput
 import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogInputError
 import com.vanpra.composematerialdialogs.test.utils.extensions.onPositiveButton
-import com.vanpra.composematerialdialogs.title
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -177,14 +175,15 @@ class InputDialogTest {
     }
 
     private fun setupBasicInputDialog(
-        dialog: MaterialDialog = MaterialDialog(),
-        testInputDialog: @Composable MaterialDialog.() -> Unit = { input(label = "Test") }
+        testInputDialog: @Composable MaterialDialogScope.() -> Unit = { input(label = "Test") }
     ) {
         composeTestRule.setContent {
-            DialogWithContent(dialog = dialog, buttons = { defaultButtons() }) {
-            title(res = R.string.input_dialog_title)
-            testInputDialog()
-        }
+            val dialogState = rememberMaterialDialogState(true)
+
+            DialogWithContent(dialogState = dialogState, buttons = { defaultButtons() }) {
+                title(res = R.string.input_dialog_title)
+                testInputDialog()
+            }
         }
     }
 }
