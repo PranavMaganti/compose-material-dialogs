@@ -36,6 +36,10 @@ import androidx.compose.ui.window.Dialog
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.min
 
+/**
+ *  Interface defining values and functions which are available to any code
+ *  within a [MaterialDialog]'s content parameter
+ */
 interface MaterialDialogScope {
     val dialogState: MaterialDialogState
     val dialogButtons: MaterialDialogButtons
@@ -45,12 +49,30 @@ interface MaterialDialogScope {
 
     val autoDismiss: Boolean
 
+    /**
+     * Hides the dialog and calls any callbacks from components in the dialog
+     */
     fun submit()
+
+    /**
+     * Clears the dialog's state
+     */
     fun reset()
 
+    /**
+     * Adds a value to the [positiveEnabled] list and returns the index used to store the boolean
+     *
+     * @param valid boolean value to initialise the index in the list
+     * @param onDispose cleanup callback when component calling this gets destroyed
+     */
     @Composable
     fun PositiveButtonEnabled(valid: Boolean, onDispose: () -> Unit)
 
+    /**
+     * Adds a callback to the dialog which is called on positive button press
+     *
+     * @param callback called when positive button is pressed
+     */
     @Composable
     fun DialogCallback(callback: () -> Unit)
 }
@@ -77,6 +99,10 @@ internal class MaterialDialogScopeImpl(
         }
     }
 
+    /**
+     * Clears the dialog callbacks and positive button enables values along with their
+     * respective counters
+     */
     override fun reset() {
         positiveButtonEnabled.clear()
         callbacks.clear()
@@ -121,19 +147,12 @@ internal class MaterialDialogScopeImpl(
 }
 
 /**
- *  The MaterialDialogState class is used to store the state for a dialog using both pre-made and
- * custom views
+ *  The [MaterialDialogState] class is used to store the state for a [MaterialDialog]
  *
- * @param autoDismiss when true the dialog will be automatically dismissed when a positive or
- * negative button is pressed
- * @param onCloseRequest a callback for when the user tries to exit the dialog by clicking outside
- * the dialog. This callback takes the current MaterialDialog as
- * a parameter to allow for the hide method of the dialog to be called if required. By default
- * this callback hides the dialog.
+ * @param initialValue the initial showing state of the dialog
  */
-
-class MaterialDialogState(initialState: Boolean = false) {
-    var showing by mutableStateOf(initialState)
+class MaterialDialogState(initialValue: Boolean = false) {
+    var showing by mutableStateOf(initialValue)
 
     /**
      *  Dialog background color with elevation overlay
@@ -159,7 +178,7 @@ class MaterialDialogState(initialState: Boolean = false) {
 
     companion object {
         /**
-         * The default [Saver] implementation for [ModalBottomSheetState].
+         * The default [Saver] implementation for [MaterialDialogState].
          */
         fun Saver(): Saver<MaterialDialogState, *> = Saver(
             save = { it.showing },
@@ -168,19 +187,28 @@ class MaterialDialogState(initialState: Boolean = false) {
     }
 }
 
+/**
+ * Create and [remember] a [MaterialDialogState].
+ *
+ * @param initialValue the initial showing state of the dialog
+ */
 @Composable
-fun rememberMaterialDialogState(initialState: Boolean = false): MaterialDialogState {
+fun rememberMaterialDialogState(initialValue: Boolean = false): MaterialDialogState {
     return rememberSaveable(saver = MaterialDialogState.Saver()) {
-        MaterialDialogState(initialState)
+        MaterialDialogState(initialValue)
     }
 }
 
 /**
  *  Builds a dialog with the given content
+ * @param dialogState state of the dialog
  * @param backgroundColor background color of the dialog
  * @param shape shape of the dialog and components used in the dialog
  * @param border border stoke of the dialog
  * @param elevation elevation of the dialog
+ * @param autoDismiss when true the dialog is hidden on any button press
+ * @param onCloseRequest function to be executed when user clicks outside dialog
+ * @param buttons the buttons layout of the dialog
  * @param content the body content of the dialog
  */
 @Composable

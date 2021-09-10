@@ -16,7 +16,7 @@ class DateTimePickerTest : ScreenshotTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    val testTitle = "Custom Title"
+    private val testTitle = "Custom Title"
 
     @Test
     fun datePickerBasic() {
