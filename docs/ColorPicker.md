@@ -7,16 +7,15 @@
 Here is an example of how to add a color picker to a dialog:
 
 ``` kotlin
-val dialog = remember { MaterialDialog() }
-
-dialog.build {
+val dialogState = rememberMaterialDialogState()
+MaterialDialog(dialogState = dialogState) {
     ...
     colorPicker(colors = ColorPalette.Primary)
     ...
 }
 
 /* This should be called in an onClick or an Effect */ 
-dialog.show()
+dialogState.show()
 ```
 
 `ColorPalette.Primary` is a predefined list of colors and can be replaced with a list of custom colors.
@@ -26,7 +25,7 @@ dialog.show()
 Here is an example of how to add a color picker with sub colors to a dialog:
 
 ``` kotlin
-dialog.build {
+MaterialDialog(dialogState = dialogState) {
     ...
     colorPicker(colors = ColorPalette.Primary, subColors = ColorPalette.PrimarySub)
     ...
@@ -40,7 +39,7 @@ The `subColors` parameter is passed in a list of list of colors which are show t
 Here is an example of how to add a color picker with custom argb selector to a dialog:
 
 ``` kotlin
-dialog.build {
+MaterialDialog(dialogState = dialogState) {
     ...
     colorPicker(colors = ColorPalette.Primary, allowCustomArgb = true)
     ...

@@ -1,5 +1,12 @@
 # Changelog
 
+### 0.6.0 - 2021-09-10
+
+  -  [BREAKING CHANGE] Replace MaterialDialog class structure with composable function with state. See [docs](https://vanpra.github.io/compose-material-dialogs) and the [sample app](https://github.com/vanpra/compose-material-dialogs/tree/main/app/src/main/java/com/vanpra/composematerialdialogdemos/demos) for examples
+  -  Update compose to 1.1.0-alpha03
+-  Update kotlin to 1.5.30
+-  Fix bug which caused the year picker to fill the whole dialog
+
 ### 0.5.1 - 2021-07-29
 
   -  Update compose to 1.0.0

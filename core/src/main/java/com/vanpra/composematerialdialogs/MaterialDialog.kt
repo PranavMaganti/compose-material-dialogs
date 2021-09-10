@@ -33,8 +33,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import kotlin.math.min
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.math.min
 
 /**
  *  Interface defining values and functions which are available to any code
