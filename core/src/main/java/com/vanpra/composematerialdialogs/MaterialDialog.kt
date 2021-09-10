@@ -33,8 +33,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.min
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  *  Interface defining values and functions which are available to any code
@@ -60,7 +60,8 @@ interface MaterialDialogScope {
     fun reset()
 
     /**
-     * Adds a value to the [positiveEnabled] list and returns the index used to store the boolean
+     * Adds a value to the [positiveButtonEnabled] map and updates the value in the map when
+     * [valid] changes
      *
      * @param valid boolean value to initialise the index in the list
      * @param onDispose cleanup callback when component calling this gets destroyed
@@ -112,7 +113,8 @@ internal class MaterialDialogScopeImpl(
     }
 
     /**
-     * Adds a value to the [positiveEnabled] list and returns the index used to store the boolean
+     * Adds a value to the [positiveButtonEnabled] map and updates the value in the map when
+     * [valid] changes
      *
      * @param valid boolean value to initialise the index in the list
      * @param onDispose cleanup callback when component calling this gets destroyed
@@ -213,7 +215,7 @@ fun rememberMaterialDialogState(initialValue: Boolean = false): MaterialDialogSt
  */
 @Composable
 fun MaterialDialog(
-    dialogState: MaterialDialogState,
+    dialogState: MaterialDialogState = rememberMaterialDialogState(),
     backgroundColor: Color = MaterialTheme.colors.surface,
     shape: Shape = MaterialTheme.shapes.medium,
     border: BorderStroke? = null,

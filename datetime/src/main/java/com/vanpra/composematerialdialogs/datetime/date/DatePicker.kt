@@ -129,7 +129,6 @@ internal fun DatePickerImpl(title: String, state: DatePickerState) {
                     androidx.compose.animation.AnimatedVisibility(
                         state.yearPickerShowing,
                         modifier = Modifier
-                            .fillMaxSize()
                             .zIndex(0.7f)
                             .clipToBounds(),
                         enter = slideInVertically({ -it }),
@@ -157,7 +156,9 @@ private fun YearPicker(
     LazyVerticalGrid(
         cells = GridCells.Fixed(3),
         state = gridState,
-        modifier = Modifier.background(state.dialogBackground)
+        modifier = Modifier
+            .background(state.dialogBackground)
+            .height(280.dp)
     ) {
         itemsIndexed(state.yearRange.toList()) { _, item ->
             val selected = remember { item == viewDate.year }
