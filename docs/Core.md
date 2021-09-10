@@ -7,9 +7,8 @@
 Here is an example to make a basic dialog with a title and text:
 
 ```kotlin
-val dialog = remember { MaterialDialog() }
-
-dialog.build {
+val dialogState = rememberMaterialDialogState()
+MaterialDialog(dialogState = dialogState) {
     title(text = "Use Location Services?")
     message(res = R.string.location_dialog_message)
 }
@@ -20,26 +19,16 @@ dialog.show()
 
 The dialog is shown when the `dialog.show()` is called. The hard coded strings for all the components in the example above can be replaced with a string resource id. 
 
-If the `autoDismiss` parameter of a `MaterialDialog`  is set to false then the dialog will not close when the positive or negative buttons are clicked, allowing for flexibility in custom views.
-
-The `MaterialDialog` class also has a `onCancelRequest` parameter which is a callback which is used when the user clicks outside the dialog area. By default this parameter is set to hide the dialog.
-
 Buttons can be added to the dialog by adding the `buttons` parameter:
 
 ```kotlin
-dialog.build(buttons = {
-    positiveButton("Ok", onClick = { 
-        //Do Something
-    })
-
-    button("Later", onClick = {
-        //Do Something
-    })
-
-    negativeButton("Cancel", onClick = { 
-        //Do Something
-    })
-}) {
+MaterialDialog(
+    dialogState = dialogState,
+    buttons = {
+        positiveButton("Ok")
+        negativeButton("Cancel")
+    }
+) {
     ...
 }
 ```
@@ -51,7 +40,7 @@ If the text of the buttons is too long to fit in one row the buttons will be aut
 <img src="https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/input.jpg" width="300" height="600"  />
 
 ```kotlin
-dialog.build(buttons = { ... }) {
+MaterialDialog(dialogState = dialogState, buttons = { ... }) {
     ...
    	input(label = "Name", hint = "Jon Smith") { inputString ->
         /* Do something */
@@ -69,7 +58,7 @@ In the code snippet above creates the dialog seen in the image (without the titl
 Below is an example of a plain list dialog:
 
 ```kotlin
-dialog.build {
+MaterialDialog(dialogState = dialogState) {
     ...
     listItems(listOf("Item 1", "Item 2", "Item 3"), onClick { index, item ->
         //Do Something
@@ -88,7 +77,9 @@ val items = listOf(
     TextIcon("Item 3", imageFromResource(R.drawable.item_three))
 )
 
-dialog.build {
+...
+
+MaterialDialog(dialogState = dialogState) {
     ...
     listItems(items, onClick { index, item ->
         //Do Something
@@ -109,7 +100,7 @@ dialog.build {
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/single_selection.png)
 
 ```kotlin
-dialog.build {
+MaterialDialog(dialogState = dialogState, buttons = { ... }) {
     listItemsSingleChoice(
         list = listOf("Item 1", "Item 2", "Item 3"),
         disabledIndices = listOf(1),
@@ -127,7 +118,7 @@ As seen in the code snippet above you can pass in a list of indices of items whi
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/multi_selection.png)
 
 ```kotlin
-dialog.build {
+MaterialDialog(dialogState = dialogState, buttons = { ... }) {
     listItemsSingleChoice(
         list = listOf("Item 1", "Item 2", "Item 3"),
         disabledIndices = listOf(1),
@@ -143,7 +134,7 @@ As seen in the code snippet above you can select which items will be disabled (i
 ### Custom View
 
 ```kotlin
-dialog.build {
+MaterialDialog(dialogState = dialogState, buttons = { ... }) {
     customView {
     	//Define your view here
     }
@@ -157,10 +148,10 @@ The custom view provides a box with the appropriate material design padding's  a
 The background colour of the dialog can be changed by using the `backgroundColor` parameter of the build function:
 
 ```kotlin
-dialog.build(backgroundColor = Color.Red) {
+MaterialDialog(dialogState = dialogState, buttons = { ... }, backgroundColor = Color.Red) {
     title(text = "Use Location Services?")
     message(res = R.string.location_dialog_message)
 }
 ```
 
-The shape of the dialog is dictated by the `MaterialTheme.shapes.medium` parameter.
+The shape of the dialog is defaulted to the `MaterialTheme.shapes.medium` property but can also be set using the `shape` parameter in `MaterialDialog` .

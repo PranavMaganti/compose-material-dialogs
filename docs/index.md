@@ -11,7 +11,7 @@
 ```gradle
 dependencies {
   ...
-  implementation "io.github.vanpra.compose-material-dialogs:core:0.5.1" 
+  implementation "io.github.vanpra.compose-material-dialogs:core:0.5.2" 
   ...
 }
 ```
@@ -27,7 +27,7 @@ dependencies {
 ```gradle
 dependencies {
   ...
-  implementation "io.github.vanpra.compose-material-dialogs:datetime:0.5.1"
+  implementation "io.github.vanpra.compose-material-dialogs:datetime:0.5.2"
   ...
 }
 ```
@@ -43,7 +43,7 @@ dependencies {
 ```gradle
 dependencies {
   ...
-  implementation "io.github.vanpra.compose-material-dialogs:color:0.5.1"
+  implementation "io.github.vanpra.compose-material-dialogs:color:0.5.2"
   ...
 }
 ```
