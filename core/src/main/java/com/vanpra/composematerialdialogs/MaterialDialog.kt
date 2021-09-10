@@ -12,13 +12,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.focus.FocusManager
@@ -36,45 +37,135 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.min
 
 /**
- *  The MaterialDialog class is used to build and display a dialog using both pre-made and
- * custom views
- *
- * @param autoDismiss when true the dialog will be automatically dismissed when a positive or
- * negative button is pressed
- * @param onCloseRequest a callback for when the user tries to exit the dialog by clicking outside
- * the dialog. This callback takes the current MaterialDialog as
- * a parameter to allow for the hide method of the dialog to be called if required. By default
- * this callback hides the dialog.
+ *  Interface defining values and functions which are available to any code
+ *  within a [MaterialDialog]'s content parameter
  */
-class MaterialDialog(
-    private val autoDismiss: Boolean = true,
-    private val onCloseRequest: (MaterialDialog) -> Unit = { it.hide() },
-) {
-    private val showing: MutableState<Boolean> = mutableStateOf(false)
+interface MaterialDialogScope {
+    val dialogState: MaterialDialogState
+    val dialogButtons: MaterialDialogButtons
 
-    val dialogButtons = MaterialDialogButtons(this)
+    val callbacks: SnapshotStateMap<Int, () -> Unit>
+    val positiveButtonEnabled: SnapshotStateMap<Int, Boolean>
 
-    val callbacks = mutableMapOf<Int, () -> Unit>()
+    val autoDismiss: Boolean
+
+    /**
+     * Hides the dialog and calls any callbacks from components in the dialog
+     */
+    fun submit()
+
+    /**
+     * Clears the dialog's state
+     */
+    fun reset()
+
+    /**
+     * Adds a value to the [positiveButtonEnabled] map and updates the value in the map when
+     * [valid] changes
+     *
+     * @param valid boolean value to initialise the index in the list
+     * @param onDispose cleanup callback when component calling this gets destroyed
+     */
+    @Composable
+    fun PositiveButtonEnabled(valid: Boolean, onDispose: () -> Unit)
+
+    /**
+     * Adds a callback to the dialog which is called on positive button press
+     *
+     * @param callback called when positive button is pressed
+     */
+    @Composable
+    fun DialogCallback(callback: () -> Unit)
+}
+
+internal class MaterialDialogScopeImpl(
+    override val dialogState: MaterialDialogState,
+    override val autoDismiss: Boolean = true
+) : MaterialDialogScope {
+    override val dialogButtons = MaterialDialogButtons(this)
+
+    override val callbacks = mutableStateMapOf<Int, () -> Unit>()
     private val callbackCounter = AtomicInteger(0)
 
-    var positiveEnabled = mutableStateMapOf<Int, Boolean>()
+    override val positiveButtonEnabled = mutableStateMapOf<Int, Boolean>()
     private val positiveEnabledCounter = AtomicInteger(0)
-    var positiveButtonEnabledOverride by mutableStateOf(true)
+
+    /**
+     * Hides the dialog and calls any callbacks from components in the dialog
+     */
+    override fun submit() {
+        dialogState.hide()
+        callbacks.values.forEach {
+            it()
+        }
+    }
+
+    /**
+     * Clears the dialog callbacks and positive button enables values along with their
+     * respective counters
+     */
+    override fun reset() {
+        positiveButtonEnabled.clear()
+        callbacks.clear()
+
+        positiveEnabledCounter.set(0)
+        callbackCounter.set(0)
+    }
+
+    /**
+     * Adds a value to the [positiveButtonEnabled] map and updates the value in the map when
+     * [valid] changes
+     *
+     * @param valid boolean value to initialise the index in the list
+     * @param onDispose cleanup callback when component calling this gets destroyed
+     */
+    @Composable
+    override fun PositiveButtonEnabled(valid: Boolean, onDispose: () -> Unit) {
+        val positiveEnabledIndex = remember { positiveEnabledCounter.getAndIncrement() }
+
+        DisposableEffect(valid) {
+            positiveButtonEnabled[positiveEnabledIndex] = valid
+            onDispose {
+                positiveButtonEnabled[positiveEnabledIndex] = true
+                onDispose()
+            }
+        }
+    }
+
+    /**
+     * Adds a callback to the dialog which is called on positive button press
+     *
+     * @param callback called when positive button is pressed
+     */
+    @Composable
+    override fun DialogCallback(callback: () -> Unit) {
+        val callbackIndex = rememberSaveable { callbackCounter.getAndIncrement() }
+
+        DisposableEffect(Unit) {
+            callbacks[callbackIndex] = callback
+            onDispose { callbacks[callbackIndex] = {} }
+        }
+    }
+}
+
+/**
+ *  The [MaterialDialogState] class is used to store the state for a [MaterialDialog]
+ *
+ * @param initialValue the initial showing state of the dialog
+ */
+class MaterialDialogState(initialValue: Boolean = false) {
+    var showing by mutableStateOf(initialValue)
 
     /**
      *  Dialog background color with elevation overlay
      */
     var dialogBackgroundColor by mutableStateOf<Color?>(null)
 
-    internal fun setPositiveEnabled(index: Int, value: Boolean) {
-        positiveEnabled[index] = value
-    }
-
     /**
      *  Shows the dialog
      */
     fun show() {
-        showing.value = true
+        showing = true
     }
 
     /**
@@ -84,124 +175,80 @@ class MaterialDialog(
      */
     fun hide(focusManager: FocusManager? = null) {
         focusManager?.clearFocus()
-        showing.value = false
+        showing = false
     }
 
-    /**
-     * Hides the dialog and calls any callbacks from components in the dialog
-     */
-    fun submit() {
-        hide()
-        callbacks.values.forEach {
-            it()
+    companion object {
+        /**
+         * The default [Saver] implementation for [MaterialDialogState].
+         */
+        fun Saver(): Saver<MaterialDialogState, *> = Saver(
+            save = { it.showing },
+            restore = { MaterialDialogState(it) }
+        )
+    }
+}
+
+/**
+ * Create and [remember] a [MaterialDialogState].
+ *
+ * @param initialValue the initial showing state of the dialog
+ */
+@Composable
+fun rememberMaterialDialogState(initialValue: Boolean = false): MaterialDialogState {
+    return rememberSaveable(saver = MaterialDialogState.Saver()) {
+        MaterialDialogState(initialValue)
+    }
+}
+
+/**
+ *  Builds a dialog with the given content
+ * @param dialogState state of the dialog
+ * @param backgroundColor background color of the dialog
+ * @param shape shape of the dialog and components used in the dialog
+ * @param border border stoke of the dialog
+ * @param elevation elevation of the dialog
+ * @param autoDismiss when true the dialog is hidden on any button press
+ * @param onCloseRequest function to be executed when user clicks outside dialog
+ * @param buttons the buttons layout of the dialog
+ * @param content the body content of the dialog
+ */
+@Composable
+fun MaterialDialog(
+    dialogState: MaterialDialogState = rememberMaterialDialogState(),
+    backgroundColor: Color = MaterialTheme.colors.surface,
+    shape: Shape = MaterialTheme.shapes.medium,
+    border: BorderStroke? = null,
+    elevation: Dp = 24.dp,
+    autoDismiss: Boolean = true,
+    onCloseRequest: (MaterialDialogState) -> Unit = { it.hide() },
+    buttons: @Composable MaterialDialogButtons.() -> Unit = {},
+    content: @Composable MaterialDialogScope.() -> Unit
+) {
+    val dialogScope = remember { MaterialDialogScopeImpl(dialogState, autoDismiss) }
+    DisposableEffect(dialogState.showing) {
+        if (!dialogState.showing) dialogScope.reset()
+        onDispose { }
+    }
+
+    BoxWithConstraints {
+        val maxHeight = if (isLargeDevice()) {
+            LocalConfiguration.current.screenHeightDp.dp - 90.dp
+        } else {
+            560.dp
         }
-    }
 
-    /**
-     *  Disables the positive dialog button if present
-     */
-    fun disablePositiveButton() {
-        positiveButtonEnabledOverride = false
-    }
+        val maxHeightPx = with(LocalDensity.current) { maxHeight.toPx().toInt() }
+        val isDialogFullWidth = LocalConfiguration.current.screenWidthDp.dp == maxWidth
+        val padding = if (isDialogFullWidth) 16.dp else 0.dp
 
-    /**
-     *  Enables the positive dialog button if present
-     */
-    fun enablePositiveButton() {
-        positiveButtonEnabledOverride = true
-    }
+        if (dialogState.showing) {
+            dialogState.dialogBackgroundColor = LocalElevationOverlay.current?.apply(
+                color = backgroundColor,
+                elevation = elevation
+            ) ?: MaterialTheme.colors.surface
 
-    /**
-     * Adds a callback to the dialog which is called on positive button press
-     *
-     * @param callback called when positive button is pressed
-     */
-    @Composable
-    fun DialogCallback(callback: () -> Unit) {
-        val callbackIndex = rememberSaveable { callbackCounter.getAndIncrement() }
-
-        DisposableEffect(Unit) {
-            callbacks[callbackIndex] = callback
-            onDispose { callbacks[callbackIndex] = {} }
-        }
-    }
-
-    /**
-     * Adds a value to the [positiveEnabled] list and returns the index used to store the boolean
-     *
-     * @param valid boolean value to initialise the index in the list
-     * @param onDispose cleanup callback when component calling this gets destroyed
-     */
-    @Composable
-    fun addPositiveButtonEnabled(valid: Boolean, onDispose: () -> Unit = {}): Int {
-        val positiveEnabledIndex = remember { positiveEnabledCounter.getAndIncrement() }
-
-        DisposableEffect(Unit) {
-            positiveEnabled[positiveEnabledIndex] = valid
-
-            onDispose {
-                setPositiveEnabled(positiveEnabledIndex, true)
-                onDispose()
-            }
-        }
-
-        return positiveEnabledIndex
-    }
-
-    /**
-     *  Checks if autoDismiss is set
-     *
-     * @return true if autoDismiss is set to true and false otherwise
-     */
-    fun isAutoDismiss() = autoDismiss
-
-    private fun resetDialog() {
-        positiveEnabled.clear()
-        callbacks.clear()
-
-        positiveEnabledCounter.set(0)
-        callbackCounter.set(0)
-    }
-
-    /**
-     *  Builds a dialog with the given content
-     * @param backgroundColor background color of the dialog
-     * @param shape shape of the dialog and components used in the dialog
-     * @param border border stoke of the dialog
-     * @param elevation elevation of the dialog
-     * @param content the body content of the dialog
-     */
-    @Composable
-    fun build(
-        backgroundColor: Color = MaterialTheme.colors.surface,
-        shape: Shape = MaterialTheme.shapes.medium,
-        border: BorderStroke? = null,
-        elevation: Dp = 24.dp,
-        buttons: @Composable MaterialDialogButtons.() -> Unit = {},
-        content: @Composable MaterialDialog.() -> Unit
-    ) {
-        BoxWithConstraints {
-            val maxHeight = if (isLargeDevice()) {
-                LocalConfiguration.current.screenHeightDp.dp - 90.dp
-            } else {
-                560.dp
-            }
-
-            val maxHeightPx = with(LocalDensity.current) { maxHeight.toPx().toInt() }
-            val isDialogFullWidth = LocalConfiguration.current.screenWidthDp.dp == maxWidth
-            val padding = if (isDialogFullWidth) 16.dp else 0.dp
-
-            if (showing.value) {
-                dialogBackgroundColor = LocalElevationOverlay.current?.apply(
-                    color = backgroundColor,
-                    elevation = elevation
-                ) ?: MaterialTheme.colors.surface
-
-                Dialog(onDismissRequest = { onCloseRequest(this@MaterialDialog) }) {
-                DisposableEffect(Unit) {
-                    onDispose { resetDialog() }
-                }
-
+            Dialog(onDismissRequest = { onCloseRequest(dialogState) }) {
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -217,13 +264,11 @@ class MaterialDialog(
                 ) {
                     Layout(
                         content = {
-                            DialogButtons(
+                            dialogScope.DialogButtonsLayout(
                                 modifier = Modifier.layoutId("buttons"),
-                                dialogButtons = dialogButtons,
-                                dialog = this@MaterialDialog,
                                 content = buttons
                             )
-                            Column(Modifier.layoutId("content")) { content() }
+                            Column(Modifier.layoutId("content")) { content(dialogScope) }
                         }
                     ) { measurables, constraints ->
                         val buttonsHeight =
@@ -235,7 +280,7 @@ class MaterialDialog(
                         val contentPlaceable = measurables[1].measure(
                             constraints.copy(
                                 maxHeight = maxHeightPx - buttonsPlaceable.height,
-                                minHeight = 0
+                                minHeight = 0,
                             )
                         )
 
@@ -248,7 +293,6 @@ class MaterialDialog(
                         }
                     }
                 }
-            }
             }
         }
     }

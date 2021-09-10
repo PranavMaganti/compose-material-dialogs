@@ -1,8 +1,8 @@
 package com.vanpra.composematerialdialogdemos
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +31,7 @@ import com.vanpra.composematerialdialogdemos.ui.ComposeMaterialDialogsTheme
 /**
  * @brief MainActivity with material dialog samples
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

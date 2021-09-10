@@ -11,9 +11,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.buttons
+import com.vanpra.composematerialdialogs.MaterialDialogScope
 import com.vanpra.composematerialdialogs.input
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
 import com.vanpra.composematerialdialogs.test.utils.defaultButtons
@@ -177,14 +177,15 @@ class InputDialogTest {
     }
 
     private fun setupBasicInputDialog(
-        dialog: MaterialDialog = MaterialDialog(),
-        testInputDialog: @Composable MaterialDialog.() -> Unit = { input(label = "Test") }
+        testInputDialog: @Composable MaterialDialogScope.() -> Unit = { input(label = "Test") }
     ) {
         composeTestRule.setContent {
-            DialogWithContent(dialog = dialog, buttons = { defaultButtons() }) {
-            title(res = R.string.input_dialog_title)
-            testInputDialog()
-        }
+            val dialogState = rememberMaterialDialogState(true)
+
+            DialogWithContent(dialogState = dialogState, buttons = { defaultButtons() }) {
+                title(res = R.string.input_dialog_title)
+                testInputDialog()
+            }
         }
     }
 }

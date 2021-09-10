@@ -1,27 +1,24 @@
 package com.vanpra.composematerialdialogs.test.utils
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.Modifier
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogButtons
+import com.vanpra.composematerialdialogs.MaterialDialogScope
+import com.vanpra.composematerialdialogs.MaterialDialogState
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 
 @Composable
 fun DialogWithContent(
     autoDismiss: Boolean = true,
-    dialog: MaterialDialog = MaterialDialog(autoDismiss),
+    dialogState: MaterialDialogState = rememberMaterialDialogState(true),
     buttons: @Composable MaterialDialogButtons.() -> Unit = {},
-    content: @Composable MaterialDialog.() -> Unit = {}
+    content: @Composable MaterialDialogScope.() -> Unit = {}
 ) {
-    MaterialTheme {
-        Box(Modifier.fillMaxSize()) {
-            dialog.build(buttons = buttons) { content() }
-            SideEffect { dialog.show() }
-        }
+    MaterialDialog(dialogState = dialogState, buttons = buttons, autoDismiss = autoDismiss) {
+        content()
     }
+    SideEffect { dialogState.show() }
 }
 
 @Composable

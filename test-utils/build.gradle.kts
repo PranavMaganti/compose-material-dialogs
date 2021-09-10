@@ -6,8 +6,8 @@ plugins {
 android {
     defaultConfig {
         minSdk = 21
+        compileSdk = 31
         targetSdk = 30
-        compileSdk = 30
 
         testInstrumentationRunner = "com.karumi.shot.ShotTestRunner"
         testApplicationId = "com.vanpra.composematerialdialogs.test"
@@ -51,9 +51,6 @@ android {
 dependencies {
     api(project(":core"))
     implementation(Dependencies.Kotlin.stdlib)
-    implementation(Dependencies.AndroidX.coreKtx)
-    implementation(Dependencies.AndroidX.appcompat)
-    implementation(Dependencies.material)
 
     implementation(Dependencies.AndroidX.Compose.ui)
     implementation(Dependencies.AndroidX.Compose.material)
@@ -61,5 +58,5 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.activity)
 
     implementation(Dependencies.AndroidX.Compose.testing)
-    implementation(Dependencies.Shot.shot)
+    implementation(Dependencies.Shot.android)
 }

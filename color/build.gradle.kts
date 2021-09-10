@@ -5,8 +5,8 @@ plugins {
 android {
     defaultConfig {
         minSdk = 21
-        compileSdk = 30
-        targetSdk = 30
+        compileSdk = 31
+        targetSdk = 31
 
         testInstrumentationRunner = "com.karumi.shot.ShotTestRunner"
         testApplicationId = "com.vanpra.composematerialdialogs.color.test"
@@ -48,6 +48,7 @@ android {
 
 dependencies {
     api(project(":core"))
+    implementation(Dependencies.AndroidX.coreKtx)
 }
 
 shot {

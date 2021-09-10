@@ -33,11 +33,14 @@ Note, this only has to be done if you intend to target an Android API level < 26
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/date.png)
 
 ```kotlin
-val dialog = remember { MaterialDialog() }
-dialog.build(buttons = {
-    positiveButton("Ok")
-    negativeButton("Cancel")
-}) {
+val dialogState = rememberMaterialDialogState()
+MaterialDialog(
+    dialogState = dialogState,
+    buttons = {
+        positiveButton("Ok")
+        negativeButton("Cancel")
+    }
+) {
     ...
     datepicker { date ->
         // Do stuff with java.time.LocalDate object which is passed in
@@ -53,10 +56,14 @@ dialog.show()
 ![](https://raw.githubusercontent.com/vanpra/compose-material-dialogs/main/imgs/time.png)
 
 ```kotlin
-dialog.build(buttons = {
-    positiveButton("Ok")
-    negativeButton("Cancel")
-}) {
+val dialogState = rememberMaterialDialogState()
+MaterialDialog(
+    dialogState = dialogState,
+    buttons = {
+        positiveButton("Ok")
+        negativeButton("Cancel")
+    }
+) {
     ...
     timepicker { time ->
         // Do stuff with java.time.LocalTime object which is passed in

@@ -115,7 +115,7 @@ fun BasicDialogDemo() {
         input(
             label = "Name", hint = "Jon Smith",
             keyboardActions = KeyboardActions(
-                onDone = { this@DialogAndShowButton.submit() }
+                onDone = { submit() }
             ),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
         ) {

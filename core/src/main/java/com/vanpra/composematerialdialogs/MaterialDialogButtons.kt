@@ -38,10 +38,8 @@ internal enum class MaterialDialogButtonTypes(val testTag: String) {
  * See [MaterialDialogButtons] for more information about the content
  */
 @Composable
-internal fun DialogButtons(
+internal fun MaterialDialogScope.DialogButtonsLayout(
     modifier: Modifier = Modifier,
-    dialogButtons: MaterialDialogButtons,
-    dialog: MaterialDialog,
     content: @Composable MaterialDialogButtons.() -> Unit
 ) {
     val interButtonPadding = with(LocalDensity.current) { 12.dp.toPx().toInt() }
@@ -54,7 +52,7 @@ internal fun DialogButtons(
         modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
-            .background(dialog.dialogBackgroundColor!!),
+            .background(dialogState.dialogBackgroundColor!!),
         { measurables, constraints ->
 
             if (measurables.isEmpty()) {
@@ -112,7 +110,7 @@ internal fun DialogButtons(
  * A class used to build a buttons layout for a MaterialDialog. This should be used in conjunction
  * with the [com.vanpra.composematerialdialogs.MaterialDialog.dialogButtons] function
  */
-class MaterialDialogButtons(private val dialog: MaterialDialog) {
+class MaterialDialogButtons(private val scope: MaterialDialogScope) {
     /**
      * Adds a button which is always enabled to the bottom of the dialog. This should
      * only be used for neutral actions.
@@ -159,16 +157,16 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
         onClick: () -> Unit = {}
     ) {
         val buttonText = getString(res, text).uppercase(Locale.ROOT)
-        val buttonEnabled = dialog.positiveEnabled.values.all { it }
+        val buttonEnabled = scope.positiveButtonEnabled.values.all { it }
         val focusManager = LocalFocusManager.current
 
         TextButton(
             onClick = {
-                if (dialog.isAutoDismiss() && !disableDismiss) {
-                    dialog.hide(focusManager)
+                if (scope.autoDismiss && !disableDismiss) {
+                    scope.dialogState.hide(focusManager)
                 }
 
-                dialog.callbacks.values.forEach {
+                scope.callbacks.values.forEach {
                     it()
                 }
 
@@ -176,7 +174,7 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
             },
             modifier = Modifier.layoutId(MaterialDialogButtonTypes.Positive)
                 .testTag(MaterialDialogButtonTypes.Positive.testTag),
-            enabled = buttonEnabled && dialog.positiveButtonEnabledOverride
+            enabled = buttonEnabled
         ) {
             Text(text = buttonText, style = textStyle)
         }
@@ -202,8 +200,8 @@ class MaterialDialogButtons(private val dialog: MaterialDialog) {
 
         TextButton(
             onClick = {
-                if (dialog.isAutoDismiss()) {
-                    dialog.hide(focusManager)
+                if (scope.autoDismiss) {
+                    scope.dialogState.hide(focusManager)
                 }
                 onClick()
             },

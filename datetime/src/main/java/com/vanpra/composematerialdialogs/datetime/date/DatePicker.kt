@@ -55,7 +55,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerDefaults
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
-import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.MaterialDialogScope
 import com.vanpra.composematerialdialogs.datetime.util.isSmallDevice
 import com.vanpra.composematerialdialogs.datetime.util.shortLocalName
 import kotlinx.coroutines.launch
@@ -74,7 +74,7 @@ import java.util.Locale
  * @param onDateChange callback with a LocalDateTime object when the user completes their input
  */
 @Composable
-fun MaterialDialog.datepicker(
+fun MaterialDialogScope.datepicker(
     initialDate: LocalDate = LocalDate.now(),
     title: String = "SELECT DATE",
     colors: DatePickerColors = DatePickerDefaults.colors(),
@@ -83,7 +83,7 @@ fun MaterialDialog.datepicker(
     onDateChange: (LocalDate) -> Unit = {}
 ) {
     val datePickerState = remember {
-        DatePickerState(initialDate, colors, yearRange, dialogBackgroundColor!!)
+        DatePickerState(initialDate, colors, yearRange, dialogState.dialogBackgroundColor!!)
     }
 
     DatePickerImpl(title = title, state = datePickerState)
@@ -110,7 +110,7 @@ internal fun DatePickerImpl(title: String, state: DatePickerState) {
         HorizontalPager(
             state = pagerState,
             verticalAlignment = Alignment.Top,
-            flingBehavior = PagerDefaults.defaultPagerFlingConfig(
+            flingBehavior = PagerDefaults.rememberPagerFlingConfig(
                 state = pagerState,
                 snapAnimationSpec = spring(stiffness = 1000f)
             )
@@ -129,7 +129,6 @@ internal fun DatePickerImpl(title: String, state: DatePickerState) {
                     androidx.compose.animation.AnimatedVisibility(
                         state.yearPickerShowing,
                         modifier = Modifier
-                            .fillMaxSize()
                             .zIndex(0.7f)
                             .clipToBounds(),
                         enter = slideInVertically({ -it }),
@@ -157,7 +156,9 @@ private fun YearPicker(
     LazyVerticalGrid(
         cells = GridCells.Fixed(3),
         state = gridState,
-        modifier = Modifier.background(state.dialogBackground)
+        modifier = Modifier
+            .background(state.dialogBackground)
+            .height(280.dp)
     ) {
         itemsIndexed(state.yearRange.toList()) { _, item ->
             val selected = remember { item == viewDate.year }
@@ -295,7 +296,11 @@ private fun CalendarViewHeader(
 
 @Composable
 private fun CalendarView(viewDate: LocalDate, state: DatePickerState) {
-    Column(Modifier.padding(start = 12.dp, end = 12.dp).testTag("dialog_date_calendar")) {
+    Column(
+        Modifier
+            .padding(start = 12.dp, end = 12.dp)
+            .testTag("dialog_date_calendar")
+    ) {
         DayOfWeekHeader()
         val calendarDatesData = remember { getDates(viewDate) }
         val datesList = remember { IntRange(1, calendarDatesData.second).toList() }
@@ -303,7 +308,7 @@ private fun CalendarView(viewDate: LocalDate, state: DatePickerState) {
             viewDate.year == state.selected.year && viewDate.month == state.selected.month
         }
 
-        LazyVerticalGrid(cells = GridCells.Fixed(7)) {
+        LazyVerticalGrid(cells = GridCells.Fixed(7), modifier = Modifier.height(240.dp)) {
             for (x in 0 until calendarDatesData.first) {
                 item { Box(Modifier.size(40.dp)) }
             }
@@ -322,7 +327,12 @@ private fun CalendarView(viewDate: LocalDate, state: DatePickerState) {
 }
 
 @Composable
-private fun DateSelectionBox(date: Int, selected: Boolean, colors: DatePickerColors, onClick: () -> Unit) {
+private fun DateSelectionBox(
+    date: Int,
+    selected: Boolean,
+    colors: DatePickerColors,
+    onClick: () -> Unit
+) {
     Box(
         Modifier
             .testTag("dialog_date_selection_$date")

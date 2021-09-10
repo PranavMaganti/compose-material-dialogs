@@ -48,7 +48,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.MaterialDialogScope
 import com.vanpra.composematerialdialogs.datetime.util.getOffset
 import com.vanpra.composematerialdialogs.datetime.util.isAM
 import com.vanpra.composematerialdialogs.datetime.util.isSmallDevice
@@ -85,7 +85,7 @@ private data class SelectedOffset(
  * @param onTimeChange callback with a LocalTime object when the user completes their input
  */
 @Composable
-fun MaterialDialog.timepicker(
+fun MaterialDialogScope.timepicker(
     initialTime: LocalTime = LocalTime.now().noSeconds(),
     title: String = "SELECT TIME",
     colors: TimePickerColors = TimePickerDefaults.colors(),

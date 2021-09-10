@@ -8,7 +8,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.karumi.shot.ScreenshotTest
-import com.vanpra.composematerialdialogs.buttons
 import com.vanpra.composematerialdialogs.iconTitle
 import com.vanpra.composematerialdialogs.input
 import com.vanpra.composematerialdialogs.message

@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    compileSdk = 30
+    compileSdk = 31
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
@@ -52,6 +52,7 @@ dependencies {
 //    implementation(Dependencies.ComposeMaterialDialogs.color)
 
     implementation(Dependencies.Kotlin.stdlib)
+    implementation(Dependencies.Google.material)
 
     implementation(Dependencies.AndroidX.Compose.ui)
     implementation(Dependencies.AndroidX.Compose.material)
@@ -59,13 +60,6 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.activity)
     implementation(Dependencies.AndroidX.Compose.navigation)
 
-    implementation(Dependencies.AndroidX.coreKtx)
-    implementation(Dependencies.AndroidX.appcompat)
-
-    implementation(Dependencies.material)
-
     implementation(kotlin("stdlib-jdk8"))
-
-    androidTestImplementation(Dependencies.AndroidX.Compose.testing)
     coreLibraryDesugaring(Dependencies.desugar)
 }

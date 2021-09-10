@@ -5,6 +5,7 @@
     <application>
         <activity
             android:name="androidx.activity.ComponentActivity"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+            android:exported="true"
+        />
     </application>
 </manifest>

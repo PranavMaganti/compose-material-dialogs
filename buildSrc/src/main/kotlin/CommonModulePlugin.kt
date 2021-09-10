@@ -24,8 +24,6 @@ class CommonModulePlugin: Plugin<Project> {
         dependencies.apply {
             implementation(Dependencies.Kotlin.stdlib)
             implementation(Dependencies.AndroidX.coreKtx)
-            implementation(Dependencies.AndroidX.appcompat)
-            implementation(Dependencies.material)
 
             implementation(Dependencies.AndroidX.Compose.ui)
             implementation(Dependencies.AndroidX.Compose.material)
