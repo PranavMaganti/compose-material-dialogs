@@ -12,7 +12,7 @@ android {
 
         applicationId = "com.vanpra.composematerialdialogs"
         minSdk = 23
-        targetSdk = 31
+        targetSdk = 30
 
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

@@ -10,7 +10,6 @@ import com.vanpra.composematerialdialogs.test.utils.defaultButtons
 import com.vanpra.composematerialdialogs.test.utils.extensions.assertDialogDoesNotExist
 import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogDateSelector
 import com.vanpra.composematerialdialogs.test.utils.extensions.onPositiveButton
-import com.vanpra.composematerialdialogs.title
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -30,10 +29,10 @@ class DatePickerTest {
 
         composeTestRule.setContent {
             DialogWithContent(buttons = { defaultButtons() }) {
-            datepicker(initialDate = testDate, waitForPositiveButton = true) {
-                selectedDate = it
+                datepicker(initialDate = testDate, waitForPositiveButton = true) {
+                    selectedDate = it
+                }
             }
-        }
         }
 
         composeTestRule.onDialogDateSelector(20).performClick()
@@ -50,10 +49,10 @@ class DatePickerTest {
 
         composeTestRule.setContent {
             DialogWithContent(buttons = { defaultButtons() }) {
-            datepicker(initialDate = testDate, waitForPositiveButton = false) {
-                selectedDate = it
+                datepicker(initialDate = testDate, waitForPositiveButton = false) {
+                    selectedDate = it
+                }
             }
-        }
         }
 
         composeTestRule.onDialogDateSelector(20).performClick()
@@ -71,8 +70,8 @@ class DatePickerTest {
         val title = "Custom Title"
         composeTestRule.setContent {
             DialogWithContent(buttons = { defaultButtons() }) {
-            datepicker(title = title)
-        }
+                datepicker(title = title)
+            }
         }
 
         composeTestRule.onNodeWithText(title).assertExists()

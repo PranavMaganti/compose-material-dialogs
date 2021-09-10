@@ -3,6 +3,9 @@
     package="com.vanpra.composematerialdialogs.test"
     android:sharedUserId="com.vanpra.composematerialdialogs.uid">
     <application>
-        <activity android:name="androidx.activity.ComponentActivity" />
+        <activity
+            android:name="androidx.activity.ComponentActivity"
+            android:exported="true"
+        />
     </application>
 </manifest>

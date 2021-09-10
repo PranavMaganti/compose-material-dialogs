@@ -20,7 +20,10 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.vanpra.composematerialdialogs.*
+import com.vanpra.composematerialdialogs.MaterialDialogState
+import com.vanpra.composematerialdialogs.listItems
+import com.vanpra.composematerialdialogs.listItemsMultiChoice
+import com.vanpra.composematerialdialogs.listItemsSingleChoice
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
 import com.vanpra.composematerialdialogs.test.utils.defaultButtons
@@ -28,6 +31,7 @@ import com.vanpra.composematerialdialogs.test.utils.extensions.assertDialogDoesN
 import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogListItem
 import com.vanpra.composematerialdialogs.test.utils.extensions.onPositiveButton
 import com.vanpra.composematerialdialogs.test.utils.powerSet
+import com.vanpra.composematerialdialogs.title
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertEquals

@@ -7,7 +7,7 @@ android {
     defaultConfig {
         minSdk = 21
         compileSdk = 31
-        targetSdk = 31
+        targetSdk = 30
 
         testInstrumentationRunner = "com.karumi.shot.ShotTestRunner"
         testApplicationId = "com.vanpra.composematerialdialogs.test"

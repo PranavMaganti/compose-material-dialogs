@@ -55,7 +55,7 @@ class DateTimePickerTest : ScreenshotTest {
     fun datePickerWithCustomTitle() {
         composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
-                datepicker(title = testTitle)
+                datepicker(title = testTitle, initialDate = LocalDate.of(2021, 7, 27))
             }
         }
 

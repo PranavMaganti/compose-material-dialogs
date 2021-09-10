@@ -15,7 +15,7 @@ google_search_url = "https://maven.google.com/web/index.html"
 
 
 chrome_options = Options()
-chrome_options.add_argument("--headless")
+# chrome_options.add_argument("--headless")
 chrome_options.add_argument("--window-size=1920x1080")
 driver = webdriver.Chrome(options=chrome_options)
 
@@ -51,6 +51,7 @@ for index, item in enumerate(tqdm(current_deps)):
         if res["response"]["docs"]:
             latest_version = res["response"]["docs"][0]["v"]
         else:
+            print(google_dep_url)
             driver.get(google_dep_url)
             elems = WebDriverWait(driver, 10).until(
                 ec.visibility_of_element_located(

@@ -8,7 +8,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -27,7 +26,7 @@ fun DialogAndShowButton(
     content: @Composable MaterialDialogScope.() -> Unit
 ) {
     val dialogState = rememberMaterialDialogState()
-    
+
     MaterialDialog(dialogState = dialogState, buttons = buttons) {
         content()
     }

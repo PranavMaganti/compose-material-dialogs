@@ -1,12 +1,24 @@
 package com.vanpra.composematerialdialogs
 
-import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.LocalElevationOverlay
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -18,7 +30,6 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -109,7 +120,6 @@ internal class MaterialDialogScopeImpl(
     }
 }
 
-
 /**
  *  The MaterialDialogState class is used to store the state for a dialog using both pre-made and
  * custom views
@@ -147,7 +157,6 @@ class MaterialDialogState(initialState: Boolean = false) {
         showing = false
     }
 
-
     companion object {
         /**
          * The default [Saver] implementation for [ModalBottomSheetState].
@@ -158,7 +167,6 @@ class MaterialDialogState(initialState: Boolean = false) {
         )
     }
 }
-
 
 @Composable
 fun rememberMaterialDialogState(initialState: Boolean = false): MaterialDialogState {

@@ -110,7 +110,7 @@ internal fun DatePickerImpl(title: String, state: DatePickerState) {
         HorizontalPager(
             state = pagerState,
             verticalAlignment = Alignment.Top,
-            flingBehavior = PagerDefaults.defaultPagerFlingConfig(
+            flingBehavior = PagerDefaults.rememberPagerFlingConfig(
                 state = pagerState,
                 snapAnimationSpec = spring(stiffness = 1000f)
             )
@@ -298,7 +298,8 @@ private fun CalendarView(viewDate: LocalDate, state: DatePickerState) {
     Column(
         Modifier
             .padding(start = 12.dp, end = 12.dp)
-            .testTag("dialog_date_calendar")) {
+            .testTag("dialog_date_calendar")
+    ) {
         DayOfWeekHeader()
         val calendarDatesData = remember { getDates(viewDate) }
         val datesList = remember { IntRange(1, calendarDatesData.second).toList() }
