@@ -107,10 +107,10 @@ internal fun DatePickerImpl(title: String, state: DatePickerState) {
     Column(Modifier.fillMaxWidth()) {
         CalendarHeader(title, state)
         HorizontalPager(
-            count = ((state.yearRange.last - state.yearRange.first) + 1) * 12,
+            count = (state.yearRange.last - state.yearRange.first + 1) * 12,
             state = pagerState,
             verticalAlignment = Alignment.Top,
-            flingBehavior = PagerDefaults.rememberPagerFlingConfig(
+            flingBehavior = PagerDefaults.flingBehavior(
                 state = pagerState,
                 snapAnimationSpec = spring(stiffness = 1000f)
             )
