@@ -126,8 +126,8 @@ internal fun DatePickerImpl(title: String, state: DatePickerState) {
                         modifier = Modifier
                             .zIndex(0.7f)
                             .clipToBounds(),
-                        enter = slideInVertically({ -it }),
-                        exit = slideOutVertically({ -it })
+                        enter = slideInVertically(initialOffsetY = { -it }),
+                        exit = slideOutVertically(targetOffsetY = { -it })
                     ) {
                         YearPicker(viewDate, state, pagerState)
                     }
