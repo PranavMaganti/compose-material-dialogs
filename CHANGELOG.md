@@ -1,5 +1,11 @@
 # Changelog
 
+### 0.6.1 - 2021-10-07
+
+  -  Update compose to 1.1.0-alpha05 ([#112](https://github.com/vanpra/compose-material-dialogs/issues/112) and [#110](https://github.com/vanpra/compose-material-dialogs/issues/110))
+-  Update kotlin to 1.5.31
+-  Make compose animation dependency explicit to ensure an old version is not used (thanks **[skolson](https://github.com/skolson)**)
+
 ### 0.6.0 - 2021-09-10
 
   -  [BREAKING CHANGE] Replace MaterialDialog class structure with composable function with state. See [docs](https://vanpra.github.io/compose-material-dialogs) and the [sample app](https://github.com/vanpra/compose-material-dialogs/tree/main/app/src/main/java/com/vanpra/composematerialdialogdemos/demos) for examples

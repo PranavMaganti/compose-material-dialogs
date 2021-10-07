@@ -3,7 +3,7 @@ package com.vanpra.composematerialdialogs.color.test.screenshot
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performGesture
+import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import com.karumi.shot.ScreenshotTest
 import com.vanpra.composematerialdialogs.color.ARGBPickerState
@@ -66,7 +66,7 @@ class ColorPickerDialogTests : ScreenshotTest {
             }
         }
 
-        composeTestRule.onDialogColorPicker().performGesture { swipeLeft() }
+        composeTestRule.onDialogColorPicker().performTouchInput { swipeLeft() }
         composeTestRule.waitForIdle()
         compareScreenshot(composeTestRule.onDialog())
     }
@@ -84,7 +84,7 @@ class ColorPickerDialogTests : ScreenshotTest {
             }
         }
 
-        composeTestRule.onDialogColorPicker().performGesture { swipeLeft() }
+        composeTestRule.onDialogColorPicker().performTouchInput { swipeLeft() }
         composeTestRule.waitForIdle()
         compareScreenshot(composeTestRule.onDialog())
     }

@@ -2,7 +2,7 @@ object Dependencies {
     const val desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
 
     object ComposeMaterialDialogs {
-        const val version = "0.5.1"
+        const val version = "0.6.0"
 
         const val core = "io.github.vanpra.compose-material-dialogs:core:$version"
         const val datetime = "io.github.vanpra.compose-material-dialogs:datetime:$version"
@@ -14,12 +14,12 @@ object Dependencies {
     }
 
     object Accompanist {
-        private const val version = "0.18.0"
+        private const val version = "0.19.0"
         const val pager = "com.google.accompanist:accompanist-pager:$version"
     }
 
     object Kotlin {
-        private const val version = "1.5.30"
+        private const val version = "1.5.31"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
@@ -31,30 +31,32 @@ object Dependencies {
     }
 
     object Google {
-        const val material = "com.google.android.material:material:1.5.0-alpha02"
+        const val material = "com.google.android.material:material:1.5.0-alpha04"
     }
 
     object AndroidX {
-        const val coreKtx = "androidx.core:core-ktx:1.7.0-alpha02"
+        const val coreKtx = "androidx.core:core-ktx:1.7.0-beta02"
 
         object Testing {
-            const val version = "1.4.1-alpha01"
+            const val version = "1.4.1-alpha03"
             const val core = "androidx.test:core:$version"
             const val rules = "androidx.test:rules:$version"
             const val runner = "androidx.test:runner:$version"
         }
 
         object Compose {
-            const val version = "1.1.0-alpha03"
+            const val version = "1.1.0-alpha05"
 
             const val ui = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"
             const val materialIconsExtended =
                 "androidx.compose.material:material-icons-extended:$version"
+            const val animation = "androidx.compose.animation:animation:$version"
+            const val foundationLayout = "androidx.compose.foundation:foundation-layout:$version"
 
-            const val testing = "androidx.compose.ui:ui-test-junit4:1.1.0-alpha03"
-            const val activity = "androidx.activity:activity-compose:1.4.0-alpha01"
-            const val navigation = "androidx.navigation:navigation-compose:2.4.0-alpha08"
+            const val testing = "androidx.compose.ui:ui-test-junit4:$version"
+            const val activity = "androidx.activity:activity-compose:1.4.0-beta01"
+            const val navigation = "androidx.navigation:navigation-compose:2.4.0-alpha10"
         }
     }
 }

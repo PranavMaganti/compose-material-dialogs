@@ -1,6 +1,5 @@
 package com.vanpra.composematerialdialogs.datetime.date
 
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
@@ -52,7 +51,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerDefaults
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.vanpra.composematerialdialogs.MaterialDialogScope
@@ -101,19 +99,16 @@ fun MaterialDialogScope.datepicker(
 @Composable
 internal fun DatePickerImpl(title: String, state: DatePickerState) {
     val pagerState = rememberPagerState(
-        pageCount = ((state.yearRange.last - state.yearRange.first) + 1) * 12,
         initialPage = (state.selected.year - state.yearRange.first) * 12 + state.selected.monthValue - 1
     )
 
     Column(Modifier.fillMaxWidth()) {
         CalendarHeader(title, state)
         HorizontalPager(
+            count = (state.yearRange.last - state.yearRange.first + 1) * 12,
             state = pagerState,
             verticalAlignment = Alignment.Top,
-            flingBehavior = PagerDefaults.rememberPagerFlingConfig(
-                state = pagerState,
-                snapAnimationSpec = spring(stiffness = 1000f)
-            )
+            modifier = Modifier.height(336.dp)
         ) { page ->
             val viewDate = remember {
                 LocalDate.of(
@@ -131,8 +126,8 @@ internal fun DatePickerImpl(title: String, state: DatePickerState) {
                         modifier = Modifier
                             .zIndex(0.7f)
                             .clipToBounds(),
-                        enter = slideInVertically({ -it }),
-                        exit = slideOutVertically({ -it })
+                        enter = slideInVertically(initialOffsetY = { -it }),
+                        exit = slideOutVertically(targetOffsetY = { -it })
                     ) {
                         YearPicker(viewDate, state, pagerState)
                     }
@@ -156,9 +151,7 @@ private fun YearPicker(
     LazyVerticalGrid(
         cells = GridCells.Fixed(3),
         state = gridState,
-        modifier = Modifier
-            .background(state.dialogBackground)
-            .height(280.dp)
+        modifier = Modifier.background(state.dialogBackground)
     ) {
         itemsIndexed(state.yearRange.toList()) { _, item ->
             val selected = remember { item == viewDate.year }

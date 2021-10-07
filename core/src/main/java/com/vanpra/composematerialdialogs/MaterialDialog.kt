@@ -233,7 +233,7 @@ fun MaterialDialog(
 
     BoxWithConstraints {
         val maxHeight = if (isLargeDevice()) {
-            LocalConfiguration.current.screenHeightDp.dp - 90.dp
+            LocalConfiguration.current.screenHeightDp.dp - 96.dp
         } else {
             560.dp
         }

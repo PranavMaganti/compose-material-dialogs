@@ -53,10 +53,14 @@ dependencies {
 
     implementation(Dependencies.Kotlin.stdlib)
     implementation(Dependencies.Google.material)
+    implementation(Dependencies.AndroidX.coreKtx)
 
     implementation(Dependencies.AndroidX.Compose.ui)
     implementation(Dependencies.AndroidX.Compose.material)
     implementation(Dependencies.AndroidX.Compose.materialIconsExtended)
+    implementation(Dependencies.AndroidX.Compose.animation)
+    implementation(Dependencies.AndroidX.Compose.foundationLayout)
+
     implementation(Dependencies.AndroidX.Compose.activity)
     implementation(Dependencies.AndroidX.Compose.navigation)
 

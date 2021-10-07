@@ -43,9 +43,10 @@ internal fun MaterialDialogScope.DialogButtonsLayout(
     content: @Composable MaterialDialogButtons.() -> Unit
 ) {
     val interButtonPadding = with(LocalDensity.current) { 12.dp.toPx().toInt() }
-    val defaultBoxHeight = with(LocalDensity.current) { 36.dp.toPx().toInt() }
+    val defaultBoxHeight = with(LocalDensity.current) { 52.dp.toPx().toInt() }
+    val defaultButtonHeight = with(LocalDensity.current) { 36.dp.toPx().toInt() }
     val accessibilityPadding = with(LocalDensity.current) { 12.dp.toPx().toInt() }
-    val verticalPadding = with(LocalDensity.current) { 4.dp.toPx().toInt() }
+    val verticalPadding = with(LocalDensity.current) { 8.dp.toPx().toInt() }
 
     Layout(
         { content(dialogButtons) },
@@ -61,7 +62,7 @@ internal fun MaterialDialogScope.DialogButtonsLayout(
 
             val placeables = measurables.map {
                 (it.layoutId as MaterialDialogButtonTypes) to it.measure(
-                    constraints.copy(minWidth = 0)
+                    constraints.copy(minWidth = 0, maxHeight = defaultButtonHeight)
                 )
             }
             val totalWidth = placeables.sumOf { it.second.width }
@@ -71,10 +72,10 @@ internal fun MaterialDialogScope.DialogButtonsLayout(
                 if (column) {
                     val buttonHeight = placeables.sumOf { it.second.height }
                     val heightPadding = (placeables.size - 1) * interButtonPadding
-                    buttonHeight + heightPadding
+                    buttonHeight + heightPadding + 2 * verticalPadding
                 } else {
                     defaultBoxHeight
-                } + 2 * verticalPadding
+                }
 
             layout(constraints.maxWidth, height) {
                 var currX = constraints.maxWidth
