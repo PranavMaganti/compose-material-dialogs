@@ -1,9 +1,12 @@
 package com.vanpra.composematerialdialogs.test.utils.extensions
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeUp
 
 fun ComposeContentTestRule.setContentAndWaitForIdle(content: @Composable () -> Unit) {
     this.setContent {

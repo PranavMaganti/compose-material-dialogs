@@ -26,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
@@ -50,7 +49,8 @@ fun <T> MaterialDialogScope.listItems(
         LazyColumn(
             Modifier
                 .then(modifier)
-                .testTag("dialog_list")) {
+                .testTag("dialog_list")
+        ) {
             itemsIndexed(list) { index, it ->
                 Box(
                     Modifier
