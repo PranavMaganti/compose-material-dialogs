@@ -73,7 +73,8 @@ fun BasicListDialogDemo() {
     DialogAndShowButton(buttonText = "Custom List Dialog") {
         title(res = R.string.backup_dialog_title)
         listItems(
-            emails,
+            modifier = Modifier.padding(bottom = 8.dp),
+            list = emails,
             item = { _, email ->
                 Row(Modifier.fillMaxWidth()) {
                     Image(

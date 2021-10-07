@@ -26,9 +26,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-
-private val bottomPadding = Modifier.padding(bottom = 8.dp)
 
 /**
  * Adds a selectable list with custom items to the dialog
@@ -40,14 +39,18 @@ private val bottomPadding = Modifier.padding(bottom = 8.dp)
  */
 @Composable
 fun <T> MaterialDialogScope.listItems(
+    modifier: Modifier = Modifier,
     list: List<T>,
     closeOnClick: Boolean = true,
     onClick: (index: Int, item: T) -> Unit = { _, _ -> },
     isEnabled: (index: Int) -> Boolean = { _ -> true },
-    item: @Composable (index: Int, T) -> Unit
+    item: @Composable (index: Int, T) -> Unit,
 ) {
     BoxWithConstraints {
-        LazyColumn(Modifier.then(bottomPadding).testTag("dialog_list")) {
+        LazyColumn(
+            Modifier
+                .then(modifier)
+                .testTag("dialog_list")) {
             itemsIndexed(list) { index, it ->
                 Box(
                     Modifier
@@ -83,7 +86,12 @@ fun MaterialDialogScope.listItems(
     closeOnClick: Boolean = true,
     onClick: (index: Int, item: String) -> Unit = { _, _ -> }
 ) {
-    listItems(list = list, closeOnClick = closeOnClick, onClick = onClick) { _, item ->
+    listItems(
+        modifier = Modifier.padding(bottom = 8.dp),
+        list = list,
+        closeOnClick = closeOnClick,
+        onClick = onClick
+    ) { _, item ->
         Text(
             item,
             color = MaterialTheme.colors.onSurface,

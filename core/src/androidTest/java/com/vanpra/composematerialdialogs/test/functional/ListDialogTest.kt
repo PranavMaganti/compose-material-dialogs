@@ -100,7 +100,7 @@ class ListDialog {
             DialogWithContent(dialogState = dialogState) {
                 title(res = R.string.backup_dialog_title)
                 listItems(
-                    emails,
+                    list = emails,
                     onClick = { index, item -> selectedItem = Pair(index, item) }
                 ) { _, email ->
                     Row(Modifier.fillMaxWidth()) {

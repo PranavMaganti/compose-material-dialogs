@@ -35,10 +35,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -110,10 +107,7 @@ internal fun DatePickerImpl(title: String, state: DatePickerState) {
             count = (state.yearRange.last - state.yearRange.first + 1) * 12,
             state = pagerState,
             verticalAlignment = Alignment.Top,
-            flingBehavior = PagerDefaults.flingBehavior(
-                state = pagerState,
-                snapAnimationSpec = spring(stiffness = 1000f)
-            )
+            modifier = Modifier.height(336.dp)
         ) { page ->
             val viewDate = remember {
                 LocalDate.of(
@@ -156,9 +150,7 @@ private fun YearPicker(
     LazyVerticalGrid(
         cells = GridCells.Fixed(3),
         state = gridState,
-        modifier = Modifier
-            .background(state.dialogBackground)
-            .height(280.dp)
+        modifier = Modifier.background(state.dialogBackground)
     ) {
         itemsIndexed(state.yearRange.toList()) { _, item ->
             val selected = remember { item == viewDate.year }

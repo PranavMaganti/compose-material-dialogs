@@ -2,11 +2,8 @@ package com.vanpra.composematerialdialogs.color.test.functional
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performGesture
-import androidx.compose.ui.test.performSemanticsAction
-import androidx.compose.ui.test.swipeLeft
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vanpra.composematerialdialogs.color.ARGBPickerState
 import com.vanpra.composematerialdialogs.color.ColorPalette
@@ -157,7 +154,7 @@ class ColorPickerDialogTests {
             }
         }
 
-        composeTestRule.onDialogColorPicker().performGesture { swipeLeft() }
+        composeTestRule.onDialogColorPicker().performTouchInput { swipeLeft() }
         composeTestRule.waitForIdle()
 
         composeTestRule

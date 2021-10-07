@@ -79,7 +79,7 @@ class ListDialog : ScreenshotTest {
             DialogWithContent {
                 title(res = R.string.backup_dialog_title)
                 listItems(
-                    emails,
+                    list = emails,
                     item = { _, email ->
                         Row(Modifier.fillMaxWidth()) {
                             Image(
