@@ -65,7 +65,6 @@ fun <T> MaterialDialogScope.listItems(
                             },
                             enabled = isEnabled(index)
                         )
-                        .padding(horizontal = 24.dp)
                 ) {
                     item(index, it)
                 }
@@ -98,7 +97,7 @@ fun MaterialDialogScope.listItems(
             style = MaterialTheme.typography.body1,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 12.dp)
+                .padding(vertical = 12.dp, horizontal = 24.dp)
                 .wrapContentWidth(Alignment.Start)
         )
     }
@@ -232,7 +231,8 @@ private fun MultiChoiceItem(
     Row(
         Modifier
             .fillMaxWidth()
-            .height(48.dp),
+            .height(48.dp)
+            .padding(start = 12.dp, end = 24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(checked = selected, onCheckedChange = { onChecked(index) }, enabled = enabled)
@@ -264,7 +264,8 @@ private fun SingleChoiceItem(
     Row(
         Modifier
             .fillMaxWidth()
-            .height(48.dp),
+            .height(48.dp)
+            .padding(start = 12.dp, end = 24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
