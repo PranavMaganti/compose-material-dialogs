@@ -48,7 +48,7 @@ MaterialDialog(
 }
 
 /* This should be called in an onClick or an Effect */ 
-dialog.show()
+dialogState.show()
 ```
 
 ### Time Picker
