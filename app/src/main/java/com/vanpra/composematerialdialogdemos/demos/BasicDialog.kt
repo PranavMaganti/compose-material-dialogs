@@ -5,9 +5,10 @@ import android.util.Patterns
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.SecurityUpdateGood
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.focus.FocusRequester
@@ -25,13 +26,9 @@ import com.vanpra.composematerialdialogs.title
  */
 @Composable
 fun BasicDialogDemo() {
-    DialogAndShowButton(buttonText = "Basic Dialog") {
-        title(res = R.string.location_dialog_title)
-        message(res = R.string.location_dialog_message)
-    }
 
     DialogAndShowButton(
-        buttonText = "Basic Dialog With Buttons",
+        buttonText = "Basic Dialog",
         buttons = {
             negativeButton("Disagree")
             positiveButton("Agree")
@@ -42,7 +39,7 @@ fun BasicDialogDemo() {
     }
 
     DialogAndShowButton(
-        buttonText = "Basic Dialog With Buttons and Icon Title",
+        buttonText = "Basic Dialog With Icon Title",
         buttons = {
             negativeButton("Disagree")
             positiveButton("Agree")
@@ -51,14 +48,14 @@ fun BasicDialogDemo() {
         iconTitle(
             icon = {
                 Image(
-                    Icons.Default.LocationOn,
-                    contentDescription = "Location Icon",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                    Icons.Default.SecurityUpdateGood,
+                    contentDescription = "Device tick",
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
                 )
             },
-            textRes = R.string.location_dialog_title
+            text = "Dialog with hero icon"
         )
-        message(res = R.string.location_dialog_message)
+        message(res = R.string.hero_icon_dialog_message)
     }
 
     DialogAndShowButton(

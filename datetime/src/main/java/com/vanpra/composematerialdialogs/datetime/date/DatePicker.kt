@@ -24,18 +24,18 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
@@ -86,7 +86,7 @@ fun MaterialDialogScope.datepicker(
     onDateChange: (LocalDate) -> Unit = {}
 ) {
     val datePickerState = remember {
-        DatePickerState(initialDate, colors, yearRange, dialogState.dialogBackgroundColor!!)
+        DatePickerState(initialDate, colors, yearRange)
     }
 
     DatePickerImpl(title = title, state = datePickerState, allowedDateValidator)
@@ -103,7 +103,11 @@ fun MaterialDialogScope.datepicker(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-internal fun DatePickerImpl(title: String, state: DatePickerState, allowedDateValidator: (LocalDate) -> Boolean) {
+internal fun DatePickerImpl(
+    title: String,
+    state: DatePickerState,
+    allowedDateValidator: (LocalDate) -> Boolean
+) {
     val pagerState = rememberPagerState(
         initialPage = (state.selected.year - state.yearRange.first) * 12 + state.selected.monthValue - 1
     )
@@ -145,20 +149,20 @@ internal fun DatePickerImpl(title: String, state: DatePickerState, allowedDateVa
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun YearPicker(
     viewDate: LocalDate,
     state: DatePickerState,
     pagerState: PagerState,
 ) {
-    val gridState = rememberLazyListState((viewDate.year - state.yearRange.first) / 3)
+    val gridState = rememberLazyGridState((viewDate.year - state.yearRange.first) / 3)
     val coroutineScope = rememberCoroutineScope()
 
     LazyVerticalGrid(
+        modifier = Modifier.background(MaterialTheme.colorScheme.background),
         cells = GridCells.Fixed(3),
         state = gridState,
-        modifier = Modifier.background(state.dialogBackground)
     ) {
         itemsIndexed(state.yearRange.toList()) { _, item ->
             val selected = remember { item == viewDate.year }
@@ -238,7 +242,7 @@ private fun CalendarViewHeader(
                     .paddingFromBaseline(top = 16.dp)
                     .wrapContentSize(Alignment.Center),
                 style = TextStyle(fontSize = 14.sp, fontWeight = W600),
-                color = MaterialTheme.colors.onBackground
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             Spacer(Modifier.width(4.dp))
@@ -246,7 +250,7 @@ private fun CalendarViewHeader(
                 Icon(
                     yearDropdownIcon,
                     contentDescription = "Year Selector",
-                    tint = MaterialTheme.colors.onBackground
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         }
@@ -270,7 +274,7 @@ private fun CalendarViewHeader(
                             }
                         }
                     ),
-                tint = MaterialTheme.colors.onBackground
+                tint = MaterialTheme.colorScheme.onBackground
             )
 
             Spacer(modifier = Modifier.width(24.dp))
@@ -289,7 +293,7 @@ private fun CalendarViewHeader(
                             }
                         }
                     ),
-                tint = MaterialTheme.colors.onBackground
+                tint = MaterialTheme.colorScheme.onBackground
             )
         }
     }
@@ -297,7 +301,11 @@ private fun CalendarViewHeader(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun CalendarView(viewDate: LocalDate, state: DatePickerState, allowedDateValidator: (LocalDate) -> Boolean) {
+private fun CalendarView(
+    viewDate: LocalDate,
+    state: DatePickerState,
+    allowedDateValidator: (LocalDate) -> Boolean
+) {
     Column(
         Modifier
             .padding(start = 12.dp, end = 12.dp)
@@ -385,7 +393,7 @@ private fun DayOfWeekHeader() {
                                 .fillMaxSize()
                                 .wrapContentSize(Alignment.Center),
                             style = TextStyle(fontSize = 14.sp, fontWeight = W600),
-                            color = MaterialTheme.colors.onBackground
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }

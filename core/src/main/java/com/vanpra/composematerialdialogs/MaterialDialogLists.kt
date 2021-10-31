@@ -14,10 +14,12 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
-import androidx.compose.material.Text
+import androidx.compose.material.RadioButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -86,15 +88,15 @@ fun MaterialDialogScope.listItems(
     onClick: (index: Int, item: String) -> Unit = { _, _ -> }
 ) {
     listItems(
-        modifier = Modifier.padding(bottom = 8.dp),
+        modifier = Modifier.padding(bottom = 24.dp),
         list = list,
         closeOnClick = closeOnClick,
         onClick = onClick
     ) { _, item ->
         Text(
             item,
-            color = MaterialTheme.colors.onSurface,
-            style = MaterialTheme.typography.body1,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 12.dp, horizontal = 24.dp)
@@ -235,7 +237,18 @@ private fun MultiChoiceItem(
             .padding(start = 12.dp, end = 24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(checked = selected, onCheckedChange = { onChecked(index) }, enabled = enabled)
+        Checkbox(
+            checked = selected,
+            onCheckedChange = { onChecked(index) },
+            enabled = enabled,
+            colors = CheckboxDefaults.colors(
+                checkedColor = MaterialTheme.colorScheme.secondary,
+                uncheckedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                checkmarkColor = MaterialTheme.colorScheme.surface,
+                disabledColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled),
+                disabledIndeterminateColor = MaterialTheme.colorScheme.secondary.copy(alpha = ContentAlpha.disabled)
+            )
+        )
         Spacer(
             modifier = Modifier
                 .fillMaxHeight()
@@ -244,11 +257,11 @@ private fun MultiChoiceItem(
         Text(
             item,
             color = if (enabled) {
-                MaterialTheme.colors.onSurface
+                MaterialTheme.colorScheme.onSurface
             } else {
-                MaterialTheme.colors.onSurface.copy(ContentAlpha.disabled)
+                MaterialTheme.colorScheme.onSurface.copy(ContentAlpha.disabled)
             },
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }
@@ -275,7 +288,12 @@ private fun SingleChoiceItem(
                     onSelect(index)
                 }
             },
-            enabled = enabled
+            enabled = enabled,
+            colors = RadioButtonDefaults.colors(
+                selectedColor = MaterialTheme.colorScheme.secondary,
+                unselectedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                disabledColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled)
+            )
         )
         Spacer(
             modifier = Modifier
@@ -286,11 +304,11 @@ private fun SingleChoiceItem(
             item,
             modifier = Modifier,
             color = if (enabled) {
-                MaterialTheme.colors.onSurface
+                MaterialTheme.colorScheme.onSurface
             } else {
-                MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
+                MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled)
             },
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }

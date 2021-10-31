@@ -26,6 +26,7 @@ class CommonModulePlugin: Plugin<Project> {
 
             implementation(Dependencies.AndroidX.Compose.ui)
             implementation(Dependencies.AndroidX.Compose.material)
+            implementation(Dependencies.AndroidX.Compose.material3)
             implementation(Dependencies.AndroidX.Compose.materialIconsExtended)
             implementation(Dependencies.AndroidX.Compose.animation)
             implementation(Dependencies.AndroidX.Compose.foundationLayout)

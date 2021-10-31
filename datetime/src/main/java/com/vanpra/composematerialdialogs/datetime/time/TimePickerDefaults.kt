@@ -1,6 +1,6 @@
 package com.vanpra.composematerialdialogs.datetime.time
 
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
@@ -24,14 +24,14 @@ object TimePickerDefaults {
      */
     @Composable
     fun colors(
-        activeBackgroundColor: Color = MaterialTheme.colors.primary.copy(0.3f),
-        inactiveBackgroundColor: Color = MaterialTheme.colors.onBackground.copy(0.3f),
-        activeTextColor: Color = MaterialTheme.colors.onPrimary,
-        inactiveTextColor: Color = MaterialTheme.colors.onBackground,
+        activeBackgroundColor: Color = MaterialTheme.colorScheme.primary.copy(0.3f),
+        inactiveBackgroundColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+        activeTextColor: Color = MaterialTheme.colorScheme.onPrimary,
+        inactiveTextColor: Color = MaterialTheme.colorScheme.onBackground,
         inactivePeriodBackground: Color = Color.Transparent,
-        borderColor: Color = MaterialTheme.colors.onBackground,
-        selectorColor: Color = MaterialTheme.colors.primary,
-        selectorTextColor: Color = MaterialTheme.colors.onPrimary
+        borderColor: Color = MaterialTheme.colorScheme.onBackground,
+        selectorColor: Color = MaterialTheme.colorScheme.primary,
+        selectorTextColor: Color = MaterialTheme.colorScheme.onPrimary
     ): TimePickerColors {
         return DefaultTimePickerColors(
             activeBackgroundColor = activeBackgroundColor,

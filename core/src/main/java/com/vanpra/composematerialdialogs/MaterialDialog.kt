@@ -1,15 +1,14 @@
 package com.vanpra.composematerialdialogs
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.LocalElevationOverlay
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -30,7 +29,6 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -219,13 +217,11 @@ fun rememberMaterialDialogState(initialValue: Boolean = false): MaterialDialogSt
 fun MaterialDialog(
     dialogState: MaterialDialogState = rememberMaterialDialogState(),
     properties: DialogProperties = DialogProperties(),
-    backgroundColor: Color = MaterialTheme.colors.surface,
-    shape: Shape = MaterialTheme.shapes.medium,
-    border: BorderStroke? = null,
-    elevation: Dp = 24.dp,
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
+    shape: Shape = RoundedCornerShape(28.dp),
     autoDismiss: Boolean = true,
     onCloseRequest: (MaterialDialogState) -> Unit = { it.hide() },
-    buttons: @Composable MaterialDialogButtons.() -> Unit = {},
+    buttons: @Composable (MaterialDialogButtons.() -> Unit)? = null,
     content: @Composable MaterialDialogScope.() -> Unit
 ) {
     val dialogScope = remember { MaterialDialogScopeImpl(dialogState, autoDismiss) }
@@ -246,27 +242,20 @@ fun MaterialDialog(
         val padding = if (isDialogFullWidth) 16.dp else 0.dp
 
         if (dialogState.showing) {
-            dialogState.dialogBackgroundColor = LocalElevationOverlay.current?.apply(
-                color = backgroundColor,
-                elevation = elevation
-            ) ?: MaterialTheme.colors.surface
-
             Dialog(
                 properties = properties,
-                onDismissRequest = { onCloseRequest(dialogState) }
-            ) {
+                onDismissRequest = { onCloseRequest(dialogState) }) {
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .sizeIn(maxHeight = maxHeight, maxWidth = 560.dp)
+                        .sizeIn(maxHeight = maxHeight, minWidth = MinWidth, maxWidth = MaxWidth)
                         .padding(horizontal = padding)
                         .clipToBounds()
                         .wrapContentHeight()
                         .testTag("dialog"),
                     shape = shape,
                     color = backgroundColor,
-                    border = border,
-                    elevation = elevation
+                    tonalElevation = DialogElevation
                 ) {
                     Layout(
                         content = {
@@ -303,3 +292,8 @@ fun MaterialDialog(
         }
     }
 }
+
+private val DialogElevation = 24.dp
+private val MinWidth = 280.dp
+private val MaxWidth = 560.dp
+

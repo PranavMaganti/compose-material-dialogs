@@ -24,10 +24,11 @@ import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
@@ -276,7 +277,7 @@ internal fun TimePickerTitle(modifier: Modifier, text: String) {
         Text(
             text,
             modifier = Modifier.paddingFromBaseline(top = 28.dp),
-            style = TextStyle(color = MaterialTheme.colors.onBackground)
+            style = TextStyle(color = MaterialTheme.colorScheme.onBackground)
         )
     }
 }
@@ -292,7 +293,7 @@ internal fun ClockLabel(
         modifier = Modifier
             .width(if (isSmallDevice()) 80.dp else 96.dp)
             .fillMaxHeight(),
-        shape = MaterialTheme.shapes.medium,
+        shape = RoundedCornerShape(16.dp),
         color = backgroundColor,
     ) {
         Box(
@@ -347,7 +348,7 @@ internal fun TimeLayout(modifier: Modifier = Modifier, state: TimePickerState) {
         ) {
             Text(
                 text = ":",
-                style = TextStyle(fontSize = 50.sp, color = MaterialTheme.colors.onBackground)
+                style = TextStyle(fontSize = 50.sp, color = MaterialTheme.colorScheme.onBackground)
             )
         }
 
@@ -367,12 +368,9 @@ internal fun TimeLayout(modifier: Modifier = Modifier, state: TimePickerState) {
 
 @Composable
 private fun VerticalPeriodPicker(state: TimePickerState) {
-    val topPeriodShape = MaterialTheme.shapes.medium.copy(
-        bottomStart = CornerSize(0.dp),
-        bottomEnd = CornerSize(0.dp)
-    )
-    val bottomPeriodShape =
-        MaterialTheme.shapes.medium.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp))
+    val topPeriodShape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
+    val bottomPeriodShape = RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)
+
     val isAMEnabled = remember(state.timeRange) { state.timeRange.start.hour <= 12 }
     val isPMEnabled = remember(state.timeRange) { state.timeRange.endInclusive.hour >= 0 }
 
@@ -382,7 +380,7 @@ private fun VerticalPeriodPicker(state: TimePickerState) {
         Modifier
             .fillMaxHeight()
             .width(52.dp)
-            .border(state.colors.border, MaterialTheme.shapes.medium)
+            .border(state.colors.border, RoundedCornerShape(8.dp))
     ) {
         Box(
             modifier = Modifier
@@ -443,14 +441,8 @@ private fun VerticalPeriodPicker(state: TimePickerState) {
 
 @Composable
 private fun HorizontalPeriodPicker(state: TimePickerState) {
-    val leftPeriodShape = MaterialTheme.shapes.medium.copy(
-        bottomEnd = CornerSize(0.dp),
-        topEnd = CornerSize(0.dp)
-    )
-    val rightPeriodShape = MaterialTheme.shapes.medium.copy(
-        topStart = CornerSize(0.dp),
-        bottomStart = CornerSize(0.dp)
-    )
+    val leftPeriodShape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)
+    val rightPeriodShape = RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp)
     val isAMEnabled = remember(state.timeRange) { state.timeRange.start.hour <= 12 }
     val isPMEnabled = remember(state.timeRange) { state.timeRange.endInclusive.hour >= 0 }
 
@@ -460,7 +452,7 @@ private fun HorizontalPeriodPicker(state: TimePickerState) {
         Modifier
             .fillMaxWidth()
             .height(height = 40.dp)
-            .border(state.colors.border, MaterialTheme.shapes.medium)
+            .border(state.colors.border, RoundedCornerShape(8.dp))
     ) {
         Box(
             modifier = Modifier

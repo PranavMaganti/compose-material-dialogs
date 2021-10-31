@@ -1,22 +1,22 @@
 package com.vanpra.composematerialdialogs
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,10 +26,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -42,32 +44,21 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun MaterialDialogScope.title(
     text: String? = null,
-    @StringRes res: Int? = null,
-    center: Boolean = false
+    @StringRes res: Int? = null
 ) {
     val titleText = getString(res, text)
-    var modifier = Modifier
-        .fillMaxWidth()
-        .padding(start = 24.dp, end = 24.dp)
-        .height(64.dp)
-        .wrapContentHeight(Alignment.CenterVertically)
 
-    modifier = modifier.then(
-        Modifier.wrapContentWidth(
-            if (center) {
-                Alignment.CenterHorizontally
-            } else {
-                Alignment.Start
-            }
+    Column(Modifier.padding(top = 24.dp, bottom = 16.dp)) {
+        Text(
+            text = titleText,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp)
         )
-    )
 
-    Text(
-        text = titleText,
-        color = MaterialTheme.colors.onSurface,
-        style = MaterialTheme.typography.h6,
-        modifier = modifier
-    )
+    }
 }
 
 /**
@@ -81,20 +72,25 @@ fun MaterialDialogScope.iconTitle(
     text: String? = null,
     @StringRes textRes: Int? = null,
     icon: @Composable () -> Unit = {},
+    iconContentColor: Color = MaterialTheme.colorScheme.secondary
 ) {
     val titleText = getString(textRes, text)
-    Row(
-        modifier = Modifier
-            .padding(start = 24.dp, end = 24.dp)
-            .height(64.dp),
-        verticalAlignment = Alignment.CenterVertically
+    Column(
+        modifier = Modifier.padding(top = 24.dp, bottom = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        icon()
-        Spacer(Modifier.width(14.dp))
+        CompositionLocalProvider(LocalContentColor provides iconContentColor) {
+            icon()
+        }
+        Spacer(Modifier.height(16.dp))
         Text(
             text = titleText,
-            color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.h6
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp)
         )
     }
 }
@@ -110,12 +106,27 @@ fun MaterialDialogScope.message(text: String? = null, @StringRes res: Int? = nul
 
     Text(
         text = messageText,
-        color = MaterialTheme.colors.onSurface,
-        style = MaterialTheme.typography.body1,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        style = MaterialTheme.typography.bodyMedium,
         modifier = Modifier
-            .padding(bottom = 28.dp, start = 24.dp, end = 24.dp)
+            .padding(start = 24.dp, end = 24.dp)
     )
 }
+
+/**
+ *  Adds a divider to the dialog
+ */
+@Composable
+fun MaterialDialogScope.divider() {
+    Box(
+        Modifier
+            .padding(start = 24.dp, end = 24.dp)
+            .fillMaxWidth()
+            .height(1.dp)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+    )
+}
+
 
 /**
  *  Adds an input field with the given parameters to the dialog
@@ -172,25 +183,27 @@ fun MaterialDialogScope.input(
                     onInput(text)
                 }
             },
-            label = { Text(label, color = MaterialTheme.colors.onBackground.copy(0.8f)) },
+            label = { Text(label, color = MaterialTheme.colorScheme.onBackground.copy(0.8f)) },
             modifier = Modifier
                 .focusRequester(focusRequester)
                 .fillMaxWidth()
                 .testTag("dialog_input"),
-            placeholder = { Text(hint, color = MaterialTheme.colors.onBackground.copy(0.5f)) },
+            placeholder = { Text(hint, color = MaterialTheme.colorScheme.onBackground.copy(0.5f)) },
             isError = !valid,
             visualTransformation = visualTransformation,
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
-            textStyle = TextStyle(MaterialTheme.colors.onBackground, fontSize = 16.sp)
+            textStyle = TextStyle(MaterialTheme.colorScheme.onBackground, fontSize = 16.sp)
         )
 
         if (!valid) {
             Text(
                 errorMessage,
                 fontSize = 14.sp,
-                color = MaterialTheme.colors.error,
-                modifier = Modifier.align(Alignment.End).testTag("dialog_input_error")
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .testTag("dialog_input_error")
             )
         }
     }

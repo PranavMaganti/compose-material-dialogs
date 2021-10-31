@@ -20,31 +20,13 @@ import java.time.LocalTime
  */
 @Composable
 fun DateTimeDialogDemo() {
-    val purple = remember { Color(0xFF3700B3) }
-
-    val colors: TimePickerColors = if (isSystemInDarkTheme()) {
-        TimePickerDefaults.colors(
-            activeBackgroundColor = purple.copy(0.3f),
-            activeTextColor = Color.White,
-            selectorColor = purple,
-            inactiveBackgroundColor = Color(0xFF292929),
-        )
-    } else {
-        TimePickerDefaults.colors(
-            inactiveBackgroundColor = Color.LightGray,
-            activeBackgroundColor = purple.copy(0.1f),
-            activeTextColor = purple,
-            selectorColor = purple
-        )
-    }
-
     val context = LocalContext.current
 
     DialogAndShowButton(
         buttonText = "Time Picker Dialog",
         buttons = { defaultDateTimeDialogButtons() }
     ) {
-        timepicker(colors = colors) {
+        timepicker {
             println(it.toString())
             Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
         }
@@ -55,7 +37,6 @@ fun DateTimeDialogDemo() {
         buttons = { defaultDateTimeDialogButtons() }
     ) {
         timepicker(
-            colors = colors,
             timeRange = LocalTime.of(9, 35)..LocalTime.of(21, 13),
             is24HourClock = false
         ) {
@@ -68,7 +49,7 @@ fun DateTimeDialogDemo() {
         buttonText = "Time Picker Dialog 24H",
         buttons = { defaultDateTimeDialogButtons() }
     ) {
-        timepicker(colors = colors, is24HourClock = true) {
+        timepicker(is24HourClock = true) {
             println(it.toString())
             Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
         }
@@ -79,7 +60,6 @@ fun DateTimeDialogDemo() {
         buttons = { defaultDateTimeDialogButtons() }
     ) {
         timepicker(
-            colors = colors,
             timeRange = LocalTime.of(9, 35)..LocalTime.of(21, 13),
             is24HourClock = true
         ) {
