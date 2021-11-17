@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.min
 
@@ -204,6 +205,7 @@ fun rememberMaterialDialogState(initialValue: Boolean = false): MaterialDialogSt
 /**
  *  Builds a dialog with the given content
  * @param dialogState state of the dialog
+ * @param properties properties of the compose dialog
  * @param backgroundColor background color of the dialog
  * @param shape shape of the dialog and components used in the dialog
  * @param border border stoke of the dialog
@@ -216,6 +218,7 @@ fun rememberMaterialDialogState(initialValue: Boolean = false): MaterialDialogSt
 @Composable
 fun MaterialDialog(
     dialogState: MaterialDialogState = rememberMaterialDialogState(),
+    properties: DialogProperties = DialogProperties(),
     backgroundColor: Color = MaterialTheme.colors.surface,
     shape: Shape = MaterialTheme.shapes.medium,
     border: BorderStroke? = null,
@@ -248,7 +251,10 @@ fun MaterialDialog(
                 elevation = elevation
             ) ?: MaterialTheme.colors.surface
 
-            Dialog(onDismissRequest = { onCloseRequest(dialogState) }) {
+            Dialog(
+                properties = properties,
+                onDismissRequest = { onCloseRequest(dialogState) }
+            ) {
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
