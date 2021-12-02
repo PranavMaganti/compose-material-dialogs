@@ -22,7 +22,6 @@ class CommonModulePlugin: Plugin<Project> {
 
     private fun Project.dependenciesConf() {
         dependencies.apply {
-            implementation(Dependencies.Kotlin.stdlib)
             implementation(Dependencies.AndroidX.coreKtx)
 
             implementation(Dependencies.AndroidX.Compose.ui)
