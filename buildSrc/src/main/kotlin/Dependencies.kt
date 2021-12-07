@@ -2,7 +2,7 @@ object Dependencies {
     const val desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
 
     object ComposeMaterialDialogs {
-        const val version = "0.6.2-SNAPSHOT"
+        const val version = "0.6.2"
 
         const val core = "io.github.vanpra.compose-material-dialogs:core:$version"
         const val datetime = "io.github.vanpra.compose-material-dialogs:datetime:$version"
