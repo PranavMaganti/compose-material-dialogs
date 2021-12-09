@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("com.diffplug.spotless") version "5.14.3"
+    id("com.diffplug.spotless") version "6.0.4"
     id("org.jetbrains.dokka") version "1.6.0"
 }
 
@@ -9,7 +9,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://plugins.gradle.org/m2/")
     }
 
@@ -27,9 +26,6 @@ allprojects {
         google()
         mavenCentral()
         gradlePluginPortal()
-        maven("https://dl.bintray.com/kotlin/kotlin-eap")
-        maven("https://kotlin.bintray.com/kotlinx/")
-        maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
     }
 
     tasks.withType<KotlinCompile>().all {

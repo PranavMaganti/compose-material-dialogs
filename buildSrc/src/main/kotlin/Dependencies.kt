@@ -14,7 +14,7 @@ object Dependencies {
     }
 
     object Accompanist {
-        private const val version = "0.20.2"
+        private const val version = "0.21.4-beta"
         const val pager = "com.google.accompanist:accompanist-pager:$version"
     }
 
