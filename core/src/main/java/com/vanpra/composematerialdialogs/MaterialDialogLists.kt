@@ -13,12 +13,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.RadioButton
-import androidx.compose.material.RadioButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -245,7 +245,7 @@ private fun MultiChoiceItem(
                 checkedColor = MaterialTheme.colorScheme.secondary,
                 uncheckedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                 checkmarkColor = MaterialTheme.colorScheme.surface,
-                disabledColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled),
+                disabledUncheckedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled),
                 disabledIndeterminateColor = MaterialTheme.colorScheme.secondary.copy(alpha = ContentAlpha.disabled)
             )
         )
@@ -292,7 +292,7 @@ private fun SingleChoiceItem(
             colors = RadioButtonDefaults.colors(
                 selectedColor = MaterialTheme.colorScheme.secondary,
                 unselectedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                disabledColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled)
+                disabledUnselectedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled)
             )
         )
         Spacer(

@@ -10,16 +10,19 @@ object Dependencies {
     }
 
     object Ktlint {
-        const val version = "0.42.1"
+        const val version = "0.43.2"
     }
 
     object Accompanist {
         private const val version = "0.22.0-rc"
         const val pager = "com.google.accompanist:accompanist-pager:$version"
+        const val flowLayout = "com.google.accompanist:accompanist-flowlayout:$version"
     }
 
     object Kotlin {
         private const val version = "1.6.0"
+
+        const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
 
@@ -34,7 +37,7 @@ object Dependencies {
     }
 
     object AndroidX {
-        const val coreKtx = "androidx.core:core-ktx:1.7.0"
+        const val coreKtx = "androidx.core:core-ktx:1.8.0-alpha01"
 
         object Testing {
             const val version = "1.4.1-alpha03"
@@ -48,7 +51,7 @@ object Dependencies {
 
             const val ui = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"
-            const val material3 = "androidx.compose.material3:material3:1.0.0-alpha01"
+            const val material3 = "androidx.compose.material3:material3:1.0.0-alpha02"
             const val materialIconsExtended =
                 "androidx.compose.material:material-icons-extended:$version"
             const val animation = "androidx.compose.animation:animation:$version"

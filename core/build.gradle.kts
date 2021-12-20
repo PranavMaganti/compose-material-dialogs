@@ -51,6 +51,7 @@ android {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation(Dependencies.Accompanist.flowLayout)
 }
 
 shot {

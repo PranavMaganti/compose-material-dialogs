@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import java.util.Locale
 
 internal enum class MaterialDialogButtonTypes(val testTag: String) {
-    Text("text"),
     Positive("positive"),
     Negative("negative"),
     Accessibility("accessibility")
@@ -45,9 +44,8 @@ internal fun MaterialDialogScope.DialogButtonsLayout(
             { content(dialogButtons) },
             modifier
                 .fillMaxWidth()
-                .padding(24.dp),
+                .padding(horizontal = 24.dp),
             { measurables, constraints ->
-
                 if (measurables.isEmpty()) {
                     return@Layout layout(0, 0) {}
                 }
@@ -69,16 +67,17 @@ internal fun MaterialDialogScope.DialogButtonsLayout(
                         placeables[0].second.height
                     }
 
+                println("TESTING: ${height}")
+
                 layout(constraints.maxWidth, height) {
                     var currX = constraints.maxWidth
                     var currY = verticalPadding
 
                     val posButtons = placeables.buttons(MaterialDialogButtonTypes.Positive)
                     val negButtons = placeables.buttons(MaterialDialogButtonTypes.Negative)
-                    val textButtons = placeables.buttons(MaterialDialogButtonTypes.Text)
                     val accButtons = placeables.buttons(MaterialDialogButtonTypes.Accessibility)
 
-                    val buttonInOrder = posButtons + textButtons + negButtons
+                    val buttonInOrder = posButtons + negButtons
                     buttonInOrder.forEach { button ->
                         if (column) {
                             button.place(currX - button.width, currY)

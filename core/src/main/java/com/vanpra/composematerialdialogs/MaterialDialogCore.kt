@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextField
@@ -32,6 +31,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -48,7 +48,7 @@ fun MaterialDialogScope.title(
 ) {
     val titleText = getString(res, text)
 
-    Column(Modifier.padding(top = 24.dp, bottom = 16.dp)) {
+    Column {
         Text(
             text = titleText,
             color = MaterialTheme.colorScheme.onSurface,
@@ -75,10 +75,7 @@ fun MaterialDialogScope.iconTitle(
     iconContentColor: Color = MaterialTheme.colorScheme.secondary
 ) {
     val titleText = getString(textRes, text)
-    Column(
-        modifier = Modifier.padding(top = 24.dp, bottom = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         CompositionLocalProvider(LocalContentColor provides iconContentColor) {
             icon()
         }
@@ -108,8 +105,7 @@ fun MaterialDialogScope.message(text: String? = null, @StringRes res: Int? = nul
         text = messageText,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         style = MaterialTheme.typography.bodyMedium,
-        modifier = Modifier
-            .padding(start = 24.dp, end = 24.dp)
+        modifier = Modifier.padding(horizontal = 24.dp)
     )
 }
 
@@ -174,7 +170,7 @@ fun MaterialDialogScope.input(
         DialogCallback { onInput(text) }
     }
 
-    Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)) {
+    Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp)) {
         TextField(
             value = text,
             onValueChange = {
@@ -222,7 +218,7 @@ fun MaterialDialogScope.input(
  */
 @Composable
 fun MaterialDialogScope.customView(content: @Composable () -> Unit) {
-    Box(modifier = Modifier.padding(bottom = 28.dp, start = 24.dp, end = 24.dp)) {
+    Box(modifier = Modifier.padding(start = 24.dp, end = 24.dp)) {
         content()
     }
 }
