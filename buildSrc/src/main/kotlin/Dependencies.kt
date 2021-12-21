@@ -37,7 +37,7 @@ object Dependencies {
     }
 
     object AndroidX {
-        const val coreKtx = "androidx.core:core-ktx:1.8.0-alpha01"
+        const val coreKtx = "androidx.core:core-ktx:1.8.0-alpha02"
 
         object Testing {
             const val version = "1.4.1-alpha03"

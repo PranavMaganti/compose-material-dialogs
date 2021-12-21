@@ -10,15 +10,21 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
-import java.util.*
+import androidx.compose.ui.unit.dp
+import java.util.Locale
 
 object MaterialDialogButtonId {
     const val Positive = "positive_dialog_btn"
     const val Negative = "negative_dialog_btn"
-    const val Accessibility = "accessibility_dialog_btn"
 
+    val Ids = setOf(Positive, Negative)
+}
 
-    val Ids = setOf(Positive, Negative, Accessibility)
+object MaterialDialogButtonConstants {
+    val OuterButtonPadding = 24.dp
+    val InterButtonPadding = 8.dp
+    val MaxHeight = 34.dp
+    const val ButtonStackThreshold = 0.8
 }
 
 /**
@@ -50,7 +56,7 @@ class MaterialDialogButtons(private val scope: MaterialDialogScope) {
 
         TextButton(
             onClick = {
-                if (scope.autoDismiss && !disableDismiss) {
+                if (!disableDismiss) {
                     scope.dialogState.hide(focusManager)
                 }
 
@@ -90,9 +96,7 @@ class MaterialDialogButtons(private val scope: MaterialDialogScope) {
 
         TextButton(
             onClick = {
-                if (scope.autoDismiss) {
-                    scope.dialogState.hide(focusManager)
-                }
+                scope.dialogState.hide(focusManager)
                 onClick()
             },
             modifier = Modifier

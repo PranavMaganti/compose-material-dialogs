@@ -5,9 +5,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -34,8 +40,6 @@ interface MaterialDialogScope {
 
     val callbacks: SnapshotStateMap<Int, () -> Unit>
     val positiveButtonEnabled: SnapshotStateMap<Int, Boolean>
-
-    val autoDismiss: Boolean
 
     /**
      * Hides the dialog and calls any callbacks from components in the dialog
@@ -67,8 +71,7 @@ interface MaterialDialogScope {
 }
 
 internal class MaterialDialogScopeImpl(
-    override val dialogState: MaterialDialogState,
-    override val autoDismiss: Boolean = true
+    override val dialogState: MaterialDialogState
 ) : MaterialDialogScope {
     override val dialogButtons = MaterialDialogButtons(this)
 
@@ -113,10 +116,7 @@ internal class MaterialDialogScopeImpl(
 
         DisposableEffect(valid) {
             positiveButtonEnabled[positiveEnabledIndex] = valid
-            onDispose {
-                positiveButtonEnabled[positiveEnabledIndex] = true
-                onDispose()
-            }
+            onDispose { onDispose() }
         }
     }
 
@@ -129,7 +129,7 @@ internal class MaterialDialogScopeImpl(
     override fun DialogCallback(callback: () -> Unit) {
         val callbackIndex = rememberSaveable { callbackCounter.getAndIncrement() }
 
-        DisposableEffect(Unit) {
+        DisposableEffect(callback) {
             callbacks[callbackIndex] = callback
             onDispose { callbacks[callbackIndex] = {} }
         }
@@ -186,36 +186,34 @@ fun rememberMaterialDialogState(initialValue: Boolean = false): MaterialDialogSt
 
 /**
  *  Builds a dialog with the given content
- * @param dialogState state of the dialog
+ * @param state state of the dialog
  * @param properties properties of the compose dialog
  * @param backgroundColor background color of the dialog
  * @param shape shape of the dialog and components used in the dialog
  * @param border border stoke of the dialog
  * @param elevation elevation of the dialog
- * @param autoDismiss when true the dialog is hidden on any button press
  * @param onCloseRequest function to be executed when user clicks outside dialog
  * @param buttons the buttons layout of the dialog
  * @param content the body content of the dialog
  */
 @Composable
 fun MaterialDialog(
-    dialogState: MaterialDialogState = rememberMaterialDialogState(),
+    state: MaterialDialogState = rememberMaterialDialogState(),
     properties: DialogProperties = DialogProperties(),
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
     shape: Shape = RoundedCornerShape(28.dp),
-    autoDismiss: Boolean = true,
     onCloseRequest: (MaterialDialogState) -> Unit = { it.hide() },
-    buttons: @Composable (MaterialDialogButtons.() -> Unit)?,
+    buttons: @Composable (MaterialDialogButtons.() -> Unit) = {},
     content: @Composable MaterialDialogScope.() -> Unit
 ) {
-    val dialogScope = remember { MaterialDialogScopeImpl(dialogState, autoDismiss) }
-    DisposableEffect(dialogState.showing) {
-        if (!dialogState.showing) dialogScope.reset()
+    val dialogScope = remember { MaterialDialogScopeImpl(state) }
+    DisposableEffect(state.showing) {
+        if (!state.showing) dialogScope.reset()
         onDispose { }
     }
 
-    if (dialogState.showing) {
-        Dialog(properties = properties, onDismissRequest = { onCloseRequest(dialogState) }) {
+    if (state.showing) {
+        Dialog(properties = properties, onDismissRequest = { onCloseRequest(state) }) {
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -223,10 +221,10 @@ fun MaterialDialog(
                     .testTag("dialog"),
                 shape = shape,
                 color = backgroundColor,
-                tonalElevation = DialogElevation
+                tonalElevation = MaterialDialogConstants.Elevation
             ) {
                 MaterialDialogLayout(
-                    dialogScope = dialogScope,
+                    scope = dialogScope,
                     buttons = buttons,
                     content = content
                 )
@@ -237,21 +235,26 @@ fun MaterialDialog(
 
 @Composable
 fun MaterialDialogLayout(
-    dialogScope: MaterialDialogScope,
-    buttons: @Composable (MaterialDialogButtons.() -> Unit)?,
+    scope: MaterialDialogScope,
+    buttons: @Composable (MaterialDialogButtons.() -> Unit),
     content: @Composable MaterialDialogScope.() -> Unit
 ) {
-    val maxHeightPx = with(LocalDensity.current) { MaxDialogHeight.toPx().toInt() }
-    val btnInterPaddingPx = with(LocalDensity.current) { DialogButtonInterPadding.toPx().toInt() }
-    val btnOuterPaddingPx = with(LocalDensity.current) { DialogButtonOuterPadding.toPx().toInt() }
-    val btnMaxHeight = with(LocalDensity.current) { DialogButtonMaxHeight.toPx().toInt() }
+    val maxDimenPx = with(LocalDensity.current) { MaterialDialogConstants.MaxDimen.roundToPx() }
+    val btnInterPaddingPx =
+        with(LocalDensity.current) { MaterialDialogButtonConstants.InterButtonPadding.roundToPx() }
+    val btnOuterPaddingPx =
+        with(LocalDensity.current) { MaterialDialogButtonConstants.OuterButtonPadding.roundToPx() }
+    val btnMaxHeight =
+        with(LocalDensity.current) { MaterialDialogButtonConstants.MaxHeight.roundToPx() }
 
     Layout(content = {
-        buttons?.invoke(dialogScope.dialogButtons)
+        buttons(scope.dialogButtons)
         Column {
-            content(dialogScope)
+            content(scope)
         }
     }) { measurables, constraints ->
+        val width = min(constraints.maxWidth, maxDimenPx)
+
         val partitionedMeasureables =
             measurables.partition { it.layoutId in MaterialDialogButtonId.Ids }
 
@@ -268,60 +271,61 @@ fun MaterialDialogLayout(
                     )
                 )
             }
+        val positiveBtns = buttonPlaceables.filterButtons(MaterialDialogButtonId.Positive)
+        val negativeBtns = buttonPlaceables.filterButtons(MaterialDialogButtonId.Negative)
 
         val totalInterButtonPadding = (buttonPlaceables.size - 1) * btnInterPaddingPx
         val totalBtnWidth = buttonPlaceables.sumOf { it.second.width } + totalInterButtonPadding
-        val btnColumn = totalBtnWidth > DialogButtonColumnRatio * constraints.maxWidth
+        val stackBtns = totalBtnWidth > MaterialDialogButtonConstants.ButtonStackThreshold * width
 
         val btnHeight = if (buttonPlaceables.isEmpty()) {
             0
-        } else if (btnColumn) {
+        } else if (stackBtns) {
             val buttonHeight = buttonPlaceables.sumOf { it.second.height }
             buttonHeight + totalInterButtonPadding + 2 * btnOuterPaddingPx
         } else {
             buttonPlaceables[0].second.height + 2 * btnOuterPaddingPx
         }
 
-
         val contentPlaceable =
             contentMeasureable.measure(
                 constraints.copy(
                     minWidth = 0,
                     minHeight = 0,
-                    maxHeight = maxHeightPx - btnHeight
+                    maxHeight = maxDimenPx - btnHeight
                 )
             )
-        val height = min(contentPlaceable.height + btnHeight, maxHeightPx)
 
-        val positiveBtns = buttonPlaceables.filterButtons(MaterialDialogButtonId.Positive)
-        val negativeBtns = buttonPlaceables.filterButtons(MaterialDialogButtonId.Negative)
+        val height = min(contentPlaceable.height + btnHeight, maxDimenPx)
 
-        layout(constraints.maxWidth, height) {
+        layout(width, height) {
             contentPlaceable.place(0, 0)
 
-            var buttonX = constraints.maxWidth - btnOuterPaddingPx
-            var buttonY = height - btnOuterPaddingPx
+            if (buttonPlaceables.isNotEmpty()) {
+                var buttonX = constraints.maxWidth - btnOuterPaddingPx
+                var buttonY = height - btnOuterPaddingPx
 
-            if (btnColumn) {
-                (negativeBtns.reversed() + positiveBtns.reversed())
-                    .forEach { button ->
-                        button.place(buttonX - button.width, buttonY - button.height)
-                        buttonY -= button.height + btnInterPaddingPx
-                    }
-            } else {
-                (positiveBtns.reversed() + negativeBtns.reversed())
-                    .forEach { button ->
-                        buttonX -= button.width + btnInterPaddingPx
-                        button.place(buttonX, buttonY - button.height)
-                    }
+                if (stackBtns) {
+                    (positiveBtns + negativeBtns)
+                        .reversed()
+                        .forEach { button ->
+                            button.place(buttonX - button.width, buttonY - button.height)
+                            buttonY -= button.height + btnInterPaddingPx
+                        }
+                } else {
+                    (negativeBtns + positiveBtns)
+                        .reversed()
+                        .forEach { button ->
+                            buttonX -= button.width + btnInterPaddingPx
+                            button.place(buttonX, buttonY - button.height)
+                        }
+                }
             }
         }
     }
 }
 
-private val DialogElevation = 24.dp
-private val MaxDialogHeight = 560.dp
-val DialogButtonOuterPadding = 24.dp
-val DialogButtonInterPadding = 8.dp
-val DialogButtonMaxHeight = 34.dp
-const val DialogButtonColumnRatio = 0.8
+object MaterialDialogConstants {
+    val Elevation = 24.dp
+    val MaxDimen = 560.dp
+}

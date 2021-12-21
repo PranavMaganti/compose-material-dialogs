@@ -10,12 +10,11 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 
 @Composable
 fun DialogWithContent(
-    autoDismiss: Boolean = true,
     dialogState: MaterialDialogState = rememberMaterialDialogState(true),
     buttons: @Composable MaterialDialogButtons.() -> Unit = {},
     content: @Composable MaterialDialogScope.() -> Unit = {}
 ) {
-    MaterialDialog(dialogState = dialogState, buttons = buttons, autoDismiss = autoDismiss) {
+    MaterialDialog(state = dialogState, buttons = buttons) {
         content()
     }
     SideEffect { dialogState.show() }

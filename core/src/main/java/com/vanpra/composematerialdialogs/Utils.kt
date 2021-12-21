@@ -13,5 +13,5 @@ internal fun getString(@StringRes res: Int? = null, default: String? = null): St
         ?: throw IllegalArgumentException("Function must receive one non null string parameter")
 }
 
-internal fun List<Pair<Any?, Placeable>>.filterButtons(buttonId: String)  =
+internal fun List<Pair<Any?, Placeable>>.filterButtons(buttonId: String) =
     this.filter { it.first == buttonId }.map { it.second }

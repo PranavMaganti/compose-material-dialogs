@@ -22,12 +22,12 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 @Composable
 fun DialogAndShowButton(
     buttonText: String,
-    buttons: @Composable (MaterialDialogButtons.() -> Unit)? = null,
+    buttons: @Composable (MaterialDialogButtons.() -> Unit) = {},
     content: @Composable MaterialDialogScope.() -> Unit
 ) {
     val dialogState = rememberMaterialDialogState()
 
-    MaterialDialog(dialogState = dialogState, buttons = buttons) {
+    MaterialDialog(state = dialogState, buttons = buttons) {
         content()
     }
 
