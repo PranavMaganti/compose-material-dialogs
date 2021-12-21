@@ -1,104 +1,24 @@
 package com.vanpra.composematerialdialogs
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.dp
-import java.util.Locale
+import java.util.*
 
-internal enum class MaterialDialogButtonTypes(val testTag: String) {
-    Positive("positive"),
-    Negative("negative"),
-    Accessibility("accessibility")
-}
+object MaterialDialogButtonId {
+    const val Positive = "positive_dialog_btn"
+    const val Negative = "negative_dialog_btn"
+    const val Accessibility = "accessibility_dialog_btn"
 
-/**
- *  Adds buttons to the bottom of the dialog
- * @param content the buttons which should be displayed in the dialog.
- * See [MaterialDialogButtons] for more information about the content
- */
-@Composable
-internal fun MaterialDialogScope.DialogButtonsLayout(
-    modifier: Modifier = Modifier,
-    content: @Composable (MaterialDialogButtons.() -> Unit)?
-) {
-    if (content != null) {
-        val interButtonPadding = with(LocalDensity.current) { 12.dp.toPx().toInt() }
-        val defaultButtonHeight = with(LocalDensity.current) { 36.dp.toPx().toInt() }
-        val accessibilityPadding = with(LocalDensity.current) { 12.dp.toPx().toInt() }
-        val verticalPadding = with(LocalDensity.current) { 8.dp.toPx().toInt() }
 
-        Layout(
-            { content(dialogButtons) },
-            modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            { measurables, constraints ->
-                if (measurables.isEmpty()) {
-                    return@Layout layout(0, 0) {}
-                }
-
-                val placeables = measurables.map {
-                    (it.layoutId as MaterialDialogButtonTypes) to it.measure(
-                        constraints.copy(minWidth = 0, maxHeight = defaultButtonHeight)
-                    )
-                }
-                val totalWidth = placeables.sumOf { it.second.width }
-                val column = totalWidth > 0.8 * constraints.maxWidth
-
-                val height =
-                    if (column) {
-                        val buttonHeight = placeables.sumOf { it.second.height }
-                        val heightPadding = (placeables.size - 1) * interButtonPadding
-                        buttonHeight + heightPadding + 2 * verticalPadding
-                    } else {
-                        placeables[0].second.height
-                    }
-
-                println("TESTING: ${height}")
-
-                layout(constraints.maxWidth, height) {
-                    var currX = constraints.maxWidth
-                    var currY = verticalPadding
-
-                    val posButtons = placeables.buttons(MaterialDialogButtonTypes.Positive)
-                    val negButtons = placeables.buttons(MaterialDialogButtonTypes.Negative)
-                    val accButtons = placeables.buttons(MaterialDialogButtonTypes.Accessibility)
-
-                    val buttonInOrder = posButtons + negButtons
-                    buttonInOrder.forEach { button ->
-                        if (column) {
-                            button.place(currX - button.width, currY)
-                            currY += button.height + interButtonPadding
-                        } else {
-                            currX -= button.width
-                            button.place(currX, currY)
-                        }
-                    }
-
-                    if (accButtons.isNotEmpty()) {
-                        /* There can only be one accessibility button so take first */
-                        val button = accButtons[0]
-                        button.place(accessibilityPadding, height - button.height)
-                    }
-                }
-            }
-        )
-    } else {
-        Box(Modifier)
-    }
+    val Ids = setOf(Positive, Negative, Accessibility)
 }
 
 /**
@@ -141,8 +61,8 @@ class MaterialDialogButtons(private val scope: MaterialDialogScope) {
                 onClick()
             },
             modifier = Modifier
-                .layoutId(MaterialDialogButtonTypes.Positive)
-                .testTag(MaterialDialogButtonTypes.Positive.testTag),
+                .layoutId(MaterialDialogButtonId.Positive)
+                .testTag(MaterialDialogButtonId.Positive),
             enabled = buttonEnabled
         ) {
             Text(text = buttonText, style = textStyle)
@@ -176,8 +96,8 @@ class MaterialDialogButtons(private val scope: MaterialDialogScope) {
                 onClick()
             },
             modifier = Modifier
-                .layoutId(MaterialDialogButtonTypes.Negative)
-                .testTag(MaterialDialogButtonTypes.Negative.testTag),
+                .layoutId(MaterialDialogButtonId.Negative)
+                .testTag(MaterialDialogButtonId.Negative),
         ) {
             Text(text = buttonText, style = textStyle)
         }

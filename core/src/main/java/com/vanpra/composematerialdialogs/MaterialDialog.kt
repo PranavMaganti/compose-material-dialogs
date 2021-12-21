@@ -1,23 +1,13 @@
 package com.vanpra.composematerialdialogs
 
-import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -26,14 +16,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.flowlayout.MainAxisAlignment
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.min
 
@@ -158,11 +145,6 @@ class MaterialDialogState(initialValue: Boolean = false) {
     var showing by mutableStateOf(initialValue)
 
     /**
-     *  Dialog background color with elevation overlay
-     */
-    var dialogBackgroundColor by mutableStateOf<Color?>(null)
-
-    /**
      *  Shows the dialog
      */
     fun show() {
@@ -232,97 +214,114 @@ fun MaterialDialog(
         onDispose { }
     }
 
-    val maxHeight = if (isLargeDevice()) {
-        LocalConfiguration.current.screenHeightDp.dp - 96.dp
-    } else {
-        560.dp
-    }
-    val maxHeightPx = with(LocalDensity.current) { maxHeight.toPx().toInt() }
-
     if (dialogState.showing) {
-        Dialog(onDismissRequest = { onCloseRequest(dialogState) }) {
+        Dialog(properties = properties, onDismissRequest = { onCloseRequest(dialogState) }) {
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .sizeIn(maxHeight = maxHeight, minWidth = MinDialogWidth, maxWidth = MaxDialogHeight)
                     .clipToBounds()
                     .testTag("dialog"),
                 shape = shape,
                 color = backgroundColor,
                 tonalElevation = DialogElevation
             ) {
+                MaterialDialogLayout(
+                    dialogScope = dialogScope,
+                    buttons = buttons,
+                    content = content
+                )
             }
         }
     }
 }
 
 @Composable
-internal fun MaterialDialogLayout(
+fun MaterialDialogLayout(
     dialogScope: MaterialDialogScope,
     buttons: @Composable (MaterialDialogButtons.() -> Unit)?,
     content: @Composable MaterialDialogScope.() -> Unit
 ) {
-    Layout(
-        modifier = Modifier.padding(vertical = DialogBorderPadding),
-        content = {
-//                            dialogScope.DialogButtonsLayout(
-//                                modifier = Modifier.layoutId("buttons"),
-//                                content = buttons
-//                            )
+    val maxHeightPx = with(LocalDensity.current) { MaxDialogHeight.toPx().toInt() }
+    val btnInterPaddingPx = with(LocalDensity.current) { DialogButtonInterPadding.toPx().toInt() }
+    val btnOuterPaddingPx = with(LocalDensity.current) { DialogButtonOuterPadding.toPx().toInt() }
+    val btnMaxHeight = with(LocalDensity.current) { DialogButtonMaxHeight.toPx().toInt() }
 
-            if (buttons != null) {
-                FlowRow(
-                    modifier = Modifier
-                        .layoutId("buttons")
-                        .padding(horizontal = 24.dp),
-                    mainAxisSpacing = 8.dp,
-                    mainAxisAlignment = MainAxisAlignment.End,
-                    crossAxisSpacing = 12.dp
-                ) {
-                    buttons(dialogScope.dialogButtons)
-                }
-            } else {
-                Box(Modifier)
-            }
+    Layout(content = {
+        buttons?.invoke(dialogScope.dialogButtons)
+        Column {
+            content(dialogScope)
+        }
+    }) { measurables, constraints ->
+        val partitionedMeasureables =
+            measurables.partition { it.layoutId in MaterialDialogButtonId.Ids }
 
-            Column(
-                Modifier
-                    .layoutId("content")
-                    .padding(bottom = 24.dp),
-                verticalArrangement = spacedBy(16.dp)
-            ) {
-                content(
-                    dialogScope
+        val buttonMeasureables = partitionedMeasureables.first
+        val contentMeasureable = partitionedMeasureables.second[0] // Always have a single column
+
+        val buttonPlaceables = buttonMeasureables
+            .map {
+                it.layoutId to it.measure(
+                    constraints.copy(
+                        minWidth = 0,
+                        minHeight = 0,
+                        maxHeight = btnMaxHeight
+                    )
                 )
             }
+
+        val totalInterButtonPadding = (buttonPlaceables.size - 1) * btnInterPaddingPx
+        val totalBtnWidth = buttonPlaceables.sumOf { it.second.width } + totalInterButtonPadding
+        val btnColumn = totalBtnWidth > DialogButtonColumnRatio * constraints.maxWidth
+
+        val btnHeight = if (buttonPlaceables.isEmpty()) {
+            0
+        } else if (btnColumn) {
+            val buttonHeight = buttonPlaceables.sumOf { it.second.height }
+            buttonHeight + totalInterButtonPadding + 2 * btnOuterPaddingPx
+        } else {
+            buttonPlaceables[0].second.height + 2 * btnOuterPaddingPx
         }
-    ) { measurables, constraints ->
-        val buttonsHeight =
-            measurables[0].minIntrinsicHeight(constraints.maxWidth)
-        val buttonsPlaceable = measurables[0].measure(
-            constraints.copy(maxHeight = buttonsHeight, minHeight = 0)
-        )
 
-        println(buttonsHeight)
 
-        val contentPlaceable = measurables[1].measure(
-            constraints.copy(
-                maxHeight = maxHeightPx - buttonsPlaceable.height,
-                minHeight = 0,
+        val contentPlaceable =
+            contentMeasureable.measure(
+                constraints.copy(
+                    minWidth = 0,
+                    minHeight = 0,
+                    maxHeight = maxHeightPx - btnHeight
+                )
             )
-        )
+        val height = min(contentPlaceable.height + btnHeight, maxHeightPx)
 
-        val height =
-            min(maxHeightPx, buttonsPlaceable.height + contentPlaceable.height)
+        val positiveBtns = buttonPlaceables.filterButtons(MaterialDialogButtonId.Positive)
+        val negativeBtns = buttonPlaceables.filterButtons(MaterialDialogButtonId.Negative)
 
-        return@Layout layout(constraints.maxWidth, height) {
+        layout(constraints.maxWidth, height) {
             contentPlaceable.place(0, 0)
-            buttonsPlaceable.place(0, height - buttonsPlaceable.height)
+
+            var buttonX = constraints.maxWidth - btnOuterPaddingPx
+            var buttonY = height - btnOuterPaddingPx
+
+            if (btnColumn) {
+                (negativeBtns.reversed() + positiveBtns.reversed())
+                    .forEach { button ->
+                        button.place(buttonX - button.width, buttonY - button.height)
+                        buttonY -= button.height + btnInterPaddingPx
+                    }
+            } else {
+                (positiveBtns.reversed() + negativeBtns.reversed())
+                    .forEach { button ->
+                        buttonX -= button.width + btnInterPaddingPx
+                        button.place(buttonX, buttonY - button.height)
+                    }
+            }
         }
     }
 }
 
 private val DialogElevation = 24.dp
-private val MinDialogWidth = 280.dp
 private val MaxDialogHeight = 560.dp
-val DialogBorderPadding = 24.dp
+val DialogButtonOuterPadding = 24.dp
+val DialogButtonInterPadding = 8.dp
+val DialogButtonMaxHeight = 34.dp
+const val DialogButtonColumnRatio = 0.8

@@ -2,25 +2,14 @@ package com.vanpra.composematerialdialogs
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextField
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -31,7 +20,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -55,7 +43,7 @@ fun MaterialDialogScope.title(
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp, end = 24.dp)
+                .padding(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 16.dp)
         )
 
     }
@@ -75,7 +63,15 @@ fun MaterialDialogScope.iconTitle(
     iconContentColor: Color = MaterialTheme.colorScheme.secondary
 ) {
     val titleText = getString(textRes, text)
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = Modifier.padding(
+            start = 24.dp,
+            end = 24.dp,
+            top = 24.dp,
+            bottom = 16.dp
+        ),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         CompositionLocalProvider(LocalContentColor provides iconContentColor) {
             icon()
         }
@@ -85,9 +81,7 @@ fun MaterialDialogScope.iconTitle(
             color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 24.dp, end = 24.dp)
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
