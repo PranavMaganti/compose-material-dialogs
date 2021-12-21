@@ -51,7 +51,6 @@ dependencies {
 //    implementation(Dependencies.ComposeMaterialDialogs.datetime)
 //    implementation(Dependencies.ComposeMaterialDialogs.color)
 
-    implementation(Dependencies.Kotlin.stdlib)
     implementation(Dependencies.Google.material)
     implementation(Dependencies.AndroidX.coreKtx)
 
@@ -64,6 +63,5 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.activity)
     implementation(Dependencies.AndroidX.Compose.navigation)
 
-    implementation(kotlin("stdlib-jdk8"))
     coreLibraryDesugaring(Dependencies.desugar)
 }

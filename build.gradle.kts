@@ -1,23 +1,22 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("com.diffplug.spotless") version "5.14.3"
-    id("org.jetbrains.dokka") version "1.5.0"
+    id("com.diffplug.spotless") version "6.0.4"
+    id("org.jetbrains.dokka") version "1.6.0"
 }
 
 buildscript {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://dl.bintray.com/kotlin/kotlin-eap") }
-        maven { url = uri("https://plugins.gradle.org/m2/") }
+        maven("https://plugins.gradle.org/m2/")
     }
 
     dependencies {
         classpath(Dependencies.Kotlin.gradlePlugin)
-        classpath("com.android.tools.build:gradle:7.1.0-alpha13")
+        classpath("com.android.tools.build:gradle:7.1.0-beta04")
         classpath("com.vanniktech:gradle-maven-publish-plugin:0.17.0")
-        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.5.0")
+        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.6.0")
         classpath(Dependencies.Shot.core)
     }
 }
@@ -27,9 +26,6 @@ allprojects {
         google()
         mavenCentral()
         gradlePluginPortal()
-        maven { url = uri("https://dl.bintray.com/kotlin/kotlin-eap") }
-        maven { url = uri("https://kotlin.bintray.com/kotlinx/") }
-        maven { url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots") }
     }
 
     tasks.withType<KotlinCompile>().all {

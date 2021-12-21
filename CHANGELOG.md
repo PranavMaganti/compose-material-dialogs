@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.6.2 - 2021-12-02
+
+-  Update compose to 1.1.0-beta04 ([#120](https://github.com/vanpra/compose-material-dialogs/issues/120))
+-  Update kotlin to 1.6.0
+
 ### 0.6.1 - 2021-10-07
 
   -  Update compose to 1.1.0-alpha05 ([#112](https://github.com/vanpra/compose-material-dialogs/issues/112) and [#110](https://github.com/vanpra/compose-material-dialogs/issues/110))

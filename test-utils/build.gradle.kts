@@ -50,7 +50,6 @@ android {
 
 dependencies {
     api(project(":core"))
-    implementation(Dependencies.Kotlin.stdlib)
 
     implementation(Dependencies.AndroidX.Compose.ui)
     implementation(Dependencies.AndroidX.Compose.material)

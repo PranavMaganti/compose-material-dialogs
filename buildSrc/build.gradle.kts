@@ -1,7 +1,7 @@
 repositories {
     google()
     mavenCentral()
-    maven { url = uri("https://dl.bintray.com/kotlin/kotlin-eap") }
+    maven("https://dl.bintray.com/kotlin/kotlin-eap")
 }
 
 plugins {
