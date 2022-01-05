@@ -5,27 +5,11 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFromBaseline
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -59,7 +43,7 @@ import com.vanpra.composematerialdialogs.datetime.util.shortLocalName
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.TextStyle.FULL
-import java.util.Locale
+import java.util.*
 
 /**
  * @brief A date picker body layout
@@ -70,6 +54,7 @@ import java.util.Locale
  * @param waitForPositiveButton if true the [onDateChange] callback will only be called when the
  * positive button is pressed, otherwise it will be called on every input change
  * @param onDateChange callback with a LocalDateTime object when the user completes their input
+ * @param allowedDateValidator when this returns true the date will be selectable otherwise it won't be
  */
 @Composable
 fun MaterialDialogScope.datepicker(
@@ -78,13 +63,14 @@ fun MaterialDialogScope.datepicker(
     colors: DatePickerColors = DatePickerDefaults.colors(),
     yearRange: IntRange = IntRange(1900, 2100),
     waitForPositiveButton: Boolean = true,
+    allowedDateValidator: (LocalDate) -> Boolean = { true },
     onDateChange: (LocalDate) -> Unit = {}
 ) {
     val datePickerState = remember {
         DatePickerState(initialDate, colors, yearRange, dialogState.dialogBackgroundColor!!)
     }
 
-    DatePickerImpl(title = title, state = datePickerState)
+    DatePickerImpl(title = title, state = datePickerState, allowedDateValidator)
 
     if (waitForPositiveButton) {
         DialogCallback { onDateChange(datePickerState.selected) }
@@ -97,7 +83,7 @@ fun MaterialDialogScope.datepicker(
 }
 
 @Composable
-internal fun DatePickerImpl(title: String, state: DatePickerState) {
+internal fun DatePickerImpl(title: String, state: DatePickerState, allowedDateValidator: (LocalDate) -> Boolean) {
     val pagerState = rememberPagerState(
         initialPage = (state.selected.year - state.yearRange.first) * 12 + state.selected.monthValue - 1
     )
@@ -132,7 +118,7 @@ internal fun DatePickerImpl(title: String, state: DatePickerState) {
                         YearPicker(viewDate, state, pagerState)
                     }
 
-                    CalendarView(viewDate, state)
+                    CalendarView(viewDate, state, allowedDateValidator)
                 }
             }
         }
@@ -288,7 +274,7 @@ private fun CalendarViewHeader(
 }
 
 @Composable
-private fun CalendarView(viewDate: LocalDate, state: DatePickerState) {
+private fun CalendarView(viewDate: LocalDate, state: DatePickerState, allowedDateValidator: (LocalDate) -> Boolean) {
     Column(
         Modifier
             .padding(start = 12.dp, end = 12.dp)
@@ -310,9 +296,10 @@ private fun CalendarView(viewDate: LocalDate, state: DatePickerState) {
                 val selected = remember(state.selected) {
                     possibleSelected && it == state.selected.dayOfMonth
                 }
-
-                DateSelectionBox(it, selected, state.colors) {
-                    state.selected = viewDate.withDayOfMonth(it)
+                val date = viewDate.withDayOfMonth(it)
+                val enabled = allowedDateValidator(date)
+                DateSelectionBox(it, selected, state.colors, enabled) {
+                    state.selected = date
                 }
             }
         }
@@ -324,6 +311,7 @@ private fun DateSelectionBox(
     date: Int,
     selected: Boolean,
     colors: DatePickerColors,
+    enabled: Boolean,
     onClick: () -> Unit
 ) {
     Box(
@@ -332,7 +320,7 @@ private fun DateSelectionBox(
             .size(40.dp)
             .clickable(
                 interactionSource = MutableInteractionSource(),
-                onClick = onClick,
+                onClick = { if (enabled) onClick() },
                 indication = null
             ),
         contentAlignment = Alignment.Center
@@ -343,7 +331,8 @@ private fun DateSelectionBox(
                 .size(32.dp)
                 .clip(CircleShape)
                 .background(colors.backgroundColor(selected).value)
-                .wrapContentSize(Alignment.Center),
+                .wrapContentSize(Alignment.Center)
+                .alpha(if (enabled) ContentAlpha.high else ContentAlpha.disabled),
             style = TextStyle(
                 color = colors.textColor(selected).value,
                 fontSize = 12.sp

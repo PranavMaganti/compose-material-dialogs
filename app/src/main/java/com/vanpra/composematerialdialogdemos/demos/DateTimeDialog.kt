@@ -12,6 +12,7 @@ import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerColors
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
+import java.time.DayOfWeek
 import java.time.LocalTime
 
 /**
@@ -92,6 +93,17 @@ fun DateTimeDialogDemo() {
         buttons = { defaultDateTimeDialogButtons() }
     ) {
         datepicker {
+            println(it.toString())
+        }
+    }
+
+    DialogAndShowButton(
+        buttonText = "Date Picker Dialog with date restrictions",
+        buttons = { defaultDateTimeDialogButtons() }
+    ) {
+        datepicker(allowedDateValidator = {
+            it.dayOfWeek !== DayOfWeek.SATURDAY && it.dayOfWeek !== DayOfWeek.SUNDAY
+        }) {
             println(it.toString())
         }
     }
