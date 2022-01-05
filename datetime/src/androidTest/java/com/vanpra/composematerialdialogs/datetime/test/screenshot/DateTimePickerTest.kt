@@ -9,6 +9,7 @@ import com.vanpra.composematerialdialogs.test.utils.extensions.onDialog
 import com.vanpra.composematerialdialogs.test.utils.extensions.setContentAndWaitForIdle
 import org.junit.Rule
 import org.junit.Test
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -56,6 +57,19 @@ class DateTimePickerTest : ScreenshotTest {
         composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
                 datepicker(title = testTitle, initialDate = LocalDate.of(2021, 7, 27))
+            }
+        }
+
+        compareScreenshot(composeTestRule.onDialog())
+    }
+
+    @Test
+    fun datePickerWithRestrictedDates() {
+        composeTestRule.setContentAndWaitForIdle {
+            DialogWithContent {
+                datepicker(title = testTitle, initialDate = LocalDate.of(2021, 7, 27), allowedDateValidator = {
+                    it.dayOfWeek != DayOfWeek.SATURDAY && it.dayOfWeek != DayOfWeek.SUNDAY
+                })
             }
         }
 
