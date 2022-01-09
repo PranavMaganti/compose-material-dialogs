@@ -2,11 +2,29 @@ package com.vanpra.composematerialdialogs.datetime.date
 
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFromBaseline
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
@@ -34,6 +52,7 @@ import androidx.compose.ui.text.font.FontWeight.Companion.W600
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
@@ -43,7 +62,7 @@ import com.vanpra.composematerialdialogs.datetime.util.shortLocalName
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.TextStyle.FULL
-import java.util.*
+import java.util.Locale
 
 /**
  * @brief A date picker body layout
@@ -82,6 +101,7 @@ fun MaterialDialogScope.datepicker(
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 internal fun DatePickerImpl(title: String, state: DatePickerState, allowedDateValidator: (LocalDate) -> Boolean) {
     val pagerState = rememberPagerState(
@@ -125,6 +145,7 @@ internal fun DatePickerImpl(title: String, state: DatePickerState, allowedDateVa
     }
 }
 
+@OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun YearPicker(
     viewDate: LocalDate,
@@ -186,6 +207,7 @@ private fun YearPickerItem(
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun CalendarViewHeader(
     viewDate: LocalDate,
@@ -273,6 +295,7 @@ private fun CalendarViewHeader(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun CalendarView(viewDate: LocalDate, state: DatePickerState, allowedDateValidator: (LocalDate) -> Boolean) {
     Column(
@@ -341,6 +364,7 @@ private fun DateSelectionBox(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DayOfWeekHeader() {
     Row(
