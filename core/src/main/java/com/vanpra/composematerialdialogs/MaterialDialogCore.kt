@@ -149,6 +149,7 @@ fun MaterialDialogScope.input(
     focusRequester: FocusRequester = FocusRequester.Default,
     focusOnShow: Boolean = false,
     isTextValid: (String) -> Boolean = { true },
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
     onInput: (String) -> Unit = {}
 ) {
     var text by remember { mutableStateOf(prefill) }
@@ -182,6 +183,7 @@ fun MaterialDialogScope.input(
             visualTransformation = visualTransformation,
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
+            colors = colors,
             textStyle = TextStyle(MaterialTheme.colors.onBackground, fontSize = 16.sp)
         )
 
