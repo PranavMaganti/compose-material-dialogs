@@ -56,6 +56,10 @@ dependencies {
 }
 ```
 
+## For Developers
+
+If you would like to help by contributing to the library have a look at our [Contribution Guide](https://github.com/vanpra/compose-material-dialogs/blob/main/CONTRIBUTING.md) to get started
+
 ## Credits
 
 This library's design is heavily inspired by https://github.com/afollestad/material-dialogs
