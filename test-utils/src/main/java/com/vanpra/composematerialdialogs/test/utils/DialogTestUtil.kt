@@ -2,11 +2,7 @@ package com.vanpra.composematerialdialogs.test.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.MaterialDialogButtons
-import com.vanpra.composematerialdialogs.MaterialDialogScope
-import com.vanpra.composematerialdialogs.MaterialDialogState
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import com.vanpra.composematerialdialogs.*
 
 @Composable
 fun DialogWithContent(

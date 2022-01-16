@@ -2,7 +2,7 @@ package com.vanpra.composematerialdialogs.test.utils.extensions
 
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
-import java.util.Locale
+import java.util.*
 
 enum class ColorPickerSlider {
     Alpha,

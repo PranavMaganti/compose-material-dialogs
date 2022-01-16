@@ -13,7 +13,8 @@ class CommonModulePlugin: Plugin<Project> {
     private fun Project.applyPlugins() {
         plugins.run {
             apply("com.android.library")
-            apply("kotlin-android")
+            // already registered by another plugin
+//            apply("kotlin-android")
             apply("com.vanniktech.maven.publish")
             apply("shot")
             apply("org.jetbrains.dokka")

@@ -7,19 +7,22 @@ plugins {
 
 buildscript {
     repositories {
+        gradlePluginPortal()
+        jcenter()
         google()
         mavenCentral()
-        maven("https://plugins.gradle.org/m2/")
     }
-
     dependencies {
         classpath(Dependencies.Kotlin.gradlePlugin)
-        classpath("com.android.tools.build:gradle:7.1.0-beta04")
+        classpath("com.android.tools.build:gradle:7.0.2")
         classpath("com.vanniktech:gradle-maven-publish-plugin:0.17.0")
         classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.6.0")
         classpath(Dependencies.Shot.core)
     }
 }
+
+//group = BuildConfig.Info.group
+//version = BuildConfig.Info.version
 
 allprojects {
     repositories {
@@ -42,6 +45,7 @@ allprojects {
         }
     }
 }
+
 
 tasks.dokkaHtmlMultiModule.configure {
     outputDirectory.set(projectDir.resolve("docs/api"))
