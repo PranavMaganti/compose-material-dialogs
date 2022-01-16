@@ -49,12 +49,17 @@ The project consists of 3 types of tests:
 
 The first 2 of these tests can be run on any type of device however the screenshot tests require you to use an emulator with a specific device and version so that they are consistent and can be compared.
 
-Here are the details of the emulator you will need to setup:
+You will need to create a new AVD with the following properties, this can be done either through Android Studio or command line:
 
 ```
 Device: Nexus 6P
 API Level: 28
-Arguments: -gpu swiftshader_indirect
+```
+
+To ensure consistant reporducable screenshot testing the emulator has to be started using the command line with some additional parameters (repace [AVD Name] with the one you created in the previous step):
+
+```
+emulator -avd [AVD NAME] -no-window -gpu swiftshader_indirect
 ```
 
 To run the Unit and Functionality tests locally you can run the following command:
