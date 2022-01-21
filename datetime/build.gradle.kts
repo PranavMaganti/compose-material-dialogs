@@ -47,6 +47,12 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Dependencies.AndroidX.Compose.version
     }
+
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + listOf(
+            "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi"
+        )
+    }
 }
 
 dependencies {

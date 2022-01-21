@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.6.3 - 2021-01-21
+
+-  Update compose to 1.1.0-rc01 
+-  Add ability to disable specific days in date picker (#126)[https://github.com/vanpra/compose-material-dialogs/pull/126]
+
 ### 0.6.2 - 2021-12-02
 
 -  Update compose to 1.1.0-beta04 ([#120](https://github.com/vanpra/compose-material-dialogs/issues/120))

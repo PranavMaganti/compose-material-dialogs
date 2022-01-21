@@ -145,7 +145,7 @@ internal fun DatePickerImpl(title: String, state: DatePickerState, allowedDateVa
     }
 }
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
 @Composable
 private fun YearPicker(
     viewDate: LocalDate,
