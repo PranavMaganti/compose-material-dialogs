@@ -3,24 +3,31 @@ package com.vanpra.composematerialdialogs.color
 import android.view.View
 import android.widget.FrameLayout
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Slider
@@ -49,7 +56,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -360,6 +366,7 @@ private fun LabelSlider(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ColorGridLayout(
     modifier: Modifier = Modifier,
@@ -371,59 +378,65 @@ private fun ColorGridLayout(
     var mainSelectedIndex by remember { mutableStateOf(initialSelection) }
     var showSubColors by remember { mutableStateOf(false) }
 
-    val itemSize = with(LocalDensity.current) { itemSizeDp.toPx().toInt() }
+    LazyVerticalGrid(
+        modifier = modifier.fillMaxWidth(),
+        cells = GridCells.Adaptive(itemSizeDp),
+        contentPadding = PaddingValues(horizontal =  24.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
+        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
+        content = {
+            if (!showSubColors) {
+                itemsIndexed(colors) { index, item ->
+                    ColorView(
+                        modifier = Modifier.testTag("dialog_color_selector_$index"),
+                        color = item,
+                        selected = index == mainSelectedIndex
+                    ) {
+                        if (mainSelectedIndex != index) {
+                            mainSelectedIndex = index
+                            selectedColor.value = item
+                        }
 
-    GridView(modifier, itemSize = itemSize) {
-        if (!showSubColors) {
-            colors.forEachIndexed { index, item ->
-                ColorView(
-                    modifier = Modifier.testTag("dialog_color_selector_$index"),
-                    color = item,
-                    selected = index == mainSelectedIndex
-                ) {
-                    if (mainSelectedIndex != index) {
-                        mainSelectedIndex = index
+                        if (subColors.isNotEmpty()) {
+                            showSubColors = true
+                        }
+                    }
+                }
+            } else {
+                item {
+                    Box(
+                        Modifier
+                            .testTag("dialog_sub_color_back_btn")
+                            .size(itemSizeDp)
+                            .clip(CircleShape)
+                            .clickable(
+                                onClick = {
+                                    showSubColors = false
+                                }
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Go back to main color page",
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.size(tickSize)
+                        )
+                    }
+                }
+
+                itemsIndexed(subColors[mainSelectedIndex]) { index, item ->
+                    ColorView(
+                        modifier = Modifier.testTag("dialog_sub_color_selector_$index"),
+                        color = item,
+                        selected = selectedColor.value == item
+                    ) {
                         selectedColor.value = item
                     }
-
-                    if (subColors.isNotEmpty()) {
-                        showSubColors = true
-                    }
                 }
             }
-        } else {
-            Box(
-                Modifier
-                    .testTag("dialog_sub_color_back_btn")
-                    .size(itemSizeDp)
-                    .clip(CircleShape)
-                    .clickable(
-                        onClick = {
-                            showSubColors = false
-                        }
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    Icons.Default.ArrowBack,
-                    contentDescription = "Go back to main color page",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(tickSize)
-                )
-            }
-
-            subColors[mainSelectedIndex].forEachIndexed { index, item ->
-                ColorView(
-                    modifier = Modifier.testTag("dialog_sub_color_selector_$index"),
-                    color = item,
-                    selected = selectedColor.value == item
-                ) {
-                    selectedColor.value = item
-                }
-            }
-        }
-    }
+        })
 }
 
 @Composable
@@ -433,73 +446,29 @@ private fun ColorView(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    Box(
-        modifier
-            .size(itemSizeDp)
-            .clip(CircleShape)
-            .background(color)
-            .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
-            .clickable(
-                onClick = onClick,
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        if (selected) {
-            Image(
-                Icons.Default.Done,
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(color.foreground()),
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.size(tickSize)
-            )
-        }
-    }
-}
-
-@Composable
-private fun GridView(
-    modifier: Modifier = Modifier,
-    itemsInRow: Int = 4,
-    itemSize: Int,
-    content: @Composable () -> Unit
-) {
-    BoxWithConstraints(modifier) {
-        LazyColumn {
-            2
-            item {
-                Layout(
-                    { content() },
-                    Modifier
-                        .padding(top = 8.dp, start = 24.dp, end = 24.dp)
-                        .fillMaxWidth()
-                        .align(Alignment.Center)
-                ) { measurables, constraints ->
-                    val spacing =
-                        (constraints.maxWidth - (itemSize * itemsInRow)) / (itemsInRow - 1)
-                    val rows = (measurables.size / itemsInRow) + 1
-
-                    val layoutHeight = (rows * itemSize) + ((rows - 1) * spacing)
-
-                    layout(constraints.maxWidth, layoutHeight) {
-                        measurables
-                            .map {
-                                it.measure(
-                                    Constraints(
-                                        maxHeight = itemSize,
-                                        maxWidth = itemSize
-                                    )
-                                )
-                            }
-                            .forEachIndexed { index, it ->
-                                it.place(
-                                    x = (index % itemsInRow) * (itemSize + spacing),
-                                    y = (index / itemsInRow) * (itemSize + spacing)
-                                )
-                            }
-                    }
-                }
+    BoxWithConstraints {
+        Box(
+            modifier
+                .requiredSize(maxWidth)
+                .clip(CircleShape)
+                .background(color)
+                .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
+                .clickable(
+                    onClick = onClick,
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            if (selected) {
+                Image(
+                    Icons.Default.Done,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(color.foreground()),
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(tickSize)
+                )
             }
         }
+
     }
 }
 
