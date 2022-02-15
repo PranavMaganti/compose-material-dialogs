@@ -28,13 +28,16 @@ import androidx.compose.foundation.lazy.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalAbsoluteElevation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -111,6 +114,8 @@ internal fun DatePickerImpl(
     val pagerState = rememberPagerState(
         initialPage = (state.selected.year - state.yearRange.first) * 12 + state.selected.monthValue - 1
     )
+    val elevation = LocalAbsoluteElevation.current.value
+    val tonalElevation = LocalAbsoluteTonalElevation.current.value
 
     Column(Modifier.fillMaxWidth()) {
         CalendarHeader(title, state)
@@ -139,7 +144,14 @@ internal fun DatePickerImpl(
                         enter = slideInVertically(initialOffsetY = { -it }),
                         exit = slideOutVertically(targetOffsetY = { -it })
                     ) {
-                        YearPicker(viewDate, state, pagerState)
+                        Surface(
+                            color = MaterialTheme.colorScheme.background,
+                            tonalElevation = tonalElevation.dp,
+                            shadowElevation = elevation.dp
+                        ) {
+                            YearPicker(viewDate, state, pagerState)
+                        }
+
                     }
 
                     CalendarView(viewDate, state, allowedDateValidator)
@@ -156,11 +168,10 @@ private fun YearPicker(
     state: DatePickerState,
     pagerState: PagerState,
 ) {
-    val gridState = rememberLazyGridState((viewDate.year - state.yearRange.first) / 3)
+    val gridState = rememberLazyGridState(viewDate.year - state.yearRange.first)
     val coroutineScope = rememberCoroutineScope()
 
     LazyVerticalGrid(
-        modifier = Modifier.background(MaterialTheme.colorScheme.background),
         cells = GridCells.Fixed(3),
         state = gridState,
     ) {
@@ -172,9 +183,9 @@ private fun YearPicker(
                         pagerState.scrollToPage(
                             pagerState.currentPage + (item - viewDate.year) * 12
                         )
+                        state.yearPickerShowing = false
                     }
                 }
-                state.yearPickerShowing = false
             }
         }
     }
@@ -308,7 +319,7 @@ private fun CalendarView(
 ) {
     Column(
         Modifier
-            .padding(start = 12.dp, end = 12.dp)
+            .padding(start = 16.dp, end = 16.dp)
             .testTag("dialog_date_calendar")
     ) {
         DayOfWeekHeader()
@@ -383,7 +394,7 @@ private fun DayOfWeekHeader() {
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         LazyVerticalGrid(cells = GridCells.Fixed(7)) {
-            DatePickerState.dayHeaders.forEach { it ->
+            DatePickerState.dayHeaders.forEach {
                 item {
                     Box(Modifier.size(40.dp)) {
                         Text(
