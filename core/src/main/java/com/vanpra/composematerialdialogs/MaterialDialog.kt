@@ -2,6 +2,7 @@ package com.vanpra.composematerialdialogs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -15,6 +16,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.focus.FocusManager
@@ -186,8 +188,10 @@ fun rememberMaterialDialogState(initialValue: Boolean = false): MaterialDialogSt
 
 /**
  *  Builds a dialog with the given content
+ *
  * @param state state of the dialog
- * @param properties properties of the compose dialog
+ * @param properties properties of the compose dialog (usePlatformDefaultWidth is set to false by
+ * default to allow for resizing of dialog on recomposition)
  * @param backgroundColor background color of the dialog
  * @param shape shape of the dialog and components used in the dialog
  * @param border border stoke of the dialog
@@ -195,11 +199,13 @@ fun rememberMaterialDialogState(initialValue: Boolean = false): MaterialDialogSt
  * @param onCloseRequest function to be executed when user clicks outside dialog
  * @param buttons the buttons layout of the dialog
  * @param content the body content of the dialog
+ *
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MaterialDialog(
     state: MaterialDialogState = rememberMaterialDialogState(),
-    properties: DialogProperties = DialogProperties(),
+    properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
     shape: Shape = RoundedCornerShape(28.dp),
     onCloseRequest: (MaterialDialogState) -> Unit = { it.hide() },
@@ -216,6 +222,7 @@ fun MaterialDialog(
         Dialog(properties = properties, onDismissRequest = { onCloseRequest(state) }) {
             Surface(
                 modifier = Modifier
+                    .padding(horizontal = 48.dp)
                     .fillMaxWidth()
                     .clipToBounds()
                     .testTag("dialog"),

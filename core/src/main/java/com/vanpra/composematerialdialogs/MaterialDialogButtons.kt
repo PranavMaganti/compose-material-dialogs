@@ -1,11 +1,13 @@
 package com.vanpra.composematerialdialogs
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.border
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
@@ -21,15 +23,14 @@ object MaterialDialogButtonId {
 }
 
 object MaterialDialogButtonConstants {
-    val OuterButtonPadding = 24.dp
+    val OuterButtonPadding = 16.dp
     val InterButtonPadding = 8.dp
-    val MaxHeight = 34.dp
+    val MaxHeight = 40.dp
     const val ButtonStackThreshold = 0.8
 }
 
 /**
- * A class used to build a buttons layout for a MaterialDialog. This should be used in conjunction
- * with the [com.vanpra.composematerialdialogs.MaterialDialog.dialogButtons] function
+ * A class used to build a buttons layout for a MaterialDialog
  */
 class MaterialDialogButtons(private val scope: MaterialDialogScope) {
     /**
