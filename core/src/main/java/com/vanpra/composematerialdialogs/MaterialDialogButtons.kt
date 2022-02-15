@@ -1,13 +1,11 @@
 package com.vanpra.composematerialdialogs
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.border
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag

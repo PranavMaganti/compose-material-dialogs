@@ -381,7 +381,7 @@ private fun ColorGridLayout(
     LazyVerticalGrid(
         modifier = modifier.fillMaxWidth(),
         cells = GridCells.Adaptive(itemSizeDp),
-        contentPadding = PaddingValues(horizontal =  24.dp),
+        contentPadding = PaddingValues(horizontal = 24.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
         content = {
@@ -436,7 +436,8 @@ private fun ColorGridLayout(
                     }
                 }
             }
-        })
+        }
+    )
 }
 
 @Composable
@@ -468,7 +469,6 @@ private fun ColorView(
                 )
             }
         }
-
     }
 }
 

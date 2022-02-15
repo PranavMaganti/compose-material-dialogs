@@ -151,7 +151,6 @@ internal fun DatePickerImpl(
                         ) {
                             YearPicker(viewDate, state, pagerState)
                         }
-
                     }
 
                     CalendarView(viewDate, state, allowedDateValidator)
