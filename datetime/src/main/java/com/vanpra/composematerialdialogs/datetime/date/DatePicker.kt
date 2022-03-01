@@ -62,6 +62,7 @@ import com.vanpra.composematerialdialogs.datetime.util.shortLocalName
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.TextStyle.FULL
+import java.time.temporal.WeekFields
 import java.util.Locale
 
 /**
@@ -432,7 +433,9 @@ private fun CalendarHeader(title: String, state: DatePickerState) {
 
 private fun getDates(date: LocalDate): Pair<Int, Int> {
     val numDays = date.month.length(date.isLeapYear)
-    val firstDay = date.withDayOfMonth(1).dayOfWeek.value % 7
+
+    val firstDayOfWeek = WeekFields.of(Locale.getDefault()).getFirstDayOfWeek().value
+    val firstDay = date.withDayOfMonth(1).dayOfWeek.value - firstDayOfWeek % 7
 
     return Pair(firstDay, numDays)
 }
