@@ -5,12 +5,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.WeekFields
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 internal class DatePickerState(
     initialDate: LocalDate,
@@ -37,8 +36,6 @@ internal class DatePickerState(
 
         val dayHeaders = WeekFields.of(locale).firstDayOfWeek.let { firstDayOfWeek ->
             (0L until 7L).map {
-                println(firstDayOfWeek.plus(it))
-                println(isoDayOfWeekToCalendarDayOfWeek[firstDayOfWeek.plus(it)] )
                 DateUtils.getDayOfWeekString(isoDayOfWeekToCalendarDayOfWeek[firstDayOfWeek.plus(it)] ?: 0, DateUtils.LENGTH_SHORTEST)
             }
         }
