@@ -29,7 +29,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -103,7 +102,11 @@ fun MaterialDialogScope.datepicker(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-internal fun DatePickerImpl(title: String, state: DatePickerState, allowedDateValidator: (LocalDate) -> Boolean) {
+internal fun DatePickerImpl(
+    title: String,
+    state: DatePickerState,
+    allowedDateValidator: (LocalDate) -> Boolean
+) {
     val pagerState = rememberPagerState(
         initialPage = (state.selected.year - state.yearRange.first) * 12 + state.selected.monthValue - 1
     )
@@ -188,7 +191,7 @@ private fun YearPickerItem(
             Modifier
                 .size(72.dp, 36.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .background(colors.backgroundColor(selected).value)
+                .background(colors.dateBackgroundColor(selected).value)
                 .clickable(
                     onClick = onClick,
                     interactionSource = MutableInteractionSource(),
@@ -199,7 +202,7 @@ private fun YearPickerItem(
             Text(
                 year.toString(),
                 style = TextStyle(
-                    color = colors.textColor(selected).value,
+                    color = colors.dateTextColor(selected).value,
                     fontSize = 18.sp
                 )
             )
@@ -238,7 +241,7 @@ private fun CalendarViewHeader(
                     .paddingFromBaseline(top = 16.dp)
                     .wrapContentSize(Alignment.Center),
                 style = TextStyle(fontSize = 14.sp, fontWeight = W600),
-                color = MaterialTheme.colors.onBackground
+                color = state.colors.calendarHeaderTextColor
             )
 
             Spacer(Modifier.width(4.dp))
@@ -246,7 +249,7 @@ private fun CalendarViewHeader(
                 Icon(
                     yearDropdownIcon,
                     contentDescription = "Year Selector",
-                    tint = MaterialTheme.colors.onBackground
+                    tint = state.colors.calendarHeaderTextColor
                 )
             }
         }
@@ -270,7 +273,7 @@ private fun CalendarViewHeader(
                             }
                         }
                     ),
-                tint = MaterialTheme.colors.onBackground
+                tint = state.colors.calendarHeaderTextColor
             )
 
             Spacer(modifier = Modifier.width(24.dp))
@@ -289,7 +292,7 @@ private fun CalendarViewHeader(
                             }
                         }
                     ),
-                tint = MaterialTheme.colors.onBackground
+                tint = state.colors.calendarHeaderTextColor
             )
         }
     }
@@ -297,13 +300,17 @@ private fun CalendarViewHeader(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun CalendarView(viewDate: LocalDate, state: DatePickerState, allowedDateValidator: (LocalDate) -> Boolean) {
+private fun CalendarView(
+    viewDate: LocalDate,
+    state: DatePickerState,
+    allowedDateValidator: (LocalDate) -> Boolean
+) {
     Column(
         Modifier
             .padding(start = 12.dp, end = 12.dp)
             .testTag("dialog_date_calendar")
     ) {
-        DayOfWeekHeader()
+        DayOfWeekHeader(state)
         val calendarDatesData = remember { getDates(viewDate) }
         val datesList = remember { IntRange(1, calendarDatesData.second).toList() }
         val possibleSelected = remember(state.selected) {
@@ -353,11 +360,11 @@ private fun DateSelectionBox(
             modifier = Modifier
                 .size(32.dp)
                 .clip(CircleShape)
-                .background(colors.backgroundColor(selected).value)
+                .background(colors.dateBackgroundColor(selected).value)
                 .wrapContentSize(Alignment.Center)
                 .alpha(if (enabled) ContentAlpha.high else ContentAlpha.disabled),
             style = TextStyle(
-                color = colors.textColor(selected).value,
+                color = colors.dateTextColor(selected).value,
                 fontSize = 12.sp
             )
         )
@@ -366,7 +373,7 @@ private fun DateSelectionBox(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun DayOfWeekHeader() {
+private fun DayOfWeekHeader(state: DatePickerState) {
     Row(
         modifier = Modifier
             .height(40.dp)
@@ -385,7 +392,7 @@ private fun DayOfWeekHeader() {
                                 .fillMaxSize()
                                 .wrapContentSize(Alignment.Center),
                             style = TextStyle(fontSize = 14.sp, fontWeight = W600),
-                            color = MaterialTheme.colors.onBackground
+                            color = state.colors.calendarHeaderTextColor
                         )
                     }
                 }

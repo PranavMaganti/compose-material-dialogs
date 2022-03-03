@@ -123,7 +123,7 @@ internal fun TimePickerExpandedImpl(
 ) {
     Column(modifier.padding(start = 24.dp, end = 24.dp)) {
         Box(Modifier.align(Alignment.Start)) {
-            TimePickerTitle(Modifier.height(36.dp), title)
+            TimePickerTitle(Modifier.height(36.dp), title, state)
         }
 
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
@@ -167,7 +167,7 @@ internal fun TimePickerImpl(
     ) {
         if (title != "") {
             Box(Modifier.align(Alignment.Start)) {
-                TimePickerTitle(Modifier.height(52.dp), title)
+                TimePickerTitle(Modifier.height(52.dp), title, state)
             }
         }
 
@@ -271,12 +271,12 @@ private fun ClockMinuteLayout(state: TimePickerState) {
 }
 
 @Composable
-internal fun TimePickerTitle(modifier: Modifier, text: String) {
+internal fun TimePickerTitle(modifier: Modifier, text: String, state: TimePickerState) {
     Box(modifier) {
         Text(
             text,
             modifier = Modifier.paddingFromBaseline(top = 28.dp),
-            style = TextStyle(color = MaterialTheme.colors.onBackground)
+            style = TextStyle(color = state.colors.headerTextColor())
         )
     }
 }

@@ -18,9 +18,10 @@ object TimePickerDefaults {
      * @param activeTextColor color of text on the activeBackgroundColor
      * @param inactiveTextColor color of text on the inactiveBackgroundColor
      * @param inactivePeriodBackground background color of the inactive period (AM/PM) selector
-     * @param borderColor border color of the period (AM/PM) selector
      * @param selectorColor color of clock hand/selector
      * @param selectorTextColor color of text on selectedColor
+     * @param headerTextColor  Get color of title text
+     * @param borderColor border color of the period (AM/PM) selector
      */
     @Composable
     fun colors(
@@ -29,9 +30,10 @@ object TimePickerDefaults {
         activeTextColor: Color = MaterialTheme.colors.onPrimary,
         inactiveTextColor: Color = MaterialTheme.colors.onBackground,
         inactivePeriodBackground: Color = Color.Transparent,
-        borderColor: Color = MaterialTheme.colors.onBackground,
         selectorColor: Color = MaterialTheme.colors.primary,
-        selectorTextColor: Color = MaterialTheme.colors.onPrimary
+        selectorTextColor: Color = MaterialTheme.colors.onPrimary,
+        headerTextColor: Color = MaterialTheme.colors.onBackground,
+        borderColor: Color = MaterialTheme.colors.onBackground,
     ): TimePickerColors {
         return DefaultTimePickerColors(
             activeBackgroundColor = activeBackgroundColor,
@@ -41,6 +43,7 @@ object TimePickerDefaults {
             inactivePeriodBackground = inactivePeriodBackground,
             selectorColor = selectorColor,
             selectorTextColor = selectorTextColor,
+            headerTextColor = headerTextColor,
             borderColor = borderColor
         )
     }
