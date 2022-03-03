@@ -72,8 +72,12 @@ MaterialDialog(
 }
 ```
 
-## To Do
+### Theming
 
-1. Limit date selection range (ie. min/max date)
+Both the date and time pickers have a `colors` argument which can be used to modify colors for the background and text of different elements within the dialog. For example to change the header background color of the date picker dialog you can use the following code:
 
-2. Implement Date range selection 
+```kotlin
+datepicker(colors = DatePickerDefaults.colors(headerBackgroundColor = Color.Red)) 
+```
+
+To find out about other colors which can be changed have a look at the arguments of `DatePickerDefaults.colors` and `TimePickerDefaults.colors`. 
