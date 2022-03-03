@@ -24,7 +24,7 @@ jobs:
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'buildSrc/src/main/kotlin/*') }}
       - name: Build, lint and spotless
-        run: ./gradlew spotlessCheck assemble assembleAndroidTest lintDebug
+        run: ./gradlew spotlessCheck assemble assembleAndroidTest
       - name: Cleanup Gradle Cache
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock

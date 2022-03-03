@@ -42,14 +42,22 @@ If the text of the buttons is too long to fit in one row the buttons will be aut
 ```kotlin
 MaterialDialog(dialogState = dialogState, buttons = { ... }) {
     ...
-   	input(label = "Name", hint = "Jon Smith") { inputString ->
+   	input(label = "Name", placeholder = "Jon Smith") { inputString ->
         /* Do something */
     }
 	...
 }
 ```
 
-In the code snippet above creates the dialog seen in the image (without the title). Once an input is entered and the user presses the positive button, the dialog will callback with the string the user inputted.  The input function also has other parameters which can be found in the comment above the input function implementation.
+In the code snippet above creates the dialog seen in the image (without the title). Once an input is entered and the user presses the positive button, the dialog will callback with the string the user inputted.  The input function also has other parameters which can be found in the comment above the input function implementation. You can also change the style of the dialog by making use of the `textFieldStyle` parameter. For example, the following code can be used for an outlined text field:
+
+```kotlin
+input(label = "Name", placeholder = "Jon Smith", textFieldStyle = TextFieldStyle.Outlined) { inputString ->
+    /* Do something */
+}
+```
+
+
 
 ### List Dialogs
 

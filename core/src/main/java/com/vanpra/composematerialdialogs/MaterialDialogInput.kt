@@ -51,7 +51,6 @@ enum class TextFieldStyle {
      */
 }
 
-
 @Composable
 fun MaterialDialogScope.input(
     label: String,
