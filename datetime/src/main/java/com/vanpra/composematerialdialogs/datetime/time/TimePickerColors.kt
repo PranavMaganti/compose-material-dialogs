@@ -33,8 +33,16 @@ interface TimePickerColors {
     @Composable
     fun textColor(active: Boolean): State<Color>
 
+    /**
+     * Get the color of clock hand and color of text in clock hand
+     */
     fun selectorColor(): Color
     fun selectorTextColor(): Color
+
+    /**
+     * Get color of title text
+     */
+    fun headerTextColor(): Color
 
     @Composable
     fun periodBackgroundColor(active: Boolean): State<Color>
@@ -48,6 +56,7 @@ internal class DefaultTimePickerColors(
     private val inactivePeriodBackground: Color,
     private val selectorColor: Color,
     private val selectorTextColor: Color,
+    private val headerTextColor: Color,
     borderColor: Color
 ) : TimePickerColors {
     override val border = BorderStroke(1.dp, borderColor)
@@ -68,6 +77,10 @@ internal class DefaultTimePickerColors(
 
     override fun selectorTextColor(): Color {
         return selectorTextColor
+    }
+
+    override fun headerTextColor(): Color {
+        return headerTextColor
     }
 
     @Composable

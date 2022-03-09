@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
 import com.vanpra.composematerialdialogs.MaterialDialogButtons
+import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerColors
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
@@ -92,7 +93,7 @@ fun DateTimeDialogDemo() {
         buttonText = "Date Picker Dialog",
         buttons = { defaultDateTimeDialogButtons() }
     ) {
-        datepicker {
+        datepicker(colors = DatePickerDefaults.colors(headerBackgroundColor = Color.Red)) {
             println(it.toString())
         }
     }

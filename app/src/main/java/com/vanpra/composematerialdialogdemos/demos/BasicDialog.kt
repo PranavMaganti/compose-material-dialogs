@@ -16,9 +16,9 @@ import androidx.compose.ui.text.input.ImeAction
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
 import com.vanpra.composematerialdialogdemos.R
 import com.vanpra.composematerialdialogs.iconTitle
-import com.vanpra.composematerialdialogs.input
 import com.vanpra.composematerialdialogs.message
 import com.vanpra.composematerialdialogs.title
+import input
 
 /**
  * @brief Basic Dialog Demos
@@ -80,7 +80,20 @@ fun BasicDialogDemo() {
         }
     ) {
         title(res = R.string.input_dialog_title)
-        input(label = "Name", hint = "Jon Smith") {
+        input(label = "Name", placeholder = "Jon Smith") {
+            Log.d("SELECTION:", it)
+        }
+    }
+
+    DialogAndShowButton(
+        buttonText = "Outlined Input Dialog",
+        buttons = {
+            negativeButton("Cancel")
+            positiveButton("Ok")
+        }
+    ) {
+        title(res = R.string.input_dialog_title)
+        input(label = "Name", placeholder = "Jon Smith", textFieldStyle = TextFieldStyle.Outlined) {
             Log.d("SELECTION:", it)
         }
     }
@@ -96,7 +109,7 @@ fun BasicDialogDemo() {
         title(res = R.string.input_dialog_title)
         input(
             label = "Name",
-            hint = "Jon Smith",
+            placeholder = "Jon Smith",
             focusRequester = focusRequester,
             focusOnShow = true
         ) {
@@ -113,7 +126,7 @@ fun BasicDialogDemo() {
     ) {
         title(res = R.string.input_dialog_title)
         input(
-            label = "Name", hint = "Jon Smith",
+            label = "Name", placeholder = "Jon Smith",
             keyboardActions = KeyboardActions(
                 onDone = { submit() }
             ),
@@ -133,7 +146,7 @@ fun BasicDialogDemo() {
         title("Please enter your email")
         input(
             label = "Email",
-            hint = "hello@example.com",
+            placeholder = "hello@example.com",
             errorMessage = "Invalid email",
             isTextValid = {
                 Patterns.EMAIL_ADDRESS.matcher(it).matches() && it.isNotEmpty()

@@ -5,12 +5,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -47,7 +49,7 @@ private val ringtones =
         "Zen Too"
     )
 private val labels = listOf("None", "Forums", "Social", "Updates", "Promotions", "Spam", "Bin")
-private val emails = listOf(
+private val emails = mutableStateListOf(
     "joe@material-dialog.com",
     "jane@material-dialog.com",
     "dan@material-dialog.com",
@@ -68,12 +70,17 @@ fun BasicListDialogDemo() {
     DialogAndShowButton(buttonText = "Simple List Dialog") {
         title(res = R.string.backup_dialog_title)
         listItems(emails)
+        Button(onClick = { emails.add("test@test.com") }) {
+            Text("Add")
+        }
     }
 
     DialogAndShowButton(buttonText = "Custom List Dialog") {
         title(res = R.string.backup_dialog_title)
         listItems(
-            modifier = Modifier.padding(bottom = 8.dp).padding(horizontal = 24.dp),
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+                .padding(horizontal = 24.dp),
             list = emails,
             item = { _, email ->
                 Row(Modifier.fillMaxWidth()) {

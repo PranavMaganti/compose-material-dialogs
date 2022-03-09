@@ -9,7 +9,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.karumi.shot.ScreenshotTest
 import com.vanpra.composematerialdialogs.iconTitle
-import com.vanpra.composematerialdialogs.input
 import com.vanpra.composematerialdialogs.message
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
@@ -88,22 +87,6 @@ class BasicDialogTest : ScreenshotTest {
             ) {
                 title(res = R.string.location_dialog_title)
                 message(res = R.string.location_dialog_message)
-            }
-        }
-        compareScreenshot(composeTestRule.onDialog())
-    }
-
-    @Test
-    fun dialogWithInput() {
-        composeTestRule.setContentAndWaitForIdle {
-            DialogWithContent(
-                buttons = {
-                    negativeButton("Cancel")
-                    positiveButton("Ok")
-                }
-            ) {
-                title(res = R.string.input_dialog_title)
-                input(label = "Name", hint = "Jon Smith")
             }
         }
         compareScreenshot(composeTestRule.onDialog())
