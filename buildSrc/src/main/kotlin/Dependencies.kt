@@ -44,7 +44,7 @@ object Dependencies {
         }
 
         object Compose {
-            const val version = "1.1.1"
+            const val version = "1.2.0-alpha07"
 
             const val ui = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"

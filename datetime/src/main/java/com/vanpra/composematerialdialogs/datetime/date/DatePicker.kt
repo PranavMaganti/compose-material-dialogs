@@ -6,24 +6,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFromBaseline
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -61,7 +45,7 @@ import com.vanpra.composematerialdialogs.datetime.util.shortLocalName
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.TextStyle.FULL
-import java.util.Locale
+import java.util.*
 
 /**
  * @brief A date picker body layout
@@ -155,11 +139,11 @@ private fun YearPicker(
     state: DatePickerState,
     pagerState: PagerState,
 ) {
-    val gridState = rememberLazyListState((viewDate.year - state.yearRange.first) / 3)
+    val gridState = rememberLazyGridState((viewDate.year - state.yearRange.first) / 3)
     val coroutineScope = rememberCoroutineScope()
 
     LazyVerticalGrid(
-        cells = GridCells.Fixed(3),
+        columns = GridCells.Fixed(3),
         state = gridState,
         modifier = Modifier.background(state.dialogBackground)
     ) {
@@ -317,7 +301,7 @@ private fun CalendarView(
             viewDate.year == state.selected.year && viewDate.month == state.selected.month
         }
 
-        LazyVerticalGrid(cells = GridCells.Fixed(7), modifier = Modifier.height(240.dp)) {
+        LazyVerticalGrid(columns = GridCells.Fixed(7), modifier = Modifier.height(240.dp)) {
             for (x in 0 until calendarDatesData.first) {
                 item { Box(Modifier.size(40.dp)) }
             }
@@ -381,7 +365,7 @@ private fun DayOfWeekHeader(state: DatePickerState) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        LazyVerticalGrid(cells = GridCells.Fixed(7)) {
+        LazyVerticalGrid(columns = GridCells.Fixed(7)) {
             DatePickerState.dayHeaders.forEach { it ->
                 item {
                     Box(Modifier.size(40.dp)) {
