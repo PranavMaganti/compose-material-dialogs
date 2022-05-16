@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -39,14 +38,6 @@ private val ringtones =
         "Beats",
         "Dance Party",
         "Zen Too",
-        "None",
-        "Callisto",
-        "Ganymede",
-        "Luna",
-        "Rrrring",
-        "Beats",
-        "Dance Party",
-        "Zen Too"
     )
 private val labels = listOf("None", "Forums", "Social", "Updates", "Promotions", "Spam", "Bin")
 private val emails = mutableStateListOf(
@@ -70,9 +61,6 @@ fun BasicListDialogDemo() {
     DialogAndShowButton(buttonText = "Simple List Dialog") {
         title(res = R.string.backup_dialog_title)
         listItems(emails)
-        Button(onClick = { emails.add("test@test.com") }) {
-            Text("Add")
-        }
     }
 
     DialogAndShowButton(buttonText = "Custom List Dialog") {

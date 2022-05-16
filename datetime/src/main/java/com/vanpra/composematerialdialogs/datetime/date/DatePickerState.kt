@@ -14,8 +14,4 @@ internal class DatePickerState(
 ) {
     var selected by mutableStateOf(initialDate)
     var yearPickerShowing by mutableStateOf(false)
-
-    companion object {
-        val dayHeaders = listOf("S", "M", "T", "W", "T", "F", "S")
-    }
 }

@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Checkbox
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
@@ -39,6 +41,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun <T> MaterialDialogScope.listItems(
     modifier: Modifier = Modifier,
+    state: LazyListState = rememberLazyListState(),
     list: List<T>,
     closeOnClick: Boolean = true,
     onClick: (index: Int, item: T) -> Unit = { _, _ -> },
@@ -49,7 +52,8 @@ fun <T> MaterialDialogScope.listItems(
         LazyColumn(
             Modifier
                 .then(modifier)
-                .testTag("dialog_list")
+                .testTag("dialog_list"),
+            state = state
         ) {
             itemsIndexed(list) { index, it ->
                 Box(
@@ -82,11 +86,13 @@ fun <T> MaterialDialogScope.listItems(
 @Composable
 fun MaterialDialogScope.listItems(
     list: List<String>,
+    state: LazyListState = rememberLazyListState(),
     closeOnClick: Boolean = true,
     onClick: (index: Int, item: String) -> Unit = { _, _ -> }
 ) {
     listItems(
         modifier = Modifier.padding(bottom = 8.dp),
+        state = state,
         list = list,
         closeOnClick = closeOnClick,
         onClick = onClick
@@ -116,6 +122,7 @@ fun MaterialDialogScope.listItems(
 @Composable
 fun MaterialDialogScope.listItemsMultiChoice(
     list: List<String>,
+    state: LazyListState = rememberLazyListState(),
     disabledIndices: Set<Int> = setOf(),
     initialSelection: Set<Int> = setOf(),
     waitForPositiveButton: Boolean = true,
@@ -148,6 +155,7 @@ fun MaterialDialogScope.listItemsMultiChoice(
 
     listItems(
         list = list,
+        state = state,
         onClick = { index, _ -> onChecked(index) },
         isEnabled = isEnabled,
         closeOnClick = false
@@ -178,6 +186,7 @@ fun MaterialDialogScope.listItemsMultiChoice(
 @Composable
 fun MaterialDialogScope.listItemsSingleChoice(
     list: List<String>,
+    state: LazyListState = rememberLazyListState(),
     disabledIndices: Set<Int> = setOf(),
     initialSelection: Int? = null,
     waitForPositiveButton: Boolean = true,
@@ -203,6 +212,7 @@ fun MaterialDialogScope.listItemsSingleChoice(
     val isEnabled = remember(disabledIndices) { { index: Int -> index !in disabledIndices } }
     listItems(
         list = list,
+        state = state,
         closeOnClick = false,
         onClick = { index, _ -> onSelect(index) },
         isEnabled = isEnabled

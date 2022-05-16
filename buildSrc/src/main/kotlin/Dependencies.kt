@@ -10,7 +10,7 @@ object Dependencies {
     }
 
     object Ktlint {
-        const val version = "0.44.0"
+        const val version = "0.45.2"
     }
 
     object Accompanist {
@@ -24,20 +24,20 @@ object Dependencies {
     }
 
     object Shot {
-        private const val version = "5.13.0"
+        private const val version = "5.14.1"
         const val core = "com.karumi:shot:$version"
         const val android = "com.karumi:shot-android:$version"
     }
 
     object Google {
-        const val material = "com.google.android.material:material:1.5.0"
+        const val material = "com.google.android.material:material:1.6.0"
     }
 
     object AndroidX {
         const val coreKtx = "androidx.core:core-ktx:1.7.0"
 
         object Testing {
-            const val version = "1.4.1-alpha04"
+            const val version = "1.4.0"
             const val core = "androidx.test:core:$version"
             const val rules = "androidx.test:rules:$version"
             const val runner = "androidx.test:runner:$version"
@@ -55,7 +55,7 @@ object Dependencies {
 
             const val testing = "androidx.compose.ui:ui-test-junit4:$version"
             const val activity = "androidx.activity:activity-compose:1.4.0"
-            const val navigation = "androidx.navigation:navigation-compose:2.4.1"
+            const val navigation = "androidx.navigation:navigation-compose:2.4.2"
         }
     }
 }

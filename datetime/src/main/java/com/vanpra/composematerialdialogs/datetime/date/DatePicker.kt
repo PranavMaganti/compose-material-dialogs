@@ -56,11 +56,12 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.vanpra.composematerialdialogs.MaterialDialogScope
+import com.vanpra.composematerialdialogs.datetime.util.getFullLocalName
+import com.vanpra.composematerialdialogs.datetime.util.getShortLocalName
 import com.vanpra.composematerialdialogs.datetime.util.isSmallDevice
-import com.vanpra.composematerialdialogs.datetime.util.shortLocalName
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.format.TextStyle.FULL
+import java.time.temporal.WeekFields
 import java.util.Locale
 
 /**
@@ -82,13 +83,14 @@ fun MaterialDialogScope.datepicker(
     yearRange: IntRange = IntRange(1900, 2100),
     waitForPositiveButton: Boolean = true,
     allowedDateValidator: (LocalDate) -> Boolean = { true },
+    locale: Locale = Locale.getDefault(),
     onDateChange: (LocalDate) -> Unit = {}
 ) {
     val datePickerState = remember {
         DatePickerState(initialDate, colors, yearRange, dialogState.dialogBackgroundColor!!)
     }
 
-    DatePickerImpl(title = title, state = datePickerState, allowedDateValidator)
+    DatePickerImpl(title = title, state = datePickerState, allowedDateValidator, locale)
 
     if (waitForPositiveButton) {
         DialogCallback { onDateChange(datePickerState.selected) }
@@ -105,14 +107,15 @@ fun MaterialDialogScope.datepicker(
 internal fun DatePickerImpl(
     title: String,
     state: DatePickerState,
-    allowedDateValidator: (LocalDate) -> Boolean
+    allowedDateValidator: (LocalDate) -> Boolean,
+    locale: Locale
 ) {
     val pagerState = rememberPagerState(
         initialPage = (state.selected.year - state.yearRange.first) * 12 + state.selected.monthValue - 1
     )
 
     Column(Modifier.fillMaxWidth()) {
-        CalendarHeader(title, state)
+        CalendarHeader(title, state, locale)
         HorizontalPager(
             count = (state.yearRange.last - state.yearRange.first + 1) * 12,
             state = pagerState,
@@ -128,7 +131,7 @@ internal fun DatePickerImpl(
             }
 
             Column {
-                CalendarViewHeader(viewDate, state, pagerState)
+                CalendarViewHeader(viewDate, state, pagerState, locale)
                 Box {
                     androidx.compose.animation.AnimatedVisibility(
                         state.yearPickerShowing,
@@ -141,7 +144,7 @@ internal fun DatePickerImpl(
                         YearPicker(viewDate, state, pagerState)
                     }
 
-                    CalendarView(viewDate, state, allowedDateValidator)
+                    CalendarView(viewDate, state, locale, allowedDateValidator)
                 }
             }
         }
@@ -215,10 +218,11 @@ private fun YearPickerItem(
 private fun CalendarViewHeader(
     viewDate: LocalDate,
     state: DatePickerState,
-    pagerState: PagerState
+    pagerState: PagerState,
+    locale: Locale
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val month = remember { viewDate.month.getDisplayName(FULL, Locale.getDefault()) }
+    val month = remember { viewDate.month.getFullLocalName(locale) }
     val yearDropdownIcon = remember(state.yearPickerShowing) {
         if (state.yearPickerShowing) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown
     }
@@ -303,6 +307,7 @@ private fun CalendarViewHeader(
 private fun CalendarView(
     viewDate: LocalDate,
     state: DatePickerState,
+    locale: Locale,
     allowedDateValidator: (LocalDate) -> Boolean
 ) {
     Column(
@@ -310,8 +315,8 @@ private fun CalendarView(
             .padding(start = 12.dp, end = 12.dp)
             .testTag("dialog_date_calendar")
     ) {
-        DayOfWeekHeader(state)
-        val calendarDatesData = remember { getDates(viewDate) }
+        DayOfWeekHeader(state, locale)
+        val calendarDatesData = remember { getDates(viewDate, locale) }
         val datesList = remember { IntRange(1, calendarDatesData.second).toList() }
         val possibleSelected = remember(state.selected) {
             viewDate.year == state.selected.year && viewDate.month == state.selected.month
@@ -373,7 +378,13 @@ private fun DateSelectionBox(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun DayOfWeekHeader(state: DatePickerState) {
+private fun DayOfWeekHeader(state: DatePickerState, locale: Locale) {
+    val dayHeaders = WeekFields.of(locale).firstDayOfWeek.let { firstDayOfWeek ->
+        (0L until 7L).map {
+            firstDayOfWeek.plus(it).getDisplayName(java.time.format.TextStyle.NARROW, locale)
+        }
+    }
+
     Row(
         modifier = Modifier
             .height(40.dp)
@@ -382,7 +393,7 @@ private fun DayOfWeekHeader(state: DatePickerState) {
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         LazyVerticalGrid(cells = GridCells.Fixed(7)) {
-            DatePickerState.dayHeaders.forEach { it ->
+            dayHeaders.forEach { it ->
                 item {
                     Box(Modifier.size(40.dp)) {
                         Text(
@@ -402,9 +413,9 @@ private fun DayOfWeekHeader(state: DatePickerState) {
 }
 
 @Composable
-private fun CalendarHeader(title: String, state: DatePickerState) {
-    val month = remember(state.selected) { state.selected.month.shortLocalName }
-    val day = remember(state.selected) { state.selected.dayOfWeek.shortLocalName }
+private fun CalendarHeader(title: String, state: DatePickerState, locale: Locale) {
+    val month = remember(state.selected) { state.selected.month.getShortLocalName(locale) }
+    val day = remember(state.selected) { state.selected.dayOfWeek.getShortLocalName(locale) }
 
     Box(
         Modifier
@@ -437,9 +448,11 @@ private fun CalendarHeader(title: String, state: DatePickerState) {
     }
 }
 
-private fun getDates(date: LocalDate): Pair<Int, Int> {
+private fun getDates(date: LocalDate, locale: Locale): Pair<Int, Int> {
     val numDays = date.month.length(date.isLeapYear)
-    val firstDay = date.withDayOfMonth(1).dayOfWeek.value % 7
+
+    val firstDayOfWeek = WeekFields.of(locale).firstDayOfWeek.value
+    val firstDay = date.withDayOfMonth(1).dayOfWeek.value - firstDayOfWeek % 7
 
     return Pair(firstDay, numDays)
 }
