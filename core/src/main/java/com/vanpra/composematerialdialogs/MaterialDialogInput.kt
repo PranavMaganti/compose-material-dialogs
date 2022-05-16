@@ -53,6 +53,7 @@ enum class TextFieldStyle {
 
 @Composable
 fun MaterialDialogScope.input(
+    modifier: Modifier = Modifier,
     label: String,
     placeholder: String = "",
     prefill: String = "",
@@ -87,9 +88,8 @@ fun MaterialDialogScope.input(
     }
 
     Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)) {
-
         TextFieldWithStyle(
-            modifier = Modifier
+            modifier = modifier
                 .focusRequester(focusRequester)
                 .fillMaxWidth()
                 .testTag("dialog_input"),
