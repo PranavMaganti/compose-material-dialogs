@@ -1,6 +1,12 @@
 # Changelog
 
-### 0.7.0 - 2021-03-03
+### 0.7.1 - 2022-05-16
+
+-  Internationalise start day of week in date picker ([#146](https://github.com/vanpra/compose-material-dialogs/issues/146) and [#54](https://github.com/vanpra/compose-material-dialogs/issues/54))
+-  Add modifier parameter to input component ([#141](https://github.com/vanpra/compose-material-dialogs/issues/141))
+-  Add state parameter to the list component ([#140](https://github.com/vanpra/compose-material-dialogs/issues/140))
+
+### 0.7.0 - 2022-03-03
 
 -  Update compose to 1.1.1
 -  [BREAKING CHANGE] Modify arguments of the `input` component to better match those of `TextField`
@@ -9,7 +15,7 @@
 -  Add ability to change time picker title color ([#123](https://github.com/vanpra/compose-material-dialogs/issues/123))
 -  Fix bug which causes input field to lose focus on validity change ([#132](https://github.com/vanpra/compose-material-dialogs/issues/132))
 
-### 0.6.3 - 2021-01-21
+### 0.6.3 - 2022-01-21
 
 -  Update compose to 1.1.0-rc01 
 -  Add ability to disable specific days in date picker (#126)[https://github.com/vanpra/compose-material-dialogs/pull/126]
