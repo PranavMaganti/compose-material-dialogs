@@ -25,9 +25,14 @@ internal val LocalTime.simpleHour: Int
         return if (tempHour == 0) 12 else tempHour
     }
 
-internal fun Month.getShortLocalName(locale: Locale): String = this.getDisplayName(java.time.format.TextStyle.SHORT, locale)
-internal fun Month.getFullLocalName(locale: Locale) = this.getDisplayName(java.time.format.TextStyle.FULL, locale)
-internal fun DayOfWeek.getShortLocalName(locale: Locale) = this.getDisplayName(java.time.format.TextStyle.SHORT, locale)
+internal fun Month.getShortLocalName(locale: Locale): String =
+    this.getDisplayName(java.time.format.TextStyle.SHORT, locale)
+
+internal fun Month.getFullLocalName(locale: Locale) =
+    this.getDisplayName(java.time.format.TextStyle.FULL, locale)
+
+internal fun DayOfWeek.getShortLocalName(locale: Locale) =
+    this.getDisplayName(java.time.format.TextStyle.SHORT, locale)
 
 internal fun LocalTime.toAM(): LocalTime = if (this.isAM) this else this.minusHours(12)
 internal fun LocalTime.toPM(): LocalTime = if (!this.isAM) this else this.plusHours(12)
