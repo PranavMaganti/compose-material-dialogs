@@ -20,11 +20,11 @@ import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
@@ -158,11 +158,11 @@ private fun YearPicker(
     state: DatePickerState,
     pagerState: PagerState,
 ) {
-    val gridState = rememberLazyListState((viewDate.year - state.yearRange.first) / 3)
+    val gridState = rememberLazyGridState((viewDate.year - state.yearRange.first) / 3)
     val coroutineScope = rememberCoroutineScope()
 
     LazyVerticalGrid(
-        cells = GridCells.Fixed(3),
+        columns = GridCells.Fixed(3),
         state = gridState,
         modifier = Modifier.background(state.dialogBackground)
     ) {
@@ -322,7 +322,7 @@ private fun CalendarView(
             viewDate.year == state.selected.year && viewDate.month == state.selected.month
         }
 
-        LazyVerticalGrid(cells = GridCells.Fixed(7), modifier = Modifier.height(240.dp)) {
+        LazyVerticalGrid(columns = GridCells.Fixed(7), modifier = Modifier.height(240.dp)) {
             for (x in 0 until calendarDatesData.first) {
                 item { Box(Modifier.size(40.dp)) }
             }
@@ -392,7 +392,7 @@ private fun DayOfWeekHeader(state: DatePickerState, locale: Locale) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        LazyVerticalGrid(cells = GridCells.Fixed(7)) {
+        LazyVerticalGrid(columns = GridCells.Fixed(7)) {
             dayHeaders.forEach { it ->
                 item {
                     Box(Modifier.size(40.dp)) {
