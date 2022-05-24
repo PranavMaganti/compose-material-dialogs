@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.8.0-beta - 2022-05-25
+
+- Update compose to 1.2.0-beta02 ([#149](https://github.com/vanpra/compose-material-dialogs/pull/149))
+
 ### 0.7.2 - 2022-05-25
 
 - Fix input import and documentation ([#148](https://github.com/vanpra/compose-material-dialogs/pull/148))
