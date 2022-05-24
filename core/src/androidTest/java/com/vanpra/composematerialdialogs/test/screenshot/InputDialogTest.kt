@@ -3,12 +3,13 @@ package com.vanpra.composematerialdialogs.test.screenshot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.karumi.shot.ScreenshotTest
+import com.vanpra.composematerialdialogs.TextFieldStyle
+import com.vanpra.composematerialdialogs.input
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
 import com.vanpra.composematerialdialogs.test.utils.extensions.onDialog
 import com.vanpra.composematerialdialogs.test.utils.extensions.setContentAndWaitForIdle
 import com.vanpra.composematerialdialogs.title
-import input
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

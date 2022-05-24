@@ -1,3 +1,5 @@
+package com.vanpra.composematerialdialogs
+
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,31 +28,31 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vanpra.composematerialdialogs.MaterialDialogScope
 
 enum class TextFieldStyle {
     Filled,
-    Outlined/**
-     *  Adds an input field with the given parameters to the dialog
-     * @param label string to be shown in the input field before selection eg. Username
-     * @param hint hint to be shown in the input field when it is selected but empty eg. Joe
-     * @param prefill string to be input into the text field by default
-     * @param waitForPositiveButton if true the [onInput] callback will only be called when the
-     * positive button is pressed, otherwise it will be called when the input value is changed
-     * @param visualTransformation a visual transformation of the content of the text field
-     * @param keyboardOptions software keyboard options which can be used to customize parts
-     * of the keyboard
-     * @param errorMessage a message to be shown to the user when the input is not valid
-     * @param focusRequester a [FocusRequester] which can be used to control the focus state of the
-     * text field
-     * @param focusOnShow if set to true this will auto focus the text field when the input
-     * field is shown
-     * @param isTextValid a function which is called to check if the user input is valid
-     * @param onInput a function which is called with the user input. The timing of this call is
-     * dictated by [waitForPositiveButton]
-     */
+    Outlined
 }
 
+/**
+ * Adds an input field with the given parameters to the dialog
+ * @param label string to be shown in the input field before selection eg. Username
+ * @param placeholder hint to be shown in the input field when it is selected but empty eg. Joe
+ * @param prefill string to be input into the text field by default
+ * @param waitForPositiveButton if true the [onInput] callback will only be called when the
+ * positive button is pressed, otherwise it will be called when the input value is changed
+ * @param visualTransformation a visual transformation of the content of the text field
+ * @param keyboardOptions software keyboard options which can be used to customize parts
+ * of the keyboard
+ * @param errorMessage a message to be shown to the user when the input is not valid
+ * @param focusRequester a [FocusRequester] which can be used to control the focus state of the
+ * text field
+ * @param focusOnShow if set to true this will auto focus the text field when the input
+ * field is shown
+ * @param isTextValid a function which is called to check if the user input is valid
+ * @param onInput a function which is called with the user input. The timing of this call is
+ * dictated by [waitForPositiveButton]
+ */
 @Composable
 fun MaterialDialogScope.input(
     modifier: Modifier = Modifier,
