@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.7.2 - 2022-05-25
+
+- Fix input import and documentation ([#148](https://github.com/vanpra/compose-material-dialogs/pull/148))
+
 ### 0.7.1 - 2022-05-16
 
 -  Internationalise start day of week in date picker ([#146](https://github.com/vanpra/compose-material-dialogs/issues/146) and [#54](https://github.com/vanpra/compose-material-dialogs/issues/54))
