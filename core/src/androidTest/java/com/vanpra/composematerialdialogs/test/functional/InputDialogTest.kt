@@ -12,6 +12,7 @@ import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vanpra.composematerialdialogs.MaterialDialogScope
+import com.vanpra.composematerialdialogs.input
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import com.vanpra.composematerialdialogs.test.R
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
@@ -20,7 +21,6 @@ import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogInput
 import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogInputError
 import com.vanpra.composematerialdialogs.test.utils.extensions.onPositiveButton
 import com.vanpra.composematerialdialogs.title
-import input
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
