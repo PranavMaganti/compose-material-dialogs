@@ -1,5 +1,12 @@
 # Changelog
 
+### 0.8.1-rc - 2022-05-25
+
+- Update compose to 1.2.0-rc03 ([#156](https://github.com/vanpra/compose-material-dialogs/issues/156))
+- Update kotlin to 1.7.0
+- Remove `material-icons-extended` dependency ([#153](https://github.com/vanpra/compose-material-dialogs/issues/153))
+- Add parameter for changing title and message style and color ([#150](https://github.com/vanpra/compose-material-dialogs/issues/150))
+
 ### 0.8.0-beta - 2022-05-25
 
 - Update compose to 1.2.0-beta02 ([#149](https://github.com/vanpra/compose-material-dialogs/pull/149))

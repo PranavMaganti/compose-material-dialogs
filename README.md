@@ -6,7 +6,7 @@
 
 **Latest Stable Library Version: 0.7.2 (Supports Compose 1.1.1)**
 
-**Latest Beta Library Version: 0.8.0-beta (Supports Compose 1.2.0-beta02)**
+**Latest Beta Library Version: 0.8.1-rc (Supports Compose 1.2.0-rc03)**
 
 ### [See Releases and Changelog](https://github.com/vanpra/compose-material-dialogs/blob/main/CHANGELOG.md)
 
