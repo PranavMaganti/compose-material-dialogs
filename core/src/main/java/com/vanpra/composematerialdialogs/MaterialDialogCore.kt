@@ -17,6 +17,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
 /**
@@ -29,6 +31,8 @@ import androidx.compose.ui.unit.dp
 fun MaterialDialogScope.title(
     text: String? = null,
     @StringRes res: Int? = null,
+    color: Color = MaterialTheme.colors.onSurface,
+    style: TextStyle = MaterialTheme.typography.h6,
     center: Boolean = false
 ) {
     val titleText = getString(res, text)
@@ -50,8 +54,8 @@ fun MaterialDialogScope.title(
 
     Text(
         text = titleText,
-        color = MaterialTheme.colors.onSurface,
-        style = MaterialTheme.typography.h6,
+        color = color,
+        style = style,
         modifier = modifier
     )
 }
@@ -66,6 +70,8 @@ fun MaterialDialogScope.title(
 fun MaterialDialogScope.iconTitle(
     text: String? = null,
     @StringRes textRes: Int? = null,
+    color: Color = MaterialTheme.colors.onSurface,
+    style: TextStyle = MaterialTheme.typography.h6,
     icon: @Composable () -> Unit = {},
 ) {
     val titleText = getString(textRes, text)
@@ -79,8 +85,8 @@ fun MaterialDialogScope.iconTitle(
         Spacer(Modifier.width(14.dp))
         Text(
             text = titleText,
-            color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.h6
+            color = color,
+            style = style
         )
     }
 }
@@ -91,13 +97,18 @@ fun MaterialDialogScope.iconTitle(
  * @param res message text from a string resource
  */
 @Composable
-fun MaterialDialogScope.message(text: String? = null, @StringRes res: Int? = null) {
+fun MaterialDialogScope.message(
+    text: String? = null,
+    color: Color = MaterialTheme.colors.onSurface,
+    style: TextStyle = MaterialTheme.typography.body1,
+    @StringRes res: Int? = null
+) {
     val messageText = getString(res, text)
 
     Text(
         text = messageText,
-        color = MaterialTheme.colors.onSurface,
-        style = MaterialTheme.typography.body1,
+        color = color,
+        style = style,
         modifier = Modifier
             .padding(bottom = 28.dp, start = 24.dp, end = 24.dp)
     )

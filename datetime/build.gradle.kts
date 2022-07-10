@@ -8,8 +8,8 @@ android {
     }
     defaultConfig {
         minSdk = 21
-        compileSdk = 31
-        targetSdk = 31
+        compileSdk = 33
+        targetSdk = 33
 
         testInstrumentationRunner = "com.karumi.shot.ShotTestRunner"
         testApplicationId = "com.vanpra.composematerialdialogs.test"
@@ -45,7 +45,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Dependencies.AndroidX.Compose.version
+        kotlinCompilerExtensionVersion = Dependencies.AndroidX.Compose.compilerVersion
     }
 
     kotlinOptions {

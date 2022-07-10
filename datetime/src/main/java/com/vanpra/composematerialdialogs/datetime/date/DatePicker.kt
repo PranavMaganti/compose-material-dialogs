@@ -31,8 +31,6 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
@@ -45,6 +43,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
 import androidx.compose.ui.text.font.FontWeight.Companion.W600
@@ -56,6 +55,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.vanpra.composematerialdialogs.MaterialDialogScope
+import com.vanpra.composematerialdialogs.datetime.R
 import com.vanpra.composematerialdialogs.datetime.util.getFullLocalName
 import com.vanpra.composematerialdialogs.datetime.util.getShortLocalName
 import com.vanpra.composematerialdialogs.datetime.util.isSmallDevice
@@ -124,9 +124,7 @@ internal fun DatePickerImpl(
         ) { page ->
             val viewDate = remember {
                 LocalDate.of(
-                    state.yearRange.first + page / 12,
-                    page % 12 + 1,
-                    1
+                    state.yearRange.first + page / 12, page % 12 + 1, 1
                 )
             }
 
@@ -158,7 +156,7 @@ private fun YearPicker(
     state: DatePickerState,
     pagerState: PagerState,
 ) {
-    val gridState = rememberLazyGridState((viewDate.year - state.yearRange.first) / 3)
+    val gridState = rememberLazyGridState(viewDate.year - state.yearRange.first)
     val coroutineScope = rememberCoroutineScope()
 
     LazyVerticalGrid(
@@ -205,8 +203,7 @@ private fun YearPickerItem(
             Text(
                 year.toString(),
                 style = TextStyle(
-                    color = colors.dateTextColor(selected).value,
-                    fontSize = 18.sp
+                    color = colors.dateTextColor(selected).value, fontSize = 18.sp
                 )
             )
         }
@@ -223,9 +220,8 @@ private fun CalendarViewHeader(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val month = remember { viewDate.month.getFullLocalName(locale) }
-    val yearDropdownIcon = remember(state.yearPickerShowing) {
-        if (state.yearPickerShowing) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown
-    }
+    val arrowDropUp = painterResource(id = R.drawable.baseline_arrow_drop_up_24)
+    val arrowDropDown = painterResource(id = R.drawable.baseline_arrow_drop_down_24)
 
     Box(
         Modifier
@@ -251,7 +247,7 @@ private fun CalendarViewHeader(
             Spacer(Modifier.width(4.dp))
             Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
                 Icon(
-                    yearDropdownIcon,
+                    if (state.yearPickerShowing) arrowDropUp else arrowDropDown,
                     contentDescription = "Year Selector",
                     tint = state.colors.calendarHeaderTextColor
                 )
@@ -269,14 +265,13 @@ private fun CalendarViewHeader(
                 modifier = Modifier
                     .testTag("dialog_date_prev_month")
                     .size(24.dp)
-                    .clickable(
-                        onClick = {
-                            coroutineScope.launch {
-                                if (pagerState.currentPage - 1 >= 0)
-                                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                            }
+                    .clickable(onClick = {
+                        coroutineScope.launch {
+                            if (pagerState.currentPage - 1 >= 0) pagerState.animateScrollToPage(
+                                pagerState.currentPage - 1
+                            )
                         }
-                    ),
+                    }),
                 tint = state.colors.calendarHeaderTextColor
             )
 
@@ -288,14 +283,13 @@ private fun CalendarViewHeader(
                 modifier = Modifier
                     .testTag("dialog_date_next_month")
                     .size(24.dp)
-                    .clickable(
-                        onClick = {
-                            coroutineScope.launch {
-                                if (pagerState.currentPage + 1 < pagerState.pageCount)
-                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                            }
+                    .clickable(onClick = {
+                        coroutineScope.launch {
+                            if (pagerState.currentPage + 1 < pagerState.pageCount) pagerState.animateScrollToPage(
+                                pagerState.currentPage + 1
+                            )
                         }
-                    ),
+                    }),
                 tint = state.colors.calendarHeaderTextColor
             )
         }
@@ -369,8 +363,7 @@ private fun DateSelectionBox(
                 .wrapContentSize(Alignment.Center)
                 .alpha(if (enabled) ContentAlpha.high else ContentAlpha.disabled),
             style = TextStyle(
-                color = colors.dateTextColor(selected).value,
-                fontSize = 12.sp
+                color = colors.dateTextColor(selected).value, fontSize = 12.sp
             )
         )
     }

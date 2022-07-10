@@ -1,8 +1,8 @@
 object Dependencies {
-    const val desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
+    const val desugar = "com.android.tools:desugar_jdk_libs:1.2.0"
 
     object ComposeMaterialDialogs {
-        const val version = "0.6.3"
+        const val version = "0.7.0"
 
         const val core = "io.github.vanpra.compose-material-dialogs:core:$version"
         const val datetime = "io.github.vanpra.compose-material-dialogs:datetime:$version"
@@ -14,12 +14,12 @@ object Dependencies {
     }
 
     object Accompanist {
-        private const val version = "0.24.9-beta"
+        private const val version = "0.24.13-rc"
         const val pager = "com.google.accompanist:accompanist-pager:$version"
     }
 
     object Kotlin {
-        private const val version = "1.6.21"
+        private const val version = "1.7.0"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
 
@@ -30,11 +30,11 @@ object Dependencies {
     }
 
     object Google {
-        const val material = "com.google.android.material:material:1.6.0"
+        const val material = "com.google.android.material:material:1.6.1"
     }
 
     object AndroidX {
-        const val coreKtx = "androidx.core:core-ktx:1.7.0"
+        const val coreKtx = "androidx.core:core-ktx:1.8.0"
 
         object Testing {
             const val version = "1.4.0"
@@ -44,7 +44,8 @@ object Dependencies {
         }
 
         object Compose {
-            const val version = "1.2.0-beta02"
+            const val version = "1.2.0-rc03"
+            const val compilerVersion = "1.2.0"
 
             const val ui = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"
@@ -55,7 +56,7 @@ object Dependencies {
 
             const val testing = "androidx.compose.ui:ui-test-junit4:$version"
             const val activity = "androidx.activity:activity-compose:1.4.0"
-            const val navigation = "androidx.navigation:navigation-compose:2.4.2"
+            const val navigation = "androidx.navigation:navigation-compose:2.5.0"
         }
     }
 }
