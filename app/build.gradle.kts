@@ -5,14 +5,12 @@ plugins {
 }
 
 android {
-    compileSdk = 31
-    buildToolsVersion = "30.0.3"
-
     defaultConfig {
 
         applicationId = "com.vanpra.composematerialdialogs"
         minSdk = 23
-        targetSdk = 30
+        targetSdk = 33
+        compileSdk = 33
 
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -38,7 +36,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Dependencies.AndroidX.Compose.version
+        kotlinCompilerExtensionVersion = Dependencies.AndroidX.Compose.compilerVersion
     }
 }
 
