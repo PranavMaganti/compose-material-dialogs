@@ -10,16 +10,16 @@ object Dependencies {
     }
 
     object Ktlint {
-        const val version = "0.45.2"
+        const val version = "0.47.1"
     }
 
     object Accompanist {
-        private const val version = "0.24.13-rc"
+        private const val version = "0.25.1"
         const val pager = "com.google.accompanist:accompanist-pager:$version"
     }
 
     object Kotlin {
-        private const val version = "1.7.0"
+        private const val version = "1.7.10"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
 
@@ -34,18 +34,18 @@ object Dependencies {
     }
 
     object AndroidX {
-        const val coreKtx = "androidx.core:core-ktx:1.8.0"
+        const val coreKtx = "androidx.core:core-ktx:1.9.0"
+        const val viewmodelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha02"
 
         object Testing {
-            const val version = "1.4.0"
-            const val core = "androidx.test:core:$version"
-            const val rules = "androidx.test:rules:$version"
-            const val runner = "androidx.test:runner:$version"
+            const val core = "androidx.test:core:1.5.0-alpha02"
+            const val rules = "androidx.test:rules:1.4.1-alpha07"
+            const val runner = "androidx.test:runner:1.5.0-alpha04"
         }
 
         object Compose {
-            const val version = "1.2.0-rc03"
-            const val compilerVersion = "1.2.0"
+            const val version = "1.2.1"
+            const val compilerVersion = "1.3.0"
 
             const val ui = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"
@@ -55,8 +55,9 @@ object Dependencies {
             const val foundationLayout = "androidx.compose.foundation:foundation-layout:$version"
 
             const val testing = "androidx.compose.ui:ui-test-junit4:$version"
-            const val activity = "androidx.activity:activity-compose:1.4.0"
-            const val navigation = "androidx.navigation:navigation-compose:2.5.0"
+            const val activity = "androidx.activity:activity-compose:1.6.0-rc02"
+            const val navigation = "androidx.navigation:navigation-compose:2.5.2"
+            const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha02"
         }
     }
 }

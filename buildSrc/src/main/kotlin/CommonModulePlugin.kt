@@ -23,17 +23,20 @@ class CommonModulePlugin: Plugin<Project> {
     private fun Project.dependenciesConf() {
         dependencies.apply {
             implementation(Dependencies.AndroidX.coreKtx)
+            implementation(Dependencies.AndroidX.viewmodelKtx)
 
             implementation(Dependencies.AndroidX.Compose.ui)
             implementation(Dependencies.AndroidX.Compose.material)
             implementation(Dependencies.AndroidX.Compose.foundationLayout)
             implementation(Dependencies.AndroidX.Compose.animation)
+            implementation(Dependencies.AndroidX.Compose.viewmodel)
 
             androidTestImplementation(Dependencies.AndroidX.Compose.activity)
             androidTestImplementation(Dependencies.AndroidX.Compose.testing)
             androidTestImplementation(Dependencies.AndroidX.Testing.core)
             androidTestImplementation(Dependencies.AndroidX.Testing.rules)
             androidTestImplementation(Dependencies.AndroidX.Testing.runner)
+
             add("androidTestImplementation", project(":test-utils"))
         }
     }

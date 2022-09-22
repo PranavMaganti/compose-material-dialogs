@@ -46,6 +46,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Dependencies.AndroidX.Compose.compilerVersion
     }
+    namespace = "com.vanpra.composematerialdialogs.test.utils"
 }
 
 dependencies {

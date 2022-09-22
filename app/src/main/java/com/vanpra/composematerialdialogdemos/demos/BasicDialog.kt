@@ -127,7 +127,8 @@ fun BasicDialogDemo() {
     ) {
         title(res = R.string.input_dialog_title)
         input(
-            label = "Name", placeholder = "Jon Smith",
+            label = "Name",
+            placeholder = "Jon Smith",
             keyboardActions = KeyboardActions(
                 onDone = { submit() }
             ),
