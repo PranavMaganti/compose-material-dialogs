@@ -347,7 +347,7 @@ internal fun TimeLayout(modifier: Modifier = Modifier, state: TimePickerState) {
         ) {
             Text(
                 text = ":",
-                style = TextStyle(fontSize = 50.sp, color = MaterialTheme.colors.onBackground)
+                style = TextStyle(fontSize = 50.sp, color = state.colors.headerTextColor().value)
             )
         }
 
