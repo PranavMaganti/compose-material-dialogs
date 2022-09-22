@@ -4,9 +4,7 @@
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ae8d455118164f43a24732761a970cc8)](https://www.codacy.com/gh/vanpra/compose-material-dialogs/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vanpra/compose-material-dialogs&amp;utm_campaign=Badge_Grade)![Build & Test](https://github.com/vanpra/compose-material-dialogs/actions/workflows/main.yml/badge.svg)
 
-**Latest Stable Library Version: 0.7.2 (Supports Compose 1.1.1)**
-
-**Latest Beta Library Version: 0.8.1-rc (Supports Compose 1.2.0-rc03)**
+**Latest Stable Library Version: 0.9.0 (Supports Compose 1.2.1)**
 
 ### [See Releases and Changelog](https://github.com/vanpra/compose-material-dialogs/blob/main/CHANGELOG.md)
 

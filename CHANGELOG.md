@@ -1,5 +1,11 @@
 # Changelog
 
+### 0.9.0 - 2022-09-22
+
+- Update compose to 1.2.1 ([#161](https://github.com/vanpra/compose-material-dialogs/issues/161))
+- Update kotlin to 1.7.10
+- Fix month name formatting for the languages with complex system of declensions ([#154](https://github.com/vanpra/compose-material-dialogs/pull/154))
+
 ### 0.8.1-rc - 2022-05-25
 
 - Update compose to 1.2.0-rc03 ([#156](https://github.com/vanpra/compose-material-dialogs/issues/156))
