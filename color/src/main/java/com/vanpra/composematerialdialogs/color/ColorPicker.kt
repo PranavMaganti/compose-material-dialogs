@@ -437,7 +437,7 @@ private fun ColorView(
             .background(color)
             .border(1.dp, MaterialTheme.colors.onBackground, CircleShape)
             .clickable(
-                onClick = onClick,
+                onClick = onClick
             ),
         contentAlignment = Alignment.Center
     ) {

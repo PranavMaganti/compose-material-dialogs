@@ -10,8 +10,10 @@ import androidx.compose.ui.platform.LocalContext
 internal fun getString(@StringRes res: Int? = null, default: String? = null): String {
     return if (res != null) {
         LocalContext.current.getString(res)
-    } else default
-        ?: throw IllegalArgumentException("Function must receive one non null string parameter")
+    } else {
+        default
+            ?: throw IllegalArgumentException("Function must receive one non null string parameter")
+    }
 }
 
 internal fun List<Pair<MaterialDialogButtonTypes, Placeable>>.buttons(type: MaterialDialogButtonTypes) =

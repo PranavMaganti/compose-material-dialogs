@@ -46,7 +46,7 @@ fun <T> MaterialDialogScope.listItems(
     closeOnClick: Boolean = true,
     onClick: (index: Int, item: T) -> Unit = { _, _ -> },
     isEnabled: (index: Int) -> Boolean = { _ -> true },
-    item: @Composable (index: Int, T) -> Unit,
+    item: @Composable (index: Int, T) -> Unit
 ) {
     BoxWithConstraints {
         LazyColumn(

@@ -72,7 +72,7 @@ fun MaterialDialogScope.iconTitle(
     @StringRes textRes: Int? = null,
     color: Color = MaterialTheme.colors.onSurface,
     style: TextStyle = MaterialTheme.typography.h6,
-    icon: @Composable () -> Unit = {},
+    icon: @Composable () -> Unit = {}
 ) {
     val titleText = getString(textRes, text)
     Row(

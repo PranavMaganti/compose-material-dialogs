@@ -36,7 +36,7 @@ fun DialogAndShowButton(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .background(MaterialTheme.colors.primaryVariant),
+            .background(MaterialTheme.colors.primaryVariant)
     ) {
         Text(
             buttonText,

@@ -286,7 +286,7 @@ fun MaterialDialog(
                         val contentPlaceable = measurables[1].measure(
                             constraints.copy(
                                 maxHeight = maxHeightPx - buttonsPlaceable.height,
-                                minHeight = 0,
+                                minHeight = 0
                             )
                         )
 

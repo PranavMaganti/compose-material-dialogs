@@ -164,67 +164,99 @@ object ColorPalette {
 
     val AccentSub = listOf(
         listOf(
-            Color(0xFFFF8A80), Color(0xFFFF5252), Color(0xFFFF1744),
+            Color(0xFFFF8A80),
+            Color(0xFFFF5252),
+            Color(0xFFFF1744),
             Color(0xFFD50000)
         ),
         listOf(
-            Color(0xFFFF80AB), Color(0xFFFF4081), Color(0xFFF50057),
+            Color(0xFFFF80AB),
+            Color(0xFFFF4081),
+            Color(0xFFF50057),
             Color(0xFFC51162)
         ),
         listOf(
-            Color(0xFFEA80FC), Color(0xFFE040FB), Color(0xFFD500F9),
+            Color(0xFFEA80FC),
+            Color(0xFFE040FB),
+            Color(0xFFD500F9),
             Color(0xFFAA00FF)
         ),
         listOf(
-            Color(0xFFB388FF), Color(0xFF7C4DFF), Color(0xFF651FFF),
+            Color(0xFFB388FF),
+            Color(0xFF7C4DFF),
+            Color(0xFF651FFF),
             Color(0xFF6200EA)
         ),
         listOf(
-            Color(0xFF8C9EFF), Color(0xFF536DFE), Color(0xFF3D5AFE),
+            Color(0xFF8C9EFF),
+            Color(0xFF536DFE),
+            Color(0xFF3D5AFE),
             Color(0xFF304FFE)
         ),
         listOf(
-            Color(0xFF82B1FF), Color(0xFF448AFF), Color(0xFF2979FF),
+            Color(0xFF82B1FF),
+            Color(0xFF448AFF),
+            Color(0xFF2979FF),
             Color(0xFF2962FF)
         ),
         listOf(
-            Color(0xFF80D8FF), Color(0xFF40C4FF), Color(0xFF00B0FF),
+            Color(0xFF80D8FF),
+            Color(0xFF40C4FF),
+            Color(0xFF00B0FF),
             Color(0xFF0091EA)
         ),
         listOf(
-            Color(0xFF84FFFF), Color(0xFF18FFFF), Color(0xFF00E5FF),
+            Color(0xFF84FFFF),
+            Color(0xFF18FFFF),
+            Color(0xFF00E5FF),
             Color(0xFF00B8D4)
         ),
         listOf(
-            Color(0xFFA7FFEB), Color(0xFF64FFDA), Color(0xFF1DE9B6),
+            Color(0xFFA7FFEB),
+            Color(0xFF64FFDA),
+            Color(0xFF1DE9B6),
             Color(0xFF00BFA5)
         ),
         listOf(
-            Color(0xFFB9F6CA), Color(0xFF69F0AE), Color(0xFF00E676),
+            Color(0xFFB9F6CA),
+            Color(0xFF69F0AE),
+            Color(0xFF00E676),
             Color(0xFF00C853)
         ),
         listOf(
-            Color(0xFFCCFF90), Color(0xFFB2FF59), Color(0xFF76FF03),
+            Color(0xFFCCFF90),
+            Color(0xFFB2FF59),
+            Color(0xFF76FF03),
             Color(0xFF64DD17)
         ),
         listOf(
-            Color(0xFFF4FF81), Color(0xFFEEFF41), Color(0xFFC6FF00),
+            Color(0xFFF4FF81),
+            Color(0xFFEEFF41),
+            Color(0xFFC6FF00),
             Color(0xFFAEEA00)
         ),
         listOf(
-            Color(0xFFFFFF8D), Color(0xFFFFFF00), Color(0xFFFFEA00),
+            Color(0xFFFFFF8D),
+            Color(0xFFFFFF00),
+            Color(0xFFFFEA00),
             Color(0xFFFFD600)
         ),
         listOf(
-            Color(0xFFFFE57F), Color(0xFFFFD740), Color(0xFFFFC400),
+            Color(0xFFFFE57F),
+            Color(0xFFFFD740),
+            Color(0xFFFFC400),
             Color(0xFFFFAB00)
         ),
         listOf(
-            Color(0xFFFFD180), Color(0xFFFFAB40), Color(0xFFFF9100),
+            Color(0xFFFFD180),
+            Color(0xFFFFAB40),
+            Color(0xFFFF9100),
             Color(0xFFFF6D00)
         ),
         listOf(
-            Color(0xFFFF9E80), Color(0xFFFF6E40), Color(0xFFFF3D00),
+            Color(0xFFFF9E80),
+            Color(0xFFFF6E40),
+            Color(0xFFFF3D00),
             Color(0xFFDD2C00)
         )
     )
