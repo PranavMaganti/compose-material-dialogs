@@ -28,7 +28,7 @@ fun DateTimeDialogDemo() {
             activeBackgroundColor = purple.copy(0.3f),
             activeTextColor = Color.White,
             selectorColor = purple,
-            inactiveBackgroundColor = Color(0xFF292929),
+            inactiveBackgroundColor = Color(0xFF292929)
         )
     } else {
         TimePickerDefaults.colors(

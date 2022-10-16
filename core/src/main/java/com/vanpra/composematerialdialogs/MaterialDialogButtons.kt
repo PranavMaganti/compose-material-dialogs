@@ -134,7 +134,7 @@ class MaterialDialogButtons(private val scope: MaterialDialogScope) {
             },
             modifier = Modifier
                 .layoutId(MaterialDialogButtonTypes.Text)
-                .testTag(MaterialDialogButtonTypes.Text.testTag),
+                .testTag(MaterialDialogButtonTypes.Text.testTag)
         ) {
             Text(text = buttonText, style = textStyle)
         }
@@ -207,7 +207,7 @@ class MaterialDialogButtons(private val scope: MaterialDialogScope) {
                 onClick()
             },
             modifier = Modifier.layoutId(MaterialDialogButtonTypes.Negative)
-                .testTag(MaterialDialogButtonTypes.Negative.testTag),
+                .testTag(MaterialDialogButtonTypes.Negative.testTag)
         ) {
             Text(text = buttonText, style = textStyle)
         }

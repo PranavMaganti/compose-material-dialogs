@@ -124,7 +124,9 @@ internal fun DatePickerImpl(
         ) { page ->
             val viewDate = remember {
                 LocalDate.of(
-                    state.yearRange.first + page / 12, page % 12 + 1, 1
+                    state.yearRange.first + page / 12,
+                    page % 12 + 1,
+                    1
                 )
             }
 
@@ -154,7 +156,7 @@ internal fun DatePickerImpl(
 private fun YearPicker(
     viewDate: LocalDate,
     state: DatePickerState,
-    pagerState: PagerState,
+    pagerState: PagerState
 ) {
     val gridState = rememberLazyGridState(viewDate.year - state.yearRange.first)
     val coroutineScope = rememberCoroutineScope()
@@ -203,7 +205,8 @@ private fun YearPickerItem(
             Text(
                 year.toString(),
                 style = TextStyle(
-                    color = colors.dateTextColor(selected).value, fontSize = 18.sp
+                    color = colors.dateTextColor(selected).value,
+                    fontSize = 18.sp
                 )
             )
         }
@@ -267,9 +270,11 @@ private fun CalendarViewHeader(
                     .size(24.dp)
                     .clickable(onClick = {
                         coroutineScope.launch {
-                            if (pagerState.currentPage - 1 >= 0) pagerState.animateScrollToPage(
-                                pagerState.currentPage - 1
-                            )
+                            if (pagerState.currentPage - 1 >= 0) {
+                                pagerState.animateScrollToPage(
+                                    pagerState.currentPage - 1
+                                )
+                            }
                         }
                     }),
                 tint = state.colors.calendarHeaderTextColor
@@ -285,9 +290,11 @@ private fun CalendarViewHeader(
                     .size(24.dp)
                     .clickable(onClick = {
                         coroutineScope.launch {
-                            if (pagerState.currentPage + 1 < pagerState.pageCount) pagerState.animateScrollToPage(
-                                pagerState.currentPage + 1
-                            )
+                            if (pagerState.currentPage + 1 < pagerState.pageCount) {
+                                pagerState.animateScrollToPage(
+                                    pagerState.currentPage + 1
+                                )
+                            }
                         }
                     }),
                 tint = state.colors.calendarHeaderTextColor
@@ -363,7 +370,8 @@ private fun DateSelectionBox(
                 .wrapContentSize(Alignment.Center)
                 .alpha(if (enabled) ContentAlpha.high else ContentAlpha.disabled),
             style = TextStyle(
-                color = colors.dateTextColor(selected).value, fontSize = 12.sp
+                color = colors.dateTextColor(selected).value,
+                fontSize = 12.sp
             )
         )
     }

@@ -37,7 +37,7 @@ private val ringtones =
         "Rrrring",
         "Beats",
         "Dance Party",
-        "Zen Too",
+        "Zen Too"
     )
 private val labels = listOf("None", "Forums", "Social", "Updates", "Promotions", "Spam", "Bin")
 private val emails = mutableStateListOf(

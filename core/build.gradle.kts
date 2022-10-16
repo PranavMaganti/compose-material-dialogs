@@ -47,6 +47,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Dependencies.AndroidX.Compose.compilerVersion
     }
+    namespace = "com.vanpra.composematerialdialogs"
 }
 
 dependencies {
@@ -55,8 +56,4 @@ dependencies {
 
 shot {
     tolerance = 1.0 // Tolerance needed for CI
-}
-
-mavenPublish {
-    sonatypeHost = com.vanniktech.maven.publish.SonatypeHost.S01
 }

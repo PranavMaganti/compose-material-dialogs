@@ -42,8 +42,8 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.PointerInputScope
-import androidx.compose.ui.input.pointer.consumePositionChange
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -119,7 +119,7 @@ fun MaterialDialogScope.timepicker(
 internal fun TimePickerExpandedImpl(
     modifier: Modifier = Modifier,
     title: String,
-    state: TimePickerState,
+    state: TimePickerState
 ) {
     Column(modifier.padding(start = 24.dp, end = 24.dp)) {
         Box(Modifier.align(Alignment.Start)) {
@@ -293,7 +293,7 @@ internal fun ClockLabel(
             .width(if (isSmallDevice()) 80.dp else 96.dp)
             .fillMaxHeight(),
         shape = MaterialTheme.shapes.medium,
-        color = backgroundColor,
+        color = backgroundColor
     ) {
         Box(
             modifier = Modifier
@@ -390,20 +390,22 @@ private fun VerticalPeriodPicker(state: TimePickerState) {
                 .clip(topPeriodShape)
                 .background(state.colors.periodBackgroundColor(state.selectedTime.isAM).value)
                 .then(
-                    if (isAMEnabled) Modifier.clickable {
-                        state.selectedTime = state.selectedTime
-                            .toAM()
-                            .coerceIn(state.timeRange)
-                    } else Modifier
+                    if (isAMEnabled) {
+                        Modifier.clickable {
+                            state.selectedTime = state.selectedTime
+                                .toAM()
+                                .coerceIn(state.timeRange)
+                        }
+                    } else {
+                        Modifier
+                    }
                 ),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 "AM",
                 style = TextStyle(
-                    state.colors
-                        .textColor(state.selectedTime.isAM).value
-                        .copy(alpha = if (isAMEnabled) ContentAlpha.high else ContentAlpha.disabled)
+                    state.colors.textColor(state.selectedTime.isAM).value.copy(alpha = if (isAMEnabled) ContentAlpha.high else ContentAlpha.disabled)
                 )
             )
         }
@@ -421,11 +423,15 @@ private fun VerticalPeriodPicker(state: TimePickerState) {
                 .clip(bottomPeriodShape)
                 .background(state.colors.periodBackgroundColor(!state.selectedTime.isAM).value)
                 .then(
-                    if (isPMEnabled) Modifier.clickable {
-                        state.selectedTime = state.selectedTime
-                            .toPM()
-                            .coerceIn(state.timeRange)
-                    } else Modifier
+                    if (isPMEnabled) {
+                        Modifier.clickable {
+                            state.selectedTime = state.selectedTime
+                                .toPM()
+                                .coerceIn(state.timeRange)
+                        }
+                    } else {
+                        Modifier
+                    }
                 ),
             contentAlignment = Alignment.Center
         ) {
@@ -469,20 +475,22 @@ private fun HorizontalPeriodPicker(state: TimePickerState) {
                 .clip(leftPeriodShape)
                 .background(state.colors.periodBackgroundColor(state.selectedTime.isAM).value)
                 .then(
-                    if (isAMEnabled) Modifier.clickable {
-                        state.selectedTime = state.selectedTime
-                            .toAM()
-                            .coerceIn(state.timeRange)
-                    } else Modifier
+                    if (isAMEnabled) {
+                        Modifier.clickable {
+                            state.selectedTime = state.selectedTime
+                                .toAM()
+                                .coerceIn(state.timeRange)
+                        }
+                    } else {
+                        Modifier
+                    }
                 ),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 "AM",
                 style = TextStyle(
-                    state.colors
-                        .textColor(state.selectedTime.isAM).value
-                        .copy(alpha = if (isAMEnabled) ContentAlpha.high else ContentAlpha.disabled)
+                    state.colors.textColor(state.selectedTime.isAM).value.copy(alpha = if (isAMEnabled) ContentAlpha.high else ContentAlpha.disabled)
                 )
             )
         }
@@ -500,11 +508,15 @@ private fun HorizontalPeriodPicker(state: TimePickerState) {
                 .clip(rightPeriodShape)
                 .background(state.colors.periodBackgroundColor(!state.selectedTime.isAM).value)
                 .then(
-                    if (isPMEnabled) Modifier.clickable {
-                        state.selectedTime = state.selectedTime
-                            .toPM()
-                            .coerceIn(state.timeRange)
-                    } else Modifier
+                    if (isPMEnabled) {
+                        Modifier.clickable {
+                            state.selectedTime = state.selectedTime
+                                .toPM()
+                                .coerceIn(state.timeRange)
+                        }
+                    } else {
+                        Modifier
+                    }
                 ),
             contentAlignment = Alignment.Center
         ) {
@@ -618,24 +630,22 @@ private fun ClockLayout(
             detectDragGestures(
                 onDragStart = { dragSuccess.value = true },
                 onDragCancel = { dragSuccess.value = false },
-                onDragEnd = { if (dragSuccess.value) onLift() },
+                onDragEnd = { if (dragSuccess.value) onLift() }
             ) { change, _ ->
                 dragSuccess.value = updateAnchor(change.position)
-                change.consumePositionChange()
+                if (change.positionChange() != Offset.Zero) change.consume()
             }
         }
 
         val tapObserver: suspend PointerInputScope.() -> Unit = {
-            detectTapGestures(
-                onPress = {
-                    val anchorsChanged = updateAnchor(it)
-                    val success = tryAwaitRelease()
+            detectTapGestures(onPress = {
+                val anchorsChanged = updateAnchor(it)
+                val success = tryAwaitRelease()
 
-                    if ((success || !dragSuccess.value) && anchorsChanged) {
-                        onLift()
-                    }
+                if ((success || !dragSuccess.value) && anchorsChanged) {
+                    onLift()
                 }
-            )
+            })
         }
 
         val inactiveTextColor = colors.textColor(false).value.toArgb()

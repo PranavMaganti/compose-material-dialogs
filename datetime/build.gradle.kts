@@ -53,6 +53,7 @@ android {
             "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi"
         )
     }
+    namespace = "com.vanpra.composematerialdialogs.datetime"
 }
 
 dependencies {
@@ -63,8 +64,4 @@ dependencies {
 
 shot {
     tolerance = 1.0 // Tolerance needed for CI
-}
-
-mavenPublish {
-    sonatypeHost = com.vanniktech.maven.publish.SonatypeHost.S01
 }

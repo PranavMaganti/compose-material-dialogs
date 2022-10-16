@@ -33,7 +33,7 @@ object TimePickerDefaults {
         selectorColor: Color = MaterialTheme.colors.primary,
         selectorTextColor: Color = MaterialTheme.colors.onPrimary,
         headerTextColor: Color = MaterialTheme.colors.onBackground,
-        borderColor: Color = MaterialTheme.colors.onBackground,
+        borderColor: Color = MaterialTheme.colors.onBackground
     ): TimePickerColors {
         return DefaultTimePickerColors(
             activeBackgroundColor = activeBackgroundColor,

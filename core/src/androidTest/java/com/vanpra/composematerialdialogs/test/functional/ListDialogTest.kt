@@ -64,7 +64,7 @@ private val emails = listOf(
 )
 
 @RunWith(AndroidJUnit4::class)
-class ListDialog {
+class ListDialogTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 

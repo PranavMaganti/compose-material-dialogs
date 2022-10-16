@@ -20,7 +20,7 @@ internal class TimePickerState(
     currentScreen: ClockScreen = ClockScreen.Hour,
     clockInput: Boolean = true,
     timeRange: ClosedRange<LocalTime>,
-    is24Hour: Boolean,
+    is24Hour: Boolean
 ) {
     var selectedTime by mutableStateOf(selectedTime)
     var timeRange by mutableStateOf(timeRange)
