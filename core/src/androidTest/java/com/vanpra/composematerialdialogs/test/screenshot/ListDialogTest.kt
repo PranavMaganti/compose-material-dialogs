@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.ui.Alignment
@@ -89,15 +89,15 @@ class ListDialogTest : ScreenshotTest {
                                     .padding(vertical = 8.dp)
                                     .size(30.dp),
                                 contentScale = ContentScale.FillHeight,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
                             )
                             Text(
                                 email,
                                 modifier = Modifier
                                     .padding(start = 16.dp)
                                     .align(Alignment.CenterVertically),
-                                color = MaterialTheme.colors.onBackground,
-                                style = MaterialTheme.typography.body1
+                                color = MaterialTheme.colorScheme.onBackground,
+                                style = MaterialTheme.typography.bodyLarge
                             )
                         }
                     }

@@ -1,7 +1,7 @@
 package com.vanpra.composematerialdialogs.test.screenshot
 
 import androidx.compose.foundation.Image
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.ui.graphics.ColorFilter
@@ -65,7 +65,7 @@ class BasicDialogTest : ScreenshotTest {
                         Image(
                             Icons.Default.LocationOn,
                             contentDescription = "Location Icon",
-                            colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
                         )
                     },
                     textRes = R.string.location_dialog_title

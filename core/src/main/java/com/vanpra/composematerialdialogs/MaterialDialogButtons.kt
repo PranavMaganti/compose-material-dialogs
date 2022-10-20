@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,8 +52,7 @@ internal fun MaterialDialogScope.DialogButtonsLayout(
         { content(dialogButtons) },
         modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-            .background(dialogState.dialogBackgroundColor!!),
+            .padding(horizontal = 8.dp),
         { measurables, constraints ->
 
             if (measurables.isEmpty()) {
@@ -123,7 +122,7 @@ class MaterialDialogButtons(private val scope: MaterialDialogScope) {
     @Composable
     fun button(
         text: String? = null,
-        textStyle: TextStyle = MaterialTheme.typography.button,
+        textStyle: TextStyle = MaterialTheme.typography.labelLarge,
         @StringRes res: Int? = null,
         onClick: () -> Unit = {}
     ) {
@@ -152,7 +151,7 @@ class MaterialDialogButtons(private val scope: MaterialDialogScope) {
     @Composable
     fun positiveButton(
         text: String? = null,
-        textStyle: TextStyle = MaterialTheme.typography.button,
+        textStyle: TextStyle = MaterialTheme.typography.labelLarge,
         @StringRes res: Int? = null,
         disableDismiss: Boolean = false,
         onClick: () -> Unit = {}
@@ -192,7 +191,7 @@ class MaterialDialogButtons(private val scope: MaterialDialogScope) {
     @Composable
     fun negativeButton(
         text: String? = null,
-        textStyle: TextStyle = MaterialTheme.typography.button,
+        textStyle: TextStyle = MaterialTheme.typography.labelLarge,
         @StringRes res: Int? = null,
         onClick: () -> Unit = {}
     ) {
@@ -222,7 +221,7 @@ class MaterialDialogButtons(private val scope: MaterialDialogScope) {
     @Composable
     fun accessibilityButton(
         icon: ImageVector,
-        colorFilter: ColorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
+        colorFilter: ColorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
         onClick: () -> Unit
     ) {
         Box(

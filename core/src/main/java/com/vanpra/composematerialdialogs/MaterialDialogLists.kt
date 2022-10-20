@@ -15,11 +15,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Checkbox
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Text
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -99,8 +98,8 @@ fun MaterialDialogScope.listItems(
     ) { _, item ->
         Text(
             item,
-            color = MaterialTheme.colors.onSurface,
-            style = MaterialTheme.typography.body1,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 12.dp, horizontal = 24.dp)
@@ -254,11 +253,11 @@ private fun MultiChoiceItem(
         Text(
             item,
             color = if (enabled) {
-                MaterialTheme.colors.onSurface
+                MaterialTheme.colorScheme.onSurface
             } else {
-                MaterialTheme.colors.onSurface.copy(ContentAlpha.disabled)
+                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
             },
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }
@@ -296,11 +295,11 @@ private fun SingleChoiceItem(
             item,
             modifier = Modifier,
             color = if (enabled) {
-                MaterialTheme.colors.onSurface
+                MaterialTheme.colorScheme.onSurface
             } else {
-                MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
+                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
             },
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }

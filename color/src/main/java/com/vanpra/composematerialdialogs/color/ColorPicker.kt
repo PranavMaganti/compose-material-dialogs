@@ -22,16 +22,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Slider
-import androidx.compose.material.SliderDefaults
 import androidx.compose.material.SwipeableState
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
@@ -195,7 +192,7 @@ private fun PageIndicator(swipeState: SwipeableState<ColorPickerScreen>, constra
             val ratio = remember(constraints.maxWidth, swipeState.offset.value) {
                 swipeState.offset.value / constraints.maxWidth.toFloat()
             }
-            val color = MaterialTheme.colors.onBackground
+            val color = MaterialTheme.colorScheme.onBackground
             Canvas(modifier = Modifier) {
                 val offset = Offset(3 * indicatorRadius, 0f)
                 drawCircle(
@@ -315,9 +312,9 @@ private fun LabelSlider(
         Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(
                 label,
-                style = MaterialTheme.typography.h6,
+                style = MaterialTheme.typography.titleLarge,
                 fontSize = 16.sp,
-                color = MaterialTheme.colors.onBackground,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.width(10.dp)
             )
 
@@ -348,9 +345,9 @@ private fun LabelSlider(
             ) {
                 Text(
                     value.toInt().toString(),
-                    color = MaterialTheme.colors.onBackground,
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 16.sp,
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.titleLarge
                 )
             }
         }
@@ -404,7 +401,7 @@ private fun ColorGridLayout(
                 Image(
                     Icons.Default.ArrowBack,
                     contentDescription = "Go back to main color page",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                     contentScale = ContentScale.Fit,
                     modifier = Modifier.size(tickSize)
                 )
@@ -435,7 +432,7 @@ private fun ColorView(
             .size(itemSizeDp)
             .clip(CircleShape)
             .background(color)
-            .border(1.dp, MaterialTheme.colors.onBackground, CircleShape)
+            .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
             .clickable(
                 onClick = onClick
             ),

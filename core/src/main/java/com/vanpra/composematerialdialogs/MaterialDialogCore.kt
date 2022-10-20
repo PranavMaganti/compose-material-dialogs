@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.dp
 fun MaterialDialogScope.title(
     text: String? = null,
     @StringRes res: Int? = null,
-    color: Color = MaterialTheme.colors.onSurface,
-    style: TextStyle = MaterialTheme.typography.h6,
+    color: Color = MaterialTheme.colorScheme.onSurface,
+    style: TextStyle = MaterialTheme.typography.titleLarge,
     center: Boolean = false
 ) {
     val titleText = getString(res, text)
@@ -70,8 +70,8 @@ fun MaterialDialogScope.title(
 fun MaterialDialogScope.iconTitle(
     text: String? = null,
     @StringRes textRes: Int? = null,
-    color: Color = MaterialTheme.colors.onSurface,
-    style: TextStyle = MaterialTheme.typography.h6,
+    color: Color = MaterialTheme.colorScheme.onSurface,
+    style: TextStyle = MaterialTheme.typography.titleLarge,
     icon: @Composable () -> Unit = {}
 ) {
     val titleText = getString(textRes, text)
@@ -99,8 +99,8 @@ fun MaterialDialogScope.iconTitle(
 @Composable
 fun MaterialDialogScope.message(
     text: String? = null,
-    color: Color = MaterialTheme.colors.onSurface,
-    style: TextStyle = MaterialTheme.typography.body1,
+    color: Color = MaterialTheme.colorScheme.onSurface,
+    style: TextStyle = MaterialTheme.typography.bodyLarge,
     @StringRes res: Int? = null
 ) {
     val messageText = getString(res, text)

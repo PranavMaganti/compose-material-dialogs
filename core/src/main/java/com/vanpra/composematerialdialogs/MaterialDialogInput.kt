@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.vanpra.composematerialdialogs
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -6,13 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldColors
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -105,8 +101,8 @@ fun MaterialDialogScope.input(
             enabled = enabled,
             readOnly = readOnly,
             textStyle = textStyle,
-            label = { Text(label, color = MaterialTheme.colors.onBackground.copy(0.8f)) },
-            placeholder = { Text(placeholder, color = MaterialTheme.colors.onBackground.copy(0.5f)) },
+            label = { Text(label, color = MaterialTheme.colorScheme.onBackground.copy(0.8f)) },
+            placeholder = { Text(placeholder, color = MaterialTheme.colorScheme.onBackground.copy(0.5f)) },
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,
             isError = !valid,
@@ -124,7 +120,7 @@ fun MaterialDialogScope.input(
             Text(
                 errorMessage,
                 fontSize = 14.sp,
-                color = MaterialTheme.colors.error,
+                color = MaterialTheme.colorScheme.error,
                 modifier = Modifier
                     .align(Alignment.End)
                     .testTag("dialog_input_error")

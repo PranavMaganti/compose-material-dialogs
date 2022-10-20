@@ -4,9 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,14 +36,14 @@ fun DialogAndShowButton(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .background(MaterialTheme.colors.primaryVariant)
+            .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
         Text(
             buttonText,
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentSize(Alignment.Center),
-            color = MaterialTheme.colors.onPrimary
+            color = MaterialTheme.colorScheme.onPrimary
         )
     }
 }
@@ -55,8 +55,8 @@ fun DialogAndShowButton(
 fun DialogSection(title: String, content: @Composable () -> Unit) {
     Text(
         title,
-        color = MaterialTheme.colors.onSurface,
-        style = MaterialTheme.typography.subtitle1,
+        color = MaterialTheme.colorScheme.onSurface,
+        style = MaterialTheme.typography.titleSmall,
         modifier = Modifier.padding(start = 8.dp, top = 8.dp)
     )
 

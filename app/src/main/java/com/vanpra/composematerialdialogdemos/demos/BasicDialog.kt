@@ -5,7 +5,7 @@ import android.util.Patterns
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
@@ -54,7 +54,7 @@ fun BasicDialogDemo() {
                 Image(
                     Icons.Default.LocationOn,
                     contentDescription = "Location Icon",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
                 )
             },
             textRes = R.string.location_dialog_title

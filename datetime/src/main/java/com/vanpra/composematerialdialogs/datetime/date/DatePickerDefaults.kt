@@ -1,6 +1,6 @@
 package com.vanpra.composematerialdialogs.datetime.date
 
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
@@ -22,13 +22,13 @@ object DatePickerDefaults {
      */
     @Composable
     fun colors(
-        headerBackgroundColor: Color = MaterialTheme.colors.primary,
-        headerTextColor: Color = MaterialTheme.colors.onPrimary,
-        calendarHeaderTextColor: Color = MaterialTheme.colors.onBackground,
-        dateActiveBackgroundColor: Color = MaterialTheme.colors.primary,
+        headerBackgroundColor: Color = MaterialTheme.colorScheme.primary,
+        headerTextColor: Color = MaterialTheme.colorScheme.onPrimary,
+        calendarHeaderTextColor: Color = MaterialTheme.colorScheme.onBackground,
+        dateActiveBackgroundColor: Color = MaterialTheme.colorScheme.primary,
         dateInactiveBackgroundColor: Color = Color.Transparent,
-        dateActiveTextColor: Color = MaterialTheme.colors.onPrimary,
-        dateInactiveTextColor: Color = MaterialTheme.colors.onBackground
+        dateActiveTextColor: Color = MaterialTheme.colorScheme.onPrimary,
+        dateInactiveTextColor: Color = MaterialTheme.colorScheme.onBackground
     ): DatePickerColors {
         return DefaultDatePickerColors(
             headerBackgroundColor = headerBackgroundColor,
