@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 
 @Composable
 internal fun getString(@StringRes res: Int? = null, default: String? = null): String {
@@ -24,7 +26,7 @@ internal fun isSmallDevice(): Boolean {
     return LocalConfiguration.current.screenWidthDp <= 360
 }
 
-@Composable
-internal fun isLargeDevice(): Boolean {
-    return LocalConfiguration.current.screenWidthDp <= 600
+
+operator fun Int.times(dp: Dp): Dp {
+    return (this * dp.value).dp
 }

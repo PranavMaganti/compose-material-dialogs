@@ -15,11 +15,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Checkbox
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Text
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,8 +51,7 @@ fun <T> MaterialDialogScope.listItems(
         LazyColumn(
             Modifier
                 .then(modifier)
-                .testTag("dialog_list"),
-            state = state
+                .testTag("dialog_list"), state = state
         ) {
             itemsIndexed(list) { index, it ->
                 Box(
@@ -66,9 +64,9 @@ fun <T> MaterialDialogScope.listItems(
                                     dialogState.hide()
                                 }
                                 onClick(index, it)
-                            },
-                            enabled = isEnabled(index)
+                            }, enabled = isEnabled(index)
                         )
+//                        .padding(start = 8.dp)
                 ) {
                     item(index, it)
                 }
@@ -91,20 +89,17 @@ fun MaterialDialogScope.listItems(
     onClick: (index: Int, item: String) -> Unit = { _, _ -> }
 ) {
     listItems(
-        modifier = Modifier.padding(bottom = 8.dp),
-        state = state,
-        list = list,
-        closeOnClick = closeOnClick,
-        onClick = onClick
+        state = state, list = list, closeOnClick = closeOnClick, onClick = onClick
     ) { _, item ->
         Text(
             item,
-            color = MaterialTheme.colors.onSurface,
-            style = MaterialTheme.typography.body1,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 12.dp, horizontal = 24.dp)
+                .padding(vertical = 12.dp)
                 .wrapContentWidth(Alignment.Start)
+                .padding(start = 8.dp)
         )
     }
 }
@@ -135,8 +130,7 @@ fun MaterialDialogScope.listItemsMultiChoice(
     }
 
     val onChecked = { index: Int ->
-        if (index !in disabledIndices) {
-            /* Have to create temp var as mutableState doesn't trigger on adding to set */
+        if (index !in disabledIndices) {/* Have to create temp var as mutableState doesn't trigger on adding to set */
             val newSelectedItems = selectedItems.toMutableSet()
             if (index in selectedItems) {
                 newSelectedItems.remove(index)
@@ -221,29 +215,19 @@ fun MaterialDialogScope.listItemsSingleChoice(
         val selected = remember(selectedItem) { index == selectedItem }
 
         SingleChoiceItem(
-            item = item,
-            index = index,
-            selected = selected,
-            enabled = enabled,
-            onSelect = onSelect
+            item = item, index = index, selected = selected, enabled = enabled, onSelect = onSelect
         )
     }
 }
 
 @Composable
 private fun MultiChoiceItem(
-    item: String,
-    index: Int,
-    selected: Boolean,
-    enabled: Boolean,
-    onChecked: (index: Int) -> Unit
+    item: String, index: Int, selected: Boolean, enabled: Boolean, onChecked: (index: Int) -> Unit
 ) {
     Row(
         Modifier
             .fillMaxWidth()
-            .height(48.dp)
-            .padding(start = 12.dp, end = 24.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .height(48.dp), verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(checked = selected, onCheckedChange = { onChecked(index) }, enabled = enabled)
         Spacer(
@@ -252,40 +236,30 @@ private fun MultiChoiceItem(
                 .width(32.dp)
         )
         Text(
-            item,
-            color = if (enabled) {
-                MaterialTheme.colors.onSurface
+            item, color = if (enabled) {
+                MaterialTheme.colorScheme.onSurface
             } else {
-                MaterialTheme.colors.onSurface.copy(ContentAlpha.disabled)
-            },
-            style = MaterialTheme.typography.body1
+                MaterialTheme.colorScheme.onSurface.copy(alpha = DialogConstants.DisabledAlpha)
+            }, style = MaterialTheme.typography.bodyMedium
         )
     }
 }
 
 @Composable
 private fun SingleChoiceItem(
-    item: String,
-    index: Int,
-    selected: Boolean,
-    enabled: Boolean,
-    onSelect: (index: Int) -> Unit
+    item: String, index: Int, selected: Boolean, enabled: Boolean, onSelect: (index: Int) -> Unit
 ) {
     Row(
         Modifier
             .fillMaxWidth()
-            .height(48.dp)
-            .padding(start = 12.dp, end = 24.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .height(48.dp), verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
-            selected = selected,
-            onClick = {
+            selected = selected, onClick = {
                 if (enabled) {
                     onSelect(index)
                 }
-            },
-            enabled = enabled
+            }, enabled = enabled
         )
         Spacer(
             modifier = Modifier
@@ -293,14 +267,11 @@ private fun SingleChoiceItem(
                 .width(32.dp)
         )
         Text(
-            item,
-            modifier = Modifier,
-            color = if (enabled) {
-                MaterialTheme.colors.onSurface
+            item, modifier = Modifier, color = if (enabled) {
+                MaterialTheme.colorScheme.onSurface
             } else {
-                MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
-            },
-            style = MaterialTheme.typography.body1
+                MaterialTheme.colorScheme.onSurface.copy(alpha = DialogConstants.DisabledAlpha)
+            }, style = MaterialTheme.typography.bodyMedium
         )
     }
 }

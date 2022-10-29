@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -28,17 +28,9 @@ import com.vanpra.composematerialdialogs.listItemsMultiChoice
 import com.vanpra.composematerialdialogs.listItemsSingleChoice
 import com.vanpra.composematerialdialogs.title
 
-private val ringtones =
-    listOf(
-        "None",
-        "Callisto",
-        "Ganymede",
-        "Luna",
-        "Rrrring",
-        "Beats",
-        "Dance Party",
-        "Zen Too"
-    )
+private val ringtones = listOf(
+    "None", "Callisto", "Ganymede", "Luna", "Rrrring", "Beats", "Dance Party", "Zen Too"
+)
 private val labels = listOf("None", "Forums", "Social", "Updates", "Promotions", "Spam", "Bin")
 private val emails = mutableStateListOf(
     "joe@material-dialog.com",
@@ -65,33 +57,27 @@ fun BasicListDialogDemo() {
 
     DialogAndShowButton(buttonText = "Custom List Dialog") {
         title(res = R.string.backup_dialog_title)
-        listItems(
-            modifier = Modifier
-                .padding(bottom = 8.dp)
-                .padding(horizontal = 24.dp),
-            list = emails,
-            item = { _, email ->
-                Row(Modifier.fillMaxWidth()) {
-                    Image(
-                        Icons.Default.AccountCircle,
-                        contentDescription = "Account icon",
-                        modifier = Modifier
-                            .padding(vertical = 8.dp)
-                            .size(30.dp),
-                        contentScale = ContentScale.FillHeight,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
-                    )
-                    Text(
-                        email,
-                        modifier = Modifier
-                            .padding(start = 16.dp)
-                            .align(Alignment.CenterVertically),
-                        color = MaterialTheme.colors.onBackground,
-                        style = MaterialTheme.typography.body1
-                    )
-                }
+        listItems(list = emails, item = { _, email ->
+            Row(Modifier.fillMaxWidth()) {
+                Image(
+                    Icons.Default.AccountCircle,
+                    contentDescription = "Account icon",
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .size(30.dp),
+                    contentScale = ContentScale.FillHeight,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+                )
+                Text(
+                    email,
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .align(Alignment.CenterVertically),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
-        )
+        })
     }
 }
 
@@ -102,20 +88,16 @@ fun BasicListDialogDemo() {
 fun MultiSelectionDemo() {
     var initialSelection by remember { mutableStateOf(setOf(3, 5)) }
 
-    DialogAndShowButton(
-        buttonText = "Multi-Selection Dialog",
-        buttons = { defaultListDialogButtons() }
-    ) {
+    DialogAndShowButton(buttonText = "Multi-Selection Dialog",
+        buttons = { defaultListDialogButtons() }) {
         title(res = R.string.labels_dialog_title)
         listItemsMultiChoice(labels) {
             println(it)
         }
     }
 
-    DialogAndShowButton(
-        buttonText = "Multi-Selection Dialog with disabled items",
-        buttons = { defaultListDialogButtons() }
-    ) {
+    DialogAndShowButton(buttonText = "Multi-Selection Dialog with disabled items",
+        buttons = { defaultListDialogButtons() }) {
         val disabledLabels = setOf(1, 3, 4)
 
         title(res = R.string.labels_dialog_title)
@@ -124,15 +106,11 @@ fun MultiSelectionDemo() {
         }
     }
 
-    DialogAndShowButton(
-        buttonText = "Multi-Selection Dialog with initial selection",
-        buttons = { defaultListDialogButtons() }
-    ) {
+    DialogAndShowButton(buttonText = "Multi-Selection Dialog with initial selection",
+        buttons = { defaultListDialogButtons() }) {
         title(res = R.string.labels_dialog_title)
         listItemsMultiChoice(
-            labels,
-            initialSelection = initialSelection,
-            waitForPositiveButton = true
+            labels, initialSelection = initialSelection, waitForPositiveButton = true
         ) {
             initialSelection = it
         }
@@ -146,20 +124,16 @@ fun MultiSelectionDemo() {
 fun SingleSelectionDemo() {
     var initialSingleSelection by remember { mutableStateOf(4) }
 
-    DialogAndShowButton(
-        buttonText = "Single Selection Dialog",
-        buttons = { defaultListDialogButtons() }
-    ) {
+    DialogAndShowButton(buttonText = "Single Selection Dialog",
+        buttons = { defaultListDialogButtons() }) {
         title(res = R.string.ringtone_dialog_title)
         listItemsSingleChoice(ringtones) {
             println(it)
         }
     }
 
-    DialogAndShowButton(
-        buttonText = "Single Selection Dialog with disabled items",
-        buttons = { defaultListDialogButtons() }
-    ) {
+    DialogAndShowButton(buttonText = "Single Selection Dialog with disabled items",
+        buttons = { defaultListDialogButtons() }) {
         val disabledRingtones = setOf(2, 4, 5)
 
         title(res = R.string.ringtone_dialog_title)
@@ -168,14 +142,11 @@ fun SingleSelectionDemo() {
         }
     }
 
-    DialogAndShowButton(
-        buttonText = "Single Selection Dialog with initial selection",
-        buttons = { defaultListDialogButtons() }
-    ) {
+    DialogAndShowButton(buttonText = "Single Selection Dialog with initial selection",
+        buttons = { defaultListDialogButtons() }) {
         title(res = R.string.ringtone_dialog_title)
         listItemsSingleChoice(
-            ringtones,
-            initialSelection = initialSingleSelection
+            ringtones, initialSelection = initialSingleSelection
         ) { initialSingleSelection = it }
     }
 }

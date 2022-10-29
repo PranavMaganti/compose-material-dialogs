@@ -70,7 +70,7 @@ fun MaterialDialogScope.input(
     singleLine: Boolean = false,
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
+//    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
     textFieldStyle: TextFieldStyle = TextFieldStyle.Filled,
     waitForPositiveButton: Boolean = true,
     errorMessage: String = "",
@@ -89,7 +89,7 @@ fun MaterialDialogScope.input(
         DialogCallback { onInput(text) }
     }
 
-    Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)) {
+    Column(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
         TextFieldWithStyle(
             modifier = modifier
                 .focusRequester(focusRequester)
@@ -105,8 +105,8 @@ fun MaterialDialogScope.input(
             enabled = enabled,
             readOnly = readOnly,
             textStyle = textStyle,
-            label = { Text(label, color = MaterialTheme.colors.onBackground.copy(0.8f)) },
-            placeholder = { Text(placeholder, color = MaterialTheme.colors.onBackground.copy(0.5f)) },
+            label = { Text(label) },
+            placeholder = { Text(placeholder) },
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,
             isError = !valid,
@@ -116,7 +116,7 @@ fun MaterialDialogScope.input(
             singleLine = singleLine,
             maxLines = maxLines,
             interactionSource = interactionSource,
-            colors = colors,
+//            colors = colors,
             style = textFieldStyle
         )
 

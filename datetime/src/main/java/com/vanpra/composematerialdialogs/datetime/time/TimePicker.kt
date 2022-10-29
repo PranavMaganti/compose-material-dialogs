@@ -1,7 +1,5 @@
 package com.vanpra.composematerialdialogs.datetime.time
 
-import android.graphics.Paint
-import android.graphics.Rect
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -19,50 +17,42 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.vanpra.composematerialdialogs.MaterialDialogScope
 import com.vanpra.composematerialdialogs.datetime.util.getOffset
 import com.vanpra.composematerialdialogs.datetime.util.isAM
-import com.vanpra.composematerialdialogs.datetime.util.isSmallDevice
 import com.vanpra.composematerialdialogs.datetime.util.noSeconds
 import com.vanpra.composematerialdialogs.datetime.util.simpleHour
 import com.vanpra.composematerialdialogs.datetime.util.toAM
 import com.vanpra.composematerialdialogs.datetime.util.toPM
 import java.time.LocalTime
 import kotlin.math.PI
-import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.pow
-import kotlin.math.roundToInt
 import kotlin.math.sin
 
 /* Offset of the clock line and selected circle */
@@ -87,7 +77,7 @@ private data class SelectedOffset(
 @Composable
 fun MaterialDialogScope.timepicker(
     initialTime: LocalTime = LocalTime.now().noSeconds(),
-    title: String = "SELECT TIME",
+    title: String = "Select Time",
     colors: TimePickerColors = TimePickerDefaults.colors(),
     waitForPositiveButton: Boolean = true,
     timeRange: ClosedRange<LocalTime> = LocalTime.MIN..LocalTime.MAX,
@@ -115,65 +105,26 @@ fun MaterialDialogScope.timepicker(
     TimePickerImpl(title = title, state = timePickerState)
 }
 
-@Composable
-internal fun TimePickerExpandedImpl(
-    modifier: Modifier = Modifier,
-    title: String,
-    state: TimePickerState
-) {
-    Column(modifier.padding(start = 24.dp, end = 24.dp)) {
-        Box(Modifier.align(Alignment.Start)) {
-            TimePickerTitle(Modifier.height(36.dp), title, state)
-        }
-
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            Column(
-                Modifier
-                    .padding(top = 72.dp, bottom = 50.dp)
-                    .width(216.dp)
-            ) {
-                TimeLayout(state = state)
-                Spacer(modifier = Modifier.height(12.dp))
-                HorizontalPeriodPicker(state = state)
-            }
-
-            /* This isn't an exact match to the material spec as there is a contradiction it.
-            Dialogs should be limited to the size of 560 dp but given sizes for extended
-            time picker go over this limit */
-            Spacer(modifier = Modifier.width(40.dp))
-            Crossfade(state.currentScreen) {
-                when (it) {
-                    ClockScreen.Hour -> if (state.is24Hour) {
-                        ExtendedClockHourLayout(state = state)
-                    } else {
-                        ClockHourLayout(state = state)
-                    }
-                    ClockScreen.Minute -> ClockMinuteLayout(state = state)
-                }
-            }
-        }
-    }
-}
 
 @Composable
 internal fun TimePickerImpl(
-    modifier: Modifier = Modifier,
-    title: String,
-    state: TimePickerState
+    modifier: Modifier = Modifier, title: String, state: TimePickerState
 ) {
     Column(
-        modifier.padding(start = 24.dp, end = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (title != "") {
-            Box(Modifier.align(Alignment.Start)) {
-                TimePickerTitle(Modifier.height(52.dp), title, state)
+            Box(modifier = Modifier.align(Alignment.Start)) {
+                TimePickerTitle(text = title, state = state)
             }
         }
 
+        Spacer(Modifier.height(20.dp))
+
         TimeLayout(state = state)
 
-        Spacer(modifier = Modifier.height(if (isSmallDevice()) 24.dp else 36.dp))
+        Spacer(modifier = Modifier.height(36.dp))
+
         Crossfade(state.currentScreen) {
             when (it) {
                 ClockScreen.Hour -> if (state.is24Hour) {
@@ -181,12 +132,187 @@ internal fun TimePickerImpl(
                 } else {
                     ClockHourLayout(state = state)
                 }
+
                 ClockScreen.Minute -> ClockMinuteLayout(state = state)
             }
         }
-
-        Spacer(modifier = Modifier.height(24.dp))
     }
+}
+
+@Composable
+internal fun TimePickerTitle(modifier: Modifier = Modifier, text: String, state: TimePickerState) {
+    Box(modifier) {
+        Text(
+            text, color = state.colors.headerText(), style = MaterialTheme.typography.labelMedium
+        )
+    }
+}
+
+@Composable
+internal fun ClockLabel(
+    text: String, backgroundColor: Color, textColor: Color, onClick: () -> Unit, is24Hour: Boolean
+) {
+    Surface(
+        modifier = Modifier
+            .size(height = 80.dp, width = if (is24Hour) 114.dp else 96.dp)
+            .fillMaxHeight(), shape = MaterialTheme.shapes.small, color = backgroundColor
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable(onClick = onClick),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = text, color = textColor, style = MaterialTheme.typography.displayLarge
+            )
+        }
+    }
+}
+
+
+@Composable
+internal fun TimeLayout(modifier: Modifier = Modifier, state: TimePickerState) {
+    val clockHour: String = remember(
+        state.is24Hour, state.selectedTime, state.selectedTime.hour
+    ) {
+        if (state.is24Hour) {
+            state.selectedTime.hour.toString().padStart(2, '0')
+        } else {
+            state.selectedTime.simpleHour.toString().padStart(2, '0')
+        }
+    }
+
+    Row(
+        horizontalArrangement = Arrangement.Center, modifier = modifier
+            .height(80.dp)
+            .fillMaxWidth()
+    ) {
+        ClockLabel(
+            text = clockHour,
+            backgroundColor = state.colors.timeSelectorContainer(state.currentScreen.isHour()).value,
+            textColor = state.colors.timeSelectorText(state.currentScreen.isHour()).value,
+            onClick = { state.currentScreen = ClockScreen.Hour },
+            is24Hour = state.is24Hour
+        )
+
+        Box(
+            Modifier
+                .width(24.dp)
+                .fillMaxHeight(), contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = ":",
+                color = state.colors.timeSelectorSeparator(),
+                style = MaterialTheme.typography.displayLarge
+            )
+        }
+
+        ClockLabel(
+            text = state.selectedTime.minute.toString().padStart(2, '0'),
+            backgroundColor = state.colors.timeSelectorContainer(state.currentScreen.isMinute()).value,
+            textColor = state.colors.timeSelectorText(state.currentScreen.isMinute()).value,
+            onClick = { state.currentScreen = ClockScreen.Minute },
+            is24Hour = state.is24Hour
+        )
+
+        if (!state.is24Hour) {
+            VerticalPeriodPicker(state = state)
+        }
+    }
+}
+
+@Composable
+private fun VerticalPeriodPicker(state: TimePickerState) {
+    val isAMEnabled = remember(state.timeRange) { state.timeRange.start.hour <= 12 }
+    val isPMEnabled = remember(state.timeRange) { state.timeRange.endInclusive.hour >= 0 }
+
+    Spacer(modifier = Modifier.width(12.dp))
+
+    Column(
+        Modifier
+            .fillMaxHeight()
+            .width(52.dp)
+            .border(
+                width = 1.dp,
+                color = state.colors.periodContainerOutline(),
+                shape = MaterialTheme.shapes.small
+            )
+    ) {
+        Box(
+            modifier = Modifier
+                .size(height = 40.dp, width = 52.dp)
+                .clipToBounds()
+                .background(state.colors.periodContainer(state.selectedTime.isAM).value)
+                .clickable(onClick = {
+                    state.selectedTime = state.selectedTime
+                        .toAM()
+                        .coerceIn(state.timeRange)
+                }, enabled = isAMEnabled), contentAlignment = Alignment.Center
+        ) {
+            var color = state.colors.periodText(state.selectedTime.isAM).value
+            if (!isAMEnabled) {
+                color = color.copy(alpha = TimePickerConstants.DisabledAlpha)
+            }
+
+            Text(
+                "AM",
+                style = MaterialTheme.typography.titleMedium,
+                color = color
+            )
+        }
+
+        Divider(thickness = 1.dp)
+
+        Box(
+            modifier = Modifier
+                .size(height = 40.dp, width = 52.dp)
+                .clipToBounds()
+                .background(state.colors.periodContainer(!state.selectedTime.isAM).value)
+                .clickable(onClick = {
+                    state.selectedTime = state.selectedTime
+                        .toPM()
+                        .coerceIn(state.timeRange)
+                }, enabled = isPMEnabled), contentAlignment = Alignment.Center
+        ) {
+            var color = state.colors.periodText(!state.selectedTime.isAM).value
+            if (!isAMEnabled) {
+                color = color.copy(alpha = TimePickerConstants.DisabledAlpha)
+            }
+            Text(
+                "PM",
+                style = MaterialTheme.typography.titleMedium,
+                color = color
+            )
+        }
+    }
+}
+
+@Composable
+private fun ClockHourLayout(state: TimePickerState) {
+    fun adjustedHour(hour: Int): Int {
+        return if (state.selectedTime.isAM || hour == 12) hour else hour + 12
+    }
+
+    val isEnabled: (Int) -> Boolean = remember(state.timeRange, state.selectedTime) {
+        { index -> adjustedHour(index) in state.hourRange() }
+    }
+
+    ClockLayout(
+        anchorPoints = 12,
+        label = { index -> if (index == 0) "12" else index.toString() },
+        onAnchorChange = { hours ->
+            val adjustedHour = when (hours) {
+                12 -> if (state.selectedTime.isAM) 0 else 12
+                else -> if (state.selectedTime.isAM) hours else hours + 12
+            }
+            state.selectedTime = state.selectedTime.withHour(adjustedHour).coerceIn(state.timeRange)
+        },
+        startAnchor = state.selectedTime.simpleHour % 12,
+        onLift = { state.currentScreen = ClockScreen.Minute },
+        colors = state.colors,
+        isAnchorEnabled = isEnabled
+    )
 }
 
 @Composable
@@ -225,33 +351,6 @@ private fun ExtendedClockHourLayout(state: TimePickerState) {
 }
 
 @Composable
-private fun ClockHourLayout(state: TimePickerState) {
-    fun adjustedHour(hour: Int): Int {
-        return if (state.selectedTime.isAM || hour == 12) hour else hour + 12
-    }
-
-    val isEnabled: (Int) -> Boolean = remember(state.timeRange, state.selectedTime) {
-        { index -> adjustedHour(index) in state.hourRange() }
-    }
-
-    ClockLayout(
-        anchorPoints = 12,
-        label = { index -> if (index == 0) "12" else index.toString() },
-        onAnchorChange = { hours ->
-            val adjustedHour = when (hours) {
-                12 -> if (state.selectedTime.isAM) 0 else 12
-                else -> if (state.selectedTime.isAM) hours else hours + 12
-            }
-            state.selectedTime = state.selectedTime.withHour(adjustedHour).coerceIn(state.timeRange)
-        },
-        startAnchor = state.selectedTime.simpleHour % 12,
-        onLift = { state.currentScreen = ClockScreen.Minute },
-        colors = state.colors,
-        isAnchorEnabled = isEnabled
-    )
-}
-
-@Composable
 private fun ClockMinuteLayout(state: TimePickerState) {
     val isEnabled: (Int) -> Boolean =
         remember(state.timeRange, state.selectedTime, state.selectedTime.isAM) {
@@ -270,268 +369,7 @@ private fun ClockMinuteLayout(state: TimePickerState) {
     )
 }
 
-@Composable
-internal fun TimePickerTitle(modifier: Modifier, text: String, state: TimePickerState) {
-    Box(modifier) {
-        Text(
-            text,
-            modifier = Modifier.paddingFromBaseline(top = 28.dp),
-            style = TextStyle(color = state.colors.headerTextColor())
-        )
-    }
-}
-
-@Composable
-internal fun ClockLabel(
-    text: String,
-    backgroundColor: Color,
-    textColor: Color,
-    onClick: () -> Unit
-) {
-    Surface(
-        modifier = Modifier
-            .width(if (isSmallDevice()) 80.dp else 96.dp)
-            .fillMaxHeight(),
-        shape = MaterialTheme.shapes.medium,
-        color = backgroundColor
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable(onClick = onClick),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = text,
-                style = TextStyle(
-                    fontSize = 50.sp,
-                    color = textColor
-                )
-            )
-        }
-    }
-}
-
-@Composable
-internal fun TimeLayout(modifier: Modifier = Modifier, state: TimePickerState) {
-    val clockHour: String = remember(
-        state.is24Hour,
-        state.selectedTime,
-        state.selectedTime.hour
-    ) {
-        if (state.is24Hour) {
-            state.selectedTime.hour.toString().padStart(2, '0')
-        } else {
-            state.selectedTime.simpleHour.toString()
-        }
-    }
-
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = modifier
-            .height(80.dp)
-            .fillMaxWidth()
-    ) {
-        ClockLabel(
-            text = clockHour,
-            backgroundColor = state.colors.backgroundColor(state.currentScreen.isHour()).value,
-            textColor = state.colors.textColor(state.currentScreen.isHour()).value,
-            onClick = { state.currentScreen = ClockScreen.Hour }
-        )
-
-        Box(
-            Modifier
-                .width(24.dp)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = ":",
-                style = TextStyle(fontSize = 50.sp, color = MaterialTheme.colors.onBackground)
-            )
-        }
-
-        ClockLabel(
-            text = state.selectedTime.minute.toString().padStart(2, '0'),
-            backgroundColor = state.colors.backgroundColor(state.currentScreen.isMinute()).value,
-            textColor = state.colors.textColor(state.currentScreen.isMinute()).value,
-            onClick = { state.currentScreen = ClockScreen.Minute }
-
-        )
-
-        if (!state.is24Hour) {
-            VerticalPeriodPicker(state = state)
-        }
-    }
-}
-
-@Composable
-private fun VerticalPeriodPicker(state: TimePickerState) {
-    val topPeriodShape = MaterialTheme.shapes.medium.copy(
-        bottomStart = CornerSize(0.dp),
-        bottomEnd = CornerSize(0.dp)
-    )
-    val bottomPeriodShape =
-        MaterialTheme.shapes.medium.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp))
-    val isAMEnabled = remember(state.timeRange) { state.timeRange.start.hour <= 12 }
-    val isPMEnabled = remember(state.timeRange) { state.timeRange.endInclusive.hour >= 0 }
-
-    Spacer(modifier = Modifier.width(12.dp))
-
-    Column(
-        Modifier
-            .fillMaxHeight()
-            .width(52.dp)
-            .border(state.colors.border, MaterialTheme.shapes.medium)
-    ) {
-        Box(
-            modifier = Modifier
-                .size(height = 40.dp, width = 52.dp)
-                .clip(topPeriodShape)
-                .background(state.colors.periodBackgroundColor(state.selectedTime.isAM).value)
-                .then(
-                    if (isAMEnabled) {
-                        Modifier.clickable {
-                            state.selectedTime = state.selectedTime
-                                .toAM()
-                                .coerceIn(state.timeRange)
-                        }
-                    } else {
-                        Modifier
-                    }
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                "AM",
-                style = TextStyle(
-                    state.colors.textColor(state.selectedTime.isAM).value.copy(alpha = if (isAMEnabled) ContentAlpha.high else ContentAlpha.disabled)
-                )
-            )
-        }
-
-        Spacer(
-            Modifier
-                .fillMaxWidth()
-                .height(1.dp)
-                .background(state.colors.border.brush)
-        )
-
-        Box(
-            modifier = Modifier
-                .size(height = 40.dp, width = 52.dp)
-                .clip(bottomPeriodShape)
-                .background(state.colors.periodBackgroundColor(!state.selectedTime.isAM).value)
-                .then(
-                    if (isPMEnabled) {
-                        Modifier.clickable {
-                            state.selectedTime = state.selectedTime
-                                .toPM()
-                                .coerceIn(state.timeRange)
-                        }
-                    } else {
-                        Modifier
-                    }
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                "PM",
-                style = TextStyle(
-                    state.colors.textColor(!state.selectedTime.isAM).value.copy(
-                        alpha = if (isPMEnabled) ContentAlpha.high else ContentAlpha.disabled
-                    )
-                )
-            )
-        }
-    }
-}
-
-@Composable
-private fun HorizontalPeriodPicker(state: TimePickerState) {
-    val leftPeriodShape = MaterialTheme.shapes.medium.copy(
-        bottomEnd = CornerSize(0.dp),
-        topEnd = CornerSize(0.dp)
-    )
-    val rightPeriodShape = MaterialTheme.shapes.medium.copy(
-        topStart = CornerSize(0.dp),
-        bottomStart = CornerSize(0.dp)
-    )
-    val isAMEnabled = remember(state.timeRange) { state.timeRange.start.hour <= 12 }
-    val isPMEnabled = remember(state.timeRange) { state.timeRange.endInclusive.hour >= 0 }
-
-    Spacer(modifier = Modifier.width(12.dp))
-
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .height(height = 40.dp)
-            .border(state.colors.border, MaterialTheme.shapes.medium)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(0.5f)
-                .clip(leftPeriodShape)
-                .background(state.colors.periodBackgroundColor(state.selectedTime.isAM).value)
-                .then(
-                    if (isAMEnabled) {
-                        Modifier.clickable {
-                            state.selectedTime = state.selectedTime
-                                .toAM()
-                                .coerceIn(state.timeRange)
-                        }
-                    } else {
-                        Modifier
-                    }
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                "AM",
-                style = TextStyle(
-                    state.colors.textColor(state.selectedTime.isAM).value.copy(alpha = if (isAMEnabled) ContentAlpha.high else ContentAlpha.disabled)
-                )
-            )
-        }
-
-        Spacer(
-            Modifier
-                .fillMaxHeight()
-                .width(1.dp)
-                .background(state.colors.border.brush)
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(rightPeriodShape)
-                .background(state.colors.periodBackgroundColor(!state.selectedTime.isAM).value)
-                .then(
-                    if (isPMEnabled) {
-                        Modifier.clickable {
-                            state.selectedTime = state.selectedTime
-                                .toPM()
-                                .coerceIn(state.timeRange)
-                        }
-                    } else {
-                        Modifier
-                    }
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                "PM",
-                style = TextStyle(
-                    state.colors.textColor(!state.selectedTime.isAM).value.copy(
-                        alpha = if (isPMEnabled) ContentAlpha.high else ContentAlpha.disabled
-                    )
-                )
-            )
-        }
-    }
-}
-
+@OptIn(ExperimentalTextApi::class)
 @Composable
 private fun ClockLayout(
     isNamedAnchor: (Int) -> Boolean = { true },
@@ -551,17 +389,14 @@ private fun ClockLayout(
         val faceRadiusPx = faceDiameterPx / 2f
 
         val outerRadiusPx = faceRadiusPx * 0.8f
-        val innerRadiusPx = remember(outerRadiusPx) { outerRadiusPx * 0.6f }
+        val innerRadiusPx = remember(outerRadiusPx) { outerRadiusPx * 0.65f }
 
-        val textSizePx = with(LocalDensity.current) { 18.sp.toPx() }
-        val innerTextSizePx = remember(textSizePx) { textSizePx * 0.8f }
-
-        val selectedRadius = remember(outerRadiusPx) { outerRadiusPx * 0.2f }
-        val selectedInnerDotRadius = remember(selectedRadius) { selectedRadius * 0.2f }
+        val selectedRadius = with(LocalDensity.current) { 24.dp.toPx() }
+        val selectedInnerDotRadius = with(LocalDensity.current) { 4.dp.toPx() }
         val innerSelectedRadius = remember(innerRadiusPx) { innerRadiusPx * 0.3f }
 
-        val centerCircleRadius = remember(selectedRadius) { selectedRadius * 0.4f }
-        val selectedLineWidth = remember(centerCircleRadius) { centerCircleRadius * 0.5f }
+        val centerCircleRadius = with(LocalDensity.current) { 4.dp.toPx() }
+        val selectedLineWidth = with(LocalDensity.current) { 2.dp.toPx() }
 
         val center = remember { Offset(faceRadiusPx, faceRadiusPx) }
 
@@ -577,9 +412,7 @@ private fun ClockLayout(
 
                 anchors.add(
                     SelectedOffset(
-                        lineOuterOffset,
-                        selectedOuterOffset,
-                        selectedRadius
+                        lineOuterOffset, selectedOuterOffset, selectedRadius
                     )
                 )
             }
@@ -590,9 +423,7 @@ private fun ClockLayout(
 
                 anchors.add(
                     SelectedOffset(
-                        lineOuterOffset,
-                        selectedOuterOffset,
-                        innerSelectedRadius
+                        lineOuterOffset, selectedOuterOffset, innerSelectedRadius
                     )
                 )
             }
@@ -627,11 +458,9 @@ private fun ClockLayout(
         val dragSuccess = remember { mutableStateOf(false) }
 
         val dragObserver: suspend PointerInputScope.() -> Unit = {
-            detectDragGestures(
-                onDragStart = { dragSuccess.value = true },
+            detectDragGestures(onDragStart = { dragSuccess.value = true },
                 onDragCancel = { dragSuccess.value = false },
-                onDragEnd = { if (dragSuccess.value) onLift() }
-            ) { change, _ ->
+                onDragEnd = { if (dragSuccess.value) onLift() }) { change, _ ->
                 dragSuccess.value = updateAnchor(change.position)
                 if (change.positionChange() != Offset.Zero) change.consume()
             }
@@ -648,13 +477,12 @@ private fun ClockLayout(
             })
         }
 
-        val inactiveTextColor = colors.textColor(false).value.toArgb()
-        val clockBackgroundColor = colors.backgroundColor(false).value
-        val selectorColor = remember { colors.selectorColor() }
-        val selectorTextColor = remember { colors.selectorTextColor().toArgb() }
-
-        val enabledAlpha = ContentAlpha.high
-        val disabledAlpha = ContentAlpha.disabled
+        val clockBackgroundColor = remember { colors.clockDialContainer() }
+        val selectorColor = remember { colors.clockDialSelector() }
+        val activeLabelColor = colors.clockDialText(active = true).value
+        val inactiveLabelColor = colors.clockDialText(active = false).value
+        val dialTextStyle = MaterialTheme.typography.bodyLarge
+        val textMeasurer = rememberTextMeasurer()
 
         Canvas(
             modifier = Modifier
@@ -688,77 +516,52 @@ private fun ClockLayout(
                 )
             }
 
-            drawIntoCanvas { canvas ->
-                fun drawAnchorText(
-                    anchor: Int,
-                    textSize: Float,
-                    radius: Float,
-                    angle: Double,
-                    alpha: Int = 255
-                ) {
-                    val textOuter = label(anchor)
-                    val textColor = if (selectedAnchor.value == anchor) {
-                        selectorTextColor
-                    } else {
-                        inactiveTextColor
-                    }
-
-                    val contentAlpha = if (isAnchorEnabled(anchor)) enabledAlpha else disabledAlpha
-
-                    drawText(
-                        textSize,
-                        textOuter,
-                        center,
-                        angle.toFloat(),
-                        canvas,
-                        radius,
-                        alpha = (255f * contentAlpha).roundToInt().coerceAtMost(alpha),
-                        color = textColor
-                    )
+            fun drawAnchorText(
+                anchor: Int, angle: Double, radius: Float
+            ) {
+                val text = label(anchor)
+                var textColor = if (selectedAnchor.value == anchor) {
+                    activeLabelColor
+                } else {
+                    inactiveLabelColor
                 }
 
-                for (x in 0 until 12) {
-                    val angle = (2 * PI / 12) * (x - 15)
-                    drawAnchorText(x * anchorPoints / 12, textSizePx, outerRadiusPx, angle)
+                if (!isAnchorEnabled(anchor)) {
+                    textColor = textColor.copy(alpha = TimePickerConstants.DisabledAlpha)
+                }
 
-                    if (innerAnchorPoints > 0) {
-                        drawAnchorText(
-                            x * innerAnchorPoints / 12 + anchorPoints,
-                            innerTextSizePx,
-                            innerRadiusPx,
-                            angle,
-                            alpha = (255 * 0.8f).toInt()
-                        )
-                    }
+                val textStyle = dialTextStyle.copy(color = textColor)
+                val measuredText =
+                    textMeasurer.measure(text = AnnotatedString(text), style = textStyle)
+
+                drawText(
+                    textMeasurer = textMeasurer, text = text, topLeft = Offset(
+                        center.x + (radius * cos(angle)).toFloat() - measuredText.size.width / 2,
+                        center.y + (radius * sin(angle)).toFloat() - measuredText.size.height / 2,
+                    ), style = textStyle
+                )
+            }
+
+            for (x in 0 until 12) {
+                val angle = (2 * PI / 12) * (x - 15)
+
+                drawAnchorText(
+                    anchor = x * anchorPoints / 12, angle = angle, radius = outerRadiusPx
+                )
+
+                if (innerAnchorPoints > 0) {
+                    drawAnchorText(
+                        anchor = x * innerAnchorPoints / 12 + anchorPoints,
+                        angle = angle,
+                        radius = innerRadiusPx
+                    )
+
                 }
             }
         }
     }
 }
 
-private fun drawText(
-    textSize: Float,
-    text: String,
-    center: Offset,
-    angle: Float,
-    canvas: Canvas,
-    radius: Float,
-    alpha: Int = 255,
-    color: Int = android.graphics.Color.WHITE
-) {
-    val outerText = Paint()
-    outerText.color = color
-    outerText.textSize = textSize
-    outerText.textAlign = Paint.Align.CENTER
-    outerText.alpha = alpha
-
-    val r = Rect()
-    outerText.getTextBounds(text, 0, text.length, r)
-
-    canvas.nativeCanvas.drawText(
-        text,
-        center.x + (radius * cos(angle)),
-        center.y + (radius * sin(angle)) + (abs(r.height())) / 2,
-        outerText
-    )
+object TimePickerConstants {
+    const val DisabledAlpha = 0.38f
 }
