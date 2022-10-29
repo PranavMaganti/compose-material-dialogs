@@ -1,6 +1,6 @@
 package com.vanpra.composematerialdialogs.datetime.time
 
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
@@ -25,26 +25,38 @@ object TimePickerDefaults {
      */
     @Composable
     fun colors(
-        activeBackgroundColor: Color = MaterialTheme.colors.primary.copy(0.3f),
-        inactiveBackgroundColor: Color = MaterialTheme.colors.onBackground.copy(0.3f),
-        activeTextColor: Color = MaterialTheme.colors.onPrimary,
-        inactiveTextColor: Color = MaterialTheme.colors.onBackground,
-        inactivePeriodBackground: Color = Color.Transparent,
-        selectorColor: Color = MaterialTheme.colors.primary,
-        selectorTextColor: Color = MaterialTheme.colors.onPrimary,
-        headerTextColor: Color = MaterialTheme.colors.onBackground,
-        borderColor: Color = MaterialTheme.colors.onBackground
+        headerText: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+        timeSelectorSeparator: Color = MaterialTheme.colorScheme.onSurface,
+        activePeriodContainer: Color = MaterialTheme.colorScheme.tertiaryContainer,
+        inactivePeriodContainer: Color = Color.Transparent,
+        periodContainerOutline: Color = MaterialTheme.colorScheme.outline,
+        activePeriodText: Color = MaterialTheme.colorScheme.onTertiaryContainer,
+        inactivePeriodText: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+        clockDialContainer: Color = MaterialTheme.colorScheme.surfaceVariant,
+        clockDialSelector: Color = MaterialTheme.colorScheme.primary,
+        activeClockDialText: Color = MaterialTheme.colorScheme.onPrimary,
+        inactiveClockDialText: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+        activeTimeSelectorContainer: Color = MaterialTheme.colorScheme.primaryContainer,
+        inactiveTimeSelectorContainer: Color = MaterialTheme.colorScheme.surfaceVariant,
+        activeTimeSelectorText: Color  = MaterialTheme.colorScheme.onPrimaryContainer,
+        inactiveTimeSelectorText: Color = MaterialTheme.colorScheme.onSurfaceVariant
     ): TimePickerColors {
         return DefaultTimePickerColors(
-            activeBackgroundColor = activeBackgroundColor,
-            inactiveBackgroundColor = inactiveBackgroundColor,
-            activeTextColor = activeTextColor,
-            inactiveTextColor = inactiveTextColor,
-            inactivePeriodBackground = inactivePeriodBackground,
-            selectorColor = selectorColor,
-            selectorTextColor = selectorTextColor,
-            headerTextColor = headerTextColor,
-            borderColor = borderColor
+            headerText = headerText,
+            timeSelectorSeparator = timeSelectorSeparator,
+            activePeriodContainer = activePeriodContainer,
+            inactivePeriodContainer = inactivePeriodContainer,
+            periodContainerOutline = periodContainerOutline,
+            activePeriodText = activePeriodText,
+            inactivePeriodText = inactivePeriodText,
+            clockDialContainer = clockDialContainer,
+            clockDialSelector = clockDialSelector,
+            activeClockDialText = activeClockDialText,
+            inactiveClockDialText = inactiveClockDialText,
+            activeTimeSelectorContainer = activeTimeSelectorContainer,
+            inactiveTimeSelectorContainer = inactiveTimeSelectorContainer,
+            activeTimeSelectorText = activeTimeSelectorText,
+            inactiveTimeSelectorText = inactiveTimeSelectorText
         )
     }
 }

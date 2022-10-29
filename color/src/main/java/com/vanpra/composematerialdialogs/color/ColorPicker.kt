@@ -42,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -143,6 +144,7 @@ fun MaterialDialogScope.colorChooser(
                     resistance = null,
                     enabled = argbPickerState.allowCustomARGB
                 )
+                .clipToBounds()
         ) {
             if (argbPickerState.allowCustomARGB) {
                 PageIndicator(swipeState, this@BoxWithConstraints.constraints)
@@ -215,7 +217,7 @@ private fun PageIndicator(swipeState: SwipeableState<ColorPickerScreen>, constra
 
 @Composable
 private fun CustomARGB(selectedColor: MutableState<Color>, showAlphaSelector: Boolean) {
-    LazyColumn(Modifier.padding(start = 24.dp, end = 24.dp)) {
+    LazyColumn {
         item {
             Box(
                 Modifier
@@ -466,7 +468,7 @@ private fun GridView(
                 Layout(
                     { content() },
                     Modifier
-                        .padding(top = 8.dp, start = 24.dp, end = 24.dp)
+                        .padding(top = 8.dp)
                         .fillMaxWidth()
                         .align(Alignment.Center)
                 ) { measurables, constraints ->

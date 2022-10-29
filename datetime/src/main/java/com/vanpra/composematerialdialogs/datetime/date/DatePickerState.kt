@@ -9,8 +9,7 @@ import java.time.LocalDate
 internal class DatePickerState(
     initialDate: LocalDate,
     val colors: DatePickerColors,
-    val yearRange: IntRange,
-    val dialogBackground: Color
+    val yearRange: IntRange
 ) {
     var selected by mutableStateOf(initialDate)
     var yearPickerShowing by mutableStateOf(false)

@@ -87,7 +87,7 @@ fun MaterialDialogScope.datepicker(
     onDateChange: (LocalDate) -> Unit = {}
 ) {
     val datePickerState = remember {
-        DatePickerState(initialDate, colors, yearRange, dialogState.dialogBackgroundColor!!)
+        DatePickerState(initialDate, colors, yearRange)
     }
 
     DatePickerImpl(title = title, state = datePickerState, allowedDateValidator, locale)
@@ -164,7 +164,6 @@ private fun YearPicker(
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         state = gridState,
-        modifier = Modifier.background(state.dialogBackground)
     ) {
         itemsIndexed(state.yearRange.toList()) { _, item ->
             val selected = remember { item == viewDate.year }
