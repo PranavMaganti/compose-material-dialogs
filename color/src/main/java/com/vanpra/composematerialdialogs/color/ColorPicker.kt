@@ -1,6 +1,5 @@
 package com.vanpra.composematerialdialogs.color
 
-import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import androidx.compose.foundation.Canvas
@@ -476,8 +475,6 @@ private fun GridView(
                     val additionalRow = measurables.size % 2
                     val rows = maxOf((measurables.size / itemsInRow) + additionalRow, 1)
                     val layoutHeight = (rows * itemSize) + ((rows - 1) * spacing)
-
-                    Log.d("ColorPicker", "$additionalRow and ${measurables.size / itemsInRow}")
 
                     layout(constraints.maxWidth, layoutHeight) {
                         measurables
