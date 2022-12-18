@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://vanpra.github.io/compose-material-dialogs/</loc>
+         <lastmod>2022-12-18</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vanpra.github.io/compose-material-dialogs/ColorPicker/</loc>
+         <lastmod>2022-12-18</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vanpra.github.io/compose-material-dialogs/Core/</loc>
+         <lastmod>2022-12-18</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vanpra.github.io/compose-material-dialogs/DateTimePicker/</loc>
+         <lastmod>2022-12-18</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://vanpra.github.io/compose-material-dialogs/PULL_REQUEST_TEMPLATE/</loc>
+         <lastmod>2022-12-18</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+</urlset>
