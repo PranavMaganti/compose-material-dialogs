@@ -53,7 +53,6 @@ fun BasicDialogDemo() {
                     Icons.Default.LocationOn,
                     modifier = Modifier.size(24.dp),
                     contentDescription = "Location Icon",
-                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }, textRes = R.string.location_dialog_title
         )

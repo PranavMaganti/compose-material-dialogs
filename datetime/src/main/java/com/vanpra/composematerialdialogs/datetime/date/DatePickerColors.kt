@@ -11,9 +11,13 @@ import androidx.compose.ui.graphics.Color
  * See [DatePickerDefaults.colors] for the default implementation
  */
 interface DatePickerColors {
-    val headerBackgroundColor: Color
-    val headerTextColor: Color
-    val calendarHeaderTextColor: Color
+    val headerText: Color
+    val selectedDateTitle: Color
+    val activeDateContainer: Color
+    val inactiveDateContainer: Color
+    val activeDateText: Color
+    val inactiveDateText: Color
+
 
     /**
      * Gets the background color dependant on if the item is active or not
@@ -22,7 +26,7 @@ interface DatePickerColors {
      * @return background color as a State
      */
     @Composable
-    fun dateBackgroundColor(active: Boolean): State<Color>
+    fun dateContainer(active: Boolean): State<Color>
 
     /**
      * Gets the text color dependant on if the item is active or not
@@ -31,25 +35,25 @@ interface DatePickerColors {
      * @return text color as a State
      */
     @Composable
-    fun dateTextColor(active: Boolean): State<Color>
+    fun dateText(active: Boolean): State<Color>
 }
 
 internal class DefaultDatePickerColors(
-    override val headerBackgroundColor: Color,
-    override val headerTextColor: Color,
-    override val calendarHeaderTextColor: Color,
-    private val dateActiveBackgroundColor: Color,
-    private val dateInactiveBackgroundColor: Color,
-    private val dateActiveTextColor: Color,
-    private val dateInactiveTextColor: Color
+    override val headerText: Color,
+    override val selectedDateTitle: Color,
+    override val activeDateContainer: Color,
+    override val inactiveDateContainer: Color,
+    override val activeDateText: Color,
+    override val inactiveDateText: Color
 ) : DatePickerColors {
+
     @Composable
-    override fun dateBackgroundColor(active: Boolean): State<Color> {
-        return rememberUpdatedState(if (active) dateActiveBackgroundColor else dateInactiveBackgroundColor)
+    override fun dateContainer(active: Boolean): State<Color> {
+        return rememberUpdatedState(if (active) activeDateContainer else inactiveDateContainer)
     }
 
     @Composable
-    override fun dateTextColor(active: Boolean): State<Color> {
-        return rememberUpdatedState(if (active) dateActiveTextColor else dateInactiveTextColor)
+    override fun dateText(active: Boolean): State<Color> {
+        return rememberUpdatedState(if (active) activeDateText else inactiveDateText)
     }
 }

@@ -74,7 +74,7 @@ internal fun MaterialDialogScope.DialogButtonsLayout(
                     button.place(currX - button.width, currY)
                     currY += button.height + interButtonPadding
                 } else {
-                    currX -= button.width
+                    currX -= button.width + interButtonPadding
                     button.place(currX, currY)
                 }
             }

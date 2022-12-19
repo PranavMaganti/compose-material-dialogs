@@ -73,7 +73,7 @@ fun DateTimeDialogDemo() {
         buttonText = "Date Picker Dialog",
         buttons = { defaultDateTimeDialogButtons() }
     ) {
-        datepicker(colors = DatePickerDefaults.colors(headerBackgroundColor = Color.Red)) {
+        datepicker(colors = DatePickerDefaults.colors()) {
             println(it.toString())
         }
     }

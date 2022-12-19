@@ -92,6 +92,7 @@ fun MaterialDialogScope.input(
     Column(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
         TextFieldWithStyle(
             modifier = modifier
+                .padding(horizontal = DialogConstants.InternalPadding)
                 .focusRequester(focusRequester)
                 .fillMaxWidth()
                 .testTag("dialog_input"),

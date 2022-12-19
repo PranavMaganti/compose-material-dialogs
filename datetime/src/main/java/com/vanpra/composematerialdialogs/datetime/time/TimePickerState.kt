@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.vanpra.composematerialdialogs.datetime.util.isAM
+import com.vanpra.composematerialdialogs.datetime.util.simpleHour
 import java.time.LocalTime
 
 internal enum class ClockScreen {
@@ -18,7 +19,6 @@ internal class TimePickerState(
     val colors: TimePickerColors,
     selectedTime: LocalTime,
     currentScreen: ClockScreen = ClockScreen.Hour,
-    clockInput: Boolean = true,
     timeRange: ClosedRange<LocalTime>,
     is24Hour: Boolean
 ) {
@@ -26,7 +26,8 @@ internal class TimePickerState(
     var timeRange by mutableStateOf(timeRange)
     var is24Hour by mutableStateOf(is24Hour)
     var currentScreen by mutableStateOf(currentScreen)
-    var clockInput by mutableStateOf(clockInput)
+
+    fun getHour(): Int =  if (is24Hour) selectedTime.hour else selectedTime.simpleHour
 
     private fun minimumMinute(isAM: Boolean, hour: Int): Int {
         return when {

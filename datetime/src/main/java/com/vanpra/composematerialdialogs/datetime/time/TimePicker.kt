@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -29,7 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerInputScope
@@ -113,10 +112,12 @@ internal fun TimePickerImpl(
     Column(
         modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (title != "") {
-            Box(modifier = Modifier.align(Alignment.Start)) {
-                TimePickerTitle(text = title, state = state)
-            }
+        if (title.isNotEmpty()) {
+            TimePickerTitle(
+                modifier = Modifier.align(Alignment.Start),
+                text = title,
+                state = state
+            )
         }
 
         Spacer(Modifier.height(20.dp))
@@ -141,11 +142,12 @@ internal fun TimePickerImpl(
 
 @Composable
 internal fun TimePickerTitle(modifier: Modifier = Modifier, text: String, state: TimePickerState) {
-    Box(modifier) {
-        Text(
-            text, color = state.colors.headerText(), style = MaterialTheme.typography.labelMedium
-        )
-    }
+    Text(
+        modifier = modifier,
+        text = text,
+        color = state.colors.headerText(),
+        style = MaterialTheme.typography.labelMedium
+    )
 }
 
 @Composable
@@ -155,17 +157,12 @@ internal fun ClockLabel(
     Surface(
         modifier = Modifier
             .size(height = 80.dp, width = if (is24Hour) 114.dp else 96.dp)
-            .fillMaxHeight(), shape = MaterialTheme.shapes.small, color = backgroundColor
+            .clickable(onClick = onClick),
+        shape = MaterialTheme.shapes.small,
+        color = backgroundColor
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable(onClick = onClick),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = text, color = textColor, style = MaterialTheme.typography.displayLarge
-            )
+        Box(contentAlignment = Alignment.Center) {
+            Text(text = text, color = textColor, style = MaterialTheme.typography.displayLarge)
         }
     }
 }
@@ -173,14 +170,8 @@ internal fun ClockLabel(
 
 @Composable
 internal fun TimeLayout(modifier: Modifier = Modifier, state: TimePickerState) {
-    val clockHour: String = remember(
-        state.is24Hour, state.selectedTime, state.selectedTime.hour
-    ) {
-        if (state.is24Hour) {
-            state.selectedTime.hour.toString().padStart(2, '0')
-        } else {
-            state.selectedTime.simpleHour.toString().padStart(2, '0')
-        }
+    val clockHour: String = remember(state.is24Hour, state.selectedTime, state.selectedTime.hour) {
+        state.getHour().toString().padStart(2, '0')
     }
 
     Row(
@@ -217,6 +208,7 @@ internal fun TimeLayout(modifier: Modifier = Modifier, state: TimePickerState) {
         )
 
         if (!state.is24Hour) {
+            Spacer(modifier = Modifier.width(12.dp))
             VerticalPeriodPicker(state = state)
         }
     }
@@ -227,12 +219,11 @@ private fun VerticalPeriodPicker(state: TimePickerState) {
     val isAMEnabled = remember(state.timeRange) { state.timeRange.start.hour <= 12 }
     val isPMEnabled = remember(state.timeRange) { state.timeRange.endInclusive.hour >= 0 }
 
-    Spacer(modifier = Modifier.width(12.dp))
-
     Column(
         Modifier
             .fillMaxHeight()
             .width(52.dp)
+            .clip(MaterialTheme.shapes.small)
             .border(
                 width = 1.dp,
                 color = state.colors.periodContainerOutline(),
@@ -242,23 +233,23 @@ private fun VerticalPeriodPicker(state: TimePickerState) {
         Box(
             modifier = Modifier
                 .size(height = 40.dp, width = 52.dp)
-                .clipToBounds()
                 .background(state.colors.periodContainer(state.selectedTime.isAM).value)
-                .clickable(onClick = {
-                    state.selectedTime = state.selectedTime
-                        .toAM()
-                        .coerceIn(state.timeRange)
-                }, enabled = isAMEnabled), contentAlignment = Alignment.Center
+                .clickable(
+                    onClick = {
+                        state.selectedTime = state.selectedTime
+                            .toAM()
+                            .coerceIn(state.timeRange)
+                    },
+                    enabled = isAMEnabled
+                ),
+            contentAlignment = Alignment.Center
         ) {
             var color = state.colors.periodText(state.selectedTime.isAM).value
             if (!isAMEnabled) {
                 color = color.copy(alpha = TimePickerConstants.DisabledAlpha)
             }
-
             Text(
-                "AM",
-                style = MaterialTheme.typography.titleMedium,
-                color = color
+                "AM", style = MaterialTheme.typography.titleMedium, color = color
             )
         }
 
@@ -267,7 +258,6 @@ private fun VerticalPeriodPicker(state: TimePickerState) {
         Box(
             modifier = Modifier
                 .size(height = 40.dp, width = 52.dp)
-                .clipToBounds()
                 .background(state.colors.periodContainer(!state.selectedTime.isAM).value)
                 .clickable(onClick = {
                     state.selectedTime = state.selectedTime
@@ -276,13 +266,11 @@ private fun VerticalPeriodPicker(state: TimePickerState) {
                 }, enabled = isPMEnabled), contentAlignment = Alignment.Center
         ) {
             var color = state.colors.periodText(!state.selectedTime.isAM).value
-            if (!isAMEnabled) {
+            if (!isPMEnabled) {
                 color = color.copy(alpha = TimePickerConstants.DisabledAlpha)
             }
             Text(
-                "PM",
-                style = MaterialTheme.typography.titleMedium,
-                color = color
+                "PM", style = MaterialTheme.typography.titleMedium, color = color
             )
         }
     }

@@ -1,6 +1,6 @@
 package com.vanpra.composematerialdialogs.datetime.date
 
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
@@ -22,22 +22,20 @@ object DatePickerDefaults {
      */
     @Composable
     fun colors(
-        headerBackgroundColor: Color = MaterialTheme.colors.primary,
-        headerTextColor: Color = MaterialTheme.colors.onPrimary,
-        calendarHeaderTextColor: Color = MaterialTheme.colors.onBackground,
-        dateActiveBackgroundColor: Color = MaterialTheme.colors.primary,
-        dateInactiveBackgroundColor: Color = Color.Transparent,
-        dateActiveTextColor: Color = MaterialTheme.colors.onPrimary,
-        dateInactiveTextColor: Color = MaterialTheme.colors.onBackground
+        headerText: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+        selectedDateTitle: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+        activeDateContainer: Color = MaterialTheme.colorScheme.primary,
+        inactiveDateContainer: Color = Color.Transparent,
+        activeDateText: Color = MaterialTheme.colorScheme.onPrimary,
+        inactiveDateText: Color = MaterialTheme.colorScheme.onSurface
     ): DatePickerColors {
         return DefaultDatePickerColors(
-            headerBackgroundColor = headerBackgroundColor,
-            headerTextColor = headerTextColor,
-            calendarHeaderTextColor = calendarHeaderTextColor,
-            dateActiveBackgroundColor = dateActiveBackgroundColor,
-            dateInactiveBackgroundColor = dateInactiveBackgroundColor,
-            dateActiveTextColor = dateActiveTextColor,
-            dateInactiveTextColor = dateInactiveTextColor
+            headerText = headerText,
+            selectedDateTitle = selectedDateTitle,
+            activeDateContainer = activeDateContainer,
+            inactiveDateContainer = inactiveDateContainer,
+            activeDateText = activeDateText,
+            inactiveDateText = inactiveDateText
         )
     }
 }

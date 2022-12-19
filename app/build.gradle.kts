@@ -18,9 +18,13 @@ android {
 
     packagingOptions.excludes.addAll(
         listOf(
+            "META-INF/DEPENDENCIES.txt",
             "META-INF/LICENSE",
+            "META-INF/LICENSE.txt",
+            "META-INF/NOTICE",
+            "META-INF/NOTICE.txt",
             "META-INF/AL2.0",
-            "META-INF/**",
+            "META-INF/LGPL2.1"
         )
     )
 
