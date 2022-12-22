@@ -18,6 +18,7 @@ import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.time.MaterialTimePickerDialog
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerColors
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
+import com.vanpra.composematerialdialogs.datetime.time.rememberTimePickerOptions
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalTime
 
@@ -54,11 +55,13 @@ fun TimePickerDialogAndShowButton(
     MaterialTimePickerDialog(
         state = dialogState,
         buttons = buttons,
-        initialTime = initialTime,
-        colors = colors,
-        timeRange = timeRange,
-        is24HourClock = is24HourClock,
-        onTimeChange = onTimeChange
+        timePickerOptions = rememberTimePickerOptions(
+            initialTime = initialTime,
+            colors = colors,
+            timeRange = timeRange,
+            is24HourClock = is24HourClock,
+            onTimeChange = onTimeChange
+        )
     )
     DialogDemoButton(state = dialogState, buttonText = buttonText)
 }

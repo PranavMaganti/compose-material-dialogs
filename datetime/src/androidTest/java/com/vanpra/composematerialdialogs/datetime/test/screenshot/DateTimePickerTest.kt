@@ -38,7 +38,7 @@ class DateTimePickerTest : ScreenshotTest {
                 val dialogState = rememberMaterialDialogState()
                 MaterialTimePickerDialog(
                     state = dialogState,
-                    initialTime = LocalTime.of(12, 0),
+                    initialTime = LocalTime.of(12, 0)
                 )
                 SideEffect { dialogState.show() }
             }

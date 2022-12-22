@@ -3,8 +3,7 @@ package com.vanpra.composematerialdialogs
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -228,6 +227,12 @@ fun MaterialDialog(
     } else {
         DialogConstants.MaxDimen
     }
+
+    val maxWidth = min(
+        LocalConfiguration.current.screenWidthDp - totalExternalPadding.value,
+        DialogConstants.MaxDimen.value
+    ).dp
+
     val maxHeightPx = with(LocalDensity.current) { maxHeight.roundToPx() }
     val buttonsPaddingPx = with(LocalDensity.current) { buttonsPadding.roundToPx(this) }
 
@@ -235,8 +240,7 @@ fun MaterialDialog(
         Dialog(properties = properties, onDismissRequest = { onCloseRequest(state) }) {
             Surface(
                 modifier = Modifier
-                    .padding(horizontal = DialogConstants.ExternalPadding)
-                    .fillMaxWidth()
+                    .widthIn(max = maxWidth)
                     .wrapContentHeight()
                     .testTag("dialog"),
                 shape = shape,
@@ -301,7 +305,7 @@ object DialogConstants {
 
     val ExternalPadding = 48.dp
     val InternalPadding = 24.dp
-    val ButtonContentPadding = 24.dp
+//    val ButtonContentPadding = 24.dp
 
     val TitleBodyPadding = 16.dp
     val IconTitlePadding = 8.dp

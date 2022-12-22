@@ -9,28 +9,26 @@ import androidx.compose.ui.res.painterResource
 import com.vanpra.composematerialdialogs.datetime.R
 import com.vanpra.composematerialdialogs.datetime.util.isAM
 import com.vanpra.composematerialdialogs.datetime.util.simpleHour
-import java.time.LocalTime
 
 internal enum class ClockScreen {
     Hour,
-    Minute;
+    Minute
+}
 
-    fun isHour() = this == Hour
-    fun isMinute() = this == Minute
+enum class TimePickerEntryMode {
+    Clock,
+    Text
 }
 
 internal class TimePickerState(
-    val colors: TimePickerColors,
-    selectedTime: LocalTime,
+    options: TimePickerOptions,
     currentScreen: ClockScreen = ClockScreen.Hour,
-    timeRange: ClosedRange<LocalTime>,
-    is24Hour: Boolean,
     entryMode: TimePickerEntryMode = TimePickerEntryMode.Clock
-
 ) {
-    var selectedTime by mutableStateOf(selectedTime)
-    var timeRange by mutableStateOf(timeRange)
-    var is24Hour by mutableStateOf(is24Hour)
+    val colors = options.colors
+    var selectedTime by mutableStateOf(options.initialTime)
+    var timeRange by mutableStateOf(options.timeRange)
+    var is24Hour by mutableStateOf(options.is24HourClock)
     var currentScreen by mutableStateOf(currentScreen)
     var entryMode by mutableStateOf(entryMode)
 
@@ -45,6 +43,7 @@ internal class TimePickerState(
                 } else {
                     0
                 }
+
             isAM -> 61
             else -> 0
         }
@@ -58,6 +57,7 @@ internal class TimePickerState(
                 } else {
                     60
                 }
+
             isAM -> 60
             else -> 0
         }

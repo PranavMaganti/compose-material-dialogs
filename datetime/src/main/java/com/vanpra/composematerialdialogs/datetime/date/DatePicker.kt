@@ -34,6 +34,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,10 +43,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.W600
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -264,51 +267,52 @@ private fun CalendarViewHeader(
             }
         }
 
-        Row(
-            Modifier
-                .fillMaxHeight()
-                .align(Alignment.CenterEnd)
-        ) {
-            Icon(
-                Icons.Default.KeyboardArrowLeft,
-                contentDescription = "Previous Month",
-                modifier = Modifier
-                    .testTag("dialog_date_prev_month")
-                    .size(24.dp)
-                    .clickable(onClick = {
-                        coroutineScope.launch {
-                            if (pagerState.currentPage - 1 >= 0) {
-                                pagerState.animateScrollToPage(
-                                    pagerState.currentPage - 1
-                                )
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            Row(
+                Modifier
+                    .fillMaxHeight()
+                    .align(Alignment.CenterEnd)
+            ) {
+                Icon(
+                    Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "Previous Month",
+                    modifier = Modifier
+                        .testTag("dialog_date_prev_month")
+                        .size(24.dp)
+                        .clickable(onClick = {
+                            coroutineScope.launch {
+                                if (pagerState.currentPage - 1 >= 0) {
+                                    pagerState.animateScrollToPage(
+                                        pagerState.currentPage - 1
+                                    )
+                                }
                             }
-                        }
-                    })
-            )
+                        })
+                )
 
-            Spacer(modifier = Modifier.width(24.dp))
+                Spacer(modifier = Modifier.width(24.dp))
 
-            Icon(
-                Icons.Default.KeyboardArrowRight,
-                contentDescription = "Next Month",
-                modifier = Modifier
-                    .testTag("dialog_date_next_month")
-                    .size(24.dp)
-                    .clickable(onClick = {
-                        coroutineScope.launch {
-                            if (pagerState.currentPage + 1 < pagerState.pageCount) {
-                                pagerState.animateScrollToPage(
-                                    pagerState.currentPage + 1
-                                )
+                Icon(
+                    Icons.Default.KeyboardArrowRight,
+                    contentDescription = "Next Month",
+                    modifier = Modifier
+                        .testTag("dialog_date_next_month")
+                        .size(24.dp)
+                        .clickable(onClick = {
+                            coroutineScope.launch {
+                                if (pagerState.currentPage + 1 < pagerState.pageCount) {
+                                    pagerState.animateScrollToPage(
+                                        pagerState.currentPage + 1
+                                    )
+                                }
                             }
-                        }
-                    })
-            )
+                        })
+                )
+            }
         }
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun CalendarView(
     viewDate: LocalDate,
