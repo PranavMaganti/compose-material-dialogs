@@ -18,7 +18,6 @@ interface DatePickerColors {
     val activeDateText: Color
     val inactiveDateText: Color
 
-
     /**
      * Gets the background color dependant on if the item is active or not
      *

@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
@@ -30,7 +30,8 @@ internal enum class MaterialDialogButtonTypes(val testTag: String) {
  */
 @Composable
 internal fun MaterialDialogScope.DialogButtonsLayout(
-    modifier: Modifier = Modifier, content: @Composable MaterialDialogButtons.() -> Unit
+    modifier: Modifier = Modifier,
+    content: @Composable (MaterialDialogButtons.() -> Unit)
 ) {
     val interButtonPadding =
         with(LocalDensity.current) { DialogConstants.PaddingBetweenButtons.roundToPx() }
@@ -38,7 +39,6 @@ internal fun MaterialDialogScope.DialogButtonsLayout(
         with(LocalDensity.current) { DialogConstants.ButtonHeight.roundToPx() }
 
     Layout({ content(dialogButtons) }, modifier.fillMaxWidth(), { measurables, constraints ->
-
         if (measurables.isEmpty()) {
             return@Layout layout(0, 0) {}
         }
@@ -79,7 +79,8 @@ internal fun MaterialDialogScope.DialogButtonsLayout(
                 }
             }
 
-            if (accButtons.isNotEmpty()) {/* There can only be one accessibility button so take first */
+            if (accButtons.isNotEmpty()) {
+                /* There can only be one accessibility button so take first */
                 val button = accButtons[0]
                 button.place(0, height - button.height)
             }
@@ -197,14 +198,15 @@ class MaterialDialogButtons(private val scope: MaterialDialogScope) {
      */
     @Composable
     fun accessibilityButton(
-        icon: ImageVector,
+        icon: Painter,
         colorFilter: ColorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
         onClick: () -> Unit
     ) {
         IconButton(
             modifier = Modifier
                 .layoutId(MaterialDialogButtonTypes.Accessibility)
-                .testTag(MaterialDialogButtonTypes.Accessibility.testTag), onClick = onClick
+                .testTag(MaterialDialogButtonTypes.Accessibility.testTag),
+            onClick = onClick
         ) {
             Image(
                 icon,

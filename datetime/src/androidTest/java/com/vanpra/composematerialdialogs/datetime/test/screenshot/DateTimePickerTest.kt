@@ -1,17 +1,19 @@
 package com.vanpra.composematerialdialogs.datetime.test.screenshot
 
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.karumi.shot.ScreenshotTest
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
-import com.vanpra.composematerialdialogs.datetime.time.timepicker
+import com.vanpra.composematerialdialogs.datetime.time.MaterialTimePickerDialog
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import com.vanpra.composematerialdialogs.test.utils.DialogWithContent
 import com.vanpra.composematerialdialogs.test.utils.extensions.onDialog
 import com.vanpra.composematerialdialogs.test.utils.extensions.setContentAndWaitForIdle
-import org.junit.Rule
-import org.junit.Test
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
+import org.junit.Rule
+import org.junit.Test
 
 class DateTimePickerTest : ScreenshotTest {
     @get:Rule
@@ -33,7 +35,12 @@ class DateTimePickerTest : ScreenshotTest {
     fun timePickerBasic() {
         composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
-                timepicker(initialTime = LocalTime.of(12, 0))
+                val dialogState = rememberMaterialDialogState()
+                MaterialTimePickerDialog(
+                    state = dialogState,
+                    initialTime = LocalTime.of(12, 0),
+                )
+                SideEffect { dialogState.show() }
             }
         }
         compareScreenshot(composeTestRule.onDialog())
@@ -43,10 +50,13 @@ class DateTimePickerTest : ScreenshotTest {
     fun timePicker24Hour() {
         composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
-                timepicker(
+                val dialogState = rememberMaterialDialogState()
+                MaterialTimePickerDialog(
+                    state = dialogState,
                     initialTime = LocalTime.of(12, 0),
                     is24HourClock = true
                 )
+                SideEffect { dialogState.show() }
             }
         }
         compareScreenshot(composeTestRule.onDialog())
@@ -67,9 +77,13 @@ class DateTimePickerTest : ScreenshotTest {
     fun datePickerWithRestrictedDates() {
         composeTestRule.setContentAndWaitForIdle {
             DialogWithContent {
-                datepicker(title = testTitle, initialDate = LocalDate.of(2021, 7, 27), allowedDateValidator = {
-                    it.dayOfWeek != DayOfWeek.SATURDAY && it.dayOfWeek != DayOfWeek.SUNDAY
-                })
+                datepicker(
+                    title = testTitle,
+                    initialDate = LocalDate.of(2021, 7, 27),
+                    allowedDateValidator = {
+                        it.dayOfWeek != DayOfWeek.SATURDAY && it.dayOfWeek != DayOfWeek.SUNDAY
+                    }
+                )
             }
         }
 
@@ -79,9 +93,12 @@ class DateTimePickerTest : ScreenshotTest {
     @Test
     fun timePickerWithCustomTitle() {
         composeTestRule.setContentAndWaitForIdle {
-            DialogWithContent {
-                timepicker(title = testTitle, initialTime = LocalTime.of(19, 0))
-            }
+            val dialogState = rememberMaterialDialogState()
+            MaterialTimePickerDialog(
+                state = dialogState,
+                initialTime = LocalTime.of(19, 0)
+            )
+            SideEffect { dialogState.show() }
         }
 
         compareScreenshot(composeTestRule.onDialog())

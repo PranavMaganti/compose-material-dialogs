@@ -10,11 +10,11 @@ import com.vanpra.composematerialdialogs.test.utils.defaultButtons
 import com.vanpra.composematerialdialogs.test.utils.extensions.assertDialogDoesNotExist
 import com.vanpra.composematerialdialogs.test.utils.extensions.onDialogDateSelector
 import com.vanpra.composematerialdialogs.test.utils.extensions.onPositiveButton
+import java.time.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.time.LocalDate
 
 @RunWith(AndroidJUnit4::class)
 class DatePickerTest {

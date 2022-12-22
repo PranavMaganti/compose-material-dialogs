@@ -14,7 +14,7 @@ buildscript {
 
     dependencies {
         classpath(Dependencies.Kotlin.gradlePlugin)
-        classpath("com.android.tools.build:gradle:8.0.0-alpha08")
+        classpath("com.android.tools.build:gradle:8.0.0-alpha09")
         classpath("com.vanniktech:gradle-maven-publish-plugin:0.22.0")
         classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.7.20")
         classpath(Dependencies.Shot.core)

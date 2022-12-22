@@ -1,18 +1,13 @@
 package com.vanpra.composematerialdialogdemos.demos
 
 import android.widget.Toast
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
+import com.vanpra.composematerialdialogdemos.TimePickerDialogAndShowButton
 import com.vanpra.composematerialdialogs.MaterialDialogButtons
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
-import com.vanpra.composematerialdialogs.datetime.time.TimePickerColors
-import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
-import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import java.time.DayOfWeek
 import java.time.LocalTime
 
@@ -23,51 +18,46 @@ import java.time.LocalTime
 fun DateTimeDialogDemo() {
     val context = LocalContext.current
 
-    DialogAndShowButton(
+    TimePickerDialogAndShowButton(
         buttonText = "Time Picker Dialog",
-        buttons = { defaultDateTimeDialogButtons() }
-    ) {
-        timepicker {
+        buttons = { defaultDateTimeDialogButtons() },
+        onTimeChange = {
             println(it.toString())
             Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
         }
-    }
+    )
 
-    DialogAndShowButton(
+    TimePickerDialogAndShowButton(
         buttonText = "Time Picker Dialog With Min/Max",
-        buttons = { defaultDateTimeDialogButtons() }
-    ) {
-        timepicker(
-            timeRange = LocalTime.of(9, 35)..LocalTime.of(21, 13),
-            is24HourClock = false
-        ) {
+        buttons = { defaultDateTimeDialogButtons() },
+        timeRange = LocalTime.of(9, 35)..LocalTime.of(21, 13),
+        is24HourClock = false,
+        onTimeChange = {
             println(it.toString())
             Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
         }
-    }
+    )
 
-    DialogAndShowButton(
+    TimePickerDialogAndShowButton(
         buttonText = "Time Picker Dialog 24H",
-        buttons = { defaultDateTimeDialogButtons() }
-    ) {
-        timepicker(is24HourClock = true) {
+        buttons = { defaultDateTimeDialogButtons() },
+        is24HourClock = true,
+        onTimeChange = {
             println(it.toString())
             Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
         }
-    }
+    )
 
-    DialogAndShowButton(
+    TimePickerDialogAndShowButton(
         buttonText = "Time Picker Dialog 24H With Min/Max",
-        buttons = { defaultDateTimeDialogButtons() }
-    ) {
-        timepicker(
-            timeRange = LocalTime.of(9, 35)..LocalTime.of(21, 13),
-            is24HourClock = true
-        ) {
+        buttons = { defaultDateTimeDialogButtons() },
+        timeRange = LocalTime.of(9, 35)..LocalTime.of(21, 13),
+        is24HourClock = true,
+        onTimeChange = {
             println(it.toString())
             Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
         }
-    }
+    )
 
     DialogAndShowButton(
         buttonText = "Date Picker Dialog",

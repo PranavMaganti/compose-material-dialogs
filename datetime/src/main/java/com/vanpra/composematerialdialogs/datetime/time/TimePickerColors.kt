@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
  * See [TimePickerDefaults.colors] for the default implementation
  */
 interface TimePickerColors {
-    fun headerText(): Color
+    fun headlineText(): Color
 
     fun timeSelectorSeparator(): Color
 
@@ -29,15 +29,19 @@ interface TimePickerColors {
 
     @Composable
     fun clockDialText(active: Boolean): State<Color>
+
     @Composable
     fun timeSelectorContainer(active: Boolean): State<Color>
 
     @Composable
     fun timeSelectorText(active: Boolean): State<Color>
+
+    @Composable
+    fun entryTimeSelectorBorder(): Color
 }
 
 internal class DefaultTimePickerColors(
-    private val headerText: Color,
+    private val headlineText: Color,
     private val timeSelectorSeparator: Color,
     private val activePeriodContainer: Color,
     private val periodContainerOutline: Color,
@@ -52,9 +56,10 @@ internal class DefaultTimePickerColors(
     private val inactiveTimeSelectorContainer: Color,
     private val activeTimeSelectorText: Color,
     private val inactiveTimeSelectorText: Color,
+    private val activeEntryTimeSelectorBorder: Color
 ) : TimePickerColors {
 
-    override fun headerText(): Color = headerText
+    override fun headlineText(): Color = headlineText
 
     override fun timeSelectorSeparator(): Color = timeSelectorSeparator
 
@@ -81,11 +86,18 @@ internal class DefaultTimePickerColors(
 
     @Composable
     override fun timeSelectorContainer(active: Boolean): State<Color> {
-        return rememberUpdatedState(if (active) activeTimeSelectorContainer else inactiveTimeSelectorContainer)
+        return rememberUpdatedState(
+            if (active) activeTimeSelectorContainer else inactiveTimeSelectorContainer
+        )
     }
 
     @Composable
     override fun timeSelectorText(active: Boolean): State<Color> {
-        return rememberUpdatedState(if (active) activeTimeSelectorText else inactiveTimeSelectorText)
+        return rememberUpdatedState(
+            if (active) activeTimeSelectorText else inactiveTimeSelectorText
+        )
     }
+
+    @Composable
+    override fun entryTimeSelectorBorder(): Color = activeEntryTimeSelectorBorder
 }

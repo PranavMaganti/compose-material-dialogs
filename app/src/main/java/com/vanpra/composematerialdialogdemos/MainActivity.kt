@@ -44,12 +44,16 @@ class MainActivity : ComponentActivity() {
 
 data class DialogSectionData(val title: String, val content: @Composable () -> Unit)
 
-val sections = listOf(DialogSectionData("Basic Dialogs") { BasicDialogDemo() },
-    DialogSectionData("Basic List Dialogs") { BasicListDialogDemo() },
-    DialogSectionData("Single Selection List Dialogs") { SingleSelectionDemo() },
-    DialogSectionData("Multi-Selection List Dialogs") { MultiSelectionDemo() },
+val sections = listOf(
+    DialogSectionData("Basic Dialogs") { BasicDialogDemo() },
+    DialogSectionData("List Dialogs") {
+        BasicListDialogDemo()
+        SingleSelectionDemo()
+        MultiSelectionDemo()
+    },
     DialogSectionData("Date and Time Picker Dialogs") { DateTimeDialogDemo() },
-    DialogSectionData("Color Picker Dialogs") { ColorDialogDemo() })
+    DialogSectionData("Color Picker Dialogs") { ColorDialogDemo() }
+)
 
 /**
  * @brief Collection of Material Dialog Demos

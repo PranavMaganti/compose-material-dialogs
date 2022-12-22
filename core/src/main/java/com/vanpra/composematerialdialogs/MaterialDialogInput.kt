@@ -6,13 +6,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldColors
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -53,6 +54,7 @@ enum class TextFieldStyle {
  * @param onInput a function which is called with the user input. The timing of this call is
  * dictated by [waitForPositiveButton]
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MaterialDialogScope.input(
     modifier: Modifier = Modifier,
@@ -70,7 +72,7 @@ fun MaterialDialogScope.input(
     singleLine: Boolean = false,
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-//    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
     textFieldStyle: TextFieldStyle = TextFieldStyle.Filled,
     waitForPositiveButton: Boolean = true,
     errorMessage: String = "",
@@ -89,10 +91,13 @@ fun MaterialDialogScope.input(
         DialogCallback { onInput(text) }
     }
 
-    Column(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
+    Column(
+        modifier = Modifier
+            .padding(top = 8.dp, bottom = 8.dp)
+            .padding(horizontal = DialogConstants.InternalPadding)
+    ) {
         TextFieldWithStyle(
             modifier = modifier
-                .padding(horizontal = DialogConstants.InternalPadding)
                 .focusRequester(focusRequester)
                 .fillMaxWidth()
                 .testTag("dialog_input"),
@@ -117,7 +122,7 @@ fun MaterialDialogScope.input(
             singleLine = singleLine,
             maxLines = maxLines,
             interactionSource = interactionSource,
-//            colors = colors,
+            colors = colors,
             style = textFieldStyle
         )
 
@@ -125,7 +130,7 @@ fun MaterialDialogScope.input(
             Text(
                 errorMessage,
                 fontSize = 14.sp,
-                color = MaterialTheme.colors.error,
+                color = MaterialTheme.colorScheme.error,
                 modifier = Modifier
                     .align(Alignment.End)
                     .testTag("dialog_input_error")
@@ -141,6 +146,7 @@ fun MaterialDialogScope.input(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TextFieldWithStyle(
     value: String,
@@ -160,7 +166,7 @@ private fun TextFieldWithStyle(
     singleLine: Boolean = false,
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
+    colors: TextFieldColors,
     style: TextFieldStyle = TextFieldStyle.Filled
 ) {
     when (style) {

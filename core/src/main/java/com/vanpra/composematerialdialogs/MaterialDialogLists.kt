@@ -51,7 +51,8 @@ fun <T> MaterialDialogScope.listItems(
         LazyColumn(
             Modifier
                 .then(modifier)
-                .testTag("dialog_list"), state = state
+                .testTag("dialog_list"),
+            state = state
         ) {
             itemsIndexed(list) { index, it ->
                 Box(
@@ -64,9 +65,10 @@ fun <T> MaterialDialogScope.listItems(
                                     dialogState.hide()
                                 }
                                 onClick(index, it)
-                            }, enabled = isEnabled(index)
+                            },
+                            enabled = isEnabled(index)
                         )
-//                        .padding(start = 8.dp)
+                        .padding(horizontal = DialogConstants.InternalPadding)
                 ) {
                     item(index, it)
                 }
@@ -89,7 +91,10 @@ fun MaterialDialogScope.listItems(
     onClick: (index: Int, item: String) -> Unit = { _, _ -> }
 ) {
     listItems(
-        state = state, list = list, closeOnClick = closeOnClick, onClick = onClick
+        state = state,
+        list = list,
+        closeOnClick = closeOnClick,
+        onClick = onClick
     ) { _, item ->
         Text(
             item,
@@ -99,7 +104,6 @@ fun MaterialDialogScope.listItems(
                 .fillMaxWidth()
                 .padding(vertical = 12.dp)
                 .wrapContentWidth(Alignment.Start)
-                .padding(start = 8.dp)
         )
     }
 }
@@ -130,7 +134,8 @@ fun MaterialDialogScope.listItemsMultiChoice(
     }
 
     val onChecked = { index: Int ->
-        if (index !in disabledIndices) {/* Have to create temp var as mutableState doesn't trigger on adding to set */
+        if (index !in disabledIndices) {
+            /* Have to create temp var as mutableState doesn't trigger on adding to set */
             val newSelectedItems = selectedItems.toMutableSet()
             if (index in selectedItems) {
                 newSelectedItems.remove(index)
@@ -215,63 +220,84 @@ fun MaterialDialogScope.listItemsSingleChoice(
         val selected = remember(selectedItem) { index == selectedItem }
 
         SingleChoiceItem(
-            item = item, index = index, selected = selected, enabled = enabled, onSelect = onSelect
+            item = item,
+            index = index,
+            selected = selected,
+            enabled = enabled,
+            onSelect = onSelect
         )
     }
 }
 
 @Composable
 private fun MultiChoiceItem(
-    item: String, index: Int, selected: Boolean, enabled: Boolean, onChecked: (index: Int) -> Unit
+    item: String,
+    index: Int,
+    selected: Boolean,
+    enabled: Boolean,
+    onChecked: (index: Int) -> Unit
 ) {
     Row(
         Modifier
             .fillMaxWidth()
-            .height(48.dp), verticalAlignment = Alignment.CenterVertically
+            .height(48.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(checked = selected, onCheckedChange = { onChecked(index) }, enabled = enabled)
         Spacer(
             modifier = Modifier
                 .fillMaxHeight()
-                .width(32.dp)
+                .width(24.dp)
         )
         Text(
-            item, color = if (enabled) {
+            item,
+            color = if (enabled) {
                 MaterialTheme.colorScheme.onSurface
             } else {
                 MaterialTheme.colorScheme.onSurface.copy(alpha = DialogConstants.DisabledAlpha)
-            }, style = MaterialTheme.typography.bodyMedium
+            },
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }
 
 @Composable
 private fun SingleChoiceItem(
-    item: String, index: Int, selected: Boolean, enabled: Boolean, onSelect: (index: Int) -> Unit
+    item: String,
+    index: Int,
+    selected: Boolean,
+    enabled: Boolean,
+    onSelect: (index: Int) -> Unit
 ) {
     Row(
         Modifier
             .fillMaxWidth()
-            .height(48.dp), verticalAlignment = Alignment.CenterVertically
+            .height(48.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
-            selected = selected, onClick = {
+            selected = selected,
+            onClick = {
                 if (enabled) {
                     onSelect(index)
                 }
-            }, enabled = enabled
+            },
+            enabled = enabled
         )
         Spacer(
             modifier = Modifier
                 .fillMaxHeight()
-                .width(32.dp)
+                .width(24.dp)
         )
         Text(
-            item, modifier = Modifier, color = if (enabled) {
+            item,
+            modifier = Modifier,
+            color = if (enabled) {
                 MaterialTheme.colorScheme.onSurface
             } else {
                 MaterialTheme.colorScheme.onSurface.copy(alpha = DialogConstants.DisabledAlpha)
-            }, style = MaterialTheme.typography.bodyMedium
+            },
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }

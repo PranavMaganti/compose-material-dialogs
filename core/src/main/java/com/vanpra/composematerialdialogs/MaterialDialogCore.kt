@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.dp
 
 /**
  *  Adds a title with the given text to the dialog
@@ -35,14 +34,18 @@ fun MaterialDialogScope.title(
 ) {
     val titleText = getString(res, text)
 
+    Spacer(modifier = Modifier.height(DialogConstants.InternalPadding))
     Text(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp)
+            .padding(horizontal = DialogConstants.InternalPadding)
             .wrapContentHeight(Alignment.CenterVertically)
             .wrapContentWidth(
                 if (center) Alignment.CenterHorizontally else Alignment.Start
-            ), text = titleText, color = color, style = style
+            ),
+        text = titleText,
+        color = color,
+        style = style
     )
     Spacer(modifier = Modifier.height(DialogConstants.TitleBodyPadding))
 }
@@ -63,6 +66,7 @@ fun MaterialDialogScope.iconTitle(
 ) {
     val titleText = getString(textRes, text)
 
+    Spacer(modifier = Modifier.height(DialogConstants.InternalPadding))
     Column(
         Modifier
             .fillMaxWidth()
@@ -75,7 +79,9 @@ fun MaterialDialogScope.iconTitle(
 
         Spacer(Modifier.height(DialogConstants.IconTitlePadding))
         Text(
-            text = titleText, color = color, style = style
+            text = titleText,
+            color = color,
+            style = style
         )
     }
 
@@ -97,9 +103,13 @@ fun MaterialDialogScope.message(
     val messageText = getString(res, text)
 
     Text(
-        modifier = Modifier.padding(horizontal = DialogConstants.InternalPadding),
+        modifier = Modifier
+            .padding(horizontal = DialogConstants.InternalPadding)
+            .fillMaxWidth(),
         text = messageText,
         color = color,
-        style = style,
+        style = style
     )
+
+    Spacer(modifier = Modifier.height(DialogConstants.InternalPadding))
 }

@@ -29,7 +29,14 @@ import com.vanpra.composematerialdialogs.listItemsSingleChoice
 import com.vanpra.composematerialdialogs.title
 
 private val ringtones = listOf(
-    "None", "Callisto", "Ganymede", "Luna", "Rrrring", "Beats", "Dance Party", "Zen Too"
+    "None",
+    "Callisto",
+    "Ganymede",
+    "Luna",
+    "Rrrring",
+    "Beats",
+    "Dance Party",
+    "Zen Too"
 )
 private val labels = listOf("None", "Forums", "Social", "Updates", "Promotions", "Spam", "Bin")
 private val emails = mutableStateListOf(
@@ -88,16 +95,20 @@ fun BasicListDialogDemo() {
 fun MultiSelectionDemo() {
     var initialSelection by remember { mutableStateOf(setOf(3, 5)) }
 
-    DialogAndShowButton(buttonText = "Multi-Selection Dialog",
-        buttons = { defaultListDialogButtons() }) {
+    DialogAndShowButton(
+        buttonText = "Multi-Selection Dialog",
+        buttons = { defaultListDialogButtons() }
+    ) {
         title(res = R.string.labels_dialog_title)
         listItemsMultiChoice(labels) {
             println(it)
         }
     }
 
-    DialogAndShowButton(buttonText = "Multi-Selection Dialog with disabled items",
-        buttons = { defaultListDialogButtons() }) {
+    DialogAndShowButton(
+        buttonText = "Multi-Selection Dialog with disabled items",
+        buttons = { defaultListDialogButtons() }
+    ) {
         val disabledLabels = setOf(1, 3, 4)
 
         title(res = R.string.labels_dialog_title)
@@ -106,11 +117,15 @@ fun MultiSelectionDemo() {
         }
     }
 
-    DialogAndShowButton(buttonText = "Multi-Selection Dialog with initial selection",
-        buttons = { defaultListDialogButtons() }) {
+    DialogAndShowButton(
+        buttonText = "Multi-Selection Dialog with initial selection",
+        buttons = { defaultListDialogButtons() }
+    ) {
         title(res = R.string.labels_dialog_title)
         listItemsMultiChoice(
-            labels, initialSelection = initialSelection, waitForPositiveButton = true
+            labels,
+            initialSelection = initialSelection,
+            waitForPositiveButton = true
         ) {
             initialSelection = it
         }
@@ -124,16 +139,20 @@ fun MultiSelectionDemo() {
 fun SingleSelectionDemo() {
     var initialSingleSelection by remember { mutableStateOf(4) }
 
-    DialogAndShowButton(buttonText = "Single Selection Dialog",
-        buttons = { defaultListDialogButtons() }) {
+    DialogAndShowButton(
+        buttonText = "Single Selection Dialog",
+        buttons = { defaultListDialogButtons() }
+    ) {
         title(res = R.string.ringtone_dialog_title)
         listItemsSingleChoice(ringtones) {
             println(it)
         }
     }
 
-    DialogAndShowButton(buttonText = "Single Selection Dialog with disabled items",
-        buttons = { defaultListDialogButtons() }) {
+    DialogAndShowButton(
+        buttonText = "Single Selection Dialog with disabled items",
+        buttons = { defaultListDialogButtons() }
+    ) {
         val disabledRingtones = setOf(2, 4, 5)
 
         title(res = R.string.ringtone_dialog_title)
@@ -142,11 +161,14 @@ fun SingleSelectionDemo() {
         }
     }
 
-    DialogAndShowButton(buttonText = "Single Selection Dialog with initial selection",
-        buttons = { defaultListDialogButtons() }) {
+    DialogAndShowButton(
+        buttonText = "Single Selection Dialog with initial selection",
+        buttons = { defaultListDialogButtons() }
+    ) {
         title(res = R.string.ringtone_dialog_title)
         listItemsSingleChoice(
-            ringtones, initialSelection = initialSingleSelection
+            ringtones,
+            initialSelection = initialSingleSelection
         ) { initialSingleSelection = it }
     }
 }

@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
@@ -30,6 +29,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -55,13 +55,12 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.vanpra.composematerialdialogs.MaterialDialogScope
 import com.vanpra.composematerialdialogs.datetime.R
-import com.vanpra.composematerialdialogs.datetime.util.getFullLocalName
 import com.vanpra.composematerialdialogs.datetime.util.getShortLocalName
-import com.vanpra.composematerialdialogs.datetime.util.isSmallDevice
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.temporal.WeekFields
 import java.util.Locale
+import kotlin.math.ceil
+import kotlinx.coroutines.launch
 
 /**
  * @brief A date picker body layout
@@ -113,13 +112,23 @@ internal fun DatePickerImpl(
         initialPage = (state.selected.year - state.yearRange.first) * 12 + state.selected.monthValue - 1
     )
 
-    Column(Modifier.fillMaxWidth()) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp, bottom = 8.dp)
+    ) {
         CalendarHeader(title, state, locale)
+
+        Spacer(Modifier.height(12.dp))
+        Divider(Modifier.fillMaxWidth())
+        Spacer(Modifier.height(16.dp))
+
         HorizontalPager(
             count = (state.yearRange.last - state.yearRange.first + 1) * 12,
             state = pagerState,
             verticalAlignment = Alignment.Top,
-            modifier = Modifier.height(336.dp)
+            modifier = Modifier.height(312.dp),
+            userScrollEnabled = !state.yearPickerShowing
         ) { page ->
             val viewDate = remember {
                 LocalDate.of(
@@ -161,8 +170,9 @@ private fun YearPicker(
     val coroutineScope = rememberCoroutineScope()
 
     LazyVerticalGrid(
+        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
         columns = GridCells.Fixed(3),
-        state = gridState,
+        state = gridState
     ) {
         itemsIndexed(state.yearRange.toList()) { _, item ->
             val selected = remember { item == viewDate.year }
@@ -220,13 +230,13 @@ private fun CalendarViewHeader(
     locale: Locale
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val month = remember { viewDate.month.getFullLocalName(locale) }
+    val month = remember { viewDate.month.getShortLocalName(locale) }
     val arrowDropUp = painterResource(id = R.drawable.baseline_arrow_drop_up_24)
     val arrowDropDown = painterResource(id = R.drawable.baseline_arrow_drop_down_24)
 
     Box(
         Modifier
-            .padding(top = 16.dp, bottom = 16.dp)
+            .padding(bottom = 16.dp, start = 12.dp, end = 12.dp)
             .height(24.dp)
             .fillMaxWidth()
     ) {
@@ -249,7 +259,7 @@ private fun CalendarViewHeader(
             Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
                 Icon(
                     if (state.yearPickerShowing) arrowDropUp else arrowDropDown,
-                    contentDescription = "Year Selector",
+                    contentDescription = "Year Selector"
                 )
             }
         }
@@ -273,7 +283,7 @@ private fun CalendarViewHeader(
                                 )
                             }
                         }
-                    }),
+                    })
             )
 
             Spacer(modifier = Modifier.width(24.dp))
@@ -292,7 +302,7 @@ private fun CalendarViewHeader(
                                 )
                             }
                         }
-                    }),
+                    })
             )
         }
     }
@@ -312,24 +322,29 @@ private fun CalendarView(
     ) {
         DayOfWeekHeader(state, locale)
         val calendarDatesData = remember { getDates(viewDate, locale) }
-        val datesList = remember { IntRange(1, calendarDatesData.second).toList() }
+        val weeks =
+            remember { ceil((calendarDatesData.first + calendarDatesData.second) / 7f).toInt() }
         val possibleSelected = remember(state.selected) {
             viewDate.year == state.selected.year && viewDate.month == state.selected.month
         }
 
-        LazyVerticalGrid(columns = GridCells.Fixed(7), modifier = Modifier.height(240.dp)) {
-            for (x in 0 until calendarDatesData.first) {
-                item { Box(Modifier.size(40.dp)) }
-            }
+        for (i in 0..weeks) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                val baseDate = remember { i * 7 - calendarDatesData.first }
+                for (day in baseDate + 1..baseDate + 7) {
+                    if (day <= 0 || day > calendarDatesData.second) {
+                        Box(Modifier.size(40.dp))
+                    } else {
+                        val selected = remember(state.selected) {
+                            possibleSelected && day == state.selected.dayOfMonth
+                        }
+                        val date = remember { viewDate.withDayOfMonth(day) }
+                        val enabled = remember(date) { allowedDateValidator(date) }
 
-            items(datesList) {
-                val selected = remember(state.selected) {
-                    possibleSelected && it == state.selected.dayOfMonth
-                }
-                val date = viewDate.withDayOfMonth(it)
-                val enabled = allowedDateValidator(date)
-                DateSelectionBox(it, selected, state.colors, enabled) {
-                    state.selected = date
+                        DateSelectionBox(day, selected, state.colors, enabled) {
+                            state.selected = date
+                        }
+                    }
                 }
             }
         }
@@ -360,10 +375,14 @@ private fun DateSelectionBox(
             modifier = Modifier
                 .size(32.dp)
                 .clip(CircleShape)
+                .then(
+                    if (selected) Modifier.background(MaterialTheme.colorScheme.primary) else Modifier
+                )
                 .wrapContentSize(Alignment.Center)
-                .then(if (enabled) Modifier.alpha(DatePickerConstants.DisabledAlpha) else Modifier),
+                .then(if (enabled) Modifier else Modifier.alpha(DatePickerConstants.DisabledAlpha)),
             style = TextStyle(
-                fontSize = 12.sp
+                fontSize = 12.sp,
+                color = colors.dateContainer(active = selected).value
             )
         )
     }
@@ -379,26 +398,19 @@ private fun DayOfWeekHeader(state: DatePickerState, locale: Locale) {
     }
 
     Row(
-        modifier = Modifier
-            .height(40.dp)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        LazyVerticalGrid(columns = GridCells.Fixed(7)) {
-            dayHeaders.forEach { it ->
-                item {
-                    Box(Modifier.size(40.dp)) {
-                        Text(
-                            it,
-                            modifier = Modifier
-                                .alpha(0.8f)
-                                .fillMaxSize()
-                                .wrapContentSize(Alignment.Center),
-                            style = TextStyle(fontSize = 14.sp, fontWeight = W600),
-                        )
-                    }
-                }
+        dayHeaders.forEach {
+            Box(Modifier.size(40.dp)) {
+                Text(
+                    it,
+                    modifier = Modifier
+                        .alpha(0.8f)
+                        .fillMaxSize()
+                        .wrapContentSize(Alignment.Center),
+                    style = TextStyle(fontSize = 14.sp, fontWeight = W600)
+                )
             }
         }
     }
@@ -410,12 +422,13 @@ private fun CalendarHeader(title: String, state: DatePickerState, locale: Locale
     val day = remember(state.selected) { state.selected.dayOfWeek.getShortLocalName(locale) }
 
     Box(
-        Modifier.fillMaxWidth()
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
     ) {
         Column {
             Text(
                 text = title,
-                modifier = Modifier.paddingFromBaseline(top = if (isSmallDevice()) 24.dp else 32.dp),
                 color = state.colors.headerText,
                 style = MaterialTheme.typography.labelMedium
             )
@@ -434,8 +447,6 @@ private fun CalendarHeader(title: String, state: DatePickerState, locale: Locale
                     style = MaterialTheme.typography.headlineLarge
                 )
             }
-
-            Spacer(Modifier.height(12.dp))
         }
     }
 }
@@ -448,7 +459,6 @@ private fun getDates(date: LocalDate, locale: Locale): Pair<Int, Int> {
 
     return Pair(firstDay, numDays)
 }
-
 
 object DatePickerConstants {
     const val DisabledAlpha = 0.38f

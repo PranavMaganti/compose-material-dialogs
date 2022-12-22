@@ -2,7 +2,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyHandler
 
-class CommonModulePlugin: Plugin<Project> {
+class CommonModulePlugin : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
             applyPlugins()

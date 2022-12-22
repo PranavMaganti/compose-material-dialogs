@@ -14,7 +14,12 @@ import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogButtons
 import com.vanpra.composematerialdialogs.MaterialDialogScope
+import com.vanpra.composematerialdialogs.MaterialDialogState
+import com.vanpra.composematerialdialogs.datetime.time.MaterialTimePickerDialog
+import com.vanpra.composematerialdialogs.datetime.time.TimePickerColors
+import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.time.LocalTime
 
 /**
  * @brief Builds a dialog and adds button to the layout which shows the dialog on click
@@ -31,8 +36,37 @@ fun DialogAndShowButton(
         content()
     }
 
+    DialogDemoButton(state = dialogState, buttonText = buttonText)
+}
+
+@Composable
+fun TimePickerDialogAndShowButton(
+    buttonText: String,
+    buttons: @Composable MaterialDialogButtons.() -> Unit = {},
+    initialTime: LocalTime = LocalTime.now(),
+    colors: TimePickerColors = TimePickerDefaults.colors(),
+    timeRange: ClosedRange<LocalTime> = LocalTime.MIN..LocalTime.MAX,
+    is24HourClock: Boolean = false,
+    onTimeChange: (LocalTime) -> Unit = {}
+) {
+    val dialogState = rememberMaterialDialogState()
+
+    MaterialTimePickerDialog(
+        state = dialogState,
+        buttons = buttons,
+        initialTime = initialTime,
+        colors = colors,
+        timeRange = timeRange,
+        is24HourClock = is24HourClock,
+        onTimeChange = onTimeChange
+    )
+    DialogDemoButton(state = dialogState, buttonText = buttonText)
+}
+
+@Composable
+fun DialogDemoButton(state: MaterialDialogState, buttonText: String) {
     TextButton(
-        onClick = { dialogState.show() },
+        onClick = { state.show() },
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)

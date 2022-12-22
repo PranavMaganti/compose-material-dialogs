@@ -25,7 +25,7 @@ object TimePickerDefaults {
      */
     @Composable
     fun colors(
-        headerText: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+        headlineText: Color = MaterialTheme.colorScheme.onSurfaceVariant,
         timeSelectorSeparator: Color = MaterialTheme.colorScheme.onSurface,
         activePeriodContainer: Color = MaterialTheme.colorScheme.tertiaryContainer,
         inactivePeriodContainer: Color = Color.Transparent,
@@ -35,14 +35,15 @@ object TimePickerDefaults {
         clockDialContainer: Color = MaterialTheme.colorScheme.surfaceVariant,
         clockDialSelector: Color = MaterialTheme.colorScheme.primary,
         activeClockDialText: Color = MaterialTheme.colorScheme.onPrimary,
-        inactiveClockDialText: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+        inactiveClockDialText: Color = MaterialTheme.colorScheme.onSurface,
         activeTimeSelectorContainer: Color = MaterialTheme.colorScheme.primaryContainer,
         inactiveTimeSelectorContainer: Color = MaterialTheme.colorScheme.surfaceVariant,
-        activeTimeSelectorText: Color  = MaterialTheme.colorScheme.onPrimaryContainer,
-        inactiveTimeSelectorText: Color = MaterialTheme.colorScheme.onSurfaceVariant
+        activeTimeSelectorText: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+        inactiveTimeSelectorText: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+        activeEntryTimeSelectorBorder: Color = MaterialTheme.colorScheme.primary
     ): TimePickerColors {
         return DefaultTimePickerColors(
-            headerText = headerText,
+            headlineText = headlineText,
             timeSelectorSeparator = timeSelectorSeparator,
             activePeriodContainer = activePeriodContainer,
             inactivePeriodContainer = inactivePeriodContainer,
@@ -56,7 +57,9 @@ object TimePickerDefaults {
             activeTimeSelectorContainer = activeTimeSelectorContainer,
             inactiveTimeSelectorContainer = inactiveTimeSelectorContainer,
             activeTimeSelectorText = activeTimeSelectorText,
-            inactiveTimeSelectorText = inactiveTimeSelectorText
+            inactiveTimeSelectorText = inactiveTimeSelectorText,
+            activeEntryTimeSelectorBorder = activeEntryTimeSelectorBorder
+
         )
     }
 }

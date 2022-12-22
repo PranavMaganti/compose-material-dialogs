@@ -2,19 +2,16 @@ package com.vanpra.composematerialdialogdemos.demos
 
 import android.util.Log
 import android.util.Patterns
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogdemos.DialogAndShowButton
@@ -52,9 +49,10 @@ fun BasicDialogDemo() {
                 Icon(
                     Icons.Default.LocationOn,
                     modifier = Modifier.size(24.dp),
-                    contentDescription = "Location Icon",
+                    contentDescription = "Location Icon"
                 )
-            }, textRes = R.string.location_dialog_title
+            },
+            textRes = R.string.location_dialog_title
         )
         message(res = R.string.location_dialog_message)
     }
@@ -108,10 +106,12 @@ fun BasicDialogDemo() {
         positiveButton("Ok")
     }) {
         title(res = R.string.input_dialog_title)
-        input(label = "Name",
+        input(
+            label = "Name",
             placeholder = "Jon Smith",
             keyboardActions = KeyboardActions(onDone = { submit() }),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)) {
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
+        ) {
             Log.d("SELECTION:", it)
         }
     }
@@ -121,12 +121,14 @@ fun BasicDialogDemo() {
         positiveButton("Ok")
     }) {
         title("Please enter your email")
-        input(label = "Email",
+        input(
+            label = "Email",
             placeholder = "hello@example.com",
             errorMessage = "Invalid email",
             isTextValid = {
                 Patterns.EMAIL_ADDRESS.matcher(it).matches() && it.isNotEmpty()
-            }) {
+            }
+        ) {
             Log.d("SELECTION:", it)
         }
     }

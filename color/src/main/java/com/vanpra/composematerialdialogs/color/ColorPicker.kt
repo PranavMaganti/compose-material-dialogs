@@ -1,5 +1,6 @@
 package com.vanpra.composematerialdialogs.color
 
+import android.graphics.Color as AndroidColor
 import android.view.View
 import android.widget.FrameLayout
 import androidx.compose.foundation.Canvas
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
@@ -61,7 +63,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.ColorUtils
 import com.vanpra.composematerialdialogs.MaterialDialogScope
 import java.util.Locale
-import android.graphics.Color as AndroidColor
 
 private val itemSizeDp = 55.dp
 private val tickSize = 35.dp
@@ -101,6 +102,7 @@ data class ARGBPickerState internal constructor(
  * @param onColorSelected a function which is called with a [Color]. The timing of this call is
  * dictated by [waitForPositiveButton]
  */
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MaterialDialogScope.colorChooser(
     colors: List<Color>,

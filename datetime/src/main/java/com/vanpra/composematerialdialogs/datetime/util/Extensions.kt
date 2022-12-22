@@ -38,3 +38,7 @@ internal fun LocalTime.toAM(): LocalTime = if (this.isAM) this else this.minusHo
 internal fun LocalTime.toPM(): LocalTime = if (!this.isAM) this else this.plusHours(12)
 
 internal fun LocalTime.noSeconds(): LocalTime = LocalTime.of(this.hour, this.minute)
+internal fun String.isNumeric(): Boolean = all { it.isDigit() }
+
+internal fun LocalTime.coerceInOrSame(range: ClosedRange<LocalTime>?): LocalTime =
+    if (range != null) coerceIn(range) else this

@@ -2,6 +2,7 @@ package com.vanpra.composematerialdialogs
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -74,7 +75,7 @@ interface MaterialDialogScope {
 }
 
 internal class MaterialDialogScopeImpl(
-    override val dialogState: MaterialDialogState,
+    override val dialogState: MaterialDialogState
 ) : MaterialDialogScope {
     override val dialogButtons = MaterialDialogButtons(this)
 
@@ -201,11 +202,16 @@ fun rememberMaterialDialogState(initialValue: Boolean = false): MaterialDialogSt
 @Composable
 fun MaterialDialog(
     state: MaterialDialogState = rememberMaterialDialogState(),
-    properties: DialogProperties = DialogProperties(),
+    properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
     shape: Shape = MaterialTheme.shapes.extraLarge,
     border: BorderStroke? = null,
     elevation: Dp = DialogConstants.Elevation,
+    buttonsPadding: PaddingValues = PaddingValues(
+        start = DialogConstants.InternalPadding,
+        end = DialogConstants.InternalPadding,
+        bottom = DialogConstants.InternalPadding
+    ),
     onCloseRequest: (MaterialDialogState) -> Unit = { it.hide() },
     buttons: @Composable MaterialDialogButtons.() -> Unit = {},
     content: @Composable MaterialDialogScope.() -> Unit
@@ -215,75 +221,72 @@ fun MaterialDialog(
         if (!state.showing) dialogScope.reset()
         onDispose { }
     }
-
-    val internalPaddingPx = with(LocalDensity.current) {
-        DialogConstants.InternalPadding.roundToPx()
-    }
-
     val totalExternalPadding = remember { 2 * DialogConstants.ExternalPadding }
-    val totalInternalPadding = remember { 2 * DialogConstants.InternalPadding }
-    val totalInternalPaddingPx = with(LocalDensity.current) { totalInternalPadding.roundToPx() }
 
     val maxHeight = if (isSmallDevice()) {
-        LocalConfiguration.current.screenHeightDp.dp - totalExternalPadding - totalInternalPadding
+        LocalConfiguration.current.screenHeightDp.dp - totalExternalPadding
     } else {
-        DialogConstants.MaxDimen - totalInternalPadding
+        DialogConstants.MaxDimen
     }
     val maxHeightPx = with(LocalDensity.current) { maxHeight.roundToPx() }
+    val buttonsPaddingPx = with(LocalDensity.current) { buttonsPadding.roundToPx(this) }
 
-    val buttonContentPaddingPx =
-        with(LocalDensity.current) { DialogConstants.ButtonContentPadding.roundToPx() }
-
-    if (state.showing) {/* Horizontal padding is handled directly by the Dialog composable */
+    if (state.showing) { /* Horizontal padding is handled directly by the Dialog composable */
         Dialog(properties = properties, onDismissRequest = { onCloseRequest(state) }) {
             Surface(
                 modifier = Modifier
+                    .padding(horizontal = DialogConstants.ExternalPadding)
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .testTag("dialog"),
                 shape = shape,
                 color = backgroundColor,
                 border = border,
-                tonalElevation = elevation,
+                tonalElevation = elevation
             ) {
-                Layout(modifier = Modifier.padding(vertical = DialogConstants.InternalPadding),
-                    content = {
-                        dialogScope.DialogButtonsLayout(
-                            modifier = Modifier.layoutId("buttons"), content = buttons
-                        )
-                        Column(Modifier.layoutId("content")) { content(dialogScope) }
-                    }) { measurables, constraints ->
-                    val buttonsHeight = measurables[0].minIntrinsicHeight(constraints.maxWidth)
+                Layout(content = {
+                    dialogScope.DialogButtonsLayout(
+                        modifier = Modifier.layoutId("buttons"),
+                        content = buttons
+                    )
+                    Column(Modifier.layoutId("content")) { content(dialogScope) }
+                }) { measurables, constraints ->
                     val buttonsPlaceable = measurables[0].measure(
                         constraints.copy(
-                            maxHeight = buttonsHeight,
-                            minHeight = 0,
-                            maxWidth = constraints.maxWidth - totalInternalPaddingPx,
+                            maxWidth = constraints.maxWidth - buttonsPaddingPx.totalHorizontalPadding(),
                             minWidth = 0
                         )
                     )
 
-                    val contentHeight = if (buttonsHeight > 0) {
-                        maxHeightPx - buttonContentPaddingPx - buttonsPlaceable.height
+                    val contentHeight = if (buttonsPlaceable.height > 0) {
+                        maxHeightPx - buttonsPlaceable.height - buttonsPaddingPx.totalVerticalPadding()
                     } else {
                         maxHeightPx
                     }
 
                     val contentPlaceable = measurables[1].measure(
                         constraints.copy(
-                            maxHeight = contentHeight, minHeight = 0
+                            maxHeight = contentHeight,
+                            minHeight = 0
                         )
                     )
 
+                    val buttonsHeight = if (buttonsPlaceable.height > 0) {
+                        buttonsPlaceable.height + buttonsPaddingPx.totalVerticalPadding()
+                    } else {
+                        0
+                    }
+
                     val height = min(
                         maxHeightPx,
-                        buttonsPlaceable.height + buttonContentPaddingPx + contentPlaceable.height
+                        contentPlaceable.height + buttonsHeight
                     )
 
                     return@Layout layout(constraints.maxWidth, height) {
                         contentPlaceable.place(0, 0)
                         buttonsPlaceable.place(
-                            internalPaddingPx, contentPlaceable.height + buttonContentPaddingPx
+                            buttonsPaddingPx.start,
+                            contentPlaceable.height + buttonsPaddingPx.top
                         )
                     }
                 }
@@ -292,7 +295,7 @@ fun MaterialDialog(
     }
 }
 
-internal object DialogConstants {
+object DialogConstants {
     val Elevation = 6.dp
     val MaxDimen = 560.dp
 
