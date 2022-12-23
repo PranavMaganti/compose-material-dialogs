@@ -40,8 +40,8 @@ android {
     )
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     composeOptions {
@@ -59,7 +59,9 @@ android {
 dependencies {
     api(project(":core"))
     implementation(Dependencies.Accompanist.pager)
+    implementation("androidx.compose.ui:ui-tooling-preview:1.1.1")
     coreLibraryDesugaring(Dependencies.desugar)
+    debugImplementation("androidx.compose.ui:ui-tooling:1.1.1")
 }
 
 shot {

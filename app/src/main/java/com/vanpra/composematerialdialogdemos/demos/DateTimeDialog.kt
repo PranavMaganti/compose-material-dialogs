@@ -3,11 +3,10 @@ package com.vanpra.composematerialdialogdemos.demos
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.vanpra.composematerialdialogdemos.DialogAndShowButton
+import com.vanpra.composematerialdialogdemos.DatePickerDialogAndShowButton
 import com.vanpra.composematerialdialogdemos.TimePickerDialogAndShowButton
 import com.vanpra.composematerialdialogs.MaterialDialogButtons
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
-import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import java.time.DayOfWeek
 import java.time.LocalTime
 
@@ -59,25 +58,26 @@ fun DateTimeDialogDemo() {
         }
     )
 
-    DialogAndShowButton(
+    DatePickerDialogAndShowButton(
         buttonText = "Date Picker Dialog",
-        buttons = { defaultDateTimeDialogButtons() }
-    ) {
-        datepicker(colors = DatePickerDefaults.colors()) {
+        buttons = { defaultDateTimeDialogButtons() },
+        colors = DatePickerDefaults.colors(),
+        onDateChange = {
             println(it.toString())
         }
-    }
+    )
 
-    DialogAndShowButton(
+    DatePickerDialogAndShowButton(
         buttonText = "Date Picker Dialog with date restrictions",
-        buttons = { defaultDateTimeDialogButtons() }
-    ) {
-        datepicker(allowedDateValidator = {
+        buttons = { defaultDateTimeDialogButtons() },
+        allowedDateValidator = {
             it.dayOfWeek !== DayOfWeek.SATURDAY && it.dayOfWeek !== DayOfWeek.SUNDAY
-        }) {
+        },
+        colors = DatePickerDefaults.colors(),
+        onDateChange = {
             println(it.toString())
         }
-    }
+    )
 }
 
 @Composable

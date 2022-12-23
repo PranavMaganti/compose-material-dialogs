@@ -1,4 +1,4 @@
-package com.vanpra.composematerialdialogs.datetime.time
+package com.vanpra.composematerialdialogs.datetime.time.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures

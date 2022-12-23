@@ -22,20 +22,26 @@ object DatePickerDefaults {
      */
     @Composable
     fun colors(
-        headerText: Color = MaterialTheme.colorScheme.onSurfaceVariant,
-        selectedDateTitle: Color = MaterialTheme.colorScheme.onSurfaceVariant,
-        activeDateContainer: Color = MaterialTheme.colorScheme.primary,
-        inactiveDateContainer: Color = Color.Transparent,
+        titleText: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+        headlineText: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+        weekdaysText: Color = MaterialTheme.colorScheme.onSurface,
         activeDateText: Color = MaterialTheme.colorScheme.onPrimary,
-        inactiveDateText: Color = MaterialTheme.colorScheme.onSurface
+        activeDateContainer: Color = MaterialTheme.colorScheme.primary,
+        inactiveDateText: Color = MaterialTheme.colorScheme.onSurface,
+        inactiveDateContainer: Color = Color.Transparent,
+        todayDateText: Color = MaterialTheme.colorScheme.primary,
+        todayDateContainer: Color = MaterialTheme.colorScheme.primary
     ): DatePickerColors {
         return DefaultDatePickerColors(
-            headerText = headerText,
-            selectedDateTitle = selectedDateTitle,
+            titleText = titleText,
+            headlineText = headlineText,
+            weekdaysText = weekdaysText,
             activeDateContainer = activeDateContainer,
             inactiveDateContainer = inactiveDateContainer,
             activeDateText = activeDateText,
-            inactiveDateText = inactiveDateText
+            inactiveDateText = inactiveDateText,
+            todayDateText = todayDateText,
+            todayDateContainer = todayDateContainer
         )
     }
 }

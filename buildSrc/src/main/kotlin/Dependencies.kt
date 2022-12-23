@@ -47,6 +47,9 @@ object Dependencies {
             const val version = "1.3.2"
             const val compilerVersion = "1.3.2"
 
+            const val uiTooling = "androidx.compose.ui:ui-tooling:1.3.0"
+            const val uiToolingPreview = "androidx.compose.ui:ui-tooling-preview:1.3.0"
+
             const val ui = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:1.3.1"
             const val material3 = "androidx.compose.material3:material3:1.0.1"

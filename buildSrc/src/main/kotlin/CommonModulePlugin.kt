@@ -31,12 +31,15 @@ class CommonModulePlugin : Plugin<Project> {
             implementation(Dependencies.AndroidX.Compose.foundationLayout)
             implementation(Dependencies.AndroidX.Compose.animation)
             implementation(Dependencies.AndroidX.Compose.viewmodel)
+            implementation(Dependencies.AndroidX.Compose.uiToolingPreview)
 
             androidTestImplementation(Dependencies.AndroidX.Compose.activity)
             androidTestImplementation(Dependencies.AndroidX.Compose.testing)
             androidTestImplementation(Dependencies.AndroidX.Testing.core)
             androidTestImplementation(Dependencies.AndroidX.Testing.rules)
             androidTestImplementation(Dependencies.AndroidX.Testing.runner)
+
+            debugImplementation(Dependencies.AndroidX.Compose.uiTooling)
 
             add("androidTestImplementation", project(":test-utils"))
         }
@@ -48,5 +51,9 @@ class CommonModulePlugin : Plugin<Project> {
 
     private fun DependencyHandler.androidTestImplementation(dependency: String) {
         add("androidTestImplementation", dependency)
+    }
+
+    private fun DependencyHandler.debugImplementation(dependency: String) {
+        add("debugImplementation", dependency)
     }
 }

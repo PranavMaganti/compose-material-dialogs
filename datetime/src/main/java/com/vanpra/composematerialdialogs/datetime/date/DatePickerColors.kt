@@ -11,12 +11,16 @@ import androidx.compose.ui.graphics.Color
  * See [DatePickerDefaults.colors] for the default implementation
  */
 interface DatePickerColors {
-    val headerText: Color
-    val selectedDateTitle: Color
-    val activeDateContainer: Color
-    val inactiveDateContainer: Color
+    val titleText: Color
+    val headlineText: Color
+    val weekdaysText: Color
+
     val activeDateText: Color
+    val activeDateContainer: Color
     val inactiveDateText: Color
+    val inactiveDateContainer: Color
+    val todayDateText: Color
+    val todayDateContainer: Color
 
     /**
      * Gets the background color dependant on if the item is active or not
@@ -38,12 +42,15 @@ interface DatePickerColors {
 }
 
 internal class DefaultDatePickerColors(
-    override val headerText: Color,
-    override val selectedDateTitle: Color,
-    override val activeDateContainer: Color,
-    override val inactiveDateContainer: Color,
+    override val titleText: Color,
+    override val headlineText: Color,
+    override val weekdaysText: Color,
     override val activeDateText: Color,
-    override val inactiveDateText: Color
+    override val activeDateContainer: Color,
+    override val inactiveDateText: Color,
+    override val inactiveDateContainer: Color,
+    override val todayDateText: Color,
+    override val todayDateContainer: Color
 ) : DatePickerColors {
 
     @Composable
