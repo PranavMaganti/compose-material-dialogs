@@ -469,8 +469,8 @@ private fun GridView(
                 ) { measurables, constraints ->
                     val spacing =
                         (constraints.maxWidth - (itemSize * itemsInRow)) / (itemsInRow - 1)
-                    val rows = (measurables.size / itemsInRow) + 1
-
+                    val additionalRow = measurables.size % 2
+                    val rows = maxOf((measurables.size / itemsInRow) + additionalRow, 1)
                     val layoutHeight = (rows * itemSize) + ((rows - 1) * spacing)
 
                     layout(constraints.maxWidth, layoutHeight) {
